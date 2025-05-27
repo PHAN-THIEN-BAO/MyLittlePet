@@ -1,0 +1,291 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a6b9796d1c0440eba061ace5e9dff6, type: 3}
+  m_Name: Muse Chat Sprite
+  m_EditorClassIdentifier: 
+  assetsData:
+  - rid: 2895516110514290760
+  currentMode: TextToSprite
+  m_Data:
+  - rid: 2895516110514290761
+  - rid: 2895516110514290762
+  - rid: 2895516110514290763
+  - rid: 2895516110514290776
+  - rid: 2895516110514290777
+  - rid: 2895516110514290778
+  - rid: 2895516110514290779
+  - rid: 2895516110514290780
+  preRefinedArtifact:
+    rid: -2
+  refinedArtifact:
+    rid: -2
+  selectedArtifact:
+    rid: -2
+  m_Operators:
+  - rid: 2895516110514290764
+  - rid: 2895516110514290765
+  - rid: 2895516110514290766
+  - rid: 2895516110514290767
+  - rid: 2895516110514290768
+  - rid: 2895516110514290769
+  m_PreRefineOperators: []
+  m_ExportedArtifacts: []
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 2895516110514290760
+      type: {class: SpriteMuseArtifact, ns: Unity.Muse.Sprite.Artifacts, asm: Unity.Muse.Sprite}
+      data:
+        mode: TextToSprite
+        Guid: 3614860d-cfb4-4b39-997d-cdae9e9ab5a4
+        BatchRequestIdentifier: 
+        Seed: 43884
+        m_Operators:
+        - rid: 2895516110514290770
+        - rid: 2895516110514290771
+        - rid: 2895516110514290772
+        - rid: 2895516110514290773
+        - rid: 2895516110514290774
+        - rid: 2895516110514290775
+        history:
+        - rid: 2895516110514290760
+        children: []
+        m_UnsafeContent: 0
+    - rid: 2895516110514290761
+      type: {class: GenerateButtonData, ns: Unity.Muse.Common, asm: Unity.Muse.Common}
+      data: 
+    - rid: 2895516110514290762
+      type: {class: SessionData, ns: Unity.Muse.Sprite.Data, asm: Unity.Muse.Sprite}
+      data:
+        m_SessionId: 5c030a8d-cffc-46d9-9814-0550fca097bc
+        sessionLoaded: 5c030a8d-cffc-46d9-9814-0550fca097bc
+    - rid: 2895516110514290763
+      type: {class: GenerateCountData, ns: Unity.Muse.Sprite.Data, asm: Unity.Muse.Sprite}
+      data:
+        m_Counter: 0
+    - rid: 2895516110514290764
+      type: {class: GenerateOperator, ns: Unity.Muse.Common, asm: Unity.Muse.Common}
+      data:
+        m_OperatorData:
+          type: GenerateOperator
+          key: GenerateOperator
+          version: 1.0.0
+          settings:
+          - TextToSprite
+          - 1
+          enabled: 1
+          assembly: 
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290765
+      type: {class: PromptOperator, ns: Unity.Muse.Common, asm: Unity.Muse.Common}
+      data:
+        m_OperatorData:
+          type: PromptOperator
+          key: PromptOperator
+          version: 0.0.2
+          settings:
+          - logo
+          - 
+          enabled: 1
+          assembly: 
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290766
+      type: {class: SpriteGeneratorSettingsOperator, ns: Unity.Muse.Sprite.Operators, asm: Unity.Muse.Sprite}
+      data:
+        m_OperatorData:
+          type: Unity.Muse.Sprite.Operators.SpriteGeneratorSettingsOperator
+          key: Unity.Muse.Sprite.Operators.SpriteGeneratorSettingsOperator
+          version: 0.0.1
+          settings:
+          - 
+          - 
+          - 0.85
+          - 512
+          - 512
+          - 1
+          - 1
+          - 16648
+          - 0
+          - 0
+          - 00000000-0000-0000-0000-000000000000
+          - 0
+          - 0
+          - 
+          - 
+          - 
+          enabled: 1
+          assembly: Unity.Muse.Sprite
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290767
+      type: {class: KeyImageOperator, ns: Unity.Muse.Sprite.Operators, asm: Unity.Muse.Sprite}
+      data:
+        m_OperatorData:
+          type: Unity.Muse.Sprite.Operators.KeyImageOperator
+          key: Unity.Muse.Sprite.Operators.KeyImageOperator
+          version: 0.0.1
+          settings:
+          - 
+          - 
+          - True
+          - 512
+          - 512
+          - 0.5
+          enabled: 1
+          assembly: Unity.Muse.Sprite
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290768
+      type: {class: SpriteRefiningMaskOperator, ns: Unity.Muse.Sprite.Operators, asm: Unity.Muse.Sprite}
+      data: 
+    - rid: 2895516110514290769
+      type: {class: SessionOperator, ns: Unity.Muse.Sprite.Operators, asm: Unity.Muse.Sprite}
+      data:
+        m_OperatorData:
+          type: Unity.Muse.Sprite.Operators.SessionOperator
+          key: Unity.Muse.Sprite.Operators.SessionOperator
+          version: 0.0.1
+          settings:
+          - 5c030a8d-cffc-46d9-9814-0550fca097bc
+          enabled: 0
+          assembly: Unity.Muse.Sprite
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290770
+      type: {class: GenerateOperator, ns: Unity.Muse.Common, asm: Unity.Muse.Common}
+      data:
+        m_OperatorData:
+          type: GenerateOperator
+          key: GenerateOperator
+          version: 1.0.0
+          settings:
+          - TextToSprite
+          - 1
+          enabled: 1
+          assembly: 
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290771
+      type: {class: PromptOperator, ns: Unity.Muse.Common, asm: Unity.Muse.Common}
+      data:
+        m_OperatorData:
+          type: PromptOperator
+          key: PromptOperator
+          version: 0.0.2
+          settings:
+          - logo
+          - 
+          enabled: 1
+          assembly: 
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290772
+      type: {class: SpriteGeneratorSettingsOperator, ns: Unity.Muse.Sprite.Operators, asm: Unity.Muse.Sprite}
+      data:
+        m_OperatorData:
+          type: Unity.Muse.Sprite.Operators.SpriteGeneratorSettingsOperator
+          key: Unity.Muse.Sprite.Operators.SpriteGeneratorSettingsOperator
+          version: 0.0.1
+          settings:
+          - 
+          - 
+          - 0.85
+          - 512
+          - 512
+          - 1
+          - 1
+          - 16739
+          - 3614860d-cfb4-4b39-997d-cdae9e9ab5a4
+          - 0
+          - 0
+          - 0
+          - 00000000-0000-0000-0000-000000000000
+          - Default No Style
+          - Default No Style
+          - 
+          enabled: 1
+          assembly: Unity.Muse.Sprite
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290773
+      type: {class: KeyImageOperator, ns: Unity.Muse.Sprite.Operators, asm: Unity.Muse.Sprite}
+      data:
+        m_OperatorData:
+          type: Unity.Muse.Sprite.Operators.KeyImageOperator
+          key: Unity.Muse.Sprite.Operators.KeyImageOperator
+          version: 0.0.1
+          settings:
+          - 
+          - 
+          - True
+          - 512
+          - 512
+          - 0.5
+          enabled: 1
+          assembly: Unity.Muse.Sprite
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290774
+      type: {class: SpriteRefiningMaskOperator, ns: Unity.Muse.Sprite.Operators, asm: Unity.Muse.Sprite}
+      data: 
+    - rid: 2895516110514290775
+      type: {class: SessionOperator, ns: Unity.Muse.Sprite.Operators, asm: Unity.Muse.Sprite}
+      data:
+        m_OperatorData:
+          type: Unity.Muse.Sprite.Operators.SessionOperator
+          key: Unity.Muse.Sprite.Operators.SessionOperator
+          version: 0.0.1
+          settings:
+          - 5c030a8d-cffc-46d9-9814-0550fca097bc
+          enabled: 0
+          assembly: Unity.Muse.Sprite
+          hideable: 0
+          hidden: 0
+          isRefinement: 0
+    - rid: 2895516110514290776
+      type: {class: BookmarkManager, ns: Unity.Muse.Common, asm: Unity.Muse.Common}
+      data:
+        m_BookmarkedArtifacts:
+          m_Values: []
+        m_IsFilterEnabled: 0
+    - rid: 2895516110514290777
+      type: {class: FeedbackManager, ns: Unity.Muse.Common, asm: Unity.Muse.Common}
+      data:
+        m_Liked:
+          m_Values: []
+        m_Disliked:
+          m_Values: []
+    - rid: 2895516110514290778
+      type: {class: DefaultStyleData, ns: Unity.Muse.Sprite.Data, asm: Unity.Muse.Sprite}
+      data: 
+    - rid: 2895516110514290779
+      type: {class: MainUI/UISize, ns: Unity.Muse.Common, asm: Unity.Muse.Common}
+      data:
+        m_NodeListWidth: 300
+        m_NodeListRefineWidth: 300
+        m_AssetListRefineWidth: 200
+    - rid: 2895516110514290780
+      type: {class: OperatorOverridePublishers, ns: Unity.Muse.Sprite.Data, asm: Unity.Muse.Sprite}
+      data: 
