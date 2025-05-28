@@ -4,15 +4,15 @@ public class UIManager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-    public GameObject StoreUI;
+    public GameObject PanelUI;
 
 
-    public void OnStorePress()
+    public void OnPress()
     {
-        StoreUI.SetActive(true);
+        PanelUI.SetActive(true);
     }
-    public void OnBackStorePress()
+    public void OnBackPress()
     {
-        StoreUI.SetActive(false);
+        PanelUI.SetActive(false);
     }
 }
