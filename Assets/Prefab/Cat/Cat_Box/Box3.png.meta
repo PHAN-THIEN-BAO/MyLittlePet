@@ -1,10 +1,19 @@
 fileFormatVersion: 2
-guid: f47ce58ad539ba7448c10935979d7a9b
+guid: 64c6049598aad7c48b5ee50da834268d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1196742970097805969
-    second: panelInset_beige_0
+      213: -790410345991088130
+    second: Box3_0
+  - first:
+      213: 294295872754759312
+    second: Box3_1
+  - first:
+      213: 687226289990876177
+    second: Box3_2
+  - first:
+      213: 2528960788681728815
+    second: Box3_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +122,89 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: panelInset_beige_0
+      name: Box3_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 93
-        height: 94
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 53, y: 29, z: 9, w: 24}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 19a2024046fab9010800000000000000
-      internalID: 1196742970097805969
+      spriteID: ef758646af5e705f0800000000000000
+      internalID: -790410345991088130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Box3_1
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 0
+        width: 33
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 096396a798c851400800000000000000
+      internalID: 294295872754759312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Box3_2
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 0
+        width: 33
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11c373f6ba4898900800000000000000
+      internalID: 687226289990876177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Box3_3
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 0
+        width: 33
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f232444307ca81320800000000000000
+      internalID: 2528960788681728815
       vertices: []
       indices: 
       edges: []
@@ -138,7 +213,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 6daaa9f5f4d25514896456cac897b1d1
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +223,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      panelInset_beige_0: 1196742970097805969
+      Box3_0: -790410345991088130
+      Box3_1: 294295872754759312
+      Box3_2: 687226289990876177
+      Box3_3: 2528960788681728815
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
