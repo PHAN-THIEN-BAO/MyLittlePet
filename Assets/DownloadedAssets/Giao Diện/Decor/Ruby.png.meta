@@ -3,17 +3,17 @@ guid: b59be2322282eda4eaa7350fe0504141
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7713575526222613754
-    second: spr_coin_strip4_0
+      213: 7774493202208912350
+    second: Ruby_0
   - first:
-      213: 14333003631960633
-    second: spr_coin_strip4_1
+      213: -71519779025370795
+    second: Ruby_1
   - first:
-      213: -7089179426794110616
-    second: spr_coin_strip4_2
+      213: -6231713192252961761
+    second: Ruby_2
   - first:
-      213: -4392181159198771875
-    second: spr_coin_strip4_3
+      213: 7301505857440752111
+    second: Ruby_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -105,11 +105,24 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spr_coin_strip4_0
+      name: Ruby_0
       rect:
         serializedVersion: 2
         x: 2
@@ -124,14 +137,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: afc45a4a2102c0b60800000000000000
-      internalID: 7713575526222613754
+      spriteID: ed3f95a506c84eb60800000000000000
+      internalID: 7774493202208912350
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spr_coin_strip4_1
+      name: Ruby_1
       rect:
         serializedVersion: 2
         x: 18
@@ -146,14 +159,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9322c067acbe23000800000000000000
-      internalID: 14333003631960633
+      spriteID: 55147c0d329e10ff0800000000000000
+      internalID: -71519779025370795
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spr_coin_strip4_2
+      name: Ruby_2
       rect:
         serializedVersion: 2
         x: 34
@@ -168,14 +181,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8610ee41fdc2e9d90800000000000000
-      internalID: -7089179426794110616
+      spriteID: f1c85a16ed18489a0800000000000000
+      internalID: -6231713192252961761
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spr_coin_strip4_3
+      name: Ruby_3
       rect:
         serializedVersion: 2
         x: 50
@@ -190,8 +203,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d553bc8a186db03c0800000000000000
-      internalID: -4392181159198771875
+      spriteID: fe1a03e64e8245560800000000000000
+      internalID: 7301505857440752111
       vertices: []
       indices: 
       edges: []
@@ -209,11 +222,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      spr_coin_strip4_0: 7713575526222613754
-      spr_coin_strip4_1: 14333003631960633
-      spr_coin_strip4_2: -7089179426794110616
-      spr_coin_strip4_3: -4392181159198771875
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

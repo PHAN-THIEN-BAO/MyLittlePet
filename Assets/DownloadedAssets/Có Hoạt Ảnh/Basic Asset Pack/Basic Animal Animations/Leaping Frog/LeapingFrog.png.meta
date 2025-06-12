@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4a380b46e39d77e478118bb6b89cf0e0
+guid: 7530f7ee8e14ca94289551462a48f8f7
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -94,6 +94,19 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -209,11 +222,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      LeapingFrog_0: -6966435750794643938
-      LeapingFrog_1: 909917820915804984
-      LeapingFrog_2: 804135836340260030
-      LeapingFrog_3: -2802775154494193581
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

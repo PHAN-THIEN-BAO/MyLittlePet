@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5f68c49731ef6cc44b3858cfd6dd1a65
+guid: 3d5ef039945682e49bd20380ce54ca44
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -94,6 +94,19 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -209,11 +222,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      HonkingGoose_0: 4174905404270908697
-      HonkingGoose_1: -5204643290759313216
-      HonkingGoose_2: -9161468062983814779
-      HonkingGoose_3: 495548373352228362
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

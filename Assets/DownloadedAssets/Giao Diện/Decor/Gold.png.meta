@@ -3,20 +3,20 @@ guid: d556a8afd2bf1af45875860df51d19d3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6088342627132289551
-    second: MonedaD_0
+      213: -3988769855312385993
+    second: Gold_0
   - first:
-      213: -2359506160307568889
-    second: MonedaD_1
+      213: -1688622316818091811
+    second: Gold_1
   - first:
-      213: 4966363116081101388
-    second: MonedaD_2
+      213: -5715993420535005892
+    second: Gold_2
   - first:
-      213: -672162727369665448
-    second: MonedaD_3
+      213: 1244506449654047977
+    second: Gold_3
   - first:
-      213: 2361706786320140148
-    second: MonedaD_4
+      213: 8417888836458354848
+    second: Gold_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -108,11 +108,24 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MonedaD_0
+      name: Gold_0
       rect:
         serializedVersion: 2
         x: 0
@@ -127,14 +140,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f02b619ac532e7450800000000000000
-      internalID: 6088342627132289551
+      spriteID: 738a15333fa05a8c0800000000000000
+      internalID: -3988769855312385993
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MonedaD_1
+      name: Gold_1
       rect:
         serializedVersion: 2
         x: 18
@@ -149,14 +162,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 70f758df5a9514fd0800000000000000
-      internalID: -2359506160307568889
+      spriteID: dd0b24613fec098e0800000000000000
+      internalID: -1688622316818091811
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MonedaD_2
+      name: Gold_2
       rect:
         serializedVersion: 2
         x: 36
@@ -171,14 +184,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c4abd9fe0f01ce440800000000000000
-      internalID: 4966363116081101388
+      spriteID: c3d7a86c446bca0b0800000000000000
+      internalID: -5715993420535005892
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MonedaD_3
+      name: Gold_3
       rect:
         serializedVersion: 2
         x: 50
@@ -193,14 +206,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8549fdb8f8ffba6f0800000000000000
-      internalID: -672162727369665448
+      spriteID: 9e4ef44b500654110800000000000000
+      internalID: 1244506449654047977
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MonedaD_4
+      name: Gold_4
       rect:
         serializedVersion: 2
         x: 64
@@ -215,8 +228,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 477cd3e2fc776c020800000000000000
-      internalID: 2361706786320140148
+      spriteID: 0a893dffb4952d470800000000000000
+      internalID: 8417888836458354848
       vertices: []
       indices: 
       edges: []
@@ -234,12 +247,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      MonedaD_0: 6088342627132289551
-      MonedaD_1: -2359506160307568889
-      MonedaD_2: 4966363116081101388
-      MonedaD_3: -672162727369665448
-      MonedaD_4: 2361706786320140148
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

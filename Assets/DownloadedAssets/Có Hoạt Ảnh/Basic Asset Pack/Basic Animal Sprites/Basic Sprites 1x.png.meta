@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b03bc08579cee154380f2807632ba546
+guid: 50024e24763d2124fb38fa92c7d93ff9
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -127,6 +127,19 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -484,22 +497,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Basic Sprites 1x_0: 4121968997861998423
-      Basic Sprites 1x_1: -7163506754101745845
-      Basic Sprites 1x_10: 1616642497152446678
-      Basic Sprites 1x_11: 4479352094048111032
-      Basic Sprites 1x_12: 6639206704192926465
-      Basic Sprites 1x_13: -4280731626638766123
-      Basic Sprites 1x_14: -3660705492774249586
-      Basic Sprites 1x_2: -8697152379158545600
-      Basic Sprites 1x_3: 2158925122901969508
-      Basic Sprites 1x_4: 8166318990394740261
-      Basic Sprites 1x_5: -8646129679520489322
-      Basic Sprites 1x_6: -144812072329324669
-      Basic Sprites 1x_7: -2491920535831982720
-      Basic Sprites 1x_8: -8837193852178721400
-      Basic Sprites 1x_9: 1602081586739688020
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

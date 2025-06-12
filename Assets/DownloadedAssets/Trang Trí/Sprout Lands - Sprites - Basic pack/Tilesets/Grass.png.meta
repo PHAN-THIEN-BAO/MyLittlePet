@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a0871c9732be06944aab2832492f24e0
+guid: bb17296e315c724448337304fbd6273d
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -114,6 +114,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -121,20 +134,20 @@ TextureImporter:
       name: Grass_0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 66
-        width: 44
-        height: 44
+        x: 1
+        y: 65
+        width: 46
+        height: 46
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: c8a95b35746fd374d80e07c5314af9d3
-      internalID: -1619037063
+      spriteID: 79d946fd79a9c4de0800000000000000
+      internalID: -1347532211411968617
       vertices: []
       indices: 
       edges: []
@@ -143,20 +156,20 @@ TextureImporter:
       name: Grass_1
       rect:
         serializedVersion: 2
-        x: 50
-        y: 66
-        width: 12
-        height: 44
+        x: 49
+        y: 65
+        width: 14
+        height: 46
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 90d44a7748de4ed43b53bd9d10ffd6da
-      internalID: 116565047
+      spriteID: 26b0860faae26e590800000000000000
+      internalID: -7645372005702169758
       vertices: []
       indices: 
       edges: []
@@ -165,20 +178,20 @@ TextureImporter:
       name: Grass_2
       rect:
         serializedVersion: 2
-        x: 66
-        y: 50
-        width: 60
-        height: 60
+        x: 65
+        y: 49
+        width: 62
+        height: 62
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 81bdd1029c34c734599fcc571a101458
-      internalID: 1815401129
+      spriteID: f8a5966019ef3af50800000000000000
+      internalID: 6891631753638271631
       vertices: []
       indices: 
       edges: []
@@ -187,20 +200,20 @@ TextureImporter:
       name: Grass_3
       rect:
         serializedVersion: 2
-        x: 128
-        y: 22
-        width: 48
-        height: 90
+        x: 127
+        y: 21
+        width: 49
+        height: 91
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: e1df869769ca22640b374bb1684c288c
-      internalID: -1569883034
+      spriteID: aef03152e26199600800000000000000
+      internalID: 475435623110610922
       vertices: []
       indices: 
       edges: []
@@ -209,20 +222,20 @@ TextureImporter:
       name: Grass_4
       rect:
         serializedVersion: 2
-        x: 2
-        y: 50
-        width: 44
-        height: 12
+        x: 0
+        y: 0
+        width: 138
+        height: 49
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 9b6fb14a802f3074e9cf5aaca3ad24a3
-      internalID: 1420792465
+      spriteID: 04717a5b3804b8940800000000000000
+      internalID: 5299400320964040512
       vertices: []
       indices: 
       edges: []
@@ -231,9 +244,9 @@ TextureImporter:
       name: Grass_5
       rect:
         serializedVersion: 2
-        x: 49
+        x: 1
         y: 49
-        width: 14
+        width: 46
         height: 14
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -241,10 +254,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 05c0f4b225c981348978f6d5add41155
-      internalID: -144578560
+      spriteID: 9eccddfe8ab4f4b90800000000000000
+      internalID: -7255497285719700247
       vertices: []
       indices: 
       edges: []
@@ -253,20 +266,20 @@ TextureImporter:
       name: Grass_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 137
-        height: 48
+        x: 48
+        y: 48
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: ef017ad722ebdec4395b798ee1e14b7a
-      internalID: -1609143131
+      spriteID: 689a8b09f3825ce50800000000000000
+      internalID: 6828908663453297030
       vertices: []
       indices: 
       edges: []
@@ -275,7 +288,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 65d37c267a8b2894eb04c257fc1b1923
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -284,14 +297,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Grass_0: -1619037063
-      Grass_1: 116565047
-      Grass_2: 1815401129
-      Grass_3: -1569883034
-      Grass_4: 1420792465
-      Grass_5: -144578560
-      Grass_6: -1609143131
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
