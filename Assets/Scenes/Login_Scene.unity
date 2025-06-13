@@ -3682,10 +3682,21 @@ MonoBehaviour:
   usernameField: {fileID: 763247349}
   passwordField: {fileID: 1244986270}
   loginButton: {fileID: 697507263}
+  registerButton: {fileID: 0}
   errorText: {fileID: 433800277}
+  statusText: {fileID: 0}
+  loadingPanel: {fileID: 0}
   mainSceneName: SampleScene
-  correctUsername: admin
-  correctPassword: password
+  enableOfflineMode: 1
+  offlineUsername: admin
+  offlinePassword: password
+  registrationPanel: {fileID: 0}
+  regUsernameField: {fileID: 0}
+  regEmailField: {fileID: 0}
+  regPasswordField: {fileID: 0}
+  regConfirmPasswordField: {fileID: 0}
+  submitRegisterButton: {fileID: 0}
+  cancelRegisterButton: {fileID: 0}
 --- !u!4 &1840059407
 Transform:
   m_ObjectHideFlags: 0
