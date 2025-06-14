@@ -74,9 +74,7 @@ public class Login : MonoBehaviour
             
         if (cancelRegisterButton != null)
             cancelRegisterButton.onClick.AddListener(OnCancelRegisterClick);
-    }
-
-    public void OnLoginButtonClick()
+    }    public void OnLoginButtonClick()
     {
         if (isLoading) return;
 
@@ -256,9 +254,7 @@ public class Login : MonoBehaviour
         {
             ShowError(response.Message);
         }
-    }
-
-    private void HandleOfflineLogin(string username, string password)
+    }    private void HandleOfflineLogin(string username, string password)
     {
         if (!enableOfflineMode)
         {
@@ -279,7 +275,7 @@ public class Login : MonoBehaviour
                 Coin = 1000,
                 Diamond = 0,
                 Gem = 0,
-                JoinDate = System.DateTime.Now
+                JoinDate = System.DateTime.Now.ToString()
             };
 
             if (UserSessionManager.Instance != null)
