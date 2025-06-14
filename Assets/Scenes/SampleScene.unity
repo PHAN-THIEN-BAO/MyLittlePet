@@ -11292,6 +11292,9 @@ GameObject:
   - component: {fileID: 256286426}
   - component: {fileID: 256286425}
   - component: {fileID: 256286424}
+  - component: {fileID: 256286427}
+  - component: {fileID: 256286428}
+  - component: {fileID: 256286429}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -11309,7 +11312,7 @@ Animator:
   m_GameObject: {fileID: 256286423}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 317ea9598b52b584ab0676f03364a2da, type: 2}
+  m_Controller: {fileID: 9100000, guid: 582a4deef12ee654a898e65891bb75f9, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -11364,7 +11367,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2759478659182374079, guid: 82e7420b2992547469500cc3c4cdefd0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -11385,12 +11388,99 @@ Transform:
   m_GameObject: {fileID: 256286423}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.606, y: -1.175, z: 0}
+  m_LocalPosition: {x: -4.34, y: -1.55, z: 0}
   m_LocalScale: {x: 3.9904652, y: 3.9904652, z: 3.9904652}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &256286427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256286423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b317dbeb8bf4b9f871fe611d58d3a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 1.7
+  changeDirectionTime: 2
+--- !u!50 &256286428
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256286423}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDamping: 0
+  m_AngularDamping: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!61 &256286429
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 256286423}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.14, y: 0.15}
+    newSize: {x: 0.14, y: 0.15}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.14, y: 0.15}
+  m_EdgeRadius: 0
 --- !u!1 &257466380
 GameObject:
   m_ObjectHideFlags: 0
@@ -69102,11 +69192,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 538858277015980949, guid: bb49d4537e83599468045f7ecbaf03ea, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.82
+      value: 11.98
       objectReference: {fileID: 0}
     - target: {fileID: 538858277015980949, guid: bb49d4537e83599468045f7ecbaf03ea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.85
+      value: -12.01
       objectReference: {fileID: 0}
     - target: {fileID: 538858277015980949, guid: bb49d4537e83599468045f7ecbaf03ea, type: 3}
       propertyPath: m_LocalPosition.z
