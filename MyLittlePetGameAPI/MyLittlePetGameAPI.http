@@ -1,0 +1,6 @@
+@MyLittlePetGameAPI_HostAddress = http://localhost:5083
+
+GET {{MyLittlePetGameAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
