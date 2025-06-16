@@ -37,11 +37,10 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<ShopProduct> ShopProducts { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=THIENBAO-PC\\BAO;Database=My_Little_Pet_V3;Trusted_Connection=True;TrustServerCertificate=True;");
+    public virtual DbSet<User> Users { get; set; }    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        // Connection string is already configured in Program.cs
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
