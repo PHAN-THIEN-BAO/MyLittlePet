@@ -19,11 +19,11 @@ public partial class ShopProduct
 
     public string? ImageUrl { get; set; }
 
-    public int Price { get; set; }
-
-    public string CurrencyType { get; set; } = null!;
+    public int Price { get; set; }    public string CurrencyType { get; set; } = null!;
 
     public int? Quality { get; set; }
+    
+    public int? Status { get; set; }
 
     public virtual User Admin { get; set; } = null!;
 

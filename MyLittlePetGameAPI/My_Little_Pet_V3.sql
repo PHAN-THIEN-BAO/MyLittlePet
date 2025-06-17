@@ -2,7 +2,7 @@ Create database My_Little_Pet_V3;
 GO
 USE My_Little_Pet_V3;
 GO
-
+Drop database My_Little_Pet_V3;
 CREATE TABLE [User] (
     ID INT PRIMARY KEY  IDENTITY(1,1),
 	Role NVARCHAR(50) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE [User] (
 );
 
 
-GO
+
 CREATE TABLE Shop (
     ShopID INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL,
@@ -38,6 +38,7 @@ CREATE TABLE ShopProduct (
     Price INT NOT NULL,
     CurrencyType VARCHAR(20) NOT NULL,
     Quality INT DEFAULT 100,
+	Status INT DEFAULT 1,
     FOREIGN KEY (ShopID) REFERENCES Shop(ShopID),
 	FOREIGN KEY (AdminID) REFERENCES [User](ID)
 );
@@ -53,12 +54,14 @@ CREATE TABLE PlayerInventory (
     FOREIGN KEY (ShopProductID) REFERENCES ShopProduct(ShopProductID),
 );
 
+
 --Done with Shop and Player 
 CREATE TABLE Pet (
     PetID INT PRIMARY KEY IDENTITY(1,1),
 	AdminID INT,
     PetType VARCHAR(50) NOT NULL,  
 	PetDefaultName VARCHAR(50) NOT NULL,
+	PetStatus INT DEFAULt 1,
     Description TEXT,
 	FOREIGN KEY (AdminID) REFERENCES [User](ID)
 );
@@ -109,6 +112,7 @@ CREATE TABLE PlayerAchievement (
     PlayerID INT,
     AchievementID INT,
     EarnedAt DATETIME DEFAULT GETDATE(),
+	IsCollected BIT DEFAULT 0,
     PRIMARY KEY (PlayerID, AchievementID),
     FOREIGN KEY (PlayerID) REFERENCES [User](ID),
     FOREIGN KEY (AchievementID) REFERENCES Achievement(AchievementID)
@@ -133,7 +137,6 @@ CREATE TABLE GameRecord (
     FOREIGN KEY (MinigameID) REFERENCES Minigame(MinigameID)
 );
 
-
 INSERT INTO [User] (Role, UserName, Email, Password, UserStatus, Level, Coin, Diamond, Gem)
 VALUES 
 ('Player', N'CatLover01', 'catlover01@example.com', 'pass1234', 'ACTIVE', 5, 1000, 5, 3),
@@ -147,4 +150,3 @@ VALUES
 ('Player', N'BirdWatcher', 'birdw@example.com', 'tweet123', 'ONLINE', 5, 1200, 6, 4),
 ('Player', N'ReptileRider', 'reptrider@example.com', 'reptilepass', 'ACTIVE', 7, 1500, 8, 7);
 
-select * from [User]

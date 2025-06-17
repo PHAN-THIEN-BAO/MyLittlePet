@@ -21,8 +21,7 @@ namespace MyLittlePetGameAPI.Controllers
         {
             return Ok(_context.Users.ToList());
         }
-        
-        // GET: User/{id} - Get user by ID
+          // GET: User/{id} - Get user by ID
         [HttpGet("{id}")]
         public ActionResult<User> GetById(int id)
         {
@@ -35,10 +34,24 @@ namespace MyLittlePetGameAPI.Controllers
             
             return Ok(user);
         }
-
-        // GET: User/login - Get user by username and password
+        
+        // GET: User/{id}/PetCount - Get number of pets owned by user
+        [HttpGet("{id}/PetCount")]
+        public ActionResult<int> GetPetCount(int id)
+        {
+            var user = _context.Users.Find(id);
+            
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            
+            var petCount = _context.PlayerPets.Count(pp => pp.PlayerId == id);
+            
+            return Ok(new { UserId = id, PetCount = petCount });
+        }        // GET: User/login - Get user by username and password
         [HttpGet("login")]
-        public ActionResult<User> GetByLogin(string userName, string password)
+        public ActionResult GetByLogin(string userName, string password)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
             {
@@ -49,10 +62,60 @@ namespace MyLittlePetGameAPI.Controllers
             
             if (user == null)
             {
-                return NotFound();
+                return NotFound("User not found");
+            }
+              // If role is Player, only return the User ID
+            if (user.Role == "Player")
+            {
+                return Ok(new { UserId = user.Id });
             }
             
+            // For other roles, return the full user object
             return Ok(user);
+        }
+        
+        // POST: User/register - Register a new player
+        [HttpPost("register")]
+        public ActionResult<User> RegisterPlayer(string userName, string email, string password, 
+            int? coin = 100, int? diamond = 0, int? gem = 0)
+        {
+            // Validate required fields
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Username, email, and password are required");
+            }
+            
+            // Check if username already exists
+            if (_context.Users.Any(u => u.UserName == userName))
+            {
+                return BadRequest("Username already exists");
+            }
+            
+            // Check if email already exists
+            if (_context.Users.Any(u => u.Email == email))
+            {
+                return BadRequest("Email already exists");
+            }
+            
+            var newPlayer = new User
+            {
+                Role = "Player", // Always set role to Player for this endpoint
+                UserName = userName,
+                Password = password,
+                Email = email,
+                UserStatus = "ACTIVE",
+                Level = 1,
+                Coin = coin ?? 100, // Default starting coins
+                Diamond = diamond ?? 0,
+                Gem = gem ?? 0,
+                JoinDate = DateTime.Now
+            };
+            
+            _context.Users.Add(newPlayer);
+            _context.SaveChanges();
+            
+            // Return only the ID for security
+            return Ok(new { PlayerId = newPlayer.Id, Message = "Registration successful" });
         }
         
         // POST: User - Create a new user

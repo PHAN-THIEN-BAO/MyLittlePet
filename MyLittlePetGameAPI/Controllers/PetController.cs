@@ -35,10 +35,21 @@ namespace MyLittlePetGameAPI.Controllers
             
             return Ok(pet);
         }
+          // GET: Pet/Status/{status} - Get pets by status
+        [HttpGet("Status/{status}")]
+        public ActionResult<IEnumerable<Pet>> GetByStatus(int status)
+        {
+            var pets = _context.Pets
+                .Include(p => p.Admin)
+                .Where(p => p.PetStatus == status)
+                .ToList();
+                
+            return Ok(pets);
+        }
         
         // POST: Pet - Create a new pet
         [HttpPost]
-        public ActionResult<Pet> Create(int? adminId, string petType, string petDefaultName, string? description)
+        public ActionResult<Pet> Create(int? adminId, string petType, string petDefaultName, string? description, int? petStatus)
         {
             // Validate required fields
             if (string.IsNullOrEmpty(petType) || string.IsNullOrEmpty(petDefaultName))
@@ -61,7 +72,8 @@ namespace MyLittlePetGameAPI.Controllers
                 AdminId = adminId,
                 PetType = petType,
                 PetDefaultName = petDefaultName,
-                Description = description
+                Description = description,
+                PetStatus = petStatus ?? 1 // Default to 1 (active) if not provided
             };
             
             _context.Pets.Add(newPet);
@@ -69,10 +81,9 @@ namespace MyLittlePetGameAPI.Controllers
             
             return CreatedAtAction(nameof(GetById), new { id = newPet.PetId }, newPet);
         }
-        
-        // PUT: Pet/{id} - Update a pet
+          // PUT: Pet/{id} - Update a pet
         [HttpPut("{id}")]
-        public ActionResult<Pet> Update(int id, int? adminId, string petType, string petDefaultName, string? description)
+        public ActionResult<Pet> Update(int id, int? adminId, string? petType, string? petDefaultName, string? description, int? petStatus)
         {
             var pet = _context.Pets.Find(id);
             
@@ -81,10 +92,11 @@ namespace MyLittlePetGameAPI.Controllers
                 return NotFound();
             }
             
-            // Validate required fields
-            if (string.IsNullOrEmpty(petType) || string.IsNullOrEmpty(petDefaultName))
+            // Validate required fields if they're being updated
+            if ((petType != null && string.IsNullOrEmpty(petType)) || 
+                (petDefaultName != null && string.IsNullOrEmpty(petDefaultName)))
             {
-                return BadRequest("Pet type and default name are required");
+                return BadRequest("Pet type and default name cannot be empty");
             }
             
             // Validate adminId exists if provided
@@ -95,12 +107,28 @@ namespace MyLittlePetGameAPI.Controllers
                 {
                     return BadRequest("Admin user not found");
                 }
+                pet.AdminId = adminId;
             }
             
-            pet.AdminId = adminId;
-            pet.PetType = petType;
-            pet.PetDefaultName = petDefaultName;
-            pet.Description = description;
+            if (!string.IsNullOrEmpty(petType))
+            {
+                pet.PetType = petType;
+            }
+            
+            if (!string.IsNullOrEmpty(petDefaultName))
+            {
+                pet.PetDefaultName = petDefaultName;
+            }
+            
+            if (description != null) // Allow setting description to null
+            {
+                pet.Description = description;
+            }
+            
+            if (petStatus.HasValue)
+            {
+                pet.PetStatus = petStatus;
+            }
             
             _context.Pets.Update(pet);
             _context.SaveChanges();

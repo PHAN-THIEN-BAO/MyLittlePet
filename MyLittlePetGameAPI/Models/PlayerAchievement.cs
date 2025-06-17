@@ -5,11 +5,11 @@ namespace MyLittlePetGameAPI.Models;
 
 public partial class PlayerAchievement
 {
-    public int PlayerId { get; set; }
-
-    public int AchievementId { get; set; }
+    public int PlayerId { get; set; }    public int AchievementId { get; set; }
 
     public DateTime? EarnedAt { get; set; }
+    
+    public bool? IsCollected { get; set; }
 
     public virtual Achievement Achievement { get; set; } = null!;
 

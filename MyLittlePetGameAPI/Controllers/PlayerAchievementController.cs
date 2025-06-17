@@ -24,8 +24,7 @@ namespace MyLittlePetGameAPI.Controllers
                 .Include(pa => pa.Achievement)
                 .ToList());
         }
-        
-        // GET: PlayerAchievement/Player/{playerId} - Get achievements for a specific player
+          // GET: PlayerAchievement/Player/{playerId} - Get achievements for a specific player
         [HttpGet("Player/{playerId}")]
         public ActionResult<IEnumerable<PlayerAchievement>> GetByPlayerId(int playerId)
         {
@@ -38,6 +37,25 @@ namespace MyLittlePetGameAPI.Controllers
             var achievements = _context.PlayerAchievements
                 .Include(pa => pa.Achievement)
                 .Where(pa => pa.PlayerId == playerId)
+                .OrderByDescending(pa => pa.EarnedAt)
+                .ToList();
+                
+            return Ok(achievements);
+        }
+        
+        // GET: PlayerAchievement/Player/{playerId}/Uncollected - Get uncollected achievements for a player
+        [HttpGet("Player/{playerId}/Uncollected")]
+        public ActionResult<IEnumerable<PlayerAchievement>> GetUncollectedByPlayerId(int playerId)
+        {
+            var player = _context.Users.Find(playerId);
+            if (player == null)
+            {
+                return NotFound("Player not found");
+            }
+            
+            var achievements = _context.PlayerAchievements
+                .Include(pa => pa.Achievement)
+                .Where(pa => pa.PlayerId == playerId && (pa.IsCollected == false || pa.IsCollected == null))
                 .OrderByDescending(pa => pa.EarnedAt)
                 .ToList();
                 
@@ -62,10 +80,9 @@ namespace MyLittlePetGameAPI.Controllers
                 
             return Ok(players);
         }
-        
-        // POST: PlayerAchievement - Award an achievement to a player
+          // POST: PlayerAchievement - Award an achievement to a player
         [HttpPost]
-        public ActionResult<PlayerAchievement> Create(int playerId, int achievementId)
+        public ActionResult<PlayerAchievement> Create(int playerId, int achievementId, bool? isCollected)
         {
             // Validate player exists
             var player = _context.Users.Find(playerId);
@@ -94,16 +111,15 @@ namespace MyLittlePetGameAPI.Controllers
             {
                 PlayerId = playerId,
                 AchievementId = achievementId,
-                EarnedAt = DateTime.Now
+                EarnedAt = DateTime.Now,
+                IsCollected = isCollected ?? false // Default to false if not provided
             };
-            
-            _context.PlayerAchievements.Add(playerAchievement);
+              _context.PlayerAchievements.Add(playerAchievement);
             _context.SaveChanges();
             
-            return CreatedAtAction(nameof(GetByPlayerId), new { playerId = playerId }, playerAchievement);
+            return CreatedAtAction("GetUncollectedByPlayerId", new { playerId = playerId }, playerAchievement);
         }
-        
-        // DELETE: PlayerAchievement - Remove an achievement from a player
+          // DELETE: PlayerAchievement - Remove an achievement from a player
         [HttpDelete]
         public ActionResult Delete(int playerId, int achievementId)
         {
@@ -119,6 +135,25 @@ namespace MyLittlePetGameAPI.Controllers
             _context.SaveChanges();
             
             return NoContent();
+        }
+        
+        // PUT: PlayerAchievement/Collect - Mark an achievement as collected
+        [HttpPut("Collect")]
+        public ActionResult<PlayerAchievement> MarkAsCollected(int playerId, int achievementId)
+        {
+            var playerAchievement = _context.PlayerAchievements
+                .FirstOrDefault(pa => pa.PlayerId == playerId && pa.AchievementId == achievementId);
+                
+            if (playerAchievement == null)
+            {
+                return NotFound("Player does not have this achievement");
+            }
+            
+            playerAchievement.IsCollected = true;
+            _context.PlayerAchievements.Update(playerAchievement);
+            _context.SaveChanges();
+            
+            return Ok(playerAchievement);
         }
     }
 }

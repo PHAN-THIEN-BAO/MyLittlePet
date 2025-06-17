@@ -58,11 +58,23 @@ namespace MyLittlePetGameAPI.Controllers
                 
             return Ok(products);
         }
+          // GET: ShopProduct/Status/{status} - Get products by status
+        [HttpGet("Status/{status}")]
+        public ActionResult<IEnumerable<ShopProduct>> GetByStatus(int status)
+        {
+            var products = _context.ShopProducts
+                .Include(p => p.Shop)
+                .Include(p => p.Admin)
+                .Where(p => p.Status == status)
+                .ToList();
+                
+            return Ok(products);
+        }
         
         // POST: ShopProduct - Create a new product
         [HttpPost]
         public ActionResult<ShopProduct> Create(int shopId, int adminId, string name, string type, string? description, 
-            string? imageUrl, int price, string currencyType, int? quality)
+            string? imageUrl, int price, string currencyType, int? quality, int? status)
         {
             // Validate required fields
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(currencyType))
@@ -94,7 +106,8 @@ namespace MyLittlePetGameAPI.Controllers
                 ImageUrl = imageUrl,
                 Price = price,
                 CurrencyType = currencyType,
-                Quality = quality ?? 100 // Default to 100 if not provided
+                Quality = quality ?? 100, // Default to 100 if not provided
+                Status = status ?? 1 // Default to 1 (active) if not provided
             };
             
             _context.ShopProducts.Add(product);
@@ -102,11 +115,10 @@ namespace MyLittlePetGameAPI.Controllers
             
             return CreatedAtAction(nameof(GetById), new { id = product.ShopProductId }, product);
         }
-        
-        // PUT: ShopProduct/{id} - Update a product
+          // PUT: ShopProduct/{id} - Update a product
         [HttpPut("{id}")]
         public ActionResult<ShopProduct> Update(int id, string? name, string? type, string? description, 
-            string? imageUrl, int? price, string? currencyType, int? quality)
+            string? imageUrl, int? price, string? currencyType, int? quality, int? status)
         {
             var product = _context.ShopProducts.Find(id);
             
@@ -149,6 +161,11 @@ namespace MyLittlePetGameAPI.Controllers
             if (quality.HasValue)
             {
                 product.Quality = quality.Value;
+            }
+            
+            if (status.HasValue)
+            {
+                product.Status = status.Value;
             }
             
             _context.ShopProducts.Update(product);

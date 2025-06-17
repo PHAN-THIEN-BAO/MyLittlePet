@@ -59,7 +59,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
-    <Analyzer Include="C:\Users\Admin\Desktop\Unity\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
+    <Analyzer Include="D:\SWP\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scenes\TestScene\PhayerInfomation.cs" />
@@ -68,22 +68,20 @@
     <Compile Include="Assets\Mini_game\Scripts\Testing.cs" />
     <Compile Include="Assets\Scripts\UI\LoadScenes.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerCollisionHandler.cs" />
-    <Compile Include="Assets\Scripts\Managers\APIManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManagerWaring.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlMovement.cs" />
     <Compile Include="Assets\Scripts\UI\UISetting.cs" />
+    <Compile Include="Assets\Scripts\InfiniteBackground.cs" />
     <Compile Include="Assets\Scenes\TestScene\APIUser.cs" />
-    <Compile Include="Assets\Scripts\Managers\AuthenticationManager.cs" />
     <Compile Include="Assets\Scenes\TestScene\User.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
-    <Compile Include="Assets\Scripts\UI\Login.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
-    <Compile Include="Assets\Scripts\Managers\UserSessionManager.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Enemy\EnemyRandomMovement.cs" />
     <Compile Include="Assets\Scripts\UI\UIInventory.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Character.cs" />
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
+    <Compile Include="Assets\Scripts\Login\Menu.cs" />
     <Compile Include="Assets\Scripts\UI\UIStoreOptionManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\RandomMovement.cs" />
@@ -1285,6 +1283,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Cinemachine.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Cinemachine.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.2D.SpriteShape.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Runtime.dll</HintPath>
       <Private>False</Private>
@@ -1329,6 +1331,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.Multiplayer.Center.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Splines">
+      <HintPath>Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1339,6 +1345,10 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.GPUDriven.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.GPUDriven.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Cinemachine">
+      <HintPath>Library\ScriptAssemblies\Unity.Cinemachine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.001">
@@ -1387,6 +1397,10 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Config.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Config.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Splines.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Splines.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.2D.Aseprite.Common">
