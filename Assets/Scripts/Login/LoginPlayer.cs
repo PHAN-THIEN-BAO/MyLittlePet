@@ -22,17 +22,43 @@ public class LoginPlayer : MonoBehaviour
     {
         string username = usernameField.text;
         string password = passwordField.text;
-        User user = APIUser.LoginAPI(username, password);
-        if (user != null)
+
+        // Check for empty fields first
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
-            SceneManager.LoadScene(Scenename); // Load the main menu scene after successful login
-            Debug.Log("Login successful! User ID: " + user.id);
-            // You can now use the user object as needed, e.g., store it in a session or pass it to another scene
+            errorText.text = "Please fill in all fields.";
+            errorText.color = Color.red;
+            Debug.LogError("Login failed. Please fill in all fields.");
+            return;
         }
-        else
+
+        try
         {
+            // Attempt to login
+            User user = APIUser.LoginAPI(username, password);
+
+            // Debug what's returned
+            Debug.Log("API returned: " + (user == null ? "null" : "user object"));
+
+            if (user != null)
+            {
+                SceneManager.LoadScene(Scenename); // Load the main menu scene after successful login
+                Debug.Log("Login successful! User ID: " + user.id);
+            }
+            else
+            {
+                // Make sure this block is reached when authentication fails
+                errorText.color = Color.red;
+                errorText.text = "Incorrect pass or player name.";
+                Debug.LogError("Login failed. Please check your credentials.");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            // Catch any exceptions during the API call
+            errorText.color = Color.red;
             errorText.text = "Incorrect pass or player name.";
-            Debug.LogError("Login failed. Please check your credentials.");
+            Debug.LogException(ex);
         }
     }
 
