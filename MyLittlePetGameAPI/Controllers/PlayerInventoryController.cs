@@ -17,30 +17,85 @@ namespace MyLittlePetGameAPI.Controllers
         
         // GET: PlayerInventory - Get all player inventory items
         [HttpGet]
-        public ActionResult<IEnumerable<PlayerInventory>> Get()
+        public ActionResult<IEnumerable<object>> Get()
         {
-            return Ok(_context.PlayerInventories
-                .Include(i => i.Player)
-                .Include(i => i.ShopProduct)
-                .ToList());
+            try
+            {
+                var inventoryItems = _context.PlayerInventories
+                    .Include(i => i.Player)
+                    .Include(i => i.ShopProduct)
+                    .Select(i => new
+                    {
+                        PlayerId = i.PlayerId,
+                        ShopProductId = i.ShopProductId,
+                        Quantity = i.Quantity,
+                        AcquiredAt = i.AcquiredAt,
+                        PlayerInfo = new
+                        {
+                            Id = i.Player.Id,
+                            UserName = i.Player.UserName
+                        },
+                        ProductInfo = new
+                        {
+                            Id = i.ShopProduct.ShopProductId,
+                            Name = i.ShopProduct.Name,
+                            Type = i.ShopProduct.Type,
+                            Description = i.ShopProduct.Description,
+                            Price = i.ShopProduct.Price,
+                            CurrencyType = i.ShopProduct.CurrencyType,
+                            ImageUrl = i.ShopProduct.ImageUrl
+                        }
+                    })
+                    .ToList();
+                
+                return Ok(inventoryItems);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: PlayerInventory/Player/{playerId} - Get inventory for a specific player
         [HttpGet("Player/{playerId}")]
-        public ActionResult<IEnumerable<PlayerInventory>> GetByPlayerId(int playerId)
+        public ActionResult<IEnumerable<object>> GetByPlayerId(int playerId)
         {
-            var player = _context.Users.Find(playerId);
-            if (player == null)
+            try
             {
-                return NotFound("Player not found");
-            }
-            
-            var inventory = _context.PlayerInventories
-                .Include(i => i.ShopProduct)
-                .Where(i => i.PlayerId == playerId)
-                .ToList();
+                var player = _context.Users.Find(playerId);
+                if (player == null)
+                {
+                    return NotFound("Player not found");
+                }
                 
-            return Ok(inventory);
+                var inventory = _context.PlayerInventories
+                    .Include(i => i.ShopProduct)
+                    .Where(i => i.PlayerId == playerId)
+                    .Select(i => new
+                    {
+                        PlayerId = i.PlayerId,
+                        ShopProductId = i.ShopProductId,
+                        Quantity = i.Quantity,
+                        AcquiredAt = i.AcquiredAt,
+                        ProductInfo = new
+                        {
+                            Id = i.ShopProduct.ShopProductId,
+                            Name = i.ShopProduct.Name,
+                            Type = i.ShopProduct.Type,
+                            Description = i.ShopProduct.Description,
+                            Price = i.ShopProduct.Price,
+                            CurrencyType = i.ShopProduct.CurrencyType,
+                            ImageUrl = i.ShopProduct.ImageUrl
+                        }
+                    })
+                    .ToList();
+                    
+                return Ok(inventory);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // POST: PlayerInventory - Add item to player's inventory

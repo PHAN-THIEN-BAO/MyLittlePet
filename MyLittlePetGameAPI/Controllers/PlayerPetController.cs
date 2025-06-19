@@ -17,47 +17,135 @@ namespace MyLittlePetGameAPI.Controllers
         
         // GET: PlayerPet - Get all player pets
         [HttpGet]
-        public ActionResult<IEnumerable<PlayerPet>> Get()
+        public ActionResult<IEnumerable<object>> Get()
         {
-            return Ok(_context.PlayerPets
-                .Include(pp => pp.Player)
-                .Include(pp => pp.Pet)
-                .ToList());
+            try
+            {
+                var playerPets = _context.PlayerPets
+                    .Include(pp => pp.Player)
+                    .Include(pp => pp.Pet)
+                    .Select(pp => new
+                    {
+                        PlayerPetId = pp.PlayerPetId,
+                        PlayerId = pp.PlayerId,
+                        PetId = pp.PetId,
+                        PetCustomName = pp.PetCustomName,
+                        AdoptedAt = pp.AdoptedAt,
+                        Level = pp.Level,
+                        Status = pp.Status,
+                        LastStatusUpdate = pp.LastStatusUpdate,
+                        PetInfo = new
+                        {
+                            PetId = pp.Pet.PetId,
+                            PetType = pp.Pet.PetType,
+                            PetDefaultName = pp.Pet.PetDefaultName,
+                            Description = pp.Pet.Description
+                        },
+                        PlayerInfo = new
+                        {
+                            Id = pp.Player.Id,
+                            UserName = pp.Player.UserName
+                        }
+                    })
+                    .ToList();
+                
+                return Ok(playerPets);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: PlayerPet/{id} - Get player pet by ID
         [HttpGet("{id}")]
-        public ActionResult<PlayerPet> GetById(int id)
+        public ActionResult<object> GetById(int id)
         {
-            var playerPet = _context.PlayerPets
-                .Include(pp => pp.Player)
-                .Include(pp => pp.Pet)
-                .FirstOrDefault(pp => pp.PlayerPetId == id);
-            
-            if (playerPet == null)
+            try
             {
-                return NotFound();
+                var playerPet = _context.PlayerPets
+                    .Include(pp => pp.Player)
+                    .Include(pp => pp.Pet)
+                    .FirstOrDefault(pp => pp.PlayerPetId == id);
+                
+                if (playerPet == null)
+                {
+                    return NotFound();
+                }
+                
+                var result = new
+                {
+                    PlayerPetId = playerPet.PlayerPetId,
+                    PlayerId = playerPet.PlayerId,
+                    PetId = playerPet.PetId,
+                    PetCustomName = playerPet.PetCustomName,
+                    AdoptedAt = playerPet.AdoptedAt,
+                    Level = playerPet.Level,
+                    Status = playerPet.Status,
+                    LastStatusUpdate = playerPet.LastStatusUpdate,
+                    PetInfo = new
+                    {
+                        PetId = playerPet.Pet.PetId,
+                        PetType = playerPet.Pet.PetType,
+                        PetDefaultName = playerPet.Pet.PetDefaultName,
+                        Description = playerPet.Pet.Description
+                    },
+                    PlayerInfo = new
+                    {
+                        Id = playerPet.Player.Id,
+                        UserName = playerPet.Player.UserName
+                    }
+                };
+                
+                return Ok(result);
             }
-            
-            return Ok(playerPet);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: PlayerPet/Player/{playerId} - Get all pets for a player
         [HttpGet("Player/{playerId}")]
-        public ActionResult<IEnumerable<PlayerPet>> GetByPlayerId(int playerId)
+        public ActionResult<IEnumerable<object>> GetByPlayerId(int playerId)
         {
-            var player = _context.Users.Find(playerId);
-            if (player == null)
+            try
             {
-                return NotFound("Player not found");
-            }
-            
-            var playerPets = _context.PlayerPets
-                .Include(pp => pp.Pet)
-                .Where(pp => pp.PlayerId == playerId)
-                .ToList();
+                var player = _context.Users.Find(playerId);
+                if (player == null)
+                {
+                    return NotFound("Player not found");
+                }
                 
-            return Ok(playerPets);
+                var playerPets = _context.PlayerPets
+                    .Include(pp => pp.Pet)
+                    .Where(pp => pp.PlayerId == playerId)
+                    .Select(pp => new
+                    {
+                        PlayerPetId = pp.PlayerPetId,
+                        PlayerId = pp.PlayerId,
+                        PetId = pp.PetId,
+                        PetCustomName = pp.PetCustomName,
+                        AdoptedAt = pp.AdoptedAt,
+                        Level = pp.Level,
+                        Status = pp.Status,
+                        LastStatusUpdate = pp.LastStatusUpdate,
+                        PetInfo = new
+                        {
+                            PetId = pp.Pet.PetId,
+                            PetType = pp.Pet.PetType,
+                            PetDefaultName = pp.Pet.PetDefaultName,
+                            Description = pp.Pet.Description
+                        }
+                    })
+                    .ToList();
+                    
+                return Ok(playerPets);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // POST: PlayerPet - Adopt a pet for a player
