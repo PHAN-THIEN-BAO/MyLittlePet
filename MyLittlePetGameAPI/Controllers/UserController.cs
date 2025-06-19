@@ -68,16 +68,10 @@ namespace MyLittlePetGameAPI.Controllers
             // Check if the user is banned
             if (user.UserStatus == "BANNED")
             {
-                return Unauthorized("Mày bị ban rồi, cút!!");
-            }
-              
-            // If role is Player, only return the User ID
-            if (user.Role == "Player")
-            {
-                return Ok(new { UserId = user.Id });
+                return Unauthorized("Mày bị ban rồi, cút!!");
             }
             
-            // For other roles, return the full user object
+            // Return the full user object for all roles including Player
             return Ok(user);
         }
         
