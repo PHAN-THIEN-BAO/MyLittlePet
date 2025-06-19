@@ -43,7 +43,10 @@ public class LoginPlayer : MonoBehaviour
 
             if (user != null)
             {
-                //SceneManager.LoadScene(Scenename);
+                // Save user information
+                PlayerInfomation.SavePlayerInfo(user);
+                // Log user information for debugging
+                Debug.Log("User info: " + JsonUtility.ToJson(user));
                 currentPanel.SetActive(false);
                 successPanel.SetActive(true);
                 Debug.Log("Login successful! User ID: " + user.id);
