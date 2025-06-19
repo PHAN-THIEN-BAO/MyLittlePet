@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Net;
 using System.IO;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 public static class APIUser
 {
@@ -97,28 +98,22 @@ public static class APIUser
         }
     }
 
-    public static List<Pet> GetPlayerPets(string playerId)
+    public static List<PlayerPet> GetPlayerPets(string playerId)
     {
-        // Example endpoint: https://localhost:7035/User/{playerId}/pets
-        string url = "https://localhost:7035/User/" + playerId + "/pets";
+        string url = "https://localhost:7035/PlayerPet/Player/" + playerId;
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string jsonResponse = reader.ReadToEnd();
         reader.Close();
 
-        
-        PetListWrapper wrapper = JsonUtility.FromJson<PetListWrapper>(jsonResponse);
-        if (wrapper != null && wrapper.pets != null)
-            return new List<Pet>(wrapper.pets);
-        return new List<Pet>();
+        // Parse the JSON response into a list of PlayerPet objects
+        return JsonConvert.DeserializeObject<List<PlayerPet>>(jsonResponse);
     }
 
-    [System.Serializable]
-    public class PetListWrapper
+    public static int GetPlayerPetCount(string playerId)
     {
-        public Pet[] pets;
+        List<PlayerPet> playerPets = GetPlayerPets(playerId);
+        return playerPets != null ? playerPets.Count : 0;
     }
-
-
 }
