@@ -16,6 +16,8 @@ public class LoginPlayer : MonoBehaviour
     [SerializeField] public TMP_InputField passwordField;
     [SerializeField] public Button loginButton;
     [SerializeField] public TextMeshProUGUI errorText;
+    [SerializeField] public GameObject currentPanel;
+    [SerializeField] public GameObject successPanel;
 
 
     public void LogInPlayer()
@@ -28,7 +30,7 @@ public class LoginPlayer : MonoBehaviour
         {
             errorText.text = "Please fill in all fields.";
             errorText.color = Color.red;
-            Debug.LogError("Login failed. Please fill in all fields.");
+            Debug.Log("Login failed. Please fill in all fields.");
             return;
         }
 
@@ -37,29 +39,48 @@ public class LoginPlayer : MonoBehaviour
             // Attempt to login
             User user = APIUser.LoginAPI(username, password);
 
-            // Debug what's returned
             Debug.Log("API returned: " + (user == null ? "null" : "user object"));
 
             if (user != null)
             {
-                SceneManager.LoadScene(Scenename); // Load the main menu scene after successful login
+                //SceneManager.LoadScene(Scenename);
+                currentPanel.SetActive(false);
+                successPanel.SetActive(true);
                 Debug.Log("Login successful! User ID: " + user.id);
             }
             else
             {
-                // Make sure this block is reached when authentication fails
                 errorText.color = Color.red;
                 errorText.text = "Incorrect pass or player name.";
-                Debug.LogError("Login failed. Please check your credentials.");
+                Debug.Log("Login failed. Please check your credentials.");
             }
+        }
+        catch (System.Net.WebException webEx)
+        {
+            var response = webEx.Response as System.Net.HttpWebResponse;
+            if (response != null && response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                //handle 404 error
+                errorText.color = Color.red;
+                errorText.text = "User not found (404).";
+                Debug.LogWarning("User not found (404).");
+            }
+            else
+            {
+                errorText.color = Color.red;
+                errorText.text = "Server error. Please try again.";
+                Debug.LogException(webEx);
+            }
+            
         }
         catch (System.Exception ex)
         {
-            // Catch any exceptions during the API call
             errorText.color = Color.red;
-            errorText.text = "Incorrect pass or player name.";
+            errorText.text = "Login failed.";
             Debug.LogException(ex);
+            
         }
     }
+
 
 }
