@@ -1,10 +1,15 @@
 using UnityEngine;
 using System.Net;
 using System.IO;
+using System.Collections.Generic;
 
 public static class APIUser
 {
-  public static User GetUser()
+    /// <summary>
+    /// test API call to get a user by ID
+    /// </summary>
+    /// <returns></returns>
+    public static User GetUser()
     {   //create a request to the API endpoint
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/User/5");
         //set the method to GET 
@@ -16,6 +21,12 @@ public static class APIUser
         //return the deserialized User object
         return JsonUtility.FromJson<User>(jsonResponse);
     }
+    /// <summary>
+    /// Login to the API with username and password
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
     public static User LoginAPI(string userName, string password)
     {
         //create a request to the API endpoint
@@ -29,7 +40,13 @@ public static class APIUser
         //return the deserialized User object
         return JsonUtility.FromJson<User>(jsonResponse);
     }
-
+    /// <summary>
+    /// Register a new user via the API
+    /// </summary>
+    /// <param name="userName"></param>
+    /// <param name="password"></param>
+    /// <param name="email"></param>
+    /// <returns></returns>
     public static bool RegisterAPI(string userName, string password, string email)
     {
         try
@@ -80,56 +97,28 @@ public static class APIUser
         }
     }
 
-    //public static User Register(string userName, string password, string confirmPassword, string email)
-    //{
-    //    // Validate passwords match
-    //    if (password != confirmPassword)
-    //    {
-    //        Debug.LogError("Passwords do not match");
-    //        return null;
-    //    }
+    public static List<Pet> GetPlayerPets(string playerId)
+    {
+        // Example endpoint: https://localhost:7035/User/{playerId}/pets
+        string url = "https://localhost:7035/User/" + playerId + "/pets";
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+        StreamReader reader = new StreamReader(response.GetResponseStream());
+        string jsonResponse = reader.ReadToEnd();
+        reader.Close();
 
-    //    try
-    //    {
-    //        // Create a request to the API endpoint
-    //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(
-    //            "https://localhost:7035/User/register?userName=" + userName +
-    //            "&password=" + password +
-    //            "&email=" + email);
+        
+        PetListWrapper wrapper = JsonUtility.FromJson<PetListWrapper>(jsonResponse);
+        if (wrapper != null && wrapper.pets != null)
+            return new List<Pet>(wrapper.pets);
+        return new List<Pet>();
+    }
 
-    //        request.Method = "POST";
+    [System.Serializable]
+    public class PetListWrapper
+    {
+        public Pet[] pets;
+    }
 
-    //        // Get the response
-    //        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-    //        // Read and parse the response
-    //        StreamReader reader = new StreamReader(response.GetResponseStream());
-    //        string jsonResponse = reader.ReadToEnd();
-    //        reader.Close();
-
-    //        // After successful registration, log in to get the full user object
-    //        return LoginAPI(userName, password);
-    //    }
-    //    catch (WebException ex)
-    //    {
-    //        // Log the error
-    //        if (ex.Response != null)
-    //        {
-    //            using (StreamReader reader = new StreamReader(ex.Response.GetResponseStream()))
-    //            {
-    //                Debug.LogError("Registration error: " + reader.ReadToEnd());
-    //            }
-    //        }
-    //        else
-    //        {
-    //            Debug.LogError("Registration error: " + ex.Message);
-    //        }
-    //        return null;
-    //    }
-    //    catch (System.Exception ex)
-    //    {
-    //        Debug.LogError("Unexpected error during registration: " + ex.Message);
-    //        return null;
-    //    }
-    //}
 }

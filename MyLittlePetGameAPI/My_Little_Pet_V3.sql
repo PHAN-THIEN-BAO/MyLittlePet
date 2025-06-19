@@ -235,17 +235,17 @@ VALUES
 (8, 7, 2),
 (9, 8, 5);
 INSERT INTO Achievement (AchievementName, Description)
-VALUES 
-('First Pet', 'Adopt your first pet'),
-('Loyal Owner', 'Keep pet for 7 days'),
-('Playful Day', 'Play 5 times'),
-('Clean Pet', 'Give 3 baths'),
-('Veteran', 'Reach level 5'),
-('Wealthy', 'Earn 1000 coins'),
-('Tidy', 'Groom pet 3 times'),
-('Trainer', 'Train pet 3 times'),
-('Socializer', 'Talk to pet 5 times'),
-('Champion', 'Reach top score in minigame');
+VALUES
+('Welcome Aboard!', 'First Login to receive a reward'),
+('Cat Collector', 'Own 2 Cats to receive a reward'),
+('Big Spender', 'Spend 2000 Coins to receive a reward'),
+('Big Spender', 'Spend 5000 Coins to receive a reward'),
+('Big Spender', 'Spend 7000 Coins to receive a reward'),
+('Pet Lover', 'Own 3 pets to receive a reward'),
+('Pet Lover', 'Own 5 pets to receive a reward'),
+('Caring Owne', 'Feed your pets 10 times to receive a reward'),
+('Game On!', 'Play your first minigame to receive a reward'),
+('First Purchase', 'Buy 1 item from the shop to receive a reward');
 INSERT INTO PlayerAchievement (PlayerID, AchievementID)
 VALUES 
 (3, 1),
