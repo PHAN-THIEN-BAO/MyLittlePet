@@ -17,16 +17,24 @@ namespace MyLittlePetGameAPI.Controllers
         
         // GET: PlayerAchievement - Get all player achievements
         [HttpGet]
-        public ActionResult<IEnumerable<PlayerAchievement>> Get()
+        public ActionResult<IEnumerable<object>> Get()
         {
-            return Ok(_context.PlayerAchievements
+            var achievements = _context.PlayerAchievements
                 .Include(pa => pa.Player)
                 .Include(pa => pa.Achievement)
-                .ToList());
+                .Select(pa => new 
+                {
+                    UserId = pa.PlayerId,
+                    AchievementId = pa.AchievementId,
+                    IsCollected = pa.IsCollected
+                })
+                .ToList();
+                
+            return Ok(achievements);
         }
           // GET: PlayerAchievement/Player/{playerId} - Get achievements for a specific player
         [HttpGet("Player/{playerId}")]
-        public ActionResult<IEnumerable<PlayerAchievement>> GetByPlayerId(int playerId)
+        public ActionResult<IEnumerable<object>> GetByPlayerId(int playerId)
         {
             var player = _context.Users.Find(playerId);
             if (player == null)
@@ -38,6 +46,12 @@ namespace MyLittlePetGameAPI.Controllers
                 .Include(pa => pa.Achievement)
                 .Where(pa => pa.PlayerId == playerId)
                 .OrderByDescending(pa => pa.EarnedAt)
+                .Select(pa => new 
+                {
+                    UserId = pa.PlayerId,
+                    AchievementId = pa.AchievementId,
+                    IsCollected = pa.IsCollected
+                })
                 .ToList();
                 
             return Ok(achievements);
