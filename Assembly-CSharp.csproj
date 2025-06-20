@@ -62,9 +62,11 @@
     <Analyzer Include="C:\Users\Admin\Desktop\Unity\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
     <Compile Include="Assets\Scripts\Object\User\APIUser.cs" />
     <Compile Include="Assets\Scripts\Register\RegisterPlayer.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\Camera\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\Object\Achievement\APIAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\User.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlStateAmin.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Testing.cs" />
@@ -74,17 +76,20 @@
     <Compile Include="Assets\Scripts\UI\UIManagerWaring.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlMovement.cs" />
     <Compile Include="Assets\Scripts\UI\UISetting.cs" />
+    <Compile Include="Assets\Scripts\Object\Achievement\Achievement.cs" />
     <Compile Include="Assets\Scripts\InfiniteBackground.cs" />
     <Compile Include="Assets\Scripts\Object\User\UserProfile.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
+    <Compile Include="Assets\Scripts\Object\PlayerAchievement\PlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfomation.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Enemy\EnemyRandomMovement.cs" />
     <Compile Include="Assets\Scripts\UI\UIInventory.cs" />
     <Compile Include="Assets\Scripts\Object\Pet\Pet.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Character.cs" />
     <Compile Include="Assets\Scripts\Login\LoginPlayer.cs" />
+    <Compile Include="Assets\Scripts\Object\PlayerAchievement\APIPlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
     <Compile Include="Assets\Scripts\Login\Menu.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PlayerPet.cs" />
