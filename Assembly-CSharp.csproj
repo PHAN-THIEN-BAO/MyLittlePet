@@ -63,9 +63,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
+    <Compile Include="Assets\Scripts\Object\ShopProduct\ShowShopProduct.cs" />
+    <Compile Include="Assets\Scripts\Object\ShopProduct\ShopProduct.cs" />
     <Compile Include="Assets\Scripts\Object\Shop\Shop.cs" />
     <Compile Include="Assets\Scripts\Object\User\APIUser.cs" />
     <Compile Include="Assets\Scripts\Register\RegisterPlayer.cs" />
+    <Compile Include="Assets\Scripts\Login\CkeckLogin.cs" />
+    <Compile Include="Assets\Scripts\Object\PlayerInventory\PlayerInventory.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\APIAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\User.cs" />
@@ -74,15 +78,18 @@
     <Compile Include="Assets\Scripts\UI\LoadScenes.cs" />
     <Compile Include="Assets\Scripts\Loading\ASyncLoading.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerCollisionHandler.cs" />
+    <Compile Include="Assets\Scripts\Object\PlayerInventory\PlayerInventoryDisplay.cs" />
     <Compile Include="Assets\Scripts\UI\UIManagerWaring.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlMovement.cs" />
     <Compile Include="Assets\Scripts\UI\UISetting.cs" />
+    <Compile Include="Assets\Scripts\Object\ShopProduct\APIShopProduct.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\Achievement.cs" />
     <Compile Include="Assets\Scripts\InfiniteBackground.cs" />
     <Compile Include="Assets\Scripts\Object\User\UserProfile.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
+    <Compile Include="Assets\Scripts\Object\User\PlayerInfoMainScene.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\PlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfomation.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Enemy\EnemyRandomMovement.cs" />
@@ -97,6 +104,7 @@
     <Compile Include="Assets\Scripts\UI\UIStoreOptionManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\RandomMovement.cs" />
+    <Compile Include="Assets\Scripts\Object\PlayerInventory\APIPlayerInventory.cs" />
     <Compile Include="Assets\Scripts\LogOut\LogoutUser.cs" />
   </ItemGroup>
   <ItemGroup>
