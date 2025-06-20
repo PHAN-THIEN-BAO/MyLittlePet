@@ -17,72 +17,155 @@ namespace MyLittlePetGameAPI.Controllers
         
         // GET: GameRecord - Get all game records
         [HttpGet]
-        public ActionResult<IEnumerable<GameRecord>> Get()
+        public ActionResult<IEnumerable<object>> Get()
         {
-            return Ok(_context.GameRecords
-                .Include(gr => gr.Player)
-                .Include(gr => gr.Minigame)
-                .ToList());
+            try
+            {
+                var records = _context.GameRecords
+                    .Include(gr => gr.Player)
+                    .Include(gr => gr.Minigame)
+                    .Select(gr => new
+                    {
+                        PlayerId = gr.PlayerId,
+                        MinigameId = gr.MinigameId,
+                        Score = gr.Score,
+                        PlayedAt = gr.PlayedAt,
+                        PlayerInfo = new
+                        {
+                            Id = gr.Player.Id,
+                            UserName = gr.Player.UserName
+                        },
+                        MinigameInfo = new
+                        {
+                            MinigameId = gr.Minigame.MinigameId,
+                            Name = gr.Minigame.Name
+                        }
+                    })
+                    .ToList();
+                
+                return Ok(records);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: GameRecord/Player/{playerId} - Get game records for a specific player
         [HttpGet("Player/{playerId}")]
-        public ActionResult<IEnumerable<GameRecord>> GetByPlayerId(int playerId)
+        public ActionResult<IEnumerable<object>> GetByPlayerId(int playerId)
         {
-            var player = _context.Users.Find(playerId);
-            if (player == null)
+            try
             {
-                return NotFound("Player not found");
-            }
-            
-            var records = _context.GameRecords
-                .Include(gr => gr.Minigame)
-                .Where(gr => gr.PlayerId == playerId)
-                .OrderByDescending(gr => gr.PlayedAt)
-                .ToList();
+                var player = _context.Users.Find(playerId);
+                if (player == null)
+                {
+                    return NotFound("Player not found");
+                }
                 
-            return Ok(records);
+                var records = _context.GameRecords
+                    .Include(gr => gr.Minigame)
+                    .Where(gr => gr.PlayerId == playerId)
+                    .OrderByDescending(gr => gr.PlayedAt)
+                    .Select(gr => new
+                    {
+                        PlayerId = gr.PlayerId,
+                        MinigameId = gr.MinigameId,
+                        Score = gr.Score,
+                        PlayedAt = gr.PlayedAt,
+                        MinigameInfo = new
+                        {
+                            MinigameId = gr.Minigame.MinigameId,
+                            Name = gr.Minigame.Name
+                        }
+                    })
+                    .ToList();
+                    
+                return Ok(records);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: GameRecord/Minigame/{minigameId} - Get game records for a specific minigame
         [HttpGet("Minigame/{minigameId}")]
-        public ActionResult<IEnumerable<GameRecord>> GetByMinigameId(int minigameId)
+        public ActionResult<IEnumerable<object>> GetByMinigameId(int minigameId)
         {
-            var minigame = _context.Minigames.Find(minigameId);
-            if (minigame == null)
+            try
             {
-                return NotFound("Minigame not found");
-            }
-            
-            var records = _context.GameRecords
-                .Include(gr => gr.Player)
-                .Where(gr => gr.MinigameId == minigameId)
-                .OrderByDescending(gr => gr.Score)
-                .ThenByDescending(gr => gr.PlayedAt)
-                .ToList();
+                var minigame = _context.Minigames.Find(minigameId);
+                if (minigame == null)
+                {
+                    return NotFound("Minigame not found");
+                }
                 
-            return Ok(records);
+                var records = _context.GameRecords
+                    .Include(gr => gr.Player)
+                    .Where(gr => gr.MinigameId == minigameId)
+                    .OrderByDescending(gr => gr.Score)
+                    .ThenByDescending(gr => gr.PlayedAt)
+                    .Select(gr => new
+                    {
+                        PlayerId = gr.PlayerId,
+                        MinigameId = gr.MinigameId,
+                        Score = gr.Score,
+                        PlayedAt = gr.PlayedAt,
+                        PlayerInfo = new
+                        {
+                            Id = gr.Player.Id,
+                            UserName = gr.Player.UserName
+                        }
+                    })
+                    .ToList();
+                    
+                return Ok(records);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: GameRecord/Leaderboard/{minigameId} - Get leaderboard for a specific minigame
         [HttpGet("Leaderboard/{minigameId}")]
-        public ActionResult<IEnumerable<GameRecord>> GetLeaderboard(int minigameId)
+        public ActionResult<IEnumerable<object>> GetLeaderboard(int minigameId)
         {
-            var minigame = _context.Minigames.Find(minigameId);
-            if (minigame == null)
+            try
             {
-                return NotFound("Minigame not found");
-            }
-            
-            var leaderboard = _context.GameRecords
-                .Include(gr => gr.Player)
-                .Where(gr => gr.MinigameId == minigameId)
-                .GroupBy(gr => gr.PlayerId)
-                .Select(group => group.OrderByDescending(gr => gr.Score).First())
-                .OrderByDescending(gr => gr.Score)
-                .ToList();
+                var minigame = _context.Minigames.Find(minigameId);
+                if (minigame == null)
+                {
+                    return NotFound("Minigame not found");
+                }
                 
-            return Ok(leaderboard);
+                var leaderboard = _context.GameRecords
+                    .Include(gr => gr.Player)
+                    .Where(gr => gr.MinigameId == minigameId)
+                    .GroupBy(gr => gr.PlayerId)
+                    .Select(group => group.OrderByDescending(gr => gr.Score).First())
+                    .OrderByDescending(gr => gr.Score)
+                    .Select(gr => new
+                    {
+                        PlayerId = gr.PlayerId,
+                        MinigameId = gr.MinigameId,
+                        Score = gr.Score,
+                        PlayedAt = gr.PlayedAt,
+                        PlayerInfo = new
+                        {
+                            Id = gr.Player.Id,
+                            UserName = gr.Player.UserName
+                        }
+                    })
+                    .ToList();
+                    
+                return Ok(leaderboard);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // POST: GameRecord - Create a new game record
