@@ -1,8 +1,8 @@
-Create database My_Little_Pet_V3;
-GO
+--Create database My_Little_Pet_V3;
+--GO
 	
-GO
-Drop database My_Little_Pet_V3;
+--GO
+--Drop database My_Little_Pet_V3;
 CREATE TABLE [User] (
     ID INT PRIMARY KEY  IDENTITY(1,1),
 	Role NVARCHAR(50) NOT NULL,
@@ -138,42 +138,44 @@ CREATE TABLE GameRecord (
 );
 
 
+
 INSERT INTO [User] (Role, UserName, Email, Password, UserStatus, Level, Coin, Diamond, Gem)
 VALUES 
-('Admin', 'Admin01', 'admin01@example.com', 'pass123', 'ACTIVE', 10, 1000, 50, 10),
-('Admin', 'Admin02', 'admin02@example.com', 'pass123', 'ACTIVE', 10, 800, 40, 5),
-('Player', 'Player01', 'player01@example.com', 'pass123', 'ACTIVE', 5, 300, 10, 3),
-('Player', 'Player02', 'player02@example.com', 'pass123', 'ACTIVE', 3, 200, 5, 1),
-('Player', 'Player03', 'player03@example.com', 'pass123', 'BANNED', 2, 100, 2, 0),
-('Player', 'Player04', 'player04@example.com', 'pass123', 'ACTIVE', 4, 250, 6, 2),
-('Player', 'Player05', 'player05@example.com', 'pass123', 'ACTIVE', 1, 50, 1, 0),
-('Player', 'Player06', 'player06@example.com', 'pass123', 'ACTIVE', 6, 400, 12, 4),
-('Player', 'Player07', 'player07@example.com', 'pass123', 'ACTIVE', 7, 500, 15, 6),
-('Player', 'Player08', 'player08@example.com', 'pass123', 'BANNED', 1, 20, 0, 0);
+('Player', N'CatLover01', 'catlover01@example.com', 'pass1234', 'ACTIVE', 5, 1000, 5, 3),
+('Player', N'DogMaster99', 'dogmaster99@example.com', 'dogpass99', 'ACTIVE', 3, 800, 2, 1),
+('Admin', N'AdminPetCare', 'admin@petgame.com', 'adminpass', 'ACTIVE', 10, 5000, 50, 20),
+('Player', N'BunnyQueen', 'bunnyq@example.com', 'bunny123', 'BANNED', 2, 300, 0, 0),
+('Player', N'HamsterHero', 'hamhero@example.com', 'hamham', 'ACTIVE', 4, 700, 3, 2),
+('Admin', N'ModPuppy', 'modpuppy@example.com', 'mod123', 'ACTIVE', 6, 2000, 10, 5),
+('Player', N'KittyCraze', 'kittycraze@example.com', 'meowmeow', 'BANNED', 1, 100, 0, 0),
+('Player', N'FishyFella', 'fishyfella@example.com', 'fishfish', 'ACTIVE', 3, 600, 1, 1),
+('Player', N'BirdWatcher', 'birdw@example.com', 'tweet123', 'ACTIVE', 5, 1200, 6, 4),
+('Player', N'ReptileRider', 'reptrider@example.com', 'reptilepass', 'ACTIVE', 7, 1500, 8, 7);
 INSERT INTO Shop (Name, Type, Description)
 VALUES 
-('Main Shop', 'Pet', 'Pet adoption and supplies'),
-('Toy Store', 'Item', 'Fun toys for pets'),
-('Food Mart', 'Item', 'Healthy pet food'),
-('Clothing Shop', 'Item', 'Outfits for pets'),
-('Medical Shop', 'Item', 'Medicine and care items'),
-('Accessory Hut', 'Item', 'Decor and accessories'),
-('Training Shop', 'Item', 'Skill boosting items'),
-('Magic Shop', 'Item', 'Mystical items for pets'),
-('Event Shop', 'Event', 'Limited-time items'),
-('Premium Shop', 'Premium', 'Premium currency only');
+('Pets Shop', 'Pet', 'Pet adoption and animal companions'),
+('Item Shop', 'Item', 'Supplies, food and toys for pets');
+
 INSERT INTO ShopProduct (ShopID, AdminID, Name, Type, Description, ImageUrl, Price, CurrencyType)
 VALUES 
-(1, 1, 'Basic Cat', 'Pet', 'A common cat', 'img/cat.png', 100, 'Coin'),
-(1, 2, 'Loyal Dog', 'Pet', 'Friendly dog', 'img/dog.png', 120, 'Coin'),
-(2, 1, 'Rubber Ball', 'Toy', 'Pet toy ball', 'img/ball.png', 30, 'Coin'),
-(2, 2, 'Chew Toy', 'Toy', 'For dogs', 'img/chew.png', 40, 'Coin'),
-(3, 1, 'Cat Food', 'Food', 'Delicious food for cats', 'img/catfood.png', 20, 'Coin'),
-(3, 2, 'Dog Biscuit', 'Food', 'Crunchy biscuit', 'img/biscuit.png', 25, 'Coin'),
-(4, 1, 'Pet Hat', 'Clothing', 'Cute hat', 'img/hat.png', 60, 'Gem'),
-(5, 1, 'Pet Medicine', 'Medical', 'Health recovery', 'img/med.png', 70, 'Coin'),
-(6, 2, 'Pet Collar', 'Accessory', 'Stylish collar', 'img/collar.png', 50, 'Coin'),
-(10, 1, 'Golden Treat', 'Premium', 'Special treat', 'img/treat.png', 100, 'Diamond');
+-- Pets Shop (ShopID = 1)
+(1, 1, 'Basic Cat', 'Pet', 'A friendly basic cat for beginners', 'img/cat.png', 100, 'Coin'),
+(1, 2, 'Loyal Dog', 'Pet', 'A loyal dog who loves to play fetch', 'img/dog.png', 120, 'Coin'),
+(1, 1, 'Funny Chicken', 'Pet', 'A quirky chicken that lays golden eggs', 'img/chicken.png', 150, 'Coin'),
+
+-- Item Shop (ShopID = 2)
+(2, 1, 'Cat Food', 'Food', 'Nutritious food for healthy cats', 'img/catfood.png', 30, 'Coin'),
+(2, 2, 'Chicken Food', 'Food', 'Premium grains for chickens', 'img/chickenfood.png', 35, 'Coin'),
+(2, 1, 'Dog Food', 'Food', 'High-protein dog meal', 'img/dogfood.png', 40, 'Coin'),
+(2, 2, 'Cat Bed', 'Toy', 'A comfy bed that cats love to curl up in', 'img/catbed.png', 60, 'Coin'),
+(2, 1, 'Scratching Post', 'Toy', 'Keeps cats entertained and claws sharp', 'img/scratchpost.png', 50, 'Coin'),
+(2, 2, 'Chew Toy', 'Toy', 'Durable chew toy for playful dogs', 'img/chewtoy.png', 45, 'Coin'),
+(2, 1, 'Cookies', 'Food', 'Sweet and crunchy cookies for your pet to enjoy', 'img/cookies.png', 40, 'Coin'),
+(2, 1, 'Chocolate', 'Food', 'A special chocolate treat (non-toxic for pets)', 'img/chocolate.png', 40, 'Coin'),
+(2, 1, 'Orange', 'Food', 'Fresh and juicy orange slices full of vitamins', 'img/orange.png', 40, 'Coin'),
+(2, 1, 'Cherry', 'Food', 'Sweet cherries that boost pet energy', 'img/cherry.png', 40, 'Coin'),
+(2, 1, 'Pear', 'Food', 'Ripe and juicy pears for healthy digestion', 'img/pear.png', 40, 'Coin'),
+(2, 1, 'Banana', 'Food', 'Soft and sweet bananas loved by all pets', 'img/banana.png', 40, 'Coin');
 INSERT INTO PlayerInventory (PlayerID, ShopProductID, Quantity)
 VALUES 
 (3, 1, 1),
