@@ -17,58 +17,184 @@ namespace MyLittlePetGameAPI.Controllers
         
         // GET: ShopProduct - Get all products
         [HttpGet]
-        public ActionResult<IEnumerable<ShopProduct>> Get()
+        public ActionResult<IEnumerable<object>> Get()
         {
-            return Ok(_context.ShopProducts
-                .Include(p => p.Shop)
-                .Include(p => p.Admin)
-                .ToList());
+            try
+            {
+                var products = _context.ShopProducts
+                    .Include(p => p.Shop)
+                    .Include(p => p.Admin)
+                    .Select(p => new
+                    {
+                        ShopProductId = p.ShopProductId,
+                        ShopId = p.ShopId,
+                        AdminId = p.AdminId,
+                        Name = p.Name,
+                        Type = p.Type,
+                        Description = p.Description,
+                        ImageUrl = p.ImageUrl,
+                        Price = p.Price,
+                        CurrencyType = p.CurrencyType,
+                        Quality = p.Quality,
+                        Status = p.Status,
+                        ShopInfo = new
+                        {
+                            ShopId = p.Shop.ShopId,
+                            Name = p.Shop.Name,
+                            Type = p.Shop.Type
+                        },
+                        AdminInfo = new
+                        {
+                            Id = p.Admin.Id,
+                            UserName = p.Admin.UserName
+                        }
+                    })
+                    .ToList();
+                
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: ShopProduct/{id} - Get product by ID
         [HttpGet("{id}")]
-        public ActionResult<ShopProduct> GetById(int id)
+        public ActionResult<object> GetById(int id)
         {
-            var product = _context.ShopProducts
-                .Include(p => p.Shop)
-                .Include(p => p.Admin)
-                .FirstOrDefault(p => p.ShopProductId == id);
-            
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = _context.ShopProducts
+                    .Include(p => p.Shop)
+                    .Include(p => p.Admin)
+                    .FirstOrDefault(p => p.ShopProductId == id);
+                
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                
+                var result = new
+                {
+                    ShopProductId = product.ShopProductId,
+                    ShopId = product.ShopId,
+                    AdminId = product.AdminId,
+                    Name = product.Name,
+                    Type = product.Type,
+                    Description = product.Description,
+                    ImageUrl = product.ImageUrl,
+                    Price = product.Price,
+                    CurrencyType = product.CurrencyType,
+                    Quality = product.Quality,
+                    Status = product.Status,
+                    ShopInfo = new
+                    {
+                        ShopId = product.Shop.ShopId,
+                        Name = product.Shop.Name,
+                        Type = product.Shop.Type
+                    },
+                    AdminInfo = new
+                    {
+                        Id = product.Admin.Id,
+                        UserName = product.Admin.UserName
+                    }
+                };
+                
+                return Ok(result);
             }
-            
-            return Ok(product);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: ShopProduct/Type/{type} - Get products by type
         [HttpGet("Type/{type}")]
-        public ActionResult<IEnumerable<ShopProduct>> GetByType(string type)
+        public ActionResult<IEnumerable<object>> GetByType(string type)
         {
-            if (string.IsNullOrEmpty(type))
+            try
             {
-                return BadRequest("Type is required");
-            }
-            
-            var products = _context.ShopProducts
-                .Include(p => p.Shop)
-                .Where(p => p.Type == type)
-                .ToList();
+                if (string.IsNullOrEmpty(type))
+                {
+                    return BadRequest("Type is required");
+                }
                 
-            return Ok(products);
+                var products = _context.ShopProducts
+                    .Include(p => p.Shop)
+                    .Where(p => p.Type == type)
+                    .Select(p => new
+                    {
+                        ShopProductId = p.ShopProductId,
+                        ShopId = p.ShopId,
+                        AdminId = p.AdminId,
+                        Name = p.Name,
+                        Type = p.Type,
+                        Description = p.Description,
+                        ImageUrl = p.ImageUrl,
+                        Price = p.Price,
+                        CurrencyType = p.CurrencyType,
+                        Quality = p.Quality,
+                        Status = p.Status,
+                        ShopInfo = new
+                        {
+                            ShopId = p.Shop.ShopId,
+                            Name = p.Shop.Name,
+                            Type = p.Shop.Type
+                        }
+                    })
+                    .ToList();
+                    
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
           // GET: ShopProduct/Status/{status} - Get products by status
         [HttpGet("Status/{status}")]
-        public ActionResult<IEnumerable<ShopProduct>> GetByStatus(int status)
+        public ActionResult<IEnumerable<object>> GetByStatus(int status)
         {
-            var products = _context.ShopProducts
-                .Include(p => p.Shop)
-                .Include(p => p.Admin)
-                .Where(p => p.Status == status)
-                .ToList();
-                
-            return Ok(products);
+            try
+            {
+                var products = _context.ShopProducts
+                    .Include(p => p.Shop)
+                    .Include(p => p.Admin)
+                    .Where(p => p.Status == status)
+                    .Select(p => new
+                    {
+                        ShopProductId = p.ShopProductId,
+                        ShopId = p.ShopId,
+                        AdminId = p.AdminId,
+                        Name = p.Name,
+                        Type = p.Type,
+                        Description = p.Description,
+                        ImageUrl = p.ImageUrl,
+                        Price = p.Price,
+                        CurrencyType = p.CurrencyType,
+                        Quality = p.Quality,
+                        Status = p.Status,
+                        ShopInfo = new
+                        {
+                            ShopId = p.Shop.ShopId,
+                            Name = p.Shop.Name,
+                            Type = p.Shop.Type
+                        },
+                        AdminInfo = new
+                        {
+                            Id = p.Admin.Id,
+                            UserName = p.Admin.UserName
+                        }
+                    })
+                    .ToList();
+                    
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // POST: ShopProduct - Create a new product
