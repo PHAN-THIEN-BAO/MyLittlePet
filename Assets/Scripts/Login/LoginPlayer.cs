@@ -43,7 +43,6 @@ public class LoginPlayer : MonoBehaviour
 
             if (user != null)
             {
-                
                 // Save user information
                 PlayerInfomation.SavePlayerInfo(user);
                 // Log user information for debugging
@@ -62,28 +61,12 @@ public class LoginPlayer : MonoBehaviour
         catch (System.Net.WebException webEx)
         {
             var response = webEx.Response as System.Net.HttpWebResponse;
-            if (response != null)
+            if (response != null && response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    // handle 404 error
-                    errorText.color = Color.red;
-                    errorText.text = "User not found (404).";
-                    Debug.LogWarning("User not found (404).");
-                }
-                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized) // 401
-                {
-                    // handle 401 error (Unauthorized)
-                    errorText.color = Color.red;
-                    errorText.text = "Banned Player";
-                    Debug.LogWarning("Login failed: Banned Player (401).");
-                }
-                else
-                {
-                    errorText.color = Color.red;
-                    errorText.text = "Server error. Please try again.";
-                    Debug.LogException(webEx);
-                }
+                //handle 404 error
+                errorText.color = Color.red;
+                errorText.text = "User not found (404).";
+                Debug.LogWarning("User not found (404).");
             }
             else
             {
@@ -91,7 +74,7 @@ public class LoginPlayer : MonoBehaviour
                 errorText.text = "Server error. Please try again.";
                 Debug.LogException(webEx);
             }
-
+            
         }
         catch (System.Exception ex)
         {
