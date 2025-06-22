@@ -107,7 +107,7 @@ public class ShowShopProduct : MonoBehaviour
 
             // Set the Id text
             Id[i].text = products[i].shopProductID.ToString();
-            Id[i].gameObject.SetActive(true);
+            Id[i].gameObject.SetActive(false);
 
             // Load image from URL
             if (!string.IsNullOrEmpty(products[i].imageUrl))
