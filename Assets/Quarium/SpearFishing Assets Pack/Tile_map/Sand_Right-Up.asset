@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Tile_maptop
+  m_Name: Sand_Right-Up
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 7177420919200366287, guid: 10bb1f0a7d9c2f547a182959fad6229b, type: 3}
+  m_Sprite: {fileID: 7177420919200366287, guid: 38996ef42691e154dbb05865e6ed48b9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
-    e00: 1
+    e00: 2.95
     e01: 0
     e02: 0
     e03: 0
     e10: 0
-    e11: 1
+    e11: 3.11
     e12: 0
     e13: 0
     e20: 0
@@ -32,5 +32,5 @@ MonoBehaviour:
     e32: 0
     e33: 1
   m_InstancedGameObject: {fileID: 0}
-  m_Flags: 1
+  m_Flags: -1
   m_ColliderType: 1
