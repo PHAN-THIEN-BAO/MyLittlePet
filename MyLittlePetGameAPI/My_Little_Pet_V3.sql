@@ -197,18 +197,18 @@ VALUES
 (1, 1, 'Funny Chicken', 'Pet', 'A quirky chicken that lays golden eggs', 'https://drive.google.com/file/d/1fsJXvABMVtfGSPJz7E-_yhqv0H7Fo8oS/view', 150, 'Coin'),
 
 -- Item Shop (ShopID = 2)
-(2, 1, 'Cat Food', 'Food', 'Nutritious food for healthy cats', 'img/catfood.png', 30, 'Coin'),
-(2, 2, 'Chicken Food', 'Food', 'Premium grains for chickens', 'img/chickenfood.png', 35, 'Coin'),
-(2, 1, 'Dog Food', 'Food', 'High-protein dog meal', 'img/dogfood.png', 40, 'Coin'),
+(2, 1, 'Cat Food', 'Food', 'Nutritious food for healthy cats', 'https://drive.google.com/file/d/1siQWAMVbrnAqCnpnhbN5luvDEDJSgsmV/view', 30, 'Coin'),
+(2, 2, 'Chicken Food', 'Food', 'Premium grains for chickens', 'https://drive.google.com/file/d/16asRZC5bJStd8OlYVmjuOE1q6IhWlcWp/view', 35, 'Coin'),
+(2, 1, 'Dog Food', 'Food', 'High-protein dog meal', 'https://drive.google.com/file/d/1UFHJK5hW3A5l5UTgZDT5dy8YBfv_0Qvh/view', 40, 'Coin'),
 (2, 2, 'Cat Bed', 'Toy', 'A comfy bed that cats love to curl up in', 'img/catbed.png', 60, 'Coin'),
 (2, 1, 'Scratching Post', 'Toy', 'Keeps cats entertained and claws sharp', 'img/scratchpost.png', 50, 'Coin'),
 (2, 2, 'Chew Toy', 'Toy', 'Durable chew toy for playful dogs', 'img/chewtoy.png', 45, 'Coin'),
-(2, 1, 'Cookies', 'Food', 'Sweet and crunchy cookies for your pet to enjoy', 'img/cookies.png', 40, 'Coin'),
-(2, 1, 'Chocolate', 'Food', 'A special chocolate treat (non-toxic for pets)', 'img/chocolate.png', 40, 'Coin'),
-(2, 1, 'Orange', 'Food', 'Fresh and juicy orange slices full of vitamins', 'img/orange.png', 40, 'Coin'),
-(2, 1, 'Cherry', 'Food', 'Sweet cherries that boost pet energy', 'img/cherry.png', 40, 'Coin'),
-(2, 1, 'Pear', 'Food', 'Ripe and juicy pears for healthy digestion', 'img/pear.png', 40, 'Coin'),
-(2, 1, 'Banana', 'Food', 'Soft and sweet bananas loved by all pets', 'img/banana.png', 40, 'Coin');
+(2, 1, 'Cookies', 'Food', 'Sweet and crunchy cookies for your pet to enjoy', 'https://drive.google.com/file/d/1BI3P_--YCN0OQvrpeEWVK1l0dbIPFLOt/view', 40, 'Coin'),
+(2, 1, 'Chocolate', 'Food', 'A special chocolate treat (non-toxic for pets)', 'https://drive.google.com/file/d/1eeJ-Tx6ztnARuhZF3rTvThSEb1uR9ScH/view', 40, 'Coin'),
+(2, 1, 'Orange', 'Food', 'Fresh and juicy orange slices full of vitamins', 'https://drive.google.com/file/d/1Mz8_kpl7E1_MAlQ_IF1vdeXpZwEKLK0Y/view', 40, 'Coin'),
+(2, 1, 'Cherry', 'Food', 'Sweet cherries that boost pet energy', 'https://drive.google.com/file/d/1vRZIx7kORpayLeHnxZSpJ1LwIGcsgrx4/view', 40, 'Coin'),
+(2, 1, 'Pear', 'Food', 'Ripe and juicy pears for healthy digestion', 'https://drive.google.com/file/d/1Rm5aSvUASG_KzZMIWWLaSmVOx8f0Ts-8/view', 40, 'Coin'),
+(2, 1, 'Banana', 'Food', 'Soft and sweet bananas loved by all pets', 'https://drive.google.com/file/d/1gJtCKHc1IBc_JRGLd29yaYbaCUETSM8A/view', 40, 'Coin');
 INSERT INTO PlayerInventory (PlayerID, ShopProductID, Quantity)
 VALUES 
 (3, 1, 1),
