@@ -34,4 +34,18 @@ public static class PlayerInfomation
         PlayerPrefs.DeleteKey("SavedUser");
         PlayerPrefs.Save();
     }
+
+
+
+
+    public static void UpdatePlayerInfo(System.Action<User> updateAction)
+    {
+        User user = LoadPlayerInfo();
+        if (user != null && updateAction != null)
+        {
+            updateAction(user); // Allow the caller to modify the user object
+            SavePlayerInfo(user);
+        }
+    }
+
 }

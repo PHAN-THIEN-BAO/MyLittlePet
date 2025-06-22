@@ -3,6 +3,7 @@ using System.Net;
 using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System;
 
 public static class APIUser
 {
@@ -115,5 +116,61 @@ public static class APIUser
     {
         List<PlayerPet> playerPets = GetPlayerPets(playerId);
         return playerPets != null ? playerPets.Count : 0;
+    }
+
+
+    public static Boolean UpdateUser()
+    {
+        // Load the user information from PlayerInfomation
+        User user = PlayerInfomation.LoadPlayerInfo();
+        if (user == null)
+        {
+            Debug.LogError("User information not found.");
+            return false;
+        }
+        try
+        {
+            // Create a request to the API endpoint with required parameters
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/User/" + user.id + "?role=" + user.role +"&userName=" + user.userName + "&password=" + user.password + "&email=" + user.email + "&level=" + user.level + "&coin=" + user.coin +"&diamond=" + user.diamond +"&gem=" + user.gem +"&userStatus=ACTIVE");
+            request.Method = "PUT";
+            request.ContentType = "application/json";
+            // Serialize the user object to JSON
+            string jsonData = JsonUtility.ToJson(user);
+            using (StreamWriter writer = new StreamWriter(request.GetRequestStream()))
+            {
+                writer.Write(jsonData);
+            }
+            // Get the response
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            // Check if request was successful (status code 200-299)
+            bool success = (int)response.StatusCode >= 200 && (int)response.StatusCode < 300;
+            // Read and parse the response if needed
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+            string jsonResponse = reader.ReadToEnd();
+            reader.Close();
+            Debug.Log("Update response: " + jsonResponse);
+            return success;
+        }
+        catch (WebException ex)
+        {
+            // Log the error
+            if (ex.Response != null)
+            {
+                using (StreamReader reader = new StreamReader(ex.Response.GetResponseStream()))
+                {
+                    Debug.LogError("Update error: " + reader.ReadToEnd());
+                }
+            }
+            else
+            {
+                Debug.LogError("Update error: " + ex.Message);
+            }
+            return false;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Unexpected error during update: " + ex.Message);
+            return false;
+        }
     }
 }

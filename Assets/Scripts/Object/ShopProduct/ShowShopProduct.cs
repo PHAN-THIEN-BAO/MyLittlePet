@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 public class ShowShopProduct : MonoBehaviour
 {
     [SerializeField] public List<TMP_Text> name;
+    [SerializeField] public List<TMP_Text> Id;
     [SerializeField] public List<TMP_Text> value;
     [SerializeField] public List<GameObject> coinDisplay;
     [SerializeField] public List<GameObject> diamondDisplay;
@@ -80,17 +81,17 @@ public class ShowShopProduct : MonoBehaviour
         {
             GameObject newItem = Instantiate(Item, contentPanel);
 
-            // take references to the new item's components
             TMP_Text nameText = newItem.transform.Find("Name_Item").GetComponent<TMP_Text>();
             TMP_Text valueText = newItem.transform.Find("Price").GetComponent<TMP_Text>();
+            TMP_Text idText = newItem.transform.Find("Id_Item").GetComponent<TMP_Text>(); // Thêm dòng này
             Image itemImage = newItem.transform.Find("Item_Image").GetComponent<Image>();
             GameObject coinImg = newItem.transform.Find("Coin_Img").gameObject;
             GameObject diamondImg = newItem.transform.Find("Diamond_Img").gameObject;
             GameObject gemImg = newItem.transform.Find("Gem_Img").gameObject;
 
-            // add the new components to the respective lists
             name.Add(nameText);
             value.Add(valueText);
+            Id.Add(idText); // Thêm dòng này
             productImages.Add(itemImage);
             coinDisplay.Add(coinImg);
             diamondDisplay.Add(diamondImg);
@@ -104,6 +105,10 @@ public class ShowShopProduct : MonoBehaviour
             name[i].text = products[i].name;
             value[i].text = products[i].price.ToString();
 
+            // Set the Id text
+            Id[i].text = products[i].shopProductID.ToString();
+            Id[i].gameObject.SetActive(true);
+
             // Load image from URL
             if (!string.IsNullOrEmpty(products[i].imageUrl))
             {
@@ -114,11 +119,11 @@ public class ShowShopProduct : MonoBehaviour
                 productImages[i].gameObject.SetActive(false);
             }
 
-            // Set currency display
             coinDisplay[i].SetActive(products[i].currencyType == "Coin");
             diamondDisplay[i].SetActive(products[i].currencyType == "Diamond");
             gemDisplay[i].SetActive(products[i].currencyType == "Gem");
         }
+
 
 
         // hide remaining displays if there are more displays than products
