@@ -1,7 +1,17 @@
 --Create database My_Little_Pet_V3;
 --GO
-	
+
+--CACH CHAY DATABASE 
+--1 NEU CO DB CU THI CHAY  "Drop database My_Little_Pet_V3;"
+--2 SAU DO NEW MOI DB
+/*3 CHAY TU "CREATE TABLE [User]"    --->   "    FROM ShopProduct SP
+    INNER JOIN inserted i ON SP.ShopProductID = i.ShopProductID
+    WHERE i.ImageUrl LIKE '%drive.google.com/file/d/%';
+END"  */
+--4 CHAY PHAN CON LAI
+
 --GO
+
 --Drop database My_Little_Pet_V3;
 CREATE TABLE [User] (
     ID INT PRIMARY KEY  IDENTITY(1,1),
@@ -138,6 +148,29 @@ CREATE TABLE GameRecord (
 );
 
 
+GO
+CREATE TRIGGER trg_UpdateImageUrl
+ON ShopProduct
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE SP
+    SET ImageUrl = 
+        'https://drive.google.com/uc?id=' + 
+        SUBSTRING(
+            i.ImageUrl, 
+            CHARINDEX('/d/', i.ImageUrl) + 3, 
+            CHARINDEX('/', i.ImageUrl, CHARINDEX('/d/', i.ImageUrl) + 3) - (CHARINDEX('/d/', i.ImageUrl) + 3)
+        )
+    FROM ShopProduct SP
+    INNER JOIN inserted i ON SP.ShopProductID = i.ShopProductID
+    WHERE i.ImageUrl LIKE '%drive.google.com/file/d/%';
+END
+
+
+
 
 INSERT INTO [User] (Role, UserName, Email, Password, UserStatus, Level, Coin, Diamond, Gem)
 VALUES 
@@ -159,9 +192,9 @@ VALUES
 INSERT INTO ShopProduct (ShopID, AdminID, Name, Type, Description, ImageUrl, Price, CurrencyType)
 VALUES 
 -- Pets Shop (ShopID = 1)
-(1, 1, 'Basic Cat', 'Pet', 'A friendly basic cat for beginners', 'img/cat.png', 100, 'Coin'),
-(1, 2, 'Loyal Dog', 'Pet', 'A loyal dog who loves to play fetch', 'img/dog.png', 120, 'Coin'),
-(1, 1, 'Funny Chicken', 'Pet', 'A quirky chicken that lays golden eggs', 'img/chicken.png', 150, 'Coin'),
+(1, 1, 'Basic Cat', 'Pet', 'A friendly basic cat for beginners', 'https://drive.google.com/file/d/1nkOmQE4OQxJNE_-toGhVN7b0zrQf3L2H/view', 100, 'Coin'),
+(1, 2, 'Loyal Dog', 'Pet', 'A loyal dog who loves to play fetch', 'https://drive.google.com/file/d/1dnKvmkFxuECn9T10cQRB1QKFV0-uy97W/view', 120, 'Coin'),
+(1, 1, 'Funny Chicken', 'Pet', 'A quirky chicken that lays golden eggs', 'https://drive.google.com/file/d/1fsJXvABMVtfGSPJz7E-_yhqv0H7Fo8oS/view', 150, 'Coin'),
 
 -- Item Shop (ShopID = 2)
 (2, 1, 'Cat Food', 'Food', 'Nutritious food for healthy cats', 'img/catfood.png', 30, 'Coin'),
