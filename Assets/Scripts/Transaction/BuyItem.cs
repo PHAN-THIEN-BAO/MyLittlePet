@@ -3,10 +3,15 @@ using TMPro;
 
 public class BuyItem : MonoBehaviour
 {
-
+    [SerializeField] public GameObject notEnoughMoneyPanel;
 
     public void BuyProduct()
     {
+        ShopValidate shopValidate = GetComponent<ShopValidate>();
+        if (shopValidate != null && !shopValidate.CheckCanBuy(notEnoughMoneyPanel))
+        {
+            return;
+        }
         User user = PlayerInfomation.LoadPlayerInfo();
         if (user == null)
         {

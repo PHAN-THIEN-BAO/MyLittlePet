@@ -91,7 +91,7 @@ public class ShowShopProduct : MonoBehaviour
 
             name.Add(nameText);
             value.Add(valueText);
-            Id.Add(idText); // Thêm dòng này
+            Id.Add(idText); 
             productImages.Add(itemImage);
             coinDisplay.Add(coinImg);
             diamondDisplay.Add(diamondImg);

@@ -20,8 +20,12 @@ public class APIShopProduct : MonoBehaviour
         string jsonResponse = reader.ReadToEnd();
         reader.Close();
 
-        // Parse the JSON response into a list of PlayerPet objects
-        return JsonConvert.DeserializeObject<List<ShopProduct>>(jsonResponse);
+        // Parse JSON thành List<ShopProduct>
+        var allProducts = JsonConvert.DeserializeObject<List<ShopProduct>>(jsonResponse);
+
+        // fillter out products with status 0
+        allProducts.RemoveAll(p => p.status == 0);
+        return allProducts;
     }
     /// <summary>
     /// Fetches a specific shop product by its ID from the API.
