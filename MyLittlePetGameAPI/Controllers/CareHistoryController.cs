@@ -199,72 +199,100 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        
-        // POST: CareHistory - Create a new care history record
+          // POST: CareHistory - Create a new care history record
         [HttpPost]
         public ActionResult<CareHistory> Create(int playerPetId, int playerId, int activityId)
         {
-            // Validate player pet exists
-            var playerPet = _context.PlayerPets.Find(playerPetId);
-            if (playerPet == null)
+            try
             {
-                return BadRequest("Player pet not found");
+                // Validate player pet exists
+                var playerPet = _context.PlayerPets.Find(playerPetId);
+                if (playerPet == null)
+                {
+                    return BadRequest("Player pet not found");
+                }
+                
+                // Validate player exists
+                var player = _context.Users.Find(playerId);
+                if (player == null)
+                {
+                    return BadRequest("Player not found");
+                }
+                
+                // Validate player owns the pet
+                if (playerPet.PlayerId != playerId)
+                {
+                    return BadRequest("This pet does not belong to the specified player");
+                }
+                
+                // Validate activity exists
+                var activity = _context.CareActivities.Find(activityId);
+                if (activity == null)
+                {
+                    return BadRequest("Care activity not found");
+                }
+                
+                var careHistory = new CareHistory
+                {
+                    PlayerPetId = playerPetId,
+                    PlayerId = playerId,
+                    ActivityId = activityId,
+                    PerformedAt = DateTime.Now
+                };
+                
+                _context.CareHistories.Add(careHistory);
+                _context.SaveChanges();
+                
+                // Update pet status based on the activity
+                playerPet.LastStatusUpdate = DateTime.Now;
+                _context.PlayerPets.Update(playerPet);
+                _context.SaveChanges();
+                
+                // Return simplified response to avoid serialization issues
+                return Ok(new
+                {
+                    message = "Care history record created successfully",
+                    careHistory = new
+                    {
+                        careHistoryId = careHistory.CareHistoryId,
+                        playerPetId = careHistory.PlayerPetId,
+                        playerId = careHistory.PlayerId,
+                        activityId = careHistory.ActivityId,
+                        performedAt = careHistory.PerformedAt
+                    }
+                });
             }
-            
-            // Validate player exists
-            var player = _context.Users.Find(playerId);
-            if (player == null)
+            catch (Exception ex)
             {
-                return BadRequest("Player not found");
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Create method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
             }
-            
-            // Validate player owns the pet
-            if (playerPet.PlayerId != playerId)
-            {
-                return BadRequest("This pet does not belong to the specified player");
-            }
-            
-            // Validate activity exists
-            var activity = _context.CareActivities.Find(activityId);
-            if (activity == null)
-            {
-                return BadRequest("Care activity not found");
-            }
-            
-            var careHistory = new CareHistory
-            {
-                PlayerPetId = playerPetId,
-                PlayerId = playerId,
-                ActivityId = activityId,
-                PerformedAt = DateTime.Now
-            };
-            
-            _context.CareHistories.Add(careHistory);
-            _context.SaveChanges();
-            
-            // Update pet status based on the activity
-            playerPet.LastStatusUpdate = DateTime.Now;
-            _context.PlayerPets.Update(playerPet);
-            _context.SaveChanges();
-            
-            return CreatedAtAction(nameof(GetById), new { id = careHistory.CareHistoryId }, careHistory);
         }
-        
-        // DELETE: CareHistory/{id} - Delete a care history record
+          // DELETE: CareHistory/{id} - Delete a care history record
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            var history = _context.CareHistories.Find(id);
-            
-            if (history == null)
+            try
             {
-                return NotFound();
+                var history = _context.CareHistories.Find(id);
+                
+                if (history == null)
+                {
+                    return NotFound();
+                }
+                
+                _context.CareHistories.Remove(history);
+                _context.SaveChanges();
+                
+                return Ok(new { message = "Care history record deleted successfully" });
             }
-            
-            _context.CareHistories.Remove(history);
-            _context.SaveChanges();
-            
-            return NoContent();
+            catch (Exception ex)
+            {
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Delete method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
+            }
         }
     }
 }
