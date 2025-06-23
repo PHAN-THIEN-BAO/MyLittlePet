@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72cf070611116134eb47e2ff2bd794fd, type: 3}
+  m_Name: NewNPCDialogue
+  m_EditorClassIdentifier: 
+  npcName: cat
+  npcPortrait: {fileID: 0}
+  dialogueLines:
+  - Meoww~~
+  - Meow...meow
+  - Meoooww~~~~~
+  - Meowwww
+  autoProgressLines: 01
+  endDialogueLines: 00010101
+  autoProgressDelay: 1
+  typingSpeed: 0.05
+  choices:
+  - dialogueIndex: 0
+    choices:
+    - Feed
+    - Sleep
+    - Play
+    nextDialogueIndexes: 010000000200000003000000
