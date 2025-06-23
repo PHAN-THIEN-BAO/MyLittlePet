@@ -147,105 +147,159 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        
-        // POST: PlayerPet - Adopt a pet for a player
+          // POST: PlayerPet - Adopt a pet for a player
         [HttpPost]
         public ActionResult<PlayerPet> Create(int playerId, int petId, string? petCustomName, string? status)
         {
-            // Validate player exists
-            var player = _context.Users.Find(playerId);
-            if (player == null)
+            try
             {
-                return BadRequest("Player not found");
+                // Validate player exists
+                var player = _context.Users.Find(playerId);
+                if (player == null)
+                {
+                    return BadRequest("Player not found");
+                }
+                
+                // Validate pet exists
+                var pet = _context.Pets.Find(petId);
+                if (pet == null)
+                {
+                    return BadRequest("Pet not found");
+                }
+                
+                // Check if custom name is already used by this player
+                if (!string.IsNullOrEmpty(petCustomName) && 
+                    _context.PlayerPets.Any(pp => pp.PlayerId == playerId && pp.PetCustomName == petCustomName))
+                {
+                    return BadRequest("Pet name already used by this player");
+                }
+                
+                var playerPet = new PlayerPet
+                {
+                    PlayerId = playerId,
+                    PetId = petId,
+                    PetCustomName = petCustomName,
+                    AdoptedAt = DateTime.Now,
+                    Level = 1,
+                    Status = status,
+                    LastStatusUpdate = DateTime.Now
+                };
+                
+                _context.PlayerPets.Add(playerPet);
+                _context.SaveChanges();
+                
+                // Return simplified response to avoid serialization issues
+                return Ok(new
+                {
+                    message = "Pet adopted successfully",
+                    playerPet = new
+                    {
+                        playerPetId = playerPet.PlayerPetId,
+                        playerId = playerPet.PlayerId,
+                        petId = playerPet.PetId,
+                        petCustomName = playerPet.PetCustomName,
+                        adoptedAt = playerPet.AdoptedAt,
+                        level = playerPet.Level,
+                        status = playerPet.Status,
+                        lastStatusUpdate = playerPet.LastStatusUpdate
+                    }
+                });
             }
-            
-            // Validate pet exists
-            var pet = _context.Pets.Find(petId);
-            if (pet == null)
+            catch (Exception ex)
             {
-                return BadRequest("Pet not found");
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Create method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
             }
-            
-            // Check if custom name is already used by this player
-            if (!string.IsNullOrEmpty(petCustomName) && 
-                _context.PlayerPets.Any(pp => pp.PlayerId == playerId && pp.PetCustomName == petCustomName))
-            {
-                return BadRequest("Pet name already used by this player");
-            }
-            
-            var playerPet = new PlayerPet
-            {
-                PlayerId = playerId,
-                PetId = petId,
-                PetCustomName = petCustomName,
-                AdoptedAt = DateTime.Now,
-                Level = 1,
-                Status = status,
-                LastStatusUpdate = DateTime.Now
-            };
-            
-            _context.PlayerPets.Add(playerPet);
-            _context.SaveChanges();
-            
-            return CreatedAtAction(nameof(GetById), new { id = playerPet.PlayerPetId }, playerPet);
         }
-        
-        // PUT: PlayerPet/{id} - Update a player pet
+          // PUT: PlayerPet/{id} - Update a player pet
         [HttpPut("{id}")]
         public ActionResult<PlayerPet> Update(int id, string? petCustomName, int? level, string? status)
         {
-            var playerPet = _context.PlayerPets.Find(id);
-            
-            if (playerPet == null)
+            try
             {
-                return NotFound();
+                var playerPet = _context.PlayerPets.Find(id);
+                
+                if (playerPet == null)
+                {
+                    return NotFound();
+                }
+                
+                // Check if custom name is already used by this player (if name is being changed)
+                if (!string.IsNullOrEmpty(petCustomName) && 
+                    petCustomName != playerPet.PetCustomName &&
+                    _context.PlayerPets.Any(pp => pp.PlayerId == playerPet.PlayerId && pp.PetCustomName == petCustomName))
+                {
+                    return BadRequest("Pet name already used by this player");
+                }
+                
+                if (!string.IsNullOrEmpty(petCustomName))
+                {
+                    playerPet.PetCustomName = petCustomName;
+                }
+                
+                if (level.HasValue)
+                {
+                    playerPet.Level = level;
+                }
+                
+                if (!string.IsNullOrEmpty(status))
+                {
+                    playerPet.Status = status;
+                    playerPet.LastStatusUpdate = DateTime.Now;
+                }
+                
+                _context.PlayerPets.Update(playerPet);
+                _context.SaveChanges();
+                
+                // Return simplified response to avoid serialization issues
+                return Ok(new
+                {
+                    message = "Player pet updated successfully",
+                    playerPet = new
+                    {
+                        playerPetId = playerPet.PlayerPetId,
+                        playerId = playerPet.PlayerId,
+                        petId = playerPet.PetId,
+                        petCustomName = playerPet.PetCustomName,
+                        adoptedAt = playerPet.AdoptedAt,
+                        level = playerPet.Level,
+                        status = playerPet.Status,
+                        lastStatusUpdate = playerPet.LastStatusUpdate
+                    }
+                });
             }
-            
-            // Check if custom name is already used by this player (if name is being changed)
-            if (!string.IsNullOrEmpty(petCustomName) && 
-                petCustomName != playerPet.PetCustomName &&
-                _context.PlayerPets.Any(pp => pp.PlayerId == playerPet.PlayerId && pp.PetCustomName == petCustomName))
+            catch (Exception ex)
             {
-                return BadRequest("Pet name already used by this player");
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Update method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
             }
-            
-            if (!string.IsNullOrEmpty(petCustomName))
-            {
-                playerPet.PetCustomName = petCustomName;
-            }
-            
-            if (level.HasValue)
-            {
-                playerPet.Level = level;
-            }
-            
-            if (!string.IsNullOrEmpty(status))
-            {
-                playerPet.Status = status;
-                playerPet.LastStatusUpdate = DateTime.Now;
-            }
-            
-            _context.PlayerPets.Update(playerPet);
-            _context.SaveChanges();
-            
-            return Ok(playerPet);
         }
-        
-        // DELETE: PlayerPet/{id} - Delete a player pet
+          // DELETE: PlayerPet/{id} - Delete a player pet
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            var playerPet = _context.PlayerPets.Find(id);
-            
-            if (playerPet == null)
+            try
             {
-                return NotFound();
+                var playerPet = _context.PlayerPets.Find(id);
+                
+                if (playerPet == null)
+                {
+                    return NotFound();
+                }
+                
+                _context.PlayerPets.Remove(playerPet);
+                _context.SaveChanges();
+                
+                return Ok(new { message = "Player pet deleted successfully" });
             }
-            
-            _context.PlayerPets.Remove(playerPet);
-            _context.SaveChanges();
-            
-            return NoContent();
+            catch (Exception ex)
+            {
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Delete method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
+            }
         }
     }
 }
