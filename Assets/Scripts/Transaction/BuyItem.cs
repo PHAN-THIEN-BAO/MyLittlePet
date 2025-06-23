@@ -74,6 +74,18 @@ public class BuyItem : MonoBehaviour
         APIUser.UpdateUser();
 
         Debug.Log("Purchase successful!");
+
+
+        // 6. Update player inventory
+        PlayerInventory playerInventory = new PlayerInventory
+        {
+            
+            playerID = user.id,
+            shopProductID = shopProductID,
+            quantity = 1
+        };
+        APIPlayerInventory.UpdatePlayerInventory(playerInventory);
+
     }
 
 

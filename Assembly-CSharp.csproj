@@ -64,6 +64,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
     <Compile Include="Assets\Scripts\Validate\CurenciesValidation.cs" />
+    <Compile Include="Assets\Scripts\NPC\NPCDialogue.cs" />
+    <Compile Include="Assets\Scripts\UI\PetInfoUIManager.cs" />
+    <Compile Include="Assets\Scripts\Object\PlayerPet\APIPlayerPet.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShowShopProduct.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShopProduct.cs" />
     <Compile Include="Assets\Scripts\Object\Shop\Shop.cs" />
@@ -80,6 +83,7 @@
     <Compile Include="Assets\Scripts\Loading\ASyncLoading.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerCollisionHandler.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PlayerInventoryDisplay.cs" />
+    <Compile Include="Assets\Scripts\Interactions\IInteractable.cs" />
     <Compile Include="Assets\Scripts\Audio\PlayAudio.cs" />
     <Compile Include="Assets\Scripts\UI\UIManagerWaring.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlMovement.cs" />
@@ -89,26 +93,32 @@
     <Compile Include="Assets\Scripts\Object\Achievement\Achievement.cs" />
     <Compile Include="Assets\Scripts\InfiniteBackground.cs" />
     <Compile Include="Assets\Scripts\Object\User\UserProfile.cs" />
+    <Compile Include="Assets\Scripts\Interactions\InteractionDetector.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
+    <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfoMainScene.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\PlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfomation.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Enemy\EnemyRandomMovement.cs" />
+    <Compile Include="Assets\Scripts\UI\PetStatusBarManager.cs" />
     <Compile Include="Assets\Quarium\Script\CameraFollowMouse.cs" />
     <Compile Include="Assets\Scripts\UI\UIInventory.cs" />
     <Compile Include="Assets\Scripts\Object\Pet\Pet.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Character.cs" />
+    <Compile Include="Assets\Scripts\NPC\DialogueController.cs" />
     <Compile Include="Assets\Scripts\Validate\ShopValidate.cs" />
     <Compile Include="Assets\Scripts\Login\LoginPlayer.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\APIPlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
     <Compile Include="Assets\Scripts\Login\Menu.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PlayerPet.cs" />
+    <Compile Include="Assets\Scripts\ColliderHandling\PetClickHandler.cs" />
     <Compile Include="Assets\Scripts\UI\UIStoreOptionManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\RandomMovement.cs" />
+    <Compile Include="Assets\Scripts\NPC\NPC.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\APIPlayerInventory.cs" />
     <Compile Include="Assets\Scripts\LogOut\LogoutUser.cs" />
   </ItemGroup>
