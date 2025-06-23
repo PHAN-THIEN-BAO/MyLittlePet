@@ -167,94 +167,152 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        
-        // POST: GameRecord - Create a new game record
+          // POST: GameRecord - Create a new game record
         [HttpPost]
         public ActionResult<GameRecord> Create(int playerId, int minigameId, int score)
         {
-            // Validate player exists
-            var player = _context.Users.Find(playerId);
-            if (player == null)
+            try
             {
-                return BadRequest("Player not found");
-            }
-            
-            // Validate minigame exists
-            var minigame = _context.Minigames.Find(minigameId);
-            if (minigame == null)
-            {
-                return BadRequest("Minigame not found");
-            }
-            
-            // Check if player already has a record for this minigame
-            var existingRecord = _context.GameRecords
-                .FirstOrDefault(gr => gr.PlayerId == playerId && gr.MinigameId == minigameId);
-                
-            if (existingRecord != null)
-            {
-                // Update record if new score is higher
-                if (score > existingRecord.Score)
+                // Validate player exists
+                var player = _context.Users.Find(playerId);
+                if (player == null)
                 {
-                    existingRecord.Score = score;
-                    existingRecord.PlayedAt = DateTime.Now;
-                    _context.GameRecords.Update(existingRecord);
-                    _context.SaveChanges();
+                    return BadRequest("Player not found");
                 }
-                return Ok(existingRecord);
+                
+                // Validate minigame exists
+                var minigame = _context.Minigames.Find(minigameId);
+                if (minigame == null)
+                {
+                    return BadRequest("Minigame not found");
+                }
+                
+                // Check if player already has a record for this minigame
+                var existingRecord = _context.GameRecords
+                    .FirstOrDefault(gr => gr.PlayerId == playerId && gr.MinigameId == minigameId);
+                    
+                if (existingRecord != null)
+                {
+                    // Update record if new score is higher
+                    if (score > existingRecord.Score)
+                    {
+                        existingRecord.Score = score;
+                        existingRecord.PlayedAt = DateTime.Now;
+                        _context.GameRecords.Update(existingRecord);
+                        _context.SaveChanges();
+                    }
+                    
+                    // Return simplified response to avoid serialization issues
+                    return Ok(new
+                    {
+                        message = "Game record updated successfully",
+                        gameRecord = new
+                        {
+                            playerId = existingRecord.PlayerId,
+                            minigameId = existingRecord.MinigameId,
+                            score = existingRecord.Score,
+                            playedAt = existingRecord.PlayedAt
+                        }
+                    });
+                }
+                
+                // Create new record
+                var gameRecord = new GameRecord
+                {
+                    PlayerId = playerId,
+                    MinigameId = minigameId,
+                    Score = score,
+                    PlayedAt = DateTime.Now
+                };
+                
+                _context.GameRecords.Add(gameRecord);
+                _context.SaveChanges();
+                
+                // Return simplified response to avoid serialization issues
+                return Ok(new
+                {
+                    message = "Game record created successfully",
+                    gameRecord = new
+                    {
+                        playerId = gameRecord.PlayerId,
+                        minigameId = gameRecord.MinigameId,
+                        score = gameRecord.Score,
+                        playedAt = gameRecord.PlayedAt
+                    }
+                });
             }
-            
-            // Create new record
-            var gameRecord = new GameRecord
+            catch (Exception ex)
             {
-                PlayerId = playerId,
-                MinigameId = minigameId,
-                Score = score,
-                PlayedAt = DateTime.Now
-            };
-            
-            _context.GameRecords.Add(gameRecord);
-            _context.SaveChanges();
-            
-            return CreatedAtAction(nameof(GetByPlayerId), new { playerId = playerId }, gameRecord);
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Create method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
+            }
         }
-        
-        // PUT: GameRecord - Update a game record
+          // PUT: GameRecord - Update a game record
         [HttpPut]
         public ActionResult<GameRecord> Update(int playerId, int minigameId, int score)
         {
-            var gameRecord = _context.GameRecords
-                .FirstOrDefault(gr => gr.PlayerId == playerId && gr.MinigameId == minigameId);
-                
-            if (gameRecord == null)
+            try
             {
-                return NotFound("Game record not found");
+                var gameRecord = _context.GameRecords
+                    .FirstOrDefault(gr => gr.PlayerId == playerId && gr.MinigameId == minigameId);
+                    
+                if (gameRecord == null)
+                {
+                    return NotFound("Game record not found");
+                }
+                
+                gameRecord.Score = score;
+                gameRecord.PlayedAt = DateTime.Now;
+                
+                _context.GameRecords.Update(gameRecord);
+                _context.SaveChanges();
+                
+                // Return simplified response to avoid serialization issues
+                return Ok(new
+                {
+                    message = "Game record updated successfully",
+                    gameRecord = new
+                    {
+                        playerId = gameRecord.PlayerId,
+                        minigameId = gameRecord.MinigameId,
+                        score = gameRecord.Score,
+                        playedAt = gameRecord.PlayedAt
+                    }
+                });
             }
-            
-            gameRecord.Score = score;
-            gameRecord.PlayedAt = DateTime.Now;
-            
-            _context.GameRecords.Update(gameRecord);
-            _context.SaveChanges();
-            
-            return Ok(gameRecord);
+            catch (Exception ex)
+            {
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Update method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
+            }
         }
-        
-        // DELETE: GameRecord - Delete a game record
+          // DELETE: GameRecord - Delete a game record
         [HttpDelete]
         public ActionResult Delete(int playerId, int minigameId)
         {
-            var gameRecord = _context.GameRecords
-                .FirstOrDefault(gr => gr.PlayerId == playerId && gr.MinigameId == minigameId);
-                
-            if (gameRecord == null)
+            try
             {
-                return NotFound("Game record not found");
+                var gameRecord = _context.GameRecords
+                    .FirstOrDefault(gr => gr.PlayerId == playerId && gr.MinigameId == minigameId);
+                    
+                if (gameRecord == null)
+                {
+                    return NotFound("Game record not found");
+                }
+                
+                _context.GameRecords.Remove(gameRecord);
+                _context.SaveChanges();
+                
+                return Ok(new { message = "Game record deleted successfully" });
             }
-            
-            _context.GameRecords.Remove(gameRecord);
-            _context.SaveChanges();
-            
-            return NoContent();
+            catch (Exception ex)
+            {
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Delete method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
+            }
         }
     }
 }

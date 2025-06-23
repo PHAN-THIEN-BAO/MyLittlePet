@@ -46,111 +46,161 @@ namespace MyLittlePetGameAPI.Controllers
                 
             return Ok(pets);
         }
-        
-        // POST: Pet - Create a new pet
+          // POST: Pet - Create a new pet
         [HttpPost]
         public ActionResult<Pet> Create(int? adminId, string petType, string petDefaultName, string? description, int? petStatus)
         {
-            // Validate required fields
-            if (string.IsNullOrEmpty(petType) || string.IsNullOrEmpty(petDefaultName))
+            try
             {
-                return BadRequest("Pet type and default name are required");
-            }
-            
-            // Validate adminId exists if provided
-            if (adminId.HasValue)
-            {
-                var admin = _context.Users.Find(adminId);
-                if (admin == null)
+                // Validate required fields
+                if (string.IsNullOrEmpty(petType) || string.IsNullOrEmpty(petDefaultName))
                 {
-                    return BadRequest("Admin user not found");
+                    return BadRequest("Pet type and default name are required");
                 }
+                
+                // Validate adminId exists if provided
+                if (adminId.HasValue)
+                {
+                    var admin = _context.Users.Find(adminId);
+                    if (admin == null)
+                    {
+                        return BadRequest("Admin user not found");
+                    }
+                }
+                
+                var newPet = new Pet
+                {
+                    AdminId = adminId,
+                    PetType = petType,
+                    PetDefaultName = petDefaultName,
+                    Description = description,
+                    PetStatus = petStatus ?? 1 // Default to 1 (active) if not provided
+                };
+                
+                _context.Pets.Add(newPet);
+                _context.SaveChanges();
+                
+                // Return simplified response to avoid serialization issues
+                return Ok(new
+                {
+                    message = "Pet created successfully",
+                    pet = new
+                    {
+                        petId = newPet.PetId,
+                        adminId = newPet.AdminId,
+                        petType = newPet.PetType,
+                        petDefaultName = newPet.PetDefaultName,
+                        description = newPet.Description,
+                        petStatus = newPet.PetStatus
+                    }
+                });
             }
-            
-            var newPet = new Pet
+            catch (Exception ex)
             {
-                AdminId = adminId,
-                PetType = petType,
-                PetDefaultName = petDefaultName,
-                Description = description,
-                PetStatus = petStatus ?? 1 // Default to 1 (active) if not provided
-            };
-            
-            _context.Pets.Add(newPet);
-            _context.SaveChanges();
-            
-            return CreatedAtAction(nameof(GetById), new { id = newPet.PetId }, newPet);
-        }
-          // PUT: Pet/{id} - Update a pet
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Create method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
+            }
+        }        // PUT: Pet/{id} - Update a pet
         [HttpPut("{id}")]
         public ActionResult<Pet> Update(int id, int? adminId, string? petType, string? petDefaultName, string? description, int? petStatus)
         {
-            var pet = _context.Pets.Find(id);
-            
-            if (pet == null)
+            try
             {
-                return NotFound();
-            }
-            
-            // Validate required fields if they're being updated
-            if ((petType != null && string.IsNullOrEmpty(petType)) || 
-                (petDefaultName != null && string.IsNullOrEmpty(petDefaultName)))
-            {
-                return BadRequest("Pet type and default name cannot be empty");
-            }
-            
-            // Validate adminId exists if provided
-            if (adminId.HasValue)
-            {
-                var admin = _context.Users.Find(adminId);
-                if (admin == null)
+                var pet = _context.Pets.Find(id);
+                
+                if (pet == null)
                 {
-                    return BadRequest("Admin user not found");
+                    return NotFound();
                 }
-                pet.AdminId = adminId;
+                
+                // Validate required fields if they're being updated
+                if ((petType != null && string.IsNullOrEmpty(petType)) || 
+                    (petDefaultName != null && string.IsNullOrEmpty(petDefaultName)))
+                {
+                    return BadRequest("Pet type and default name cannot be empty");
+                }
+                
+                // Validate adminId exists if provided
+                if (adminId.HasValue)
+                {
+                    var admin = _context.Users.Find(adminId);
+                    if (admin == null)
+                    {
+                        return BadRequest("Admin user not found");
+                    }
+                    pet.AdminId = adminId;
+                }
+                
+                if (!string.IsNullOrEmpty(petType))
+                {
+                    pet.PetType = petType;
+                }
+                
+                if (!string.IsNullOrEmpty(petDefaultName))
+                {
+                    pet.PetDefaultName = petDefaultName;
+                }
+                
+                if (description != null) // Allow setting description to null
+                {
+                    pet.Description = description;
+                }
+                
+                if (petStatus.HasValue)
+                {
+                    pet.PetStatus = petStatus;
+                }
+                
+                _context.Pets.Update(pet);
+                _context.SaveChanges();
+                
+                // Return simplified response to avoid serialization issues
+                return Ok(new
+                {
+                    message = "Pet updated successfully",
+                    pet = new
+                    {
+                        petId = pet.PetId,
+                        adminId = pet.AdminId,
+                        petType = pet.PetType,
+                        petDefaultName = pet.PetDefaultName,
+                        description = pet.Description,
+                        petStatus = pet.PetStatus
+                    }
+                });
             }
-            
-            if (!string.IsNullOrEmpty(petType))
+            catch (Exception ex)
             {
-                pet.PetType = petType;
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Update method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
             }
-            
-            if (!string.IsNullOrEmpty(petDefaultName))
-            {
-                pet.PetDefaultName = petDefaultName;
-            }
-            
-            if (description != null) // Allow setting description to null
-            {
-                pet.Description = description;
-            }
-            
-            if (petStatus.HasValue)
-            {
-                pet.PetStatus = petStatus;
-            }
-            
-            _context.Pets.Update(pet);
-            _context.SaveChanges();
-            
-            return Ok(pet);
         }
-        
-        // DELETE: Pet/{id} - Delete a pet
+          // DELETE: Pet/{id} - Delete a pet
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            var pet = _context.Pets.Find(id);
-            
-            if (pet == null)
+            try
             {
-                return NotFound();
+                var pet = _context.Pets.Find(id);
+                
+                if (pet == null)
+                {
+                    return NotFound();
+                }
+                
+                _context.Pets.Remove(pet);
+                _context.SaveChanges();
+                
+                return Ok(new { message = "Pet deleted successfully" });
             }
-            
-            _context.Pets.Remove(pet);
-            _context.SaveChanges();
-            
-            return NoContent();
+            catch (Exception ex)
+            {
+                // Log the exception but return a clean error message
+                Console.WriteLine($"Error in Delete method: {ex.Message}");
+                return StatusCode(500, "An error occurred while processing your request");
+            }
         }
     }
 }
