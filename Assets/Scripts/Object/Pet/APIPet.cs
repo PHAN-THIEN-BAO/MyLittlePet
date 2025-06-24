@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Net;
+using System.IO;
 
 public class APIPet : MonoBehaviour
 {
@@ -23,5 +25,16 @@ public class APIPet : MonoBehaviour
                 callback?.Invoke(null);
             }
         }
+    }
+
+
+    public static Pet GetPetById(int petId)
+    {
+        HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://localhost:7035/Pet/{petId}");
+        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+        StreamReader reader = new StreamReader(response.GetResponseStream());
+        string jsonResponse = reader.ReadToEnd();
+        reader.Close();
+        return JsonUtility.FromJson<Pet>(jsonResponse);
     }
 }

@@ -65,7 +65,9 @@
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
     <Compile Include="Assets\Scripts\Validate\CurenciesValidation.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCDialogue.cs" />
+    <Compile Include="Assets\Scripts\Object\PlayerPet\FakePlayerPet.cs" />
     <Compile Include="Assets\Scripts\UI\PetInfoUIManager.cs" />
+    <Compile Include="Assets\Scripts\Register\CheckBeginer.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\APIPlayerPet.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShowShopProduct.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShopProduct.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PlayerInventory.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\APIAchievement.cs" />
+    <Compile Include="Assets\Scripts\Object\PlayerPet\LoadChoosePet.cs" />
     <Compile Include="Assets\Scripts\Object\User\User.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlStateAmin.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Testing.cs" />

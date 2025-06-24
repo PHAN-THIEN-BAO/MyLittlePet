@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System;
 
 public class APIPlayerPet : MonoBehaviour
 {
@@ -53,4 +54,89 @@ public class APIPlayerPet : MonoBehaviour
             callback?.Invoke(false);
         }
     }
+
+    //public static bool AddPlayerPet(PlayerPet playerPet)
+    //{
+    //    string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=100%25100%25100";
+    //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+    //    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+    //    StreamReader reader = new StreamReader(response.GetResponseStream());
+    //    string jsonResponse = reader.ReadToEnd();
+    //    reader.Close();
+    //    Debug.Log("AddPlayerPet response: " + jsonResponse);
+
+    //    if (response.StatusCode == HttpStatusCode.OK)
+    //    {
+    //        // Deserialize to List<PlayerPet>
+    //        var playerPets = JsonConvert.DeserializeObject<List<PlayerPet>>(jsonResponse);
+    //        if (playerPets != null && playerPets.Count > 0)
+    //        {
+    //            // take the last player pet from the list
+    //            var newPlayerPet = playerPets[playerPets.Count - 1];
+    //            playerPet.playerPetID = newPlayerPet.playerPetID;
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError("No player pet returned from API.");
+    //            return false;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Error adding player pet: " + response.StatusDescription);
+    //        return false;
+    //    }
+    //}
+
+
+    //public class AddPlayerPetResponse
+    //{
+    //    public string message { get; set; }
+    //    public PlayerPet playerPet { get; set; }
+    //}
+
+
+    public static bool AddPlayerPet(PlayerPet playerPet)
+    {
+        try
+        {
+            string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=100%25100%25100";
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "POST";
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            bool success = (int)response.StatusCode >= 200 && (int)response.StatusCode < 300;
+
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+            string jsonResponse = reader.ReadToEnd();
+            reader.Close();
+
+            Debug.Log("AddPlayerPet response: " + jsonResponse);
+
+            return success;
+        }
+        catch (WebException ex)
+        {
+            if (ex.Response != null)
+            {
+                using (StreamReader reader = new StreamReader(ex.Response.GetResponseStream()))
+                {
+                    Debug.LogError("AddPlayerPet error: " + reader.ReadToEnd());
+                }
+            }
+            else
+            {
+                Debug.LogError("AddPlayerPet error: " + ex.Message);
+            }
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Unexpected error during AddPlayerPet: " + ex.Message);
+            return false;
+        }
+    }
+
 }
