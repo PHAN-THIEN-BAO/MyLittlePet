@@ -1,4 +1,4 @@
---Create database My_Little_Pet_V3;
+Create database My_Little_Pet_V3;
 --GO
 
 --CACH CHAY DATABASE 
@@ -29,42 +29,6 @@ CREATE TABLE [User] (
 );
 
 
-
-CREATE TABLE Shop (
-    ShopID INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(100) NOT NULL,
-    Type VARCHAR(10),
-    Description NVARCHAR(255)
-);
-GO
-CREATE TABLE ShopProduct (
-    ShopProductID INT PRIMARY KEY IDENTITY(1,1),
-    ShopID INT NOT NULL,
-	AdminID INT NOT NULL,
-    Name NVARCHAR(100) NOT NULL,
-    Type VARCHAR(20) NOT NULL,
-    Description NVARCHAR(255),
-    ImageUrl NVARCHAR(255),
-    Price INT NOT NULL,
-    CurrencyType VARCHAR(20) NOT NULL,
-    Quality INT DEFAULT 100,
-	Status INT DEFAULT 1,
-    FOREIGN KEY (ShopID) REFERENCES Shop(ShopID),
-	FOREIGN KEY (AdminID) REFERENCES [User](ID)
-);
-
-
-CREATE TABLE PlayerInventory (
-    PRIMARY KEY (PlayerID, ShopProductID),
-    PlayerID INT NOT NULL,
-    ShopProductID INT NOT NULL,
-    Quantity INT DEFAULT 1,
-    AcquiredAt DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (PlayerID) REFERENCES [User](ID),
-    FOREIGN KEY (ShopProductID) REFERENCES ShopProduct(ShopProductID),
-);
-
-
 --Done with Shop and Player 
 CREATE TABLE Pet (
     PetID INT PRIMARY KEY IDENTITY(1,1),
@@ -91,7 +55,49 @@ CREATE TABLE PlayerPet (
     FOREIGN KEY (PlayerID) REFERENCES [User](ID),
     FOREIGN KEY (PetID) REFERENCES Pet(PetID)
 );
---Còn playerPet vs ACtivity
+
+
+CREATE TABLE Shop (
+    ShopID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100) NOT NULL,
+    Type VARCHAR(10),
+    Description NVARCHAR(255)
+);
+GO
+CREATE TABLE ShopProduct (
+    ShopProductID INT PRIMARY KEY IDENTITY(1,1),
+    ShopID INT NOT NULL,
+	AdminID INT NOT NULL,
+	PetID INT NULL,
+    Name NVARCHAR(100) NOT NULL,
+    Type VARCHAR(20) NOT NULL,
+    Description NVARCHAR(255),
+    ImageUrl NVARCHAR(255),
+    Price INT NOT NULL,
+    CurrencyType VARCHAR(20) NOT NULL,
+    Quantity INT,
+	Status INT DEFAULT 1,
+    FOREIGN KEY (ShopID) REFERENCES Shop(ShopID),
+	FOREIGN KEY (AdminID) REFERENCES [User](ID),
+	FOREIGN key (PetID) REFERENCES Pet(PetID)
+);
+
+
+
+
+CREATE TABLE PlayerInventory (
+    PRIMARY KEY (PlayerID, ShopProductID),
+    PlayerID INT NOT NULL,
+    ShopProductID INT NOT NULL,
+    Quantity INT DEFAULT 1,
+    AcquiredAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (PlayerID) REFERENCES [User](ID),
+    FOREIGN KEY (ShopProductID) REFERENCES ShopProduct(ShopProductID),
+);
+
+
+
+--CÃ²n playerPet vs ACtivity
 CREATE TABLE CareActivity (
     ActivityID INT PRIMARY KEY IDENTITY(1,1),
     ActivityType VARCHAR(50) NOT NULL,   
@@ -184,48 +190,14 @@ VALUES
 ('Player', N'FishyFella', 'fishyfella@example.com', 'fishfish', 'ACTIVE', 3, 600, 1, 1),
 ('Player', N'BirdWatcher', 'birdw@example.com', 'tweet123', 'ACTIVE', 5, 1200, 6, 4),
 ('Player', N'ReptileRider', 'reptrider@example.com', 'reptilepass', 'ACTIVE', 7, 1500, 8, 7);
-INSERT INTO Shop (Name, Type, Description)
-VALUES 
-('Pets Shop', 'Pet', 'Pet adoption and animal companions'),
-('Item Shop', 'Item', 'Supplies, food and toys for pets');
 
-INSERT INTO ShopProduct (ShopID, AdminID, Name, Type, Description, ImageUrl, Price, CurrencyType)
-VALUES 
--- Pets Shop (ShopID = 1)
-(1, 1, 'Basic Cat', 'Pet', 'A friendly basic cat for beginners', 'https://drive.google.com/file/d/1nkOmQE4OQxJNE_-toGhVN7b0zrQf3L2H/view', 100, 'Coin'),
-(1, 2, 'Loyal Dog', 'Pet', 'A loyal dog who loves to play fetch', 'https://drive.google.com/file/d/1dnKvmkFxuECn9T10cQRB1QKFV0-uy97W/view', 120, 'Coin'),
-(1, 1, 'Funny Chicken', 'Pet', 'A quirky chicken that lays golden eggs', 'https://drive.google.com/file/d/1fsJXvABMVtfGSPJz7E-_yhqv0H7Fo8oS/view', 150, 'Coin'),
-
--- Item Shop (ShopID = 2)
-(2, 1, 'Cat Food', 'Food', 'Nutritious food for healthy cats', 'https://drive.google.com/file/d/1siQWAMVbrnAqCnpnhbN5luvDEDJSgsmV/view', 30, 'Coin'),
-(2, 2, 'Chicken Food', 'Food', 'Premium grains for chickens', 'https://drive.google.com/file/d/16asRZC5bJStd8OlYVmjuOE1q6IhWlcWp/view', 35, 'Coin'),
-(2, 1, 'Dog Food', 'Food', 'High-protein dog meal', 'https://drive.google.com/file/d/1UFHJK5hW3A5l5UTgZDT5dy8YBfv_0Qvh/view', 40, 'Coin'),
-(2, 2, 'Cat Bed', 'Toy', 'A comfy bed that cats love to curl up in', 'img/catbed.png', 60, 'Coin'),
-(2, 1, 'Scratching Post', 'Toy', 'Keeps cats entertained and claws sharp', 'img/scratchpost.png', 50, 'Coin'),
-(2, 2, 'Chew Toy', 'Toy', 'Durable chew toy for playful dogs', 'img/chewtoy.png', 45, 'Coin'),
-(2, 1, 'Cookies', 'Food', 'Sweet and crunchy cookies for your pet to enjoy', 'https://drive.google.com/file/d/1BI3P_--YCN0OQvrpeEWVK1l0dbIPFLOt/view', 40, 'Coin'),
-(2, 1, 'Chocolate', 'Food', 'A special chocolate treat (non-toxic for pets)', 'https://drive.google.com/file/d/1eeJ-Tx6ztnARuhZF3rTvThSEb1uR9ScH/view', 40, 'Coin'),
-(2, 1, 'Orange', 'Food', 'Fresh and juicy orange slices full of vitamins', 'https://drive.google.com/file/d/1Mz8_kpl7E1_MAlQ_IF1vdeXpZwEKLK0Y/view', 40, 'Coin'),
-(2, 1, 'Cherry', 'Food', 'Sweet cherries that boost pet energy', 'https://drive.google.com/file/d/1vRZIx7kORpayLeHnxZSpJ1LwIGcsgrx4/view', 40, 'Coin'),
-(2, 1, 'Pear', 'Food', 'Ripe and juicy pears for healthy digestion', 'https://drive.google.com/file/d/1Rm5aSvUASG_KzZMIWWLaSmVOx8f0Ts-8/view', 40, 'Coin'),
-(2, 1, 'Banana', 'Food', 'Soft and sweet bananas loved by all pets', 'https://drive.google.com/file/d/1gJtCKHc1IBc_JRGLd29yaYbaCUETSM8A/view', 40, 'Coin');
-INSERT INTO PlayerInventory (PlayerID, ShopProductID, Quantity)
-VALUES 
-(3, 1, 1),
-(3, 3, 2),
-(4, 2, 1),
-(4, 4, 1),
-(5, 5, 3),
-(6, 6, 2),
-(6, 7, 1),
-(7, 8, 1),
-(8, 9, 1),
-(9, 10, 1);
 INSERT INTO Pet (AdminID, PetType, PetDefaultName, Description)
 VALUES 
 (1, 'Cat', 'Mimi', 'Playful and smart'),
 (2, 'Dog', 'Rex', 'Loyal and brave'),
 (1, 'Rabbit', 'Bunny', 'Cute and fast'),
+(1, 'Chicken', 'Chicky', 'This Pet have sth you never know'),
+
 (2, 'Hamster', 'Hamy', 'Tiny and adorable'),
 (1, 'Parrot', 'Polly', 'Talkative and colorful'),
 (2, 'Turtle', 'Slowmo', 'Slow but wise'),
@@ -239,12 +211,50 @@ VALUES
 (3, 2, 'Barker', '50%50%100'),
 (4, 3, 'Fluffy', '100%100%100'),
 (5, 4, 'Speedy', '20%50%100'),
-(6, 5, 'Talky', '100%50%20'),
-(6, 6, 'Shell', '50%50%20'),
-(7, 7, 'Splash', '20%20%50'),
-(7, 8, 'Firetail', '100%20%50'),
-(8, 9, 'Bamboo', '50%50%20'),
-(9, 10, 'Skyflame', '100%20%50');
+(6, 1, 'Talky', '100%50%20'),
+(6, 2, 'Shell', '50%50%20'),
+(7, 3, 'Splash', '20%20%50'),
+(7, 4, 'Firetail', '100%20%50'),
+(8, 3, 'Bamboo', '50%50%20'),
+(9, 4, 'Skyflame', '100%20%50');
+INSERT INTO Shop (Name, Type, Description)
+VALUES 
+('Pets Shop', 'Pet', 'Pet adoption and animal companions'),
+('Item Shop', 'Item', 'Supplies, food and toys for pets');
+
+INSERT INTO ShopProduct (ShopID, AdminID,PetID, Name, Type, Description, ImageUrl, Price, CurrencyType)
+VALUES 
+-- Pets Shop (ShopID = 1)
+(1, 1,1, 'Basic Cat', 'Pet', 'A friendly basic cat for beginners', 'https://drive.google.com/file/d/1nkOmQE4OQxJNE_-toGhVN7b0zrQf3L2H/view', 100, 'Coin'),
+(1, 2,2, 'Loyal Dog', 'Pet', 'A loyal dog who loves to play fetch', 'https://drive.google.com/file/d/1dnKvmkFxuECn9T10cQRB1QKFV0-uy97W/view', 120, 'Coin'),
+(1, 1,4, 'Funny Chicken', 'Pet', 'A quirky chicken that lays golden eggs', 'https://drive.google.com/file/d/1fsJXvABMVtfGSPJz7E-_yhqv0H7Fo8oS/view', 150, 'Coin'),
+
+-- Item Shop (ShopID = 2)
+(2, 1,NULL, 'Cat Food', 'Food', 'Nutritious food for healthy cats', 'https://drive.google.com/file/d/1siQWAMVbrnAqCnpnhbN5luvDEDJSgsmV/view', 30, 'Coin'),
+(2, 2,NULL, 'Chicken Food', 'Food', 'Premium grains for chickens', 'https://drive.google.com/file/d/16asRZC5bJStd8OlYVmjuOE1q6IhWlcWp/view', 35, 'Coin'),
+(2, 1,NULL, 'Dog Food', 'Food', 'High-protein dog meal', 'https://drive.google.com/file/d/1UFHJK5hW3A5l5UTgZDT5dy8YBfv_0Qvh/view', 40, 'Coin'),
+(2, 2,NULL, 'Cat Bed', 'Toy', 'A comfy bed that cats love to curl up in', 'img/catbed.png', 60, 'Coin'),
+(2, 1,NULL, 'Scratching Post', 'Toy', 'Keeps cats entertained and claws sharp', 'img/scratchpost.png', 50, 'Coin'),
+(2, 2,NULL, 'Chew Toy', 'Toy', 'Durable chew toy for playful dogs', 'img/chewtoy.png', 45, 'Coin'),
+(2, 1,NULL, 'Cookies', 'Food', 'Sweet and crunchy cookies for your pet to enjoy', 'https://drive.google.com/file/d/1BI3P_--YCN0OQvrpeEWVK1l0dbIPFLOt/view', 40, 'Coin'),
+(2, 1,NULL, 'Chocolate', 'Food', 'A special chocolate treat (non-toxic for pets)', 'https://drive.google.com/file/d/1eeJ-Tx6ztnARuhZF3rTvThSEb1uR9ScH/view', 40, 'Coin'),
+(2, 1,NULL, 'Orange', 'Food', 'Fresh and juicy orange slices full of vitamins', 'https://drive.google.com/file/d/1Mz8_kpl7E1_MAlQ_IF1vdeXpZwEKLK0Y/view', 40, 'Coin'),
+(2, 1,NULL, 'Cherry', 'Food', 'Sweet cherries that boost pet energy', 'https://drive.google.com/file/d/1vRZIx7kORpayLeHnxZSpJ1LwIGcsgrx4/view', 40, 'Coin'),
+(2, 1,NULL, 'Pear', 'Food', 'Ripe and juicy pears for healthy digestion', 'https://drive.google.com/file/d/1Rm5aSvUASG_KzZMIWWLaSmVOx8f0Ts-8/view', 40, 'Coin'),
+(2, 1,NULL, 'Banana', 'Food', 'Soft and sweet bananas loved by all pets', 'https://drive.google.com/file/d/1gJtCKHc1IBc_JRGLd29yaYbaCUETSM8A/view', 40, 'Coin');
+INSERT INTO PlayerInventory (PlayerID, ShopProductID, Quantity)
+VALUES 
+(3, 1, 1),
+(3, 3, 2),
+(4, 2, 1),
+(4, 4, 1),
+(5, 5, 3),
+(6, 6, 2),
+(6, 7, 1),
+(7, 8, 1),
+(8, 9, 1),
+(9, 10, 1);
+
 INSERT INTO CareActivity (ActivityType, Description)
 VALUES 
 ('Feed', 'Give food to pet'),
