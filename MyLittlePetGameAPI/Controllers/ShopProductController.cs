@@ -24,18 +24,19 @@ namespace MyLittlePetGameAPI.Controllers
                 var products = _context.ShopProducts
                     .Include(p => p.Shop)
                     .Include(p => p.Admin)
+                    .Include(p => p.Pet)
                     .Select(p => new
                     {
                         ShopProductId = p.ShopProductId,
                         ShopId = p.ShopId,
                         AdminId = p.AdminId,
+                        PetId = p.PetId,
                         Name = p.Name,
                         Type = p.Type,
                         Description = p.Description,
                         ImageUrl = p.ImageUrl,
                         Price = p.Price,
                         CurrencyType = p.CurrencyType,
-                        Quality = p.Quality,
                         Status = p.Status,
                         ShopInfo = new
                         {
@@ -47,6 +48,13 @@ namespace MyLittlePetGameAPI.Controllers
                         {
                             Id = p.Admin.Id,
                             UserName = p.Admin.UserName
+                        },
+                        PetInfo = p.Pet == null ? null : new
+                        {
+                            PetId = p.Pet.PetId,
+                            PetType = p.Pet.PetType,
+                            PetDefaultName = p.Pet.PetDefaultName,
+                            Description = p.Pet.Description
                         }
                     })
                     .ToList();
@@ -64,10 +72,10 @@ namespace MyLittlePetGameAPI.Controllers
         public ActionResult<object> GetById(int id)
         {
             try
-            {
-                var product = _context.ShopProducts
+            {                var product = _context.ShopProducts
                     .Include(p => p.Shop)
                     .Include(p => p.Admin)
+                    .Include(p => p.Pet)
                     .FirstOrDefault(p => p.ShopProductId == id);
                 
                 if (product == null)
@@ -76,17 +84,15 @@ namespace MyLittlePetGameAPI.Controllers
                 }
                 
                 var result = new
-                {
-                    ShopProductId = product.ShopProductId,
+                {                    ShopProductId = product.ShopProductId,
                     ShopId = product.ShopId,
                     AdminId = product.AdminId,
+                    PetId = product.PetId,
                     Name = product.Name,
                     Type = product.Type,
-                    Description = product.Description,
-                    ImageUrl = product.ImageUrl,
+                    Description = product.Description,                    ImageUrl = product.ImageUrl,
                     Price = product.Price,
                     CurrencyType = product.CurrencyType,
-                    Quality = product.Quality,
                     Status = product.Status,
                     ShopInfo = new
                     {
@@ -98,6 +104,13 @@ namespace MyLittlePetGameAPI.Controllers
                     {
                         Id = product.Admin.Id,
                         UserName = product.Admin.UserName
+                    },
+                    PetInfo = product.Pet == null ? null : new
+                    {
+                        PetId = product.Pet.PetId,
+                        PetType = product.Pet.PetType,
+                        PetDefaultName = product.Pet.PetDefaultName,
+                        Description = product.Pet.Description
                     }
                 };
                 
@@ -122,25 +135,39 @@ namespace MyLittlePetGameAPI.Controllers
                 
                 var products = _context.ShopProducts
                     .Include(p => p.Shop)
+                    .Include(p => p.Admin)
+                    .Include(p => p.Pet)
                     .Where(p => p.Type == type)
                     .Select(p => new
                     {
                         ShopProductId = p.ShopProductId,
                         ShopId = p.ShopId,
                         AdminId = p.AdminId,
+                        PetId = p.PetId,
                         Name = p.Name,
                         Type = p.Type,
                         Description = p.Description,
                         ImageUrl = p.ImageUrl,
                         Price = p.Price,
                         CurrencyType = p.CurrencyType,
-                        Quality = p.Quality,
                         Status = p.Status,
                         ShopInfo = new
                         {
                             ShopId = p.Shop.ShopId,
                             Name = p.Shop.Name,
                             Type = p.Shop.Type
+                        },
+                        AdminInfo = new
+                        {
+                            Id = p.Admin.Id,
+                            UserName = p.Admin.UserName
+                        },
+                        PetInfo = p.Pet == null ? null : new
+                        {
+                            PetId = p.Pet.PetId,
+                            PetType = p.Pet.PetType,
+                            PetDefaultName = p.Pet.PetDefaultName,
+                            Description = p.Pet.Description
                         }
                     })
                     .ToList();
@@ -161,19 +188,20 @@ namespace MyLittlePetGameAPI.Controllers
                 var products = _context.ShopProducts
                     .Include(p => p.Shop)
                     .Include(p => p.Admin)
+                    .Include(p => p.Pet)
                     .Where(p => p.Status == status)
                     .Select(p => new
                     {
                         ShopProductId = p.ShopProductId,
                         ShopId = p.ShopId,
                         AdminId = p.AdminId,
+                        PetId = p.PetId,
                         Name = p.Name,
                         Type = p.Type,
                         Description = p.Description,
                         ImageUrl = p.ImageUrl,
                         Price = p.Price,
                         CurrencyType = p.CurrencyType,
-                        Quality = p.Quality,
                         Status = p.Status,
                         ShopInfo = new
                         {
@@ -185,6 +213,13 @@ namespace MyLittlePetGameAPI.Controllers
                         {
                             Id = p.Admin.Id,
                             UserName = p.Admin.UserName
+                        },
+                        PetInfo = p.Pet == null ? null : new
+                        {
+                            PetId = p.Pet.PetId,
+                            PetType = p.Pet.PetType,
+                            PetDefaultName = p.Pet.PetDefaultName,
+                            Description = p.Pet.Description
                         }
                     })
                     .ToList();
@@ -196,11 +231,9 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        
-        // POST: ShopProduct - Create a new product
-        [HttpPost]
-        public ActionResult<ShopProduct> Create(int shopId, int adminId, string name, string type, string? description, 
-            string? imageUrl, int price, string currencyType, int? quality, int? status)
+          // POST: ShopProduct - Create a new product
+        [HttpPost]        public ActionResult<ShopProduct> Create(int shopId, int adminId, string name, string type, string? description, 
+            string? imageUrl, int price, string currencyType, int? status, int? petId)
         {
             // Validate required fields
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(currencyType))
@@ -214,25 +247,32 @@ namespace MyLittlePetGameAPI.Controllers
             {
                 return BadRequest("Shop not found");
             }
-            
-            // Validate admin exists
+              // Validate admin exists
             var admin = _context.Users.Find(adminId);
             if (admin == null)
             {
                 return BadRequest("Admin user not found");
             }
             
-            var product = new ShopProduct
+            // Validate pet exists if PetId is provided
+            if (petId.HasValue)
+            {
+                var pet = _context.Pets.Find(petId.Value);
+                if (pet == null)
+                {
+                    return BadRequest("Pet not found");
+                }
+            }
+              var product = new ShopProduct
             {
                 ShopId = shopId,
                 AdminId = adminId,
+                PetId = petId,
                 Name = name,
                 Type = type,
-                Description = description,
-                ImageUrl = imageUrl,
+                Description = description,                ImageUrl = imageUrl,
                 Price = price,
                 CurrencyType = currencyType,
-                Quality = quality ?? 100, // Default to 100 if not provided
                 Status = status ?? 1 // Default to 1 (active) if not provided
             };
             
@@ -240,11 +280,9 @@ namespace MyLittlePetGameAPI.Controllers
             _context.SaveChanges();
             
             return CreatedAtAction(nameof(GetById), new { id = product.ShopProductId }, product);
-        }
-          // PUT: ShopProduct/{id} - Update a product
-        [HttpPut("{id}")]
-        public ActionResult<ShopProduct> Update(int id, string? name, string? type, string? description, 
-            string? imageUrl, int? price, string? currencyType, int? quality, int? status)
+        }          // PUT: ShopProduct/{id} - Update a product
+        [HttpPut("{id}")]        public ActionResult<ShopProduct> Update(int id, string? name, string? type, string? description, 
+            string? imageUrl, int? price, string? currencyType, int? status, int? petId)
         {
             var product = _context.ShopProducts.Find(id);
             
@@ -278,20 +316,24 @@ namespace MyLittlePetGameAPI.Controllers
             {
                 product.Price = price.Value;
             }
-            
-            if (!string.IsNullOrEmpty(currencyType))
+              if (!string.IsNullOrEmpty(currencyType))
             {
                 product.CurrencyType = currencyType;
             }
-            
-            if (quality.HasValue)
-            {
-                product.Quality = quality.Value;
-            }
-            
-            if (status.HasValue)
+              if (status.HasValue)
             {
                 product.Status = status.Value;
+            }
+            
+            if (petId.HasValue)
+            {
+                // Validate pet exists if petId is provided
+                var pet = _context.Pets.Find(petId.Value);
+                if (pet == null)
+                {
+                    return BadRequest("Pet not found");
+                }
+                product.PetId = petId;
             }
             
             _context.ShopProducts.Update(product);
