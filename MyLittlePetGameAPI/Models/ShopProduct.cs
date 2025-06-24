@@ -11,18 +11,16 @@ public partial class ShopProduct
 
     public int AdminId { get; set; }
 
+    public int? PetId { get; set; }
+
     public string Name { get; set; } = null!;
 
     public string Type { get; set; } = null!;
 
     public string? Description { get; set; }
 
-    public string? ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }    public int Price { get; set; }    public string CurrencyType { get; set; } = null!;
 
-    public int Price { get; set; }    public string CurrencyType { get; set; } = null!;
-
-    public int? Quality { get; set; }
-    
     public int? Status { get; set; }
 
     public virtual User Admin { get; set; } = null!;
@@ -30,4 +28,6 @@ public partial class ShopProduct
     public virtual ICollection<PlayerInventory> PlayerInventories { get; set; } = new List<PlayerInventory>();
 
     public virtual Shop Shop { get; set; } = null!;
+    
+    public virtual Pet? Pet { get; set; }
 }
