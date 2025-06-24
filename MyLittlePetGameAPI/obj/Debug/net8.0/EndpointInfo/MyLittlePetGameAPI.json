@@ -2534,7 +2534,7 @@
             }
           },
           {
-            "name": "quality",
+            "name": "status",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2542,7 +2542,7 @@
             }
           },
           {
-            "name": "status",
+            "name": "petId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2654,7 +2654,7 @@
             }
           },
           {
-            "name": "quality",
+            "name": "status",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -2662,7 +2662,7 @@
             }
           },
           {
-            "name": "status",
+            "name": "petId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -3632,6 +3632,11 @@
             "type": "integer",
             "format": "int32"
           },
+          "petId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
           "name": {
             "type": "string",
             "nullable": true
@@ -3656,11 +3661,6 @@
             "type": "string",
             "nullable": true
           },
-          "quality": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "status": {
             "type": "integer",
             "format": "int32",
@@ -3678,6 +3678,9 @@
           },
           "shop": {
             "$ref": "#/components/schemas/Shop"
+          },
+          "pet": {
+            "$ref": "#/components/schemas/Pet"
           }
         },
         "additionalProperties": false
