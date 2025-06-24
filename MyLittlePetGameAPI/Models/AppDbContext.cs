@@ -260,13 +260,12 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.ShopProductId).HasColumnName("ShopProductID");
             entity.Property(e => e.AdminId).HasColumnName("AdminID");
+            entity.Property(e => e.PetId).HasColumnName("PetID");
             entity.Property(e => e.CurrencyType)
                 .HasMaxLength(20)
-                .IsUnicode(false);
-            entity.Property(e => e.Description).HasMaxLength(255);
+                .IsUnicode(false);            entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.ImageUrl).HasMaxLength(255);
             entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.Quality).HasDefaultValue(100);
             entity.Property(e => e.ShopId).HasColumnName("ShopID");
             entity.Property(e => e.Type)
                 .HasMaxLength(20)
@@ -276,6 +275,10 @@ public partial class AppDbContext : DbContext
                 .HasForeignKey(d => d.AdminId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ShopProdu__Admin__5629CD9C");
+
+            entity.HasOne(d => d.Pet).WithMany()
+                .HasForeignKey(d => d.PetId)
+                .HasConstraintName("FK__ShopProdu__PetId");
 
             entity.HasOne(d => d.Shop).WithMany(p => p.ShopProducts)
                 .HasForeignKey(d => d.ShopId)
