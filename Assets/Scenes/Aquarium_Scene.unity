@@ -14697,7 +14697,6 @@ GameObject:
   - component: {fileID: 389358980}
   - component: {fileID: 389358983}
   - component: {fileID: 389358984}
-  - component: {fileID: 389358985}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -14832,31 +14831,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 389358979}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b197d13358f08e4f8b1ed3de77a4ce7, type: 3}
+  m_Script: {fileID: 11500000, guid: 792373d454476864482826507bf80474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 0.1
-  smoothTime: 0.1
-  maxHorizontalMovement: 10
-  maxVerticalMovement: 10
-  initialPosition: {x: 0, y: 0, z: 0}
---- !u!114 &389358985
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 389358979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b197d13358f08e4f8b1ed3de77a4ce7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementSpeed: 0.2
-  smoothTime: 0.2
-  maxHorizontalMovement: 10
-  maxVerticalMovement: 10
-  initialPosition: {x: 12, y: 12, z: 12}
+  manualMoveSpeed: 5
+  followSpeed: 5
+  followFish: 1
+  fishTarget: {fileID: 0}
+  followSmoothTime: 0.1
+  useBoundaries: 1
+  minX: -50
+  maxX: 50
+  minY: -30
+  maxY: 30
 --- !u!1 &390880035
 GameObject:
   m_ObjectHideFlags: 0
@@ -42639,8 +42626,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1260405649}
   - component: {fileID: 1260405648}
+  - component: {fileID: 1260405650}
   m_Layer: 0
-  m_Name: Sprite names_37
+  m_Name: Fish_main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -42710,12 +42698,30 @@ Transform:
   m_GameObject: {fileID: 1260405647}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.9913754, y: -5.9100857, z: 0}
-  m_LocalScale: {x: 2.1384, y: 2.1384, z: 2.1384}
+  m_LocalPosition: {x: 0.99138, y: -5.9100857, z: 0}
+  m_LocalScale: {x: 1.18191, y: 1.18191, z: 1.18191}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1260405650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260405647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46ba2f907d819c44887728b2d1db106a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  rotationSpeed: 10
+  distanceThreshold: 0.1
+  enableSwimmingMotion: 1
+  swayAmount: 0.1
+  swaySpeed: 5
 --- !u!1 &1260668288
 GameObject:
   m_ObjectHideFlags: 0
