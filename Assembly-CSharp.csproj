@@ -59,7 +59,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
-    <Analyzer Include="C:\Users\Admin\Desktop\Unity\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
+    <Analyzer Include="D:\SWP\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Object\PlayerPet\APIPlayerPet.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShowShopProduct.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShopProduct.cs" />
+    <Compile Include="Assets\Scripts\UI\PetStatusInteractionUI.cs" />
     <Compile Include="Assets\Scripts\Object\Shop\Shop.cs" />
     <Compile Include="Assets\Scripts\Object\User\APIUser.cs" />
     <Compile Include="Assets\Scripts\Register\RegisterPlayer.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Assets\Scripts\UI\UIStoreOptionManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\RandomMovement.cs" />
+    <Compile Include="Assets\Scripts\Pet\PetStatusManager.cs" />
     <Compile Include="Assets\Scripts\NPC\NPC.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\APIPlayerInventory.cs" />
     <Compile Include="Assets\Scripts\LogOut\LogoutUser.cs" />

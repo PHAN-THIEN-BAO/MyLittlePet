@@ -113,8 +113,22 @@ public class NPC : MonoBehaviour, IInteractable
         for(int i = 0; i < choice.choices.Length; i++)
         {
             int nextIndex = choice.nextDialogueIndexes[i];
-            dialogueUI.CreateChoiceButton(choice.choices[i], () => ChooseOption(nextIndex));
             
+            // Check if this choice has effects
+            if (i < choice.choiceEffects.Length && choice.choiceEffects[i].effectType != EffectType.None)
+            {
+                // Create button with effect
+                dialogueUI.CreateChoiceButtonWithEffect(
+                    choice.choices[i], 
+                    () => ChooseOption(nextIndex),
+                    choice.choiceEffects[i]
+                );
+            }
+            else
+            {
+                // Create regular button without effect
+                dialogueUI.CreateChoiceButton(choice.choices[i], () => ChooseOption(nextIndex));
+            }
         }
     }
 

@@ -566,10 +566,10 @@ GameObject:
   - component: {fileID: 598386544}
   - component: {fileID: 598386543}
   - component: {fileID: 598386545}
-  - component: {fileID: 598386546}
   - component: {fileID: 598386547}
+  - component: {fileID: 598386548}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Pet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -691,20 +691,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &598386546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 598386541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 511c107fe86d75f44bdf87f52868ab44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPetID: 2
-  uiManager: {fileID: 1096679346}
 --- !u!114 &598386547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,6 +704,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueData: {fileID: 11400000, guid: d1cb285466607f74ca0ff1c917cce88e, type: 2}
+--- !u!114 &598386548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 598386541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 511c107fe86d75f44bdf87f52868ab44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPetID: 1
+  uiManager: {fileID: 1096679346}
 --- !u!1 &637499198
 GameObject:
   m_ObjectHideFlags: 0
@@ -1816,7 +1816,7 @@ GameObject:
   - component: {fileID: 1096679345}
   - component: {fileID: 1096679346}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: PetInfoUIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1855,6 +1855,9 @@ MonoBehaviour:
   petCustomNameText: {fileID: 1215361655}
   petAdoptedDateText: {fileID: 807419998}
   statusBarManager: {fileID: 1814071398}
+  statusCriticalWarning: {fileID: 0}
+  criticalThreshold: 15
+  defaultPlayerPetID: 1
 --- !u!1 &1156575680
 GameObject:
   m_ObjectHideFlags: 0
@@ -3374,7 +3377,7 @@ GameObject:
   - component: {fileID: 1814071399}
   - component: {fileID: 1814071398}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: StatusBarManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3394,14 +3397,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   petHungerStatusText: {fileID: 1429139610}
   petHappinessStatusText: {fileID: 1592229279}
-  petHealthStatusText: {fileID: 1392560796}
+  petEnergyStatusText: {fileID: 1392560796}
   hungerSlider: {fileID: 1353491061}
   happinessSlider: {fileID: 98514716}
-  healthSlider: {fileID: 1939118116}
+  energySlider: {fileID: 1939118116}
   levelSlider: {fileID: 1403408019}
   maxPetLevel: 100
   maxStatusValue: 100
   normalizeStatusValues: 1
+  lowHungerWarning: {fileID: 0}
+  lowHappinessWarning: {fileID: 0}
+  lowEnergyWarning: {fileID: 0}
+  warningThreshold: 25
 --- !u!4 &1814071399
 Transform:
   m_ObjectHideFlags: 0
@@ -3412,6 +3419,58 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 564.2944, y: 416.9274, z: -3.515844}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1825722760
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1825722762}
+  - component: {fileID: 1825722761}
+  m_Layer: 0
+  m_Name: PetStatus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1825722761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825722760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dddb3ec1db044c94bae786b32140e638, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updateInterval: 3600
+  decayAmount: 5
+  decayWhileGameClosed: 0
+  hungerDecayMultiplier: 1
+  happinessDecayMultiplier: 1
+  energyDecayMultiplier: 1
+  debugMode: 0
+  debugUpdateInterval: 10
+--- !u!4 &1825722762
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825722760}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 914.0423, y: 587.94055, z: -6.1174455}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3432,7 +3491,7 @@ GameObject:
   - component: {fileID: 1827903936}
   - component: {fileID: 1827903941}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4107,3 +4166,4 @@ SceneRoots:
   - {fileID: 767181007}
   - {fileID: 1814071399}
   - {fileID: 1976217939}
+  - {fileID: 1825722762}

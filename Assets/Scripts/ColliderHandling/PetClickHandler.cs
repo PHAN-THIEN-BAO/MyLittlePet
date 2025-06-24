@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 public class PetClickHandler : MonoBehaviour
 {
     // Reference to the pet's PlayerPetID
-    public int playerPetID;
+    public int playerPetID = 1; // Default to 1
     
     // Reference to the UI manager that will handle displaying pet info
     public PetInfoUIManager uiManager;
