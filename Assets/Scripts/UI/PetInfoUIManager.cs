@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class PetInfoUIManager : MonoBehaviour
 {
@@ -13,21 +14,32 @@ public class PetInfoUIManager : MonoBehaviour
     public TMP_Text petCustomNameText;
     public TMP_Text petAdoptedDateText;
     
-    [Header("Status Bar Manager")]
+    [Header("Status Components")]
     public PetStatusBarManager statusBarManager;
+    
+    [Header("Status Indicators")]
+    public GameObject statusCriticalWarning;
+    public float criticalThreshold = 15f;
     
     // Track the current pet being displayed
     private int currentPetID = -1;
-
+    
+    // Property to access current pet ID
+    public int CurrentPetID => currentPetID;
+    
+    // Define the player ID value
+    private const int PLAYER_ID = 3;
+    
+    // Default PlayerPetID to use
+    public int defaultPlayerPetID = 1;
+    
     private void Start()
     {
-        // Make sure we have a status bar manager
+        // Find required components
         if (statusBarManager == null)
         {
-            // Try to find one on this GameObject
-            statusBarManager = GetComponent<PetStatusBarManager>();
+            statusBarManager = GetComponentInChildren<PetStatusBarManager>();
             
-            // If still not found, look for one in children
             if (statusBarManager == null && petsInfoPanel != null)
             {
                 statusBarManager = petsInfoPanel.GetComponentInChildren<PetStatusBarManager>();
@@ -38,9 +50,41 @@ public class PetInfoUIManager : MonoBehaviour
                 Debug.LogWarning("No PetStatusBarManager found. Status bars will not be updated.");
             }
         }
+        
+        // Hide critical warning by default
+        if (statusCriticalWarning != null)
+        {
+            statusCriticalWarning.SetActive(false);
+        }
+        
+        // Try to subscribe to pet status updates
+        PetStatusManager statusManager = Object.FindAnyObjectByType<PetStatusManager>();
+        if (statusManager != null)
+        {
+            statusManager.OnPetStatusUpdated += OnPetStatusUpdated;
+        }
     }
-
-    // Public method to toggle the panel and display pet details
+    
+    private void OnDestroy()
+    {
+        // Unsubscribe from events
+        PetStatusManager statusManager = Object.FindAnyObjectByType<PetStatusManager>();
+        if (statusManager != null)
+        {
+            statusManager.OnPetStatusUpdated -= OnPetStatusUpdated;
+        }
+    }
+    
+    private void OnPetStatusUpdated(PlayerPet pet)
+    {
+        // Only update if this is the pet we're currently displaying
+        if (pet.playerPetID == currentPetID)
+        {
+            UpdatePetInfo(pet);
+            CheckCriticalStatus(pet.status);
+        }
+    }
+    
     public void ToggleInfoPanel(int petID)
     {
         bool isActive = petsInfoPanel.activeSelf;
@@ -60,48 +104,33 @@ public class PetInfoUIManager : MonoBehaviour
         DisplayPetDetails(petID);
     }
     
-    // Close the panel
     public void CloseInfoPanel()
     {
         petsInfoPanel.SetActive(false);
     }
     
-    // Check if the panel is currently active
     public bool IsPanelActive()
     {
         return petsInfoPanel != null && petsInfoPanel.activeSelf;
     }
     
-    // Display the pet details for the given pet ID
     private void DisplayPetDetails(int petID)
     {
         try
         {
-            // Get the logged-in player information
-            User currentUser = PlayerInfomation.LoadPlayerInfo();
+            // Use the hardcoded PlayerID
+            User currentUser = new User { id = PLAYER_ID };
             
-            if (currentUser != null)
+            PlayerPet petDetails = APIPlayerPet.GetPlayerPetById(petID);
+            
+            if (petDetails != null && petDetails.playerID == PLAYER_ID)
             {
-                // Fetch the pet details based on playerPetID
-                PlayerPet petDetails = APIPlayerPet.GetPlayerPetById(petID);
-                
-                // Verify this pet belongs to the logged-in player
-                if (petDetails != null && petDetails.playerID == currentUser.id)
-                {
-                    // Update UI elements with pet details
-                    UpdatePetInfo(petDetails);
-                    
-                    // Log status values for debugging
-                    Debug.Log($"Pet {petID} status: {petDetails.status}");
-                }
-                else
-                {
-                    Debug.LogWarning($"Pet does not belong to the current user or pet details not found. Pet ID: {petID}, User ID: {currentUser.id}");
-                }
+                UpdatePetInfo(petDetails);
+                CheckCriticalStatus(petDetails.status);
             }
             else
             {
-                Debug.LogWarning("No user is currently logged in.");
+                Debug.LogWarning($"Pet does not belong to the player or pet details not found. Pet ID: {petID}, Player ID: {PLAYER_ID}");
             }
         }
         catch (System.Exception ex)
@@ -110,7 +139,6 @@ public class PetInfoUIManager : MonoBehaviour
         }
     }
     
-    // Update the pet information UI elements
     private void UpdatePetInfo(PlayerPet petDetails)
     {
         if (petDetails == null) return;
@@ -128,14 +156,87 @@ public class PetInfoUIManager : MonoBehaviour
         if (petCustomNameText != null)
             petCustomNameText.text = "Custom Name: " + petDetails.petCustomName;
         
-        // Update status bars using the status bar manager
+        // Update status bars
         if (statusBarManager != null)
         {
-            // Update level slider
             statusBarManager.UpdateLevelSlider(petDetails.level);
-            
-            // Update status bars and text
             statusBarManager.UpdatePetStatus(petDetails.status);
+        }
+    }
+    
+    private void CheckCriticalStatus(string statusString)
+    {
+        if (string.IsNullOrEmpty(statusString) || statusCriticalWarning == null)
+            return;
+            
+        try
+        {
+            string[] statuses = statusString.Split('%');
+            
+            if (statuses.Length >= 3)
+            {
+                float hungerValue = float.Parse(statuses[0]);
+                float happinessValue = float.Parse(statuses[1]);
+                float energyValue = float.Parse(statuses[2]);
+                
+                // Show warning if any stat is below critical threshold
+                bool isCritical = hungerValue < criticalThreshold || 
+                                  happinessValue < criticalThreshold || 
+                                  energyValue < criticalThreshold;
+                                  
+                statusCriticalWarning.SetActive(isCritical);
+                
+                // Pulse animation if critical
+                if (isCritical)
+                {
+                    Animator animator = statusCriticalWarning.GetComponent<Animator>();
+                    if (animator != null)
+                        animator.SetTrigger("Pulse");
+                }
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error checking critical status: " + ex.Message);
+        }
+    }
+    
+    public void RefreshPetInfo()
+    {
+        if (currentPetID > 0 && petsInfoPanel.activeSelf)
+        {
+            DisplayPetDetails(currentPetID);
+        }
+    }
+    
+    public void TestPlayerWithID(int playerID)
+    {
+        Debug.Log($"Testing player with ID: {playerID}");
+        
+        try
+        {
+            // Always use the hardcoded PLAYER_ID instead of the parameter
+            List<PlayerPet> playerPets = APIPlayerPet.GetPetsByPlayerId(PLAYER_ID);
+            
+            if (playerPets != null && playerPets.Count > 0)
+            {
+                Debug.Log($"Found {playerPets.Count} pets for Player ID: {PLAYER_ID}");
+                
+                // Display the first pet's info
+                int firstPetID = playerPets[0].playerPetID;
+                ToggleInfoPanel(firstPetID);
+                
+                Debug.Log($"Displaying pet ID: {firstPetID}, Name: {playerPets[0].petCustomName}");
+                Debug.Log($"Status: {playerPets[0].status}");
+            }
+            else
+            {
+                Debug.LogWarning($"No pets found for Player ID: {PLAYER_ID}");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error testing Player ID {PLAYER_ID}: {ex.Message}");
         }
     }
 }
