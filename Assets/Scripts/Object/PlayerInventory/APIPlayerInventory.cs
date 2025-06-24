@@ -1,9 +1,11 @@
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class APIPlayerInventory : MonoBehaviour
 {
@@ -21,26 +23,29 @@ public class APIPlayerInventory : MonoBehaviour
         return JsonConvert.DeserializeObject<List<PlayerInventory>>(jsonResponse);
     }
 
-    public static Boolean UpdatePlayerInventory(PlayerInventory playerInventory)
+    public static IEnumerator UpdatePlayerInventoryCoroutine(PlayerInventory playerInventory, System.Action<bool> callback)
     {
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/PlayerInventory?playerId=" + playerInventory.playerID +"&shopProductId=" + playerInventory.shopProductID + "&quantity=" + playerInventory.quantity);
-        request.Method = "POST";
-        request.ContentType = "application/json";
-        // Serialize the PlayerInventory object to JSON
-        string jsonData = JsonConvert.SerializeObject(playerInventory);
-        using (StreamWriter writer = new StreamWriter(request.GetRequestStream()))
+        string url = "https://localhost:7035/PlayerInventory?playerId=" + playerInventory.playerID
+            + "&shopProductId=" + playerInventory.shopProductID
+            + "&quantity=" + playerInventory.quantity;
+
+        string jsonData = JsonUtility.ToJson(playerInventory);
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            writer.Write(jsonData);
+            callback?.Invoke(true);
         }
-        try
+        else
         {
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            return response.StatusCode == HttpStatusCode.OK;
-        }
-        catch (WebException ex)
-        {
-            Debug.LogError("Error updating player inventory: " + ex.Message);
-            return false;
+            Debug.LogError("Error updating player inventory: " + request.error);
+            callback?.Invoke(false);
         }
     }
 

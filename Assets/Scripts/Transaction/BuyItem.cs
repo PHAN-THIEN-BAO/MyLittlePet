@@ -79,12 +79,18 @@ public class BuyItem : MonoBehaviour
         // 6. Update player inventory
         PlayerInventory playerInventory = new PlayerInventory
         {
-            
             playerID = user.id,
             shopProductID = shopProductID,
             quantity = 1
         };
-        APIPlayerInventory.UpdatePlayerInventory(playerInventory);
+
+        StartCoroutine(APIPlayerInventory.UpdatePlayerInventoryCoroutine(playerInventory, (success) =>
+        {
+            if (success)
+                Debug.Log("Inventory updated!");
+            else
+                Debug.LogWarning("Failed to update inventory.");
+        }));
 
     }
 

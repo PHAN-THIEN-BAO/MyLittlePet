@@ -1786,6 +1786,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   petsInfoPanel: {fileID: 1773606577}
+  petNameText: {fileID: 0}
+  petLevelText: {fileID: 0}
+  petHungerStatusText: {fileID: 0}
+  petHappinessStatusText: {fileID: 0}
+  petHealthStatusText: {fileID: 0}
+  petAdoptedDateText: {fileID: 0}
+  petCustomNameText: {fileID: 0}
+  playerPetID: 0
 --- !u!114 &53588434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27388,7 +27396,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &704367230
 RectTransform:
   m_ObjectHideFlags: 0
@@ -32441,6 +32449,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   petsInfoPanel: {fileID: 2042108254}
+  petNameText: {fileID: 0}
+  petLevelText: {fileID: 0}
+  petHungerStatusText: {fileID: 0}
+  petHappinessStatusText: {fileID: 0}
+  petHealthStatusText: {fileID: 0}
+  petAdoptedDateText: {fileID: 0}
+  petCustomNameText: {fileID: 0}
+  playerPetID: 0
 --- !u!61 &792594118
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -55503,7 +55519,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1416136731
 RectTransform:
   m_ObjectHideFlags: 0
@@ -67511,6 +67527,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   petsInfoPanel: {fileID: 1703093635}
+  petNameText: {fileID: 0}
+  petLevelText: {fileID: 0}
+  petHungerStatusText: {fileID: 0}
+  petHappinessStatusText: {fileID: 0}
+  petHealthStatusText: {fileID: 0}
+  petAdoptedDateText: {fileID: 0}
+  petCustomNameText: {fileID: 0}
+  playerPetID: 0
 --- !u!61 &1718707987
 BoxCollider2D:
   m_ObjectHideFlags: 0
