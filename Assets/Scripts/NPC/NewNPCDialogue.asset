@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72cf070611116134eb47e2ff2bd794fd, type: 3}
   m_Name: NewNPCDialogue
   m_EditorClassIdentifier: 
-  npcName: cat
-  npcPortrait: {fileID: 0}
+  npcName: Whisker
+  npcPortrait: {fileID: 4723107735738678597, guid: 908d5a18042134dbc8be4514567a8b14, type: 3}
   dialogueLines:
   - Meoww~~
   - Meow...meow
@@ -30,3 +30,5 @@ MonoBehaviour:
     - Sleep
     - Play
     nextDialogueIndexes: 010000000200000003000000
+    petCareOptions: 010000000300000002000000
+    customCareAmount: 

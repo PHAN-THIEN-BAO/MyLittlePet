@@ -163,7 +163,7 @@ public class PetInfoUIManager : MonoBehaviour
             petNameText.text = petDetails.petCustomName;
         
         if (petLevelText != null)
-            petLevelText.text = "Level: " + petDetails.level.ToString();
+            petLevelText.text = "Lv. " + petDetails.level.ToString();
         
         if (petAdoptedDateText != null)
             petAdoptedDateText.text = "Adopted: " + petDetails.adoptedAt.ToString("MM/dd/yyyy");
