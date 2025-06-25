@@ -703,7 +703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 511c107fe86d75f44bdf87f52868ab44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPetID: 2
+  playerPetID: 3
   uiManager: {fileID: 1096679346}
 --- !u!114 &598386547
 MonoBehaviour:
@@ -914,7 +914,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.6454468, y: 0}
+  m_AnchoredPosition: {x: -0.6455078, y: 0}
   m_SizeDelta: {x: -7.7449, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &700571002
@@ -1764,7 +1764,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.6454468, y: 0}
+  m_AnchoredPosition: {x: -0.6455078, y: 0}
   m_SizeDelta: {x: -7.7449, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &906948586
@@ -1855,6 +1855,15 @@ MonoBehaviour:
   petCustomNameText: {fileID: 1215361655}
   petAdoptedDateText: {fileID: 807419998}
   statusBarManager: {fileID: 1814071398}
+  decayInterval: 5
+  hungerDecayAmount: 5
+  happinessDecayAmount: 5
+  energyDecayAmount: 5
+  minStatusValue: 10
+  feedIncreaseAmount: 15
+  playIncreaseAmount: 15
+  sleepIncreaseAmount: 15
+  maxStatusValue: 100
 --- !u!1 &1156575680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1889,7 +1898,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.6454468, y: 0}
+  m_AnchoredPosition: {x: -0.6455078, y: 0}
   m_SizeDelta: {x: -7.7449, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1156575682
@@ -3322,7 +3331,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.50200003, y: 1}
-  m_AnchoredPosition: {x: -0.6454468, y: 0}
+  m_AnchoredPosition: {x: -0.6455078, y: 0}
   m_SizeDelta: {x: -7.7449, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1802907438
@@ -3394,10 +3403,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   petHungerStatusText: {fileID: 1429139610}
   petHappinessStatusText: {fileID: 1592229279}
-  petHealthStatusText: {fileID: 1392560796}
+  petEnergyStatusText: {fileID: 1392560796}
   hungerSlider: {fileID: 1353491061}
   happinessSlider: {fileID: 98514716}
-  healthSlider: {fileID: 1939118116}
+  energySlider: {fileID: 1939118116}
   levelSlider: {fileID: 1403408019}
   maxPetLevel: 100
   maxStatusValue: 100
@@ -4103,7 +4112,7 @@ SceneRoots:
   - {fileID: 1827903940}
   - {fileID: 598386544}
   - {fileID: 1239140010}
-  - {fileID: 1096679345}
   - {fileID: 767181007}
+  - {fileID: 1096679345}
   - {fileID: 1814071399}
   - {fileID: 1976217939}

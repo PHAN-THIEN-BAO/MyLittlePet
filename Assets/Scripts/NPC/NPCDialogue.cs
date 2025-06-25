@@ -16,10 +16,25 @@ public class NPCDialogue : ScriptableObject
     
     public DialogueChoice[] choices;
 }
+
+[System.Serializable]
+public enum PetCareOptionType
+{
+    None,
+    Feed,
+    Play,
+    Sleep,
+    CareForAll
+}
+
 [System.Serializable]
 public class DialogueChoice
 {
     public int dialogueIndex;
     public string[] choices;
     public int[] nextDialogueIndexes;
+    public PetCareOptionType[] petCareOptions; // Array of pet care actions for each choice
+    
+    [Tooltip("Custom care amount for each choice, if left at 0, the default from PetInfoUIManager will be used")]
+    public int[] customCareAmount; // Optional custom increase amounts for each choice
 }
