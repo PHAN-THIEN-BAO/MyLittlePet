@@ -1389,6 +1389,27 @@
   },
   {
     "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerPetController",
+    "Method": "GetByPlayerAndPet",
+    "RelativePath": "PlayerPet/ByPlayerAndPet",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "playerId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "petId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerPetController",
     "Method": "GetByPlayerId",
     "RelativePath": "PlayerPet/Player/{playerId}",
     "HttpMethod": "GET",

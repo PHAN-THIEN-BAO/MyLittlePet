@@ -301,5 +301,31 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, "An error occurred while processing your request");
             }
         }
+
+        // GET: PlayerPet/ByPlayerAndPet?playerId={playerId}&petId={petId} - Get player pet ID by player ID and pet ID
+        [HttpGet("ByPlayerAndPet")]
+        public ActionResult<object> GetByPlayerAndPet([FromQuery] int playerId, [FromQuery] int petId)
+        {
+            try
+            {
+                // Optimized query to only retrieve the PlayerPetId without including navigation properties
+                var playerPet = _context.PlayerPets
+                    .Where(pp => pp.PlayerId == playerId && pp.PetId == petId)
+                    .Select(pp => new { pp.PlayerPetId })
+                    .FirstOrDefault();
+                
+                if (playerPet == null)
+                {
+                    return NotFound("No pet found with the specified player ID and pet ID");
+                }
+                
+                // Return just the PlayerPetId in a simple response
+                return Ok(new { PlayerPetId = playerPet.PlayerPetId });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

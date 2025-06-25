@@ -2181,6 +2181,36 @@
         }
       }
     },
+    "/PlayerPet/ByPlayerAndPet": {
+      "get": {
+        "tags": [
+          "PlayerPet"
+        ],
+        "parameters": [
+          {
+            "name": "playerId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "petId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/Shop": {
       "get": {
         "tags": [
