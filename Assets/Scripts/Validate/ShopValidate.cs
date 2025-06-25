@@ -74,5 +74,28 @@ public class ShopValidate : MonoBehaviour
             return true;
         }
     }
+    /// <summary>
+    /// Check if the player can buy a pet based on their existing pets.
+    /// </summary>
+    /// <param name="OwnedPetPanel"></param>
+    /// <param name="petId"></param>
+    /// <returns></returns>
+    public bool CheckCanBuyPet(GameObject OwnedPetPanel, int petId)
+    {
+        PlayerPet playerPet = APIPlayerPet.GetPlayerPetById(petId);
+        if (playerPet == null)
+        {
+            Debug.Log("Player pet not found, ok can buy");
+
+            return true;
+        }
+        else
+        {
+            Debug.Log("Player pet already exists, cannot buy");
+            if (OwnedPetPanel != null)
+                OwnedPetPanel.SetActive(true);
+            return false;
+        }
+    }
 
 }

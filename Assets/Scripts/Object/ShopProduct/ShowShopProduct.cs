@@ -9,6 +9,7 @@ public class ShowShopProduct : MonoBehaviour
 {
     [SerializeField] public List<TMP_Text> name;
     [SerializeField] public List<TMP_Text> Id;
+    [SerializeField] public List<TMP_Text> Pet_Id;
     [SerializeField] public List<TMP_Text> value;
     [SerializeField] public List<GameObject> coinDisplay;
     [SerializeField] public List<GameObject> diamondDisplay;
@@ -83,7 +84,8 @@ public class ShowShopProduct : MonoBehaviour
 
             TMP_Text nameText = newItem.transform.Find("Name_Item").GetComponent<TMP_Text>();
             TMP_Text valueText = newItem.transform.Find("Price").GetComponent<TMP_Text>();
-            TMP_Text idText = newItem.transform.Find("Id_Item").GetComponent<TMP_Text>(); // Thêm dòng này
+            TMP_Text idText = newItem.transform.Find("Id_Item").GetComponent<TMP_Text>();
+            TMP_Text petIdText = newItem.transform.Find("Pet_Id").GetComponent<TMP_Text>();
             Image itemImage = newItem.transform.Find("Item_Image").GetComponent<Image>();
             GameObject coinImg = newItem.transform.Find("Coin_Img").gameObject;
             GameObject diamondImg = newItem.transform.Find("Diamond_Img").gameObject;
@@ -91,7 +93,8 @@ public class ShowShopProduct : MonoBehaviour
 
             name.Add(nameText);
             value.Add(valueText);
-            Id.Add(idText); 
+            Id.Add(idText);
+            Pet_Id.Add(petIdText);
             productImages.Add(itemImage);
             coinDisplay.Add(coinImg);
             diamondDisplay.Add(diamondImg);
@@ -104,6 +107,7 @@ public class ShowShopProduct : MonoBehaviour
         {
             name[i].text = products[i].name;
             value[i].text = products[i].price.ToString();
+            Pet_Id[i].text = products[i].petID.HasValue ? products[i].petID.Value.ToString() : "N/A";
 
             // Set the Id text
             Id[i].text = products[i].shopProductID.ToString();

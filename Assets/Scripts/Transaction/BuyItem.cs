@@ -4,6 +4,7 @@ using TMPro;
 public class BuyItem : MonoBehaviour
 {
     [SerializeField] public GameObject notEnoughMoneyPanel;
+    [SerializeField] public GameObject OwnedPetPanel;
 
     public void BuyProduct()
     {
@@ -38,6 +39,21 @@ public class BuyItem : MonoBehaviour
             Debug.LogError("TMP_Text component not found on Id_Item");
             return;
         }
+
+        Transform idPetTransform = transform.parent.Find("Pet_Id");
+        if (idPetTransform == null)
+        {
+            Debug.LogError($"Pet_Id not found as sibling of {gameObject.name}");
+            return;
+        }
+        //TMP_Text idPetText = idPetTransform.GetComponent<TMP_Text>();
+        //if (idPetText != null)
+        //{
+        //    if()
+        //    {
+
+        //    }
+        //}
 
         int shopProductID = int.Parse(idText.text);
 
