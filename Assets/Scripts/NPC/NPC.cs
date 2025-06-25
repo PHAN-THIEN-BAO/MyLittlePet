@@ -106,15 +106,54 @@ public class NPC : MonoBehaviour, IInteractable
             yield return new WaitForSeconds(dialogueData.autoProgressDelay);
             NextLine();
         }
-    }
-
-    void DisplayChoices(DialogueChoice choice)
+    }    void DisplayChoices(DialogueChoice choice)
     {
         for(int i = 0; i < choice.choices.Length; i++)
         {
             int nextIndex = choice.nextDialogueIndexes[i];
-            dialogueUI.CreateChoiceButton(choice.choices[i], () => ChooseOption(nextIndex));
             
+            // Check if this choice has a pet care action assigned
+            if (choice.petCareOptions != null && i < choice.petCareOptions.Length && 
+                choice.petCareOptions[i] != PetCareOptionType.None)
+            {
+                // Convert PetCareOptionType to DialogueController.PetCareAction
+                DialogueController.PetCareAction careAction = DialogueController.PetCareAction.None;
+                
+                switch (choice.petCareOptions[i])
+                {
+                    case PetCareOptionType.Feed:
+                        careAction = DialogueController.PetCareAction.Feed;
+                        break;
+                    case PetCareOptionType.Play:
+                        careAction = DialogueController.PetCareAction.Play;
+                        break;
+                    case PetCareOptionType.Sleep:
+                        careAction = DialogueController.PetCareAction.Sleep;
+                        break;
+                    case PetCareOptionType.CareForAll:
+                        careAction = DialogueController.PetCareAction.CareForAll;
+                        break;
+                }
+                
+                // Get custom care amount if specified
+                int customCareAmount = 0;
+                if (choice.customCareAmount != null && i < choice.customCareAmount.Length)
+                {
+                    customCareAmount = choice.customCareAmount[i];
+                }
+                
+                // Create a pet care choice button that also progresses the dialogue
+                dialogueUI.CreatePetCareChoiceButton(
+                    choice.choices[i], 
+                    careAction, 
+                    () => ChooseOption(nextIndex),
+                    customCareAmount);
+            }
+            else
+            {
+                // Create a regular choice button
+                dialogueUI.CreateChoiceButton(choice.choices[i], () => ChooseOption(nextIndex));
+            }
         }
     }
 

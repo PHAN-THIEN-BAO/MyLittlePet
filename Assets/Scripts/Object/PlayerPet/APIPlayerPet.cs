@@ -32,14 +32,11 @@ public class APIPlayerPet : MonoBehaviour
     // Used IEnumerator to allow for asynchronous web requests in Unity
     public static IEnumerator UpdatePlayerPetCoroutine(PlayerPet playerPet, System.Action<bool> callback)
     {
-        string url = "https://localhost:7035/PlayerPet?playerId=" + playerPet.playerID + "&petId=" + playerPet.petID +"&petCustomName=" + playerPet.petCustomName + "&status=100%25100%25100";
-        string jsonData = JsonConvert.SerializeObject(playerPet);
-
-        UnityWebRequest request = new UnityWebRequest(url, "PUT");
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        // The API expects a PUT request to /PlayerPet/{id} with query parameters
+        string url = $"https://localhost:7035/PlayerPet/{playerPet.playerPetID}?petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&level={playerPet.level}&status={Uri.EscapeDataString(playerPet.status ?? "100%25100%25100")}";
+        
+        UnityWebRequest request = UnityWebRequest.Put(url, "");
         request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
 

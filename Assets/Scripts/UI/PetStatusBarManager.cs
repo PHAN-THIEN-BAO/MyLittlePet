@@ -6,16 +6,15 @@ using TMPro;
 /// Handles the display and updates of pet status progress bars
 /// </summary>
 public class PetStatusBarManager : MonoBehaviour
-{
-    [Header("Status Text UI")]
+{    [Header("Status Text UI")]
     public TMP_Text petHungerStatusText;
     public TMP_Text petHappinessStatusText; 
-    public TMP_Text petHealthStatusText;
+    public TMP_Text petEnergyStatusText;
     
     [Header("Status Progress Bars")]
     public Slider hungerSlider;
     public Slider happinessSlider;
-    public Slider healthSlider;
+    public Slider energySlider;
     
     [Header("Level Progress Bar")]
     public Slider levelSlider;
@@ -30,13 +29,12 @@ public class PetStatusBarManager : MonoBehaviour
         // Initialize sliders with the proper max values
         InitializeSliders();
     }
-    
-    // Initialize all sliders with their proper max values
+      // Initialize all sliders with their proper max values
     public void InitializeSliders()
     {
         if (hungerSlider != null) hungerSlider.maxValue = maxStatusValue;
         if (happinessSlider != null) happinessSlider.maxValue = maxStatusValue;
-        if (healthSlider != null) healthSlider.maxValue = maxStatusValue;
+        if (energySlider != null) energySlider.maxValue = maxStatusValue;
         if (levelSlider != null) levelSlider.maxValue = maxPetLevel;
     }
     
@@ -66,8 +64,7 @@ public class PetStatusBarManager : MonoBehaviour
             
             // Check if we have 3 status values
             if (statuses.Length >= 3)
-            {
-                // Display hunger status
+            {                // Display hunger status
                 if (petHungerStatusText != null)
                     petHungerStatusText.text = statuses[0] + "%";
                 
@@ -75,9 +72,9 @@ public class PetStatusBarManager : MonoBehaviour
                 if (petHappinessStatusText != null)
                     petHappinessStatusText.text = statuses[1] + "%";
                 
-                // Display health status
-                if (petHealthStatusText != null)
-                    petHealthStatusText.text = statuses[2] + "%";
+                // Display energy status
+                if (petEnergyStatusText != null)
+                    petEnergyStatusText.text = statuses[2] + "%";
                 
                 // Update progress bars if they exist
                 UpdateStatusBars(statuses);
@@ -101,14 +98,13 @@ public class PetStatusBarManager : MonoBehaviour
         {
             // Parse status values and update sliders
             if (statuses.Length >= 3)
-            {
-                // Parse the values with better error handling
+            {                // Parse the values with better error handling
                 bool hunger = float.TryParse(statuses[0], out float hungerValue);
                 bool happiness = float.TryParse(statuses[1], out float happinessValue);
-                bool health = float.TryParse(statuses[2], out float healthValue);
+                bool energy = float.TryParse(statuses[2], out float energyValue);
                 
                 // Log the parsed values for debugging
-                Debug.Log($"Parsed status values - Hunger: {hungerValue}, Happiness: {happinessValue}, Health: {healthValue}");
+                Debug.Log($"Parsed status values - Hunger: {hungerValue}, Happiness: {happinessValue}, Energy: {energyValue}");
                 
                 // Update sliders if parsing succeeded
                 if (hunger && hungerSlider != null)
@@ -121,9 +117,9 @@ public class PetStatusBarManager : MonoBehaviour
                     happinessSlider.value = Mathf.Clamp(happinessValue, 0, maxStatusValue);
                 }
                 
-                if (health && healthSlider != null)
+                if (energy && energySlider != null)
                 {
-                    healthSlider.value = Mathf.Clamp(healthValue, 0, maxStatusValue);
+                    energySlider.value = Mathf.Clamp(energyValue, 0, maxStatusValue);
                 }
             }
             else
@@ -145,19 +141,17 @@ public class PetStatusBarManager : MonoBehaviour
         // Display raw status as fallback
         if (petHungerStatusText != null)
             petHungerStatusText.text = "Status: " + statusString;
-        
-        // Hide or clear other status texts
+          // Hide or clear other status texts
         if (petHappinessStatusText != null)
             petHappinessStatusText.text = "";
         
-        if (petHealthStatusText != null)
-            petHealthStatusText.text = "";
+        if (petEnergyStatusText != null)
+            petEnergyStatusText.text = "";
         
         // Reset sliders
         ResetAllSliders();
     }
-    
-    // Reset all sliders to zero
+      // Reset all sliders to zero
     public void ResetAllSliders()
     {
         if (hungerSlider != null)
@@ -166,8 +160,8 @@ public class PetStatusBarManager : MonoBehaviour
         if (happinessSlider != null)
             happinessSlider.value = 0;
             
-        if (healthSlider != null)
-            healthSlider.value = 0;
+        if (energySlider != null)
+            energySlider.value = 0;
             
         if (levelSlider != null)
             levelSlider.value = 0;
