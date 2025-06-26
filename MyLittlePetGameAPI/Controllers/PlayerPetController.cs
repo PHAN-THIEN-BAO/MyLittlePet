@@ -167,6 +167,12 @@ namespace MyLittlePetGameAPI.Controllers
                     return BadRequest("Pet not found");
                 }
                 
+                // Check if player already has this specific pet type
+                if (_context.PlayerPets.Any(pp => pp.PlayerId == playerId && pp.PetId == petId))
+                {
+                    return BadRequest("Player already has this pet. A player cannot adopt the same pet type more than once.");
+                }
+                
                 // Check if custom name is already used by this player
                 if (!string.IsNullOrEmpty(petCustomName) && 
                     _context.PlayerPets.Any(pp => pp.PlayerId == playerId && pp.PetCustomName == petCustomName))
@@ -302,25 +308,35 @@ namespace MyLittlePetGameAPI.Controllers
             }
         }
 
-        // GET: PlayerPet/ByPlayerAndPet?playerId={playerId}&petId={petId} - Get player pet ID by player ID and pet ID
+        // GET: PlayerPet/ByPlayerAndPet?playerId={playerId}&petId={petId} - Get player pet IDs by player ID and pet ID
         [HttpGet("ByPlayerAndPet")]
         public ActionResult<object> GetByPlayerAndPet([FromQuery] int playerId, [FromQuery] int petId)
         {
             try
             {
-                // Optimized query to only retrieve the PlayerPetId without including navigation properties
-                var playerPet = _context.PlayerPets
+                // Query to retrieve all PlayerPetIds that match the criteria
+                var playerPets = _context.PlayerPets
                     .Where(pp => pp.PlayerId == playerId && pp.PetId == petId)
-                    .Select(pp => new { pp.PlayerPetId })
-                    .FirstOrDefault();
+                    .Select(pp => new 
+                    { 
+                        pp.PlayerPetId,
+                        pp.PlayerId,
+                        pp.PetId,
+                        pp.PetCustomName,
+                        pp.AdoptedAt,
+                        pp.Level,
+                        pp.Status,
+                        pp.LastStatusUpdate
+                    })
+                    .ToList();
                 
-                if (playerPet == null)
+                if (playerPets == null || !playerPets.Any())
                 {
                     return NotFound("No pet found with the specified player ID and pet ID");
                 }
                 
-                // Return just the PlayerPetId in a simple response
-                return Ok(new { PlayerPetId = playerPet.PlayerPetId });
+                // Return all matching PlayerPetIds with related data
+                return Ok(playerPets);
             }
             catch (Exception ex)
             {
