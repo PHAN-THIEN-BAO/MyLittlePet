@@ -98,6 +98,46 @@ namespace MyLittlePetGameAPI.Controllers
             }
         }
         
+        // GET: PlayerInventory/FoodItems/{playerId} - Get food items for a specific player
+        [HttpGet("FoodItems/{playerId}")]
+        public ActionResult<IEnumerable<object>> GetFoodItemsByPlayerId(int playerId)
+        {
+            try
+            {
+                var player = _context.Users.Find(playerId);
+                if (player == null)
+                {
+                    return NotFound("Player not found");
+                }
+                
+                var foodItems = _context.PlayerInventories
+                    .Include(i => i.ShopProduct)
+                    .Where(i => i.PlayerId == playerId && i.ShopProduct.Type.ToLower() == "food")
+                    .Select(i => new
+                    {
+                        PlayerId = i.PlayerId,
+                        ShopProductId = i.ShopProductId,
+                        Quantity = i.Quantity,
+                        AcquiredAt = i.AcquiredAt,
+                        ProductInfo = new
+                        {
+                            Id = i.ShopProduct.ShopProductId,
+                            Name = i.ShopProduct.Name,
+                            Type = i.ShopProduct.Type,
+                            Description = i.ShopProduct.Description,
+                            ImageUrl = i.ShopProduct.ImageUrl
+                        }
+                    })
+                    .ToList();
+                    
+                return Ok(foodItems);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
         // POST: PlayerInventory - Add item to player's inventory
         [HttpPost]
         public ActionResult<PlayerInventory> Create(int playerId, int shopProductId, int? quantity)
