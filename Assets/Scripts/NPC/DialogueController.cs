@@ -13,6 +13,7 @@ public class DialogueController : MonoBehaviour
 
     // Reference to the PetInfoUIManager to interact with pet care functionality
     private PetInfoUIManager petInfoManager;
+    private FeedingManager feedingManager; // Add FeedingManager reference
     
     // Types of pet care actions that can be performed via dialogue
     public enum PetCareAction
@@ -44,6 +45,12 @@ public class DialogueController : MonoBehaviour
         if (petInfoManager == null)
         {
             Debug.LogWarning("PetInfoUIManager not found in the scene. Pet care dialogue options will not work.");
+        }
+        // Find the FeedingManager in the scene
+        feedingManager = FindObjectOfType<FeedingManager>();
+        if (feedingManager == null)
+        {
+            Debug.LogWarning("FeedingManager not found in the scene. Feeding panel will not show food items.");
         }
     }
 
@@ -152,15 +159,17 @@ public class DialogueController : MonoBehaviour
         switch (action)
         {
             case PetCareAction.Feed:
-                if (customCareAmount > 0)
+                // Show feeding panel and fetch food items
+                int playerId = PlayerInfomation.LoadPlayerInfo().id; // Replace with your player ID getter
+                if (feedingManager != null)
                 {
-                    petInfoManager.UpdatePetStatus(0, customCareAmount); // 0 is hunger index
-                    Debug.Log($"Dialogue choice: Feed pet with custom amount: {customCareAmount}");
+                    feedingManager.ShowFeedingPanel(playerId, customCareAmount);
+                    Debug.Log("Showing feeding panel (with FeedingManager)");
                 }
                 else
                 {
-                    petInfoManager.FeedPet();
-                    Debug.Log("Dialogue choice: Feed pet");
+                    petInfoManager.ShowFeedingPanel(customCareAmount);
+                    Debug.Log("Showing feeding panel (PetInfoUIManager fallback)");
                 }
                 break;
                 
