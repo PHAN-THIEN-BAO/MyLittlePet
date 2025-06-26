@@ -168,10 +168,10 @@ namespace MyLittlePetGameAPI.Controllers
                 }
                 
                 // Check if player already has this specific pet type
-                if (_context.PlayerPets.Any(pp => pp.PlayerId == playerId && pp.PetId == petId))
-                {
-                    return BadRequest("Player already has this pet. A player cannot adopt the same pet type more than once.");
-                }
+                // if (_context.PlayerPets.Any(pp => pp.PlayerId == playerId && pp.PetId == petId))
+                // {
+                //     return BadRequest("Player already has this pet. A player cannot adopt the same pet type more than once.");
+                // }
                 
                 // Check if custom name is already used by this player
                 if (!string.IsNullOrEmpty(petCustomName) && 
