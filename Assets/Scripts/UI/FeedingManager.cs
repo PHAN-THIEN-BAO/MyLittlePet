@@ -350,7 +350,7 @@ public class FeedingManager : MonoBehaviour
         {
             playerID = currentPlayerId,
             shopProductID = foodItem.ShopProductId,
-            quantity = -1 // Gi?m 1 s? l??ng
+            quantity = -1 // Giam 1 quantitys
         };
 
         bool apiCallSuccess = false;
