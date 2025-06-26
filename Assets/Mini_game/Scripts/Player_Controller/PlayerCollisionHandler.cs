@@ -43,6 +43,10 @@ public class PlayerCollisionHandler : MonoBehaviour
             // Nếu số lần va chạm vượt giới hạn => Game Over
             if (collisionCount >= collisionLimit)
             {
+                User user = PlayerInfomation.LoadPlayerInfo();
+                user.coin += 50;
+                PlayerInfomation.SavePlayerInfo(user);
+                APIUser.UpdateUser();
                 GameOver();
             }
         }
