@@ -23,23 +23,47 @@ public class APIPlayerInventory : MonoBehaviour
         return JsonConvert.DeserializeObject<List<PlayerInventory>>(jsonResponse);
     }
 
-    public static IEnumerator UpdatePlayerInventoryCoroutine(PlayerInventory playerInventory, System.Action<bool> callback)
-    {
-        string url = "https://localhost:7035/PlayerInventory?playerId=" + playerInventory.playerID
-            + "&shopProductId=" + playerInventory.shopProductID
-            + "&quantity=" + playerInventory.quantity;
 
-        string jsonData = JsonUtility.ToJson(playerInventory);
-        UnityWebRequest request = new UnityWebRequest(url, "POST");
-        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
-        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+    public static IEnumerator AddPlayerInventoryCoroutine(PlayerInventory playerInventory, System.Action<bool> callback)
+    {
+        string url = $"https://localhost:7035/PlayerInventory?playerId={playerInventory.playerID}&shopProductId={playerInventory.shopProductID}&quantity={playerInventory.quantity}";
+
+        // Using UnityWebRequest to send a POST request
+        WWWForm form = new WWWForm();
+        UnityWebRequest request = UnityWebRequest.Post(url, form);
         request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
+            Debug.Log("Add response: " + request.downloadHandler.text);
+            callback?.Invoke(true);
+        }
+        else
+        {
+            Debug.LogError("Error adding player inventory: " + request.error);
+            callback?.Invoke(false);
+        }
+    }
+
+
+
+
+    public static IEnumerator UpdatePlayerInventoryCoroutine(PlayerInventory playerInventory, System.Action<bool> callback)
+    {
+        // URL for the PUT request
+        string url = $"https://localhost:7035/PlayerInventory?playerId={playerInventory.playerID}&shopProductId={playerInventory.shopProductID}&quantity={playerInventory.quantity}";
+
+        // using UnityWebRequest to send a PUT request
+        UnityWebRequest request = UnityWebRequest.Put(url, "");
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Update response: " + request.downloadHandler.text);
             callback?.Invoke(true);
         }
         else

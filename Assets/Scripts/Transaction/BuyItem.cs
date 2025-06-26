@@ -102,7 +102,7 @@ public class BuyItem : MonoBehaviour
             quantity = 1
         };
 
-        StartCoroutine(APIPlayerInventory.UpdatePlayerInventoryCoroutine(playerInventory, (success) =>
+        StartCoroutine(APIPlayerInventory.AddPlayerInventoryCoroutine(playerInventory, (success) =>
         {
             if (success)
                 Debug.Log("Inventory updated!");
