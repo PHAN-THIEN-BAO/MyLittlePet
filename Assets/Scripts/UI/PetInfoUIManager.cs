@@ -6,6 +6,7 @@ public class PetInfoUIManager : MonoBehaviour
 {
     [Header("UI Panel")]
     public GameObject petsInfoPanel;
+    public GameObject feedingPanel; // Panel that appears when feeding the pet
     
     [Header("Pet Details UI")]
     public TMP_Text petNameText;
@@ -412,7 +413,22 @@ public class PetInfoUIManager : MonoBehaviour
     // Handler for the Feed button
     public void OnFeedButtonClicked()
     {
-        FeedPet();
+        // If the feeding panel is active, use the pending feed amount
+        if (feedingPanel != null && feedingPanel.activeSelf)
+        {
+            // Use the pending feed amount to update hunger
+            UpdatePetStatus(0, pendingFeedAmount); // 0 is hunger index
+            
+            // Hide the panel after feeding
+            feedingPanel.SetActive(false);
+            
+            Debug.Log($"Pet fed with {pendingFeedAmount} amount of food");
+        }
+        else
+        {
+            // Default behavior when button is clicked outside of the feeding panel flow
+            FeedPet();
+        }
     }
     
     // Handler for the Play button
@@ -512,5 +528,46 @@ public class PetInfoUIManager : MonoBehaviour
     public bool IsAllStatusAtMax()
     {
         return IsHungerAtMax() && IsHappinessAtMax() && IsEnergyAtMax();
+    }
+    
+    // Store the care amount to be used by the feeding panel
+    [HideInInspector]
+    public int pendingFeedAmount = 0;
+    
+    // Show the feeding panel
+    public void ShowFeedingPanel(int customCareAmount = 0)
+    {
+        if (feedingPanel != null)
+        {
+            // Store the care amount for use by buttons in the feeding panel
+            pendingFeedAmount = customCareAmount > 0 ? customCareAmount : feedIncreaseAmount;
+            
+            // Activate the feeding panel
+            feedingPanel.SetActive(true);
+            
+            // Optional: Update UI elements in the feeding panel to show available food options
+            UpdateFeedingPanelUI();
+        }
+        else
+        {
+            Debug.LogWarning("Feeding panel is not assigned in the inspector!");
+        }
+    }
+    
+    // Update the UI elements in the feeding panel
+    private void UpdateFeedingPanelUI()
+    {
+        // This method can be implemented to update food option buttons, 
+        // display current hunger level, etc.
+    }
+    
+    // Hide feeding panel after a delay
+    private System.Collections.IEnumerator HideFeedingPanelAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (feedingPanel != null)
+        {
+            feedingPanel.SetActive(false);
+        }
     }
 }
