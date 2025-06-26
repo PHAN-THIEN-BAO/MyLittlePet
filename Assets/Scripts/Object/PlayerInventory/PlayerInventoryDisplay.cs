@@ -16,7 +16,9 @@ public class PlayerInventoryDisplay : MonoBehaviour
     [SerializeField] public List<Image> productImages;
     [SerializeField] public GameObject Item;
     [SerializeField] public Transform contentPanel;
-    [SerializeField] public List<Button> adopButtons;        
+    [SerializeField] public List<Button> adopButtons;
+    [SerializeField] public List<TMP_InputField> nameInput;
+    [SerializeField] public List<Button> adopButton;
 
 
     public void DisplayPlayerInventory()
@@ -63,6 +65,31 @@ public class PlayerInventoryDisplay : MonoBehaviour
                 quantity[i].text = playerInventory[i].quantity.ToString();
                 shopProductId[i].text = playerInventory[i].shopProductID.ToString();
                 playerId[i].text = playerInventory[i].playerID.ToString();
+
+
+                // take the parent transform of the name[i] TextMeshPro component
+                Transform itemTransform = name[i].transform.parent;
+
+                // check if petID is null
+                if (product.petID == null)
+                {
+                    // Hide Adop_Button and Name_Input if petID is null
+                    var adopBtnObj = itemTransform.Find("Adop_Button");
+                    if (adopBtnObj != null) adopBtnObj.gameObject.SetActive(false);
+
+                    var nameInputObj = itemTransform.Find("Name_Input");
+                    if (nameInputObj != null) nameInputObj.gameObject.SetActive(false);
+                }
+                else
+                {
+                    // show Adop_Button and Name_Input if petID is not null
+                    var adopBtnObj = itemTransform.Find("Adop_Button");
+                    if (adopBtnObj != null) adopBtnObj.gameObject.SetActive(true);
+
+                    var nameInputObj = itemTransform.Find("Name_Input");
+                    if (nameInputObj != null) nameInputObj.gameObject.SetActive(true);
+                }
+
 
                 // Check if item is a pet and show/hide UI elements accordingly
                 bool isPet = IsPet(playerInventory[i]);
