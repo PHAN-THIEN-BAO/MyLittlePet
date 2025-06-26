@@ -19,6 +19,7 @@ public class PlayerInventoryDisplay : MonoBehaviour
     [SerializeField] public List<Button> adopButtons;
     [SerializeField] public List<TMP_InputField> nameInput;
     [SerializeField] public List<Button> adopButton;
+    [SerializeField] public List<Button> openAdopButton;
 
 
     public void DisplayPlayerInventory()
@@ -77,6 +78,9 @@ public class PlayerInventoryDisplay : MonoBehaviour
                     var adopBtnObj = itemTransform.Find("Adop_Button");
                     if (adopBtnObj != null) adopBtnObj.gameObject.SetActive(false);
 
+                    var adopBtn = adopButtons[i];
+                    if (adopBtn != null) adopBtn.gameObject.SetActive(false);
+
                     var nameInputObj = itemTransform.Find("Name_Input");
                     if (nameInputObj != null) nameInputObj.gameObject.SetActive(false);
                 }
@@ -84,10 +88,13 @@ public class PlayerInventoryDisplay : MonoBehaviour
                 {
                     // show Adop_Button and Name_Input if petID is not null
                     var adopBtnObj = itemTransform.Find("Adop_Button");
-                    if (adopBtnObj != null) adopBtnObj.gameObject.SetActive(true);
+                    if (adopBtnObj != null) adopBtnObj.gameObject.SetActive(false);
+
+                    var adopBtn = adopButtons[i];
+                    if(adopBtn != null) adopBtn.gameObject.SetActive(true);
 
                     var nameInputObj = itemTransform.Find("Name_Input");
-                    if (nameInputObj != null) nameInputObj.gameObject.SetActive(true);
+                    if (nameInputObj != null) nameInputObj.gameObject.SetActive(false);
                 }
 
 
