@@ -275,8 +275,8 @@ namespace MyLittlePetGameAPI.Controllers
                     return Ok(new { message = "Item removed from inventory as quantity was set to zero" });
                 }
                 
-                // Update quantity - now we'll ADD the quantity instead of replacing it
-                inventoryItem.Quantity += quantity;
+                // Update quantity - now we'll SET the quantity instead of adding it
+                inventoryItem.Quantity = quantity;
                 _context.PlayerInventories.Update(inventoryItem);
                 _context.SaveChanges();
                 
