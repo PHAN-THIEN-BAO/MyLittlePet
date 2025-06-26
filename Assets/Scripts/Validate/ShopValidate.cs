@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 public class ShopValidate : MonoBehaviour
 {
@@ -80,13 +82,15 @@ public class ShopValidate : MonoBehaviour
     /// <param name="OwnedPetPanel"></param>
     /// <param name="petId"></param>
     /// <returns></returns>
-    public bool CheckCanBuyPet(GameObject OwnedPetPanel, int petId)
+    public bool CheckCanBuyPet(GameObject OwnedPetPanel, int petId, int playerId)
     {
-        PlayerPet playerPet = APIPlayerPet.GetPlayerPetById(petId);
+        PlayerPet playerPet = APIPlayerPet.GetPlayerPetByPlayerIdAndPetId(playerId ,petId);
+
+
         if (playerPet == null)
         {
             Debug.Log("Player pet not found, ok can buy");
-
+            OwnedPetPanel.SetActive(false);
             return true;
         }
         else

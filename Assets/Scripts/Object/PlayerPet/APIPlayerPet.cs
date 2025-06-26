@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System;
+using static System.Net.WebRequestMethods;
 
 public class APIPlayerPet : MonoBehaviour
 {
@@ -51,6 +52,57 @@ public class APIPlayerPet : MonoBehaviour
             callback?.Invoke(false);
         }
     }
+
+    public static PlayerPet GetPlayerPetByPlayerIdAndPetId(int playerId, int petId)
+    {
+        try
+        {
+        
+            string url = "https://localhost:7035/PlayerPet/ByPlayerAndPet?playerId="+ playerId + "&petId=" + petId;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        string jsonResponse = reader.ReadToEnd();
+                        Debug.Log("GetPlayerPetByPlayerIdAndPetId response: " + jsonResponse);
+                        return JsonConvert.DeserializeObject<PlayerPet>(jsonResponse);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Error getting player pet: " + response.StatusDescription);
+                    return null;
+                }
+            }
+        }
+        catch (WebException ex)
+        {
+            if (ex.Response != null)
+            {
+                using (StreamReader reader = new StreamReader(ex.Response.GetResponseStream()))
+                {
+                    Debug.LogError("GetPlayerPetByPlayerIdAndPetId error: " + reader.ReadToEnd());
+                }
+            }
+            else
+            {
+                Debug.LogError("GetPlayerPetByPlayerIdAndPetId error: " + ex.Message);
+            }
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Unexpected error during GetPlayerPetByPlayerIdAndPetId: " + ex.Message);
+            return null;
+        }
+    }
+
+
 
     //public static bool AddPlayerPet(PlayerPet playerPet)
     //{

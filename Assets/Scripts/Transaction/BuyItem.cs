@@ -46,6 +46,9 @@ public class BuyItem : MonoBehaviour
             Debug.LogError($"Pet_Id not found as sibling of {gameObject.name}");
             return;
         }
+
+
+
         //TMP_Text idPetText = idPetTransform.GetComponent<TMP_Text>();
         //if (idPetText != null)
         //{
