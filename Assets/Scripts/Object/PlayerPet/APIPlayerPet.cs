@@ -53,6 +53,37 @@ public class APIPlayerPet : MonoBehaviour
         }
     }
 
+
+    public static IEnumerator AddPlayerPetCoroutine(PlayerPet playerPet, System.Action<bool> callback)
+    {
+        string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=100%25100%25100";
+
+        // create a WWWForm to send data
+        WWWForm form = new WWWForm();
+
+        // create form fields
+        UnityWebRequest request = UnityWebRequest.Post(url, form);
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Add response: " + request.downloadHandler.text);
+            callback?.Invoke(true);
+        }
+        else
+        {
+            Debug.LogError("Error adding player pet: " + request.error);
+            callback?.Invoke(false);
+        }
+    }
+
+
+
+
+
+
     public static PlayerPet GetPlayerPetByPlayerIdAndPetId(int playerId, int petId)
     {
         try

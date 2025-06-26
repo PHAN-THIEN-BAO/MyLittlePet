@@ -12,6 +12,7 @@ public class PlayerInventoryDisplay : MonoBehaviour
     [SerializeField] public List<TMP_Text> name;
     [SerializeField] public List<TMP_Text> quantity;
     [SerializeField] public List<TMP_Text> shopProductId;
+    [SerializeField] public List<TMP_Text> playerId;
     [SerializeField] public List<Image> productImages;
     [SerializeField] public GameObject Item;
     [SerializeField] public Transform contentPanel;
@@ -29,6 +30,8 @@ public class PlayerInventoryDisplay : MonoBehaviour
 
         List<PlayerInventory> playerInventory = APIPlayerInventory.GetPlayerInventory(user.id.ToString());
 
+
+
         // Automatically adjust the size of the lists to match the player inventory count
         while (name.Count < playerInventory.Count)
         {
@@ -39,12 +42,14 @@ public class PlayerInventoryDisplay : MonoBehaviour
             Image itemImage = newItem.transform.Find("Item_Image").GetComponent<Image>();
             TMP_Text shopProductIdText = newItem.transform.Find("Shop_Product_Id").GetComponent<TMP_Text>();
             Button button = newItem.transform.Find("Open_Adop_Button").GetComponent<Button>();
-
+            TMP_Text playerIdText = newItem.transform.Find("Player_Id").GetComponent<TMP_Text>();
             name.Add(nameText);
             quantity.Add(quantityText);
             productImages.Add(itemImage);
             shopProductId.Add(shopProductIdText);
-            adopButtons.Add(button); 
+            adopButtons.Add(button);
+            playerId.Add(playerIdText);
+
         }
 
         int count = playerInventory.Count;
@@ -57,6 +62,7 @@ public class PlayerInventoryDisplay : MonoBehaviour
                 name[i].text = product.name;
                 quantity[i].text = playerInventory[i].quantity.ToString();
                 shopProductId[i].text = playerInventory[i].shopProductID.ToString();
+                playerId[i].text = playerInventory[i].playerID.ToString();
 
                 // Check if item is a pet and show/hide UI elements accordingly
                 bool isPet = IsPet(playerInventory[i]);

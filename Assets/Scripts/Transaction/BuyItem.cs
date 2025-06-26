@@ -4,7 +4,6 @@ using TMPro;
 public class BuyItem : MonoBehaviour
 {
     [SerializeField] public GameObject notEnoughMoneyPanel;
-    [SerializeField] public GameObject OwnedPetPanel;
 
     public void BuyProduct()
     {
