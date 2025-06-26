@@ -50,20 +50,47 @@ public class APIPlayerInventory : MonoBehaviour
 
 
 
+    //public static IEnumerator UpdatePlayerInventoryCoroutine(PlayerInventory playerInventory, System.Action<bool> callback)
+    //{
+    //    // URL for the PUT request
+    //    string url = $"https://localhost:7035/PlayerInventory?playerId={playerInventory.playerID}&shopProductId={playerInventory.shopProductID}&quantity={playerInventory.quantity}";
+
+    //    // using UnityWebRequest to send a PUT request
+    //    UnityWebRequest request = UnityWebRequest.Put(url, "");
+    //    request.downloadHandler = new DownloadHandlerBuffer();
+
+    //    yield return request.SendWebRequest();
+
+    //    if (request.result == UnityWebRequest.Result.Success)
+    //    {
+    //        Debug.Log("Update response: " + request.downloadHandler.text);
+    //        callback?.Invoke(true);
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError("Error updating player inventory: " + request.error);
+    //        callback?.Invoke(false);
+    //    }
+    //}
+
+
     public static IEnumerator UpdatePlayerInventoryCoroutine(PlayerInventory playerInventory, System.Action<bool> callback)
     {
-        // URL for the PUT request
-        string url = $"https://localhost:7035/PlayerInventory?playerId={playerInventory.playerID}&shopProductId={playerInventory.shopProductID}&quantity={playerInventory.quantity}";
+        string url = "https://localhost:7035/PlayerInventory?playerId=" + playerInventory.playerID
+            + "&shopProductId=" + playerInventory.shopProductID
+            + "&quantity=" + playerInventory.quantity;
 
-        // using UnityWebRequest to send a PUT request
-        UnityWebRequest request = UnityWebRequest.Put(url, "");
+        string jsonData = JsonUtility.ToJson(playerInventory);
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log("Update response: " + request.downloadHandler.text);
             callback?.Invoke(true);
         }
         else

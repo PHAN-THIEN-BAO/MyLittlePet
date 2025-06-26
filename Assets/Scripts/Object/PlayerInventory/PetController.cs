@@ -10,16 +10,21 @@ public class PetController : MonoBehaviour
 
     void Start()
     {
-
         User user = PlayerInfomation.LoadPlayerInfo();
         List<PlayerPet> playerPets = APIPlayerPet.GetPetsByPlayerId(user.id);
 
         if (playerPets != null && playerPets.Count > 0)
         {
-            foreach (PlayerPet pet in playerPets)
+            for (int i = 0; i < playerPets.Count; i++)
             {
-                // Tạo instance mới từ prefab
-                GameObject petObj = Instantiate(petPrefab, petParent);
+                PlayerPet pet = playerPets[i];
+
+                // Tạo vị trí ngẫu nhiên trong vùng x: [-5, 5], y: [-2, 2]
+                float randomX = Random.Range(-5f, 5f);
+                float randomY = Random.Range(-2f, 2f);
+                Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
+
+                GameObject petObj = Instantiate(petPrefab, spawnPosition, Quaternion.identity, petParent);
 
                 SpriteRenderer sr = petObj.GetComponentInChildren<SpriteRenderer>();
                 if (sr != null && petSprites != null && pet.petID >= 0 && pet.petID < petSprites.Length)
@@ -27,8 +32,12 @@ public class PetController : MonoBehaviour
                     sr.sprite = petSprites[pet.petID];
                 }
 
-                // Gán thông tin PetID, PetCustomName, Level, Status vào các Text (nếu có)
-                // Giả sử prefab có các Text hoặc TMP_Text với tên tương ứng
+                var dataHolder = petObj.GetComponent<PetDataHolder>();
+                if (dataHolder != null)
+                {
+                    dataHolder.petData = pet;
+                }
+
                 var texts = petObj.GetComponentsInChildren<UnityEngine.UI.Text>();
                 foreach (var t in texts)
                 {

@@ -346,58 +346,46 @@ public class FeedingManager : MonoBehaviour
     /// <param name="foodItem">The food item that was used</param>
     private IEnumerator UpdateInventory(FoodItem foodItem)
     {
-        // Create a PlayerInventory object to update via the API
         PlayerInventory inventory = new PlayerInventory
         {
             playerID = currentPlayerId,
             shopProductID = foodItem.ShopProductId,
-            quantity = -1 // Reduce by 1
+            quantity = -1 // Gi?m 1 s? l??ng
         };
-        
-        // Use the existing APIPlayerInventory class to update the inventory
-        bool apiCallComplete = false;
+
         bool apiCallSuccess = false;
-        
-        // Start the coroutine to update the inventory
-        StartCoroutine(APIPlayerInventory.UpdatePlayerInventoryCoroutine(inventory, success => 
+
+        // Goi API
+        yield return StartCoroutine(APIPlayerInventory.UpdatePlayerInventoryCoroutine(inventory, success =>
         {
             apiCallSuccess = success;
-            apiCallComplete = true;
         }));
-        
-        // Wait for the API call to complete
-        while (!apiCallComplete)
-        {
-            yield return null;
-        }
-        
+
         if (apiCallSuccess)
         {
             Debug.Log("Successfully updated player inventory after feeding");
-            
-            // Update the local item quantity
+
+            // Cap nhat so luong
             foodItem.Quantity--;
-            
-            // If quantity is now 0, refresh the panel to remove the item
+
+            // Neu het xoa khoi inventory
             if (foodItem.Quantity <= 0)
             {
                 foodItems.Remove(foodItem);
+                // Goi api va xoa
+                StartCoroutine(APIPlayerInventory.DeletePlayerInventoryCoroutine(
+                    currentPlayerId,
+                    foodItem.ShopProductId,
+                    null
+                ));
             }
-            
-            // Refresh the panel
+
+            // Lam moi panel
             PopulateFeedingPanel();
-            
-            // Close the panel if no more food items
-            // if (!foodItems.Any(f => f.Quantity > 0))
-            // {
-            //     CloseFeedingPanel();
-            // }
         }
         else
         {
             Debug.LogError("Failed to update player inventory after feeding");
-            
-            // Show error message
             DisplayErrorMessage("Failed to update inventory. Please try again.");
         }
     }
