@@ -7,6 +7,7 @@ public class AdopPet : MonoBehaviour
 {
     [SerializeField] GameObject adopPetSuccessPanel;
     [SerializeField] GameObject adopPetFailPanel;
+    public GameObject petPrefab; // Prefab to spawn upon successful adoption
     public void IsAdopPetSuccess()
     {
         // Lấy gameObject cha (Item prefab)
@@ -50,6 +51,23 @@ public class AdopPet : MonoBehaviour
                 // Hiển thị panel thành công
                 adopPetSuccessPanel.SetActive(true);
 
+                // Spawn the pet GameObject
+                if (petPrefab != null)
+                {
+                    GameObject petObj = Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
+                    PetController petController = petObj.GetComponent<PetController>();
+                    if (petController != null)
+                    {
+                        petController.playerPet = newPlayerPet;
+                    }
+                    // Lưu thông tin pet vào PlayerPrefs (ví dụ cho 1 pet)
+                    
+                    PlayerPrefs.SetFloat("SavedPetPosX", petObj.transform.position.x);
+                    PlayerPrefs.SetFloat("SavedPetPosY", petObj.transform.position.y);
+                    PlayerPrefs.SetFloat("SavedPetPosZ", petObj.transform.position.z);
+                    PlayerPrefs.Save();
+                }
+
                 // Tạo PlayerInventory object để update hoặc delete
                 PlayerInventory playerInventory = new PlayerInventory
                 {
@@ -78,7 +96,6 @@ public class AdopPet : MonoBehaviour
         }));
 
     }
-
 
 
 
