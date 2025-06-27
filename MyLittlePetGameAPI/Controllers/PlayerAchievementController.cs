@@ -32,7 +32,8 @@ namespace MyLittlePetGameAPI.Controllers
                 
             return Ok(achievements);
         }
-          // GET: PlayerAchievement/Player/{playerId} - Get achievements for a specific player
+        
+        // GET: PlayerAchievement/Player/{playerId} - Get achievements for a specific player
         [HttpGet("Player/{playerId}")]
         public ActionResult<IEnumerable<object>> GetByPlayerId(int playerId)
         {
@@ -94,7 +95,8 @@ namespace MyLittlePetGameAPI.Controllers
                 
             return Ok(players);
         }
-          // POST: PlayerAchievement - Award an achievement to a player
+        
+        // POST: PlayerAchievement - Award an achievement to a player
         [HttpPost]
         public ActionResult<PlayerAchievement> Create(int playerId, int achievementId, bool? isCollected)
         {
@@ -128,12 +130,14 @@ namespace MyLittlePetGameAPI.Controllers
                 EarnedAt = DateTime.Now,
                 IsCollected = isCollected ?? false // Default to false if not provided
             };
-              _context.PlayerAchievements.Add(playerAchievement);
+            
+            _context.PlayerAchievements.Add(playerAchievement);
             _context.SaveChanges();
             
             return CreatedAtAction("GetUncollectedByPlayerId", new { playerId = playerId }, playerAchievement);
         }
-          // DELETE: PlayerAchievement - Remove an achievement from a player
+        
+        // DELETE: PlayerAchievement - Remove an achievement from a player
         [HttpDelete]
         public ActionResult Delete(int playerId, int achievementId)
         {
@@ -153,7 +157,7 @@ namespace MyLittlePetGameAPI.Controllers
         
         // PUT: PlayerAchievement/Collect - Mark an achievement as collected
         [HttpPut("Collect")]
-        public ActionResult<PlayerAchievement> MarkAsCollected(int playerId, int achievementId)
+        public ActionResult<PlayerAchievement> UpdateIsCollected(int playerId, int achievementId, bool isCollected)
         {
             var playerAchievement = _context.PlayerAchievements
                 .FirstOrDefault(pa => pa.PlayerId == playerId && pa.AchievementId == achievementId);
@@ -163,7 +167,7 @@ namespace MyLittlePetGameAPI.Controllers
                 return NotFound("Player does not have this achievement");
             }
             
-            playerAchievement.IsCollected = true;
+            playerAchievement.IsCollected = isCollected;
             _context.PlayerAchievements.Update(playerAchievement);
             _context.SaveChanges();
             
