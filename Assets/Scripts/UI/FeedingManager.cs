@@ -68,37 +68,10 @@ public class FeedingManager : MonoBehaviour
             gridPadding = new RectOffset(10, 10, 10, 10);
         }
         
-        // Configure the grid layout if one exists
-        ConfigureGridLayout();
-    }
-    
-    // Configure the grid layout component for the food items container
-    private void ConfigureGridLayout()
-    {
-        if (foodItemsContainer != null)
+        // No more grid layout configuration here!
+        if (foodItemsContainer == null)
         {
-            // Try to get GridLayoutGroup component
-            GridLayoutGroup gridLayout = foodItemsContainer.GetComponent<GridLayoutGroup>();
-            
-            // If no grid layout, add one
-            if (gridLayout == null)
-            {
-                gridLayout = foodItemsContainer.gameObject.AddComponent<GridLayoutGroup>();
-            }
-            
-            // Configure the grid layout
-            gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gridLayout.constraintCount = gridColumns;
-            gridLayout.spacing = itemSpacing;
-            gridLayout.padding = gridPadding;
-            
-            // Calculate cell size based on container width and columns
-            if (foodItemsContainer is RectTransform rectTransform)
-            {
-                float availableWidth = rectTransform.rect.width - gridPadding.left - gridPadding.right - (gridColumns - 1) * itemSpacing.x;
-                float cellWidth = availableWidth / gridColumns;
-                gridLayout.cellSize = new Vector2(cellWidth, cellWidth * 1.2f); // Make cells slightly taller than wide
-            }
+            Debug.LogWarning("FeedingManager: foodItemsContainer is not assigned in the Inspector.");
         }
     }
     

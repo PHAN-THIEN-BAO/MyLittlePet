@@ -1048,6 +1048,11 @@
         "Name": "achievementId",
         "Type": "System.Int32",
         "IsRequired": false
+      },
+      {
+        "Name": "isCollected",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [

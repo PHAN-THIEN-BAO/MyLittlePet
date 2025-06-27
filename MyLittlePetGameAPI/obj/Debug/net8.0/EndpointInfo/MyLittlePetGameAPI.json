@@ -1708,6 +1708,13 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "isCollected",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
