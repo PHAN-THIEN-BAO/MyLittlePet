@@ -19,7 +19,7 @@ MonoBehaviour:
   - Meow...meow
   - Meoooww~~~~~
   - Meowwww
-  autoProgressLines: 01
+  autoProgressLines: 01000000
   endDialogueLines: 00010101
   autoProgressDelay: 1
   typingSpeed: 0.05
@@ -32,3 +32,5 @@ MonoBehaviour:
     nextDialogueIndexes: 010000000200000003000000
     petCareOptions: 010000000300000002000000
     customCareAmount: 
+  petDialogues: []
+  defaultDialogues: []
