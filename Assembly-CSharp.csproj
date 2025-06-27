@@ -125,7 +125,6 @@
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\APIPlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Validate\ShopPetValidate.cs" />
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
-    <Compile Include="Assets\Scripts\Login\Menu.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PlayerPet.cs" />
     <Compile Include="Assets\Quarium\Script\FishControlMovement.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\PetClickHandler.cs" />
@@ -137,6 +136,7 @@
     <Compile Include="Assets\Scripts\NPC\NPC.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\APIPlayerInventory.cs" />
     <Compile Include="Assets\Scripts\LogOut\LogoutUser.cs" />
+    <Compile Include="Assets\Scripts\Object\PlayerAchievement\GetRewardAchiverment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\DownloadedAssets\Fonts\NicoFontPack-v1.0\NicoFontPack-v1.0\Bitmap Fonts\14. CleanCraters\BMFont Text\CleanCraters.fnt" />

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class AchievementDisplay : MonoBehaviour
 {
+    [SerializeField] public List<TMP_Text> idAchievement;
     [SerializeField] public List<TMP_Text> achievementTexts; // pulls the TMP_Text fields from the scene
     [SerializeField] public List<GameObject> readyCollected;
     [SerializeField] public List<GameObject> collected;
@@ -22,6 +23,7 @@ public class AchievementDisplay : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             achievementTexts[i].text = achievements[i].description;
+            idAchievement[i].text = achievements[i].achievementID.ToString();
 
             // find the corresponding PlayerAchievement for the current achievement
             PlayerAchievement playerAch = playerAchievements.Find(pa => pa.achievementID == achievements[i].achievementID);
