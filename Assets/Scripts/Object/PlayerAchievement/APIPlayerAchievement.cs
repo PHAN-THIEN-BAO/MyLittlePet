@@ -21,6 +21,40 @@ public class APIPlayerAchievement : MonoBehaviour
         return JsonConvert.DeserializeObject<List<PlayerAchievement>>(jsonResponse);
     }
 
+    private bool UpdateAchievement(int playerId, int achievementId, bool isCollected)
+    {
+        try
+        {
+            // Create a request to the API endpoint
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://localhost:7035/PlayerAchievement/Collect?playerId={playerId}&achievementId={achievementId}");
+
+            // Set the method to PUT
+            request.Method = "PUT";
+            request.ContentType = "application/json";
+
+            // Get response
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                // Check if request was successful
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    // Read the response stream
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        string jsonResponse = reader.ReadToEnd();
+                        // You can parse the response if needed
+                        // PlayerAchievement updatedAchievement = JsonConvert.DeserializeObject<PlayerAchievement>(jsonResponse);
+                        return true;
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"API Error: {response.StatusCode} - {response.StatusDescription}");
+                    return false;
+                }
+            }
+        }
+
     // đàu tiên qua swagger chạy thử API put để lấy được uputsau đó cop url qua va kêu compilot 
     // viết code cho hàm gọi API UpdateAchievement có tham số là playerID, achievementID, isCollected
     // tạo 1 cái script mới tên là GetRewardAchievement.cs(để trong playerachievement folder)
