@@ -138,6 +138,46 @@ namespace MyLittlePetGameAPI.Controllers
             }
         }
         
+        // GET: PlayerInventory/ToyItems/{playerId} - Get toy items for a specific player
+        [HttpGet("ToyItems/{playerId}")]
+        public ActionResult<IEnumerable<object>> GetToyItemsByPlayerId(int playerId)
+        {
+            try
+            {
+                var player = _context.Users.Find(playerId);
+                if (player == null)
+                {
+                    return NotFound("Player not found");
+                }
+
+                var toyItems = _context.PlayerInventories
+                    .Include(i => i.ShopProduct)
+                    .Where(i => i.PlayerId == playerId && i.ShopProduct.Type.ToLower() == "toy")
+                    .Select(i => new
+                    {
+                        PlayerId = i.PlayerId,
+                        ShopProductId = i.ShopProductId,
+                        Quantity = i.Quantity,
+                        AcquiredAt = i.AcquiredAt,
+                        ProductInfo = new
+                        {
+                            Id = i.ShopProduct.ShopProductId,
+                            Name = i.ShopProduct.Name,
+                            Type = i.ShopProduct.Type,
+                            Description = i.ShopProduct.Description,
+                            ImageUrl = i.ShopProduct.ImageUrl
+                        }
+                    })
+                    .ToList();
+
+                return Ok(toyItems);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
         // POST: PlayerInventory - Add item to player's inventory
         [HttpPost]
         public ActionResult<PlayerInventory> Create(int playerId, int shopProductId, int? quantity)
@@ -211,7 +251,8 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, "An error occurred while processing your request");
             }
         }
-          // PUT: PlayerInventory - Update item quantity
+        
+        // PUT: PlayerInventory - Update item quantity
         [HttpPut]
         public ActionResult<PlayerInventory> Update(int playerId, int shopProductId, int quantity)
         {
@@ -289,7 +330,8 @@ namespace MyLittlePetGameAPI.Controllers
                         quantity = inventoryItem.Quantity,
                         acquiredAt = inventoryItem.AcquiredAt
                     }
-                });            }
+                });            
+            }
             catch (Exception ex)
             {
                 // Log the exception but return a clean error message
@@ -297,7 +339,8 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, "An error occurred while processing your request");
             }
         }
-          // DELETE: PlayerInventory - Remove item from inventory
+        
+        // DELETE: PlayerInventory - Remove item from inventory
         [HttpDelete]
         public ActionResult Delete(int playerId, int shopProductId)
         {

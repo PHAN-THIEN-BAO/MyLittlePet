@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -12,6 +12,7 @@ public class ChoosePet : MonoBehaviour
     [SerializeField] public TMP_Text description;
     [SerializeField] public GameObject successPanel;
     [SerializeField] public GameObject failPanel;
+    public PetController petController; // Kéo PetController trong scene vào Inspector
 
     public void ChooseAPet()
     {
@@ -28,14 +29,16 @@ public class ChoosePet : MonoBehaviour
             Debug.Log("Pet added successfully!");
             successPanel.SetActive(true);
 
-            // Optionally, you can update the player's pet information in the UI or elsewhere
-            // UpdatePlayerPetUI(playerPet);
+            // Spawn pet ngay lập tức
+            if (petController != null)
+            {
+                petController.SpawnPet(playerPet);
+            }
         }
         else
         {
             failPanel.SetActive(true);
             Debug.LogError("Failed to add pet.");
         }
-
     }
 }

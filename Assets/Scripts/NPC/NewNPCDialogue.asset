@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcName: 
   npcPortrait: {fileID: 0}
-  dialogueLines: []
+  dialogueLines:
+  - Meoooww~
+  - Moeww
+  - Mew.....
+  - Moewwwwwww
   autoProgressLines: 01000000
   endDialogueLines: 00010101
   autoProgressDelay: 1
@@ -27,37 +31,4 @@ MonoBehaviour:
     - Play
     nextDialogueIndexes: 010000000200000003000000
     petCareOptions: 010000000300000002000000
-    customCareAmount: 
-  petDialogues:
-  - petID: 0
-    dialogueLines:
-    - bokk
-    - bokk..bokk
-    - bokkk
-    - BOKKKKK
-  - petID: 1
-    dialogueLines:
-    - Meoooww~
-    - Moeww
-    - Mew.....
-    - Moewwwwwww
-  - petID: 2
-    dialogueLines:
-    - Meoooww~
-    - Moeww
-    - Mew.....
-    - Moewwwwwww
-  - petID: 3
-    dialogueLines:
-    - Meoooww~
-    - Moeww
-    - Mew.....
-    - Moewwwwwww
-  - petID: 4
-    dialogueLines:
-    - bokk
-    - bokk..bokk
-    - bokkk
-    - BOKKKKK
-  defaultDialogues:
-  - 
+    customCareAmount: 0a0000000a0000000a000000

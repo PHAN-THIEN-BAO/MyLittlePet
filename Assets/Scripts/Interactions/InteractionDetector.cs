@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class InteractionDetector : MonoBehaviour
 {
-    private IInteractable interactableInRange = null ;
+    private IInteractable interactableInRange = null;
     public GameObject InteractionIcon;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -14,15 +14,7 @@ public class InteractionDetector : MonoBehaviour
     {
         if (context.performed)
         {
-            if (interactableInRange is NPC npc)
-            {
-                npc.playerPetID = PetSelectionManager.CurrentPlayerPetID;
-                npc.Interact();
-            }
-            else
-            {
-                interactableInRange?.Interact();
-            }
+            interactableInRange?.Interact();
         }
     }
 
@@ -33,20 +25,11 @@ public class InteractionDetector : MonoBehaviour
         {
             interactableInRange = interactable;
             InteractionIcon.SetActive(true);
-
-            // Nếu là pet, lưu luôn playerPetID
-            if (interactable is PetClickHandler petHandler)
-            {
-                var dataHolder = petHandler.GetComponent<PetDataHolder>();
-                if (dataHolder != null)
-                    PetSelectionManager.CurrentPlayerPetID = dataHolder.petData.playerPetID;
-            }
-            // Nếu là NPC, có thể giữ nguyên logic cũ
         }
     }
-   private void OnTriggerExit2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if(collision.TryGetComponent(out IInteractable interactable) && interactable == interactableInRange)
+        if (collision.TryGetComponent(out IInteractable interactable) && interactable == interactableInRange)
         {
             interactableInRange = null;
             InteractionIcon.SetActive(false);
@@ -54,23 +37,16 @@ public class InteractionDetector : MonoBehaviour
     }
     public void Interact()
     {
-        if(interactableInRange != null)
+        if (interactableInRange != null)
         {
             interactableInRange.Interact();
         }
     }
     public void StopInteract()
     {
-        if(interactableInRange != null)
+        if (interactableInRange != null)
         {
             interactableInRange.StopInteract();
         }
-    }
-
-    // Assuming you have a reference to the NPC (npcInstance)
-    public void InteractWithNPC(NPC npcInstance)
-    {
-        npcInstance.playerPetID = PetSelectionManager.CurrentPlayerPetID;
-        npcInstance.Interact();
     }
 }

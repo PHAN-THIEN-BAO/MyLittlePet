@@ -7,20 +7,16 @@ public class NPC : MonoBehaviour, IInteractable
 {
     public NPCDialogue dialogueData;
 
+
     private DialogueController dialogueUI;
 
     private int dialogueIndex;
     private bool isTyping, isDialogueActive;
 
-    // Thêm biến này để lưu playerPetID
-    public int playerPetID = -1;
-
-    // Nếu bạn có danh sách sprite cho các loại pet, gán ở đây hoặc lấy từ PetInfoUIManager
-    public Sprite[] petSprites;
-
     private void Start()
     {
         dialogueUI = DialogueController.Instance;
+
     }
 
     public bool CanInteract()
@@ -52,46 +48,11 @@ public class NPC : MonoBehaviour, IInteractable
         isDialogueActive = true;
         dialogueIndex = 0;
 
-        // Lấy thông tin pet theo playerPetID
-        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
-
-        // Lấy tên và hình từ pet
-        string petName = pet != null ? pet.petCustomName : "Unknown Pet";
-        Sprite petSprite = null;
-        if (pet != null && petSprites != null && pet.petID >= 0 && pet.petID < petSprites.Length)
-        {
-            petSprite = petSprites[pet.petID];
-        }
-
-        // Truyền playerPetID cho DialogueController để các thao tác đúng pet
-        dialogueUI.StartDialogueWithPet(playerPetID);
-
-        // Tùy biến hội thoại theo loại pet (ví dụ: mèo thì "meow", chó thì "woof")
-        string[] customLines = GetDialogueLinesForPet(pet);
-        if (customLines != null && customLines.Length > 0)
-        {
-            dialogueData.dialogueLines = customLines;
-        }
-
-        // Set tên và hình cho UI
-        dialogueUI.SetNPCInfo(petName, petSprite);
-
+        dialogueUI.SetNPCInfo(dialogueData.npcName, dialogueData.npcPortrait);
         dialogueUI.ShowDialogueUI(true);
+
         DisplayCurrentLine();
-    }
 
-    // Hàm này trả về hội thoại riêng cho từng loại pet
-    string[] GetDialogueLinesForPet(PlayerPet pet)
-    {
-        if (pet == null || dialogueData.petDialogues == null)
-            return dialogueData.defaultDialogues ?? new string[] { "Xin chào!" };
-
-        foreach (var set in dialogueData.petDialogues)
-        {
-            if (set.petID == pet.petID)
-                return set.dialogueLines;
-        }
-        return dialogueData.defaultDialogues ?? new string[] { "Xin chào!" };
     }
 
     void NextLine()
@@ -102,6 +63,7 @@ public class NPC : MonoBehaviour, IInteractable
             dialogueUI.SetDialogueText(dialogueData.dialogueLines[dialogueIndex]);
             isTyping = false;
         }
+
 
         dialogueUI.ClearChoices();
 
@@ -128,7 +90,6 @@ public class NPC : MonoBehaviour, IInteractable
             EndDialogue();
         }
     }
-
     IEnumerator TypeLine()
     {
         isTyping = true;
@@ -146,7 +107,6 @@ public class NPC : MonoBehaviour, IInteractable
             NextLine();
         }
     }
-
     void DisplayChoices(DialogueChoice choice)
     {
         for (int i = 0; i < choice.choices.Length; i++)
@@ -218,4 +178,5 @@ public class NPC : MonoBehaviour, IInteractable
         dialogueUI.SetDialogueText("");
         dialogueUI.ShowDialogueUI(false);
     }
+
 }

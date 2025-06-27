@@ -174,7 +174,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.0001
+  m_Mass: 100
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_GravityScale: 0
@@ -201,8 +201,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14b317dbeb8bf4b9f871fe611d58d3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1.7
-  changeDirectionTime: 2
+  moveSpeed: 0.2
+  changeDirectionTime: 3
 --- !u!114 &-1929851193069792078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -248,10 +248,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueData: {fileID: 11400000, guid: d1cb285466607f74ca0ff1c917cce88e, type: 2}
-  playerPetID: -1
-  petSprites:
-  - {fileID: 7892033834191237442, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
-  - {fileID: 7892033834191237442, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
-  - {fileID: 3463857228526754693, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
-  - {fileID: 4516387037990142955, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
-  - {fileID: -6733779939490682605, guid: 82e7420b2992547469500cc3c4cdefd0, type: 3}

@@ -1285,6 +1285,32 @@
     ]
   },
   {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerInventoryController",
+    "Method": "GetToyItemsByPlayerId",
+    "RelativePath": "PlayerInventory/ToyItems/{playerId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "playerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerPetController",
     "Method": "Get",
     "RelativePath": "PlayerPet",

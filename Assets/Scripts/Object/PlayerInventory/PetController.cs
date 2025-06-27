@@ -8,7 +8,6 @@ public class PetController : MonoBehaviour
     public Transform petParent;  // Kéo một GameObject trống làm parent (nếu muốn)
     public GameObject[] petPrefabs; // Kéo các prefab vào đây theo thứ tự petID
 
-
     void Start()
     {
         User user = PlayerInfomation.LoadPlayerInfo();
@@ -19,65 +18,65 @@ public class PetController : MonoBehaviour
             for (int i = 0; i < playerPets.Count; i++)
             {
                 PlayerPet pet = playerPets[i];
-
-                // Tạo vị trí ngẫu nhiên trong vùng x: [-5, 5], y: [-2, 2]
-                float randomX = Random.Range(-5f, 5f);
-                float randomY = Random.Range(-2f, 2f);
-                Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
-
-                // Chọn đúng prefab theo petID
-                GameObject prefabToSpawn = (petPrefabs != null && pet.petID >= 0 && pet.petID < petPrefabs.Length)
-                    ? petPrefabs[pet.petID]
-                    : null;
-
-                if (prefabToSpawn == null)
-                {
-                    Debug.LogWarning($"Không tìm thấy prefab cho petID: {pet.petID}");
-                    continue;
-                }
-
-                GameObject petObj = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, petParent);
-
-                var clickHandler = petObj.GetComponent<PetClickHandler>();
-                if (clickHandler != null)
-                {
-                    // Giả sử bạn có một biến tham chiếu tới PetInfoUIManager trong scene
-                    clickHandler.uiManager = FindObjectOfType<PetInfoUIManager>();
-                }
-
-                var dataHolder = petObj.GetComponent<PetDataHolder>();
-                if (dataHolder != null)
-                {
-                    dataHolder.petData = pet;
-                }
-
-                var texts = petObj.GetComponentsInChildren<UnityEngine.UI.Text>();
-                foreach (var t in texts)
-                {
-                    switch (t.gameObject.name)
-                    {
-                        case "PetIDText":
-                            t.text = "ID: " + pet.petID;
-                            break;
-                        case "PetNameText":
-                            t.text = pet.petCustomName;
-                            break;
-                        case "PetLevelText":
-                            t.text = "Level: " + pet.level;
-                            break;
-                        case "PetStatusText":
-                            t.text = "Status: " + pet.status;
-                            break;
-                    }
-                }
-                // Nếu dùng TMP_Text thì làm tương tự:
-                // var tmps = petObj.GetComponentsInChildren<TMPro.TMP_Text>();
-                // ...
+                SpawnPet(pet);
             }
         }
         else
         {
             Debug.LogWarning("Không tìm thấy pet nào cho user này.");
+        }
+    }
+
+    public void SpawnPet(PlayerPet pet)
+    {
+        // Tạo vị trí ngẫu nhiên hoặc vị trí mặc định
+        float randomX = Random.Range(-5f, 5f);
+        float randomY = Random.Range(-2f, 2f);
+        Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
+
+        // Chọn đúng prefab theo petID
+        GameObject prefabToSpawn = (petPrefabs != null && pet.petID >= 0 && pet.petID < petPrefabs.Length)
+            ? petPrefabs[pet.petID]
+            : null;
+
+        if (prefabToSpawn == null)
+        {
+            Debug.LogWarning($"Không tìm thấy prefab cho petID: {pet.petID}");
+            return;
+        }
+
+        GameObject petObj = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, petParent);
+
+        var clickHandler = petObj.GetComponent<PetClickHandler>();
+        if (clickHandler != null)
+        {
+            clickHandler.uiManager = FindObjectOfType<PetInfoUIManager>();
+        }
+
+        var dataHolder = petObj.GetComponent<PetDataHolder>();
+        if (dataHolder != null)
+        {
+            dataHolder.petData = pet;
+        }
+
+        var texts = petObj.GetComponentsInChildren<UnityEngine.UI.Text>();
+        foreach (var t in texts)
+        {
+            switch (t.gameObject.name)
+            {
+                case "PetIDText":
+                    t.text = "ID: " + pet.petID;
+                    break;
+                case "PetNameText":
+                    t.text = pet.petCustomName;
+                    break;
+                case "PetLevelText":
+                    t.text = "Level: " + pet.level;
+                    break;
+                case "PetStatusText":
+                    t.text = "Status: " + pet.status;
+                    break;
+            }
         }
     }
 }

@@ -15,16 +15,6 @@ public class NPCDialogue : ScriptableObject
     //public float voicepitch = 1.0f;
     
     public DialogueChoice[] choices;
-
-    public PetDialogueSet[] petDialogues;
-    public string[] defaultDialogues;
-}
-
-[System.Serializable]
-public class PetDialogueSet
-{
-    public int petID;
-    public string[] dialogueLines;
 }
 
 [System.Serializable]

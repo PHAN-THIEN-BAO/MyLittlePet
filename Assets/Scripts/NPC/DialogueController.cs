@@ -14,12 +14,7 @@ public class DialogueController : MonoBehaviour
     // Reference to the PetInfoUIManager to interact with pet care functionality
     private PetInfoUIManager petInfoManager;
     private FeedingManager feedingManager; // Add FeedingManager reference
-    private int currentPlayerPetID = -1; // Add this line
-
-    private const int maxStatusValue = 100; // Maximum value for pet statuses
-    private const int feedIncreaseAmount = 10; // Amount to increase hunger when feeding
-    private const int playIncreaseAmount = 10; // Amount to increase happiness when playing
-    private const int sleepIncreaseAmount = 10; // Amount to increase energy when sleeping
+    private PlayingManager playingManager; // Add PlayingManager reference
 
     // Types of pet care actions that can be performed via dialogue
     public enum PetCareAction
@@ -58,17 +53,22 @@ public class DialogueController : MonoBehaviour
         {
             Debug.LogWarning("FeedingManager not found in the scene. Feeding panel will not show food items.");
         }
+        playingManager = FindObjectOfType<PlayingManager>();
+        if (playingManager == null)
+        {
+            Debug.LogWarning("PlayingManager not found in the scene. Playing panel will not show toy items.");
+        }
     }
 
-   public void ShowDialogueUI(bool show)
+    public void ShowDialogueUI(bool show)
     {
         dialoguePanel.SetActive(show);
     }
 
     public void SetNPCInfo(string npcName, Sprite portrait)
     {
-                nameText.text = npcName;
-        portraitImage.sprite = portrait; 
+        nameText.text = npcName;
+        portraitImage.sprite = portrait;
     }
 
     public void SetDialogueText(string text)
@@ -91,7 +91,7 @@ public class DialogueController : MonoBehaviour
         choiceButton.GetComponent<Button>().onClick.AddListener(onClick);
         return choiceButton;
     }
-    
+
     // Create a choice button that performs a pet care action
     public GameObject CreatePetCareChoiceButton(string choiceText, PetCareAction careAction, UnityEngine.Events.UnityAction additionalAction = null, int customCareAmount = 0)
     {
@@ -115,7 +115,7 @@ public class DialogueController : MonoBehaviour
             switch (careAction)
             {
                 case PetCareAction.Feed:
-                    disableButton = petInfoManager.IsHungerAtMax(currentPlayerPetID);
+                    disableButton = petInfoManager.IsHungerAtMax();
                     if (disableButton)
                     {
                         choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText + " (Full)";
@@ -123,7 +123,7 @@ public class DialogueController : MonoBehaviour
                     break;
 
                 case PetCareAction.Play:
-                    disableButton = petInfoManager.IsHappinessAtMax(currentPlayerPetID);
+                    disableButton = petInfoManager.IsHappinessAtMax();
                     if (disableButton)
                     {
                         choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText + " (Happy)";
@@ -131,7 +131,7 @@ public class DialogueController : MonoBehaviour
                     break;
 
                 case PetCareAction.Sleep:
-                    disableButton = petInfoManager.IsEnergyAtMax(currentPlayerPetID);
+                    disableButton = petInfoManager.IsEnergyAtMax();
                     if (disableButton)
                     {
                         choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText + " (Energetic)";
@@ -139,7 +139,7 @@ public class DialogueController : MonoBehaviour
                     break;
 
                 case PetCareAction.CareForAll:
-                    disableButton = petInfoManager.IsAllStatusAtMax(currentPlayerPetID);
+                    disableButton = petInfoManager.IsAllStatusAtMax();
                     if (disableButton)
                     {
                         choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText + " (Not Needed)";
@@ -162,139 +162,82 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
+        int playerId = PlayerInfomation.LoadPlayerInfo().id; // Khai báo 1 lần ở đây
+
         switch (action)
         {
             case PetCareAction.Feed:
-                int playerId = PlayerInfomation.LoadPlayerInfo().id;
                 if (feedingManager != null)
                 {
-                    // Truyền đủ 3 tham số cho FeedingManager
-                    feedingManager.ShowFeedingPanel(playerId, customCareAmount, currentPlayerPetID);
+                    feedingManager.ShowFeedingPanel(playerId, customCareAmount);
+                    Debug.Log("Showing feeding panel (with FeedingManager)");
                 }
                 else
                 {
-                    // PetInfoUIManager chỉ nhận customCareAmount
                     petInfoManager.ShowFeedingPanel(customCareAmount);
+                    Debug.Log("Showing feeding panel (PetInfoUIManager fallback)");
                 }
                 break;
+
             case PetCareAction.Play:
-                if (customCareAmount > 0)
-                    petInfoManager.UpdatePetStatus(1, customCareAmount, currentPlayerPetID);
+                if (playingManager != null)
+                {
+                    playingManager.ShowPlayingPanel(playerId);
+                    Debug.Log("Showing playing panel (with PlayingManager)");
+                }
                 else
-                    petInfoManager.PlayWithPet(currentPlayerPetID);
+                {
+                    if (customCareAmount > 0)
+                    {
+                        petInfoManager.UpdatePetStatus(1, customCareAmount); // 1 is happiness index
+                        Debug.Log($"Dialogue choice: Play with pet with custom amount: {customCareAmount}");
+                    }
+                    else
+                    {
+                        petInfoManager.PlayWithPet();
+                        Debug.Log("Dialogue choice: Play with pet");
+                    }
+                }
                 break;
+
             case PetCareAction.Sleep:
                 if (customCareAmount > 0)
-                    petInfoManager.UpdatePetStatus(2, customCareAmount, currentPlayerPetID);
+                {
+                    petInfoManager.UpdatePetStatus(2, customCareAmount); // 2 is energy index
+                    Debug.Log($"Dialogue choice: Pet sleeps with custom amount: {customCareAmount}");
+                }
                 else
-                    petInfoManager.SleepPet(currentPlayerPetID);
+                {
+                    petInfoManager.SleepPet();
+                    Debug.Log("Dialogue choice: Pet sleeps");
+                }
                 break;
+
             case PetCareAction.CareForAll:
                 if (customCareAmount > 0)
                 {
-                    if (!petInfoManager.IsHungerAtMax(currentPlayerPetID))
-                        petInfoManager.UpdatePetStatus(0, customCareAmount, currentPlayerPetID);
-                    if (!petInfoManager.IsHappinessAtMax(currentPlayerPetID))
-                        petInfoManager.UpdatePetStatus(1, customCareAmount, currentPlayerPetID);
-                    if (!petInfoManager.IsEnergyAtMax(currentPlayerPetID))
-                        petInfoManager.UpdatePetStatus(2, customCareAmount, currentPlayerPetID);
+                    if (!petInfoManager.IsHungerAtMax())
+                        petInfoManager.UpdatePetStatus(0, customCareAmount); // 0 is hunger index
+
+                    if (!petInfoManager.IsHappinessAtMax())
+                        petInfoManager.UpdatePetStatus(1, customCareAmount); // 1 is happiness index
+
+                    if (!petInfoManager.IsEnergyAtMax())
+                        petInfoManager.UpdatePetStatus(2, customCareAmount); // 2 is energy index
+
+                    Debug.Log($"Dialogue choice: Care for all pet needs with custom amount: {customCareAmount}");
                 }
                 else
                 {
-                    petInfoManager.OnCareForAllButtonClicked(currentPlayerPetID);
+                    petInfoManager.OnCareForAllButtonClicked();
+                    Debug.Log("Dialogue choice: Care for all pet needs");
                 }
                 break;
+
             case PetCareAction.None:
             default:
+                // No pet care action to perform
                 break;
         }
-    }
-
-    // Call this when starting a dialogue with a specific pet
-    public void StartDialogueWithPet(int playerPetID)
-    {
-        currentPlayerPetID = playerPetID;
-        // You can add more logic here if needed, e.g. update pet info UI
-    }
-
-    public bool IsHungerAtMax(int playerPetID)
-    {
-        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
-        if (pet == null) return false;
-        string[] statusValues = pet.status.Split('%');
-        if (statusValues.Length >= 1 && int.TryParse(statusValues[0], out int hunger))
-        {
-            return hunger >= maxStatusValue;
-        }
-        return false;
-    }
-
-    public bool IsHappinessAtMax(int playerPetID)
-    {
-        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
-        if (pet == null) return false;
-        string[] statusValues = pet.status.Split('%');
-        if (statusValues.Length >= 2 && int.TryParse(statusValues[1], out int happiness))
-        {
-            return happiness >= maxStatusValue;
-        }
-        return false;
-    }
-
-    public bool IsEnergyAtMax(int playerPetID)
-    {
-        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
-        if (pet == null) return false;
-        string[] statusValues = pet.status.Split('%');
-        if (statusValues.Length >= 3 && int.TryParse(statusValues[2], out int energy))
-        {
-            return energy >= maxStatusValue;
-        }
-        return false;
-    }
-
-    public bool IsAllStatusAtMax(int playerPetID)
-    {
-        return IsHungerAtMax(playerPetID) && IsHappinessAtMax(playerPetID) && IsEnergyAtMax(playerPetID);
-    }
-
-    public void FeedPet(int playerPetID)
-    {
-        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
-        if (pet == null) return;
-        if (IsHungerAtMax(playerPetID)) return;
-        UpdatePetStatus(0, feedIncreaseAmount, playerPetID);
-    }
-
-    public void PlayWithPet(int playerPetID)
-    {
-        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
-        if (pet == null) return;
-        if (IsHappinessAtMax(playerPetID)) return;
-        UpdatePetStatus(1, playIncreaseAmount, playerPetID);
-    }
-
-    public void SleepPet(int playerPetID)
-    {
-        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
-        if (pet == null) return;
-        if (IsEnergyAtMax(playerPetID)) return;
-        UpdatePetStatus(2, sleepIncreaseAmount, playerPetID);
-    }
-
-    public void UpdatePetStatus(int statusIndex, int increaseAmount, int playerPetID)
-    {
-        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
-        if (pet == null) return;
-        string[] statusValues = pet.status.Split('%');
-        if (statusValues.Length < 3) return;
-        if (!int.TryParse(statusValues[statusIndex], out int statusValue)) return;
-        statusValue += increaseAmount;
-        statusValue = Mathf.Min(statusValue, maxStatusValue);
-        statusValues[statusIndex] = statusValue.ToString();
-        string newStatus = string.Join("%", statusValues);
-        pet.status = newStatus;
-        // Cập nhật database
-        StartCoroutine(APIPlayerPet.UpdatePlayerPetCoroutine(pet, null));
     }
 }
