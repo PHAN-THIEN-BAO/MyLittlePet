@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
@@ -324,111 +324,55 @@ public class PetInfoUIManager : MonoBehaviour
 
     // --- Pet Care System ---
 
-    // Feed the pet to increase hunger status
-    public void FeedPet()
+    public void FeedPet(int playerPetID)
     {
-        if (currentPetDetails == null) return;
-
-        // Skip if already at max
-        if (IsHungerAtMax())
-        {
-            Debug.Log($"Pet {currentPetDetails.playerPetID} is already full");
-            return;
-        }
-
-        UpdatePetStatus(0, feedIncreaseAmount); // Index 0 is hunger
-        Debug.Log($"Fed pet {currentPetDetails.playerPetID}, increasing hunger by {feedIncreaseAmount}");
+        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
+        if (pet == null) return;
+        if (IsHungerAtMax(playerPetID)) return;
+        UpdatePetStatus(0, feedIncreaseAmount, playerPetID);
     }
 
-    // Play with the pet to increase happiness status
-    public void PlayWithPet()
+    public void PlayWithPet(int playerPetID)
     {
-        if (currentPetDetails == null) return;
-
-        // Skip if already at max
-        if (IsHappinessAtMax())
-        {
-            Debug.Log($"Pet {currentPetDetails.playerPetID} is already completely happy");
-            return;
-        }
-
-        UpdatePetStatus(1, playIncreaseAmount); // Index 1 is happiness
-        Debug.Log($"Played with pet {currentPetDetails.playerPetID}, increasing happiness by {playIncreaseAmount}");
+        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
+        if (pet == null) return;
+        if (IsHappinessAtMax(playerPetID)) return;
+        UpdatePetStatus(1, playIncreaseAmount, playerPetID);
     }
 
-    // Let the pet sleep to increase energy status
-    public void SleepPet()
+    public void SleepPet(int playerPetID)
     {
-        if (currentPetDetails == null) return;
-
-        // Skip if already at max
-        if (IsEnergyAtMax())
-        {
-            Debug.Log($"Pet {currentPetDetails.playerPetID} is already full of energy");
-            return;
-        }
-
-        UpdatePetStatus(2, sleepIncreaseAmount); // Index 2 is energy
-        Debug.Log($"Pet {currentPetDetails.playerPetID} slept, increasing energy by {sleepIncreaseAmount}");
+        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
+        if (pet == null) return;
+        if (IsEnergyAtMax(playerPetID)) return;
+        UpdatePetStatus(2, sleepIncreaseAmount, playerPetID);
     }
 
-    // Update a specific pet status value
-    public void UpdatePetStatus(int statusIndex, int increaseAmount)
+    public void UpdatePetStatus(int statusIndex, int increaseAmount, int playerPetID)
     {
-        if (currentPetDetails == null) return;
-
-        // Parse the current status string
-        string[] statusValues = currentPetDetails.status.Split('%');
-        if (statusValues.Length < 3)
-        {
-            Debug.LogError($"Invalid status format: {currentPetDetails.status}");
-            return;
-        }
-
-        // Parse the status value to update
-        int statusValue;
-        if (!int.TryParse(statusValues[statusIndex], out statusValue))
-        {
-            Debug.LogError($"Failed to parse status value: {statusValues[statusIndex]}");
-            return;
-        }
-
-        // Increase the status value, capped at the maximum
+        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
+        if (pet == null) return;
+        string[] statusValues = pet.status.Split('%');
+        if (statusValues.Length < 3) return;
+        if (!int.TryParse(statusValues[statusIndex], out int statusValue)) return;
         statusValue += increaseAmount;
         statusValue = Mathf.Min(statusValue, maxStatusValue);
-
-        // Update the status array
         statusValues[statusIndex] = statusValue.ToString();
-
-        // Create the new status string
         string newStatus = string.Join("%", statusValues);
-        currentPetDetails.status = newStatus;
-
-        // Update the UI
-        if (statusBarManager != null)
-        {
-            statusBarManager.UpdatePetStatus(newStatus);
-        }
-
-        // Update button states if the status reached max
-        UpdateCareButtonStates();
-
-        // Update the database
-        StartCoroutine(UpdatePetInDatabase());
-
-        Debug.Log($"Updated pet status to: {newStatus}");
+        pet.status = newStatus;
+        // Cập nhật database
+        StartCoroutine(APIPlayerPet.UpdatePlayerPetCoroutine(pet, null));
     }
 
     // --- UI Button Handlers ---
 
-    // Handler for the Feed button
     public void OnFeedButtonClicked()
     {
         // If the feeding panel is active, use the pending feed amount
         if (feedingPanel != null && feedingPanel.activeSelf)
         {
             // Use the pending feed amount to update hunger
-            UpdatePetStatus(0, pendingFeedAmount); // 0 is hunger index
+            UpdatePetStatus(0, pendingFeedAmount, currentPetID); // 0 is hunger index
 
             // Hide the panel after feeding
             feedingPanel.SetActive(false);
@@ -438,35 +382,39 @@ public class PetInfoUIManager : MonoBehaviour
         else
         {
             // Default behavior when button is clicked outside of the feeding panel flow
-            FeedPet();
+            FeedPet(currentPetID);
         }
     }
 
-    // Handler for the Play button
     public void OnPlayButtonClicked()
     {
-        PlayWithPet();
+        PlayWithPet(currentPetID);
     }
 
-    // Handler for the Sleep button
     public void OnSleepButtonClicked()
     {
-        SleepPet();
+        SleepPet(currentPetID);
     }
 
-    // Care for all pet needs at once (for convenience)
     public void OnCareForAllButtonClicked()
     {
         if (currentPetDetails == null) return;
 
-        FeedPet();
-        PlayWithPet();
-        SleepPet();
+        FeedPet(currentPetID);
+        PlayWithPet(currentPetID);
+        SleepPet(currentPetID);
 
         Debug.Log($"Provided complete care for pet {currentPetDetails.playerPetID}");
     }
 
-    // Update UI button interactable states based on pet status
+    public void OnCareForAllButtonClicked(int playerPetID)
+    {
+        FeedPet(playerPetID);
+        PlayWithPet(playerPetID);
+        SleepPet(playerPetID);
+        Debug.Log($"Provided complete care for pet {playerPetID}");
+    }
+
     private void UpdateCareButtonStates()
     {
         // Find care buttons in the scene if they exist
@@ -477,31 +425,30 @@ public class PetInfoUIManager : MonoBehaviour
             // Check button name/tag to determine its function
             if (button.name.Contains("Feed") || button.tag == "FeedButton")
             {
-                button.interactable = !IsHungerAtMax();
+                button.interactable = !IsHungerAtMax(currentPetID);
             }
             else if (button.name.Contains("Play") || button.tag == "PlayButton")
             {
-                button.interactable = !IsHappinessAtMax();
+                button.interactable = !IsHappinessAtMax(currentPetID);
             }
             else if (button.name.Contains("Sleep") || button.tag == "SleepButton")
             {
-                button.interactable = !IsEnergyAtMax();
+                button.interactable = !IsEnergyAtMax(currentPetID);
             }
             else if (button.name.Contains("CareAll") || button.tag == "CareAllButton")
             {
-                button.interactable = !IsAllStatusAtMax();
+                button.interactable = !IsAllStatusAtMax(currentPetID);
             }
         }
     }
 
     // --- Status Check Methods ---
 
-    // Check if hunger status is at maximum
-    public bool IsHungerAtMax()
+    public bool IsHungerAtMax(int playerPetID)
     {
-        if (currentPetDetails == null) return false;
-
-        string[] statusValues = currentPetDetails.status.Split('%');
+        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
+        if (pet == null) return false;
+        string[] statusValues = pet.status.Split('%');
         if (statusValues.Length >= 1 && int.TryParse(statusValues[0], out int hunger))
         {
             return hunger >= maxStatusValue;
@@ -509,12 +456,11 @@ public class PetInfoUIManager : MonoBehaviour
         return false;
     }
 
-    // Check if happiness status is at maximum
-    public bool IsHappinessAtMax()
+    public bool IsHappinessAtMax(int playerPetID)
     {
-        if (currentPetDetails == null) return false;
-
-        string[] statusValues = currentPetDetails.status.Split('%');
+        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
+        if (pet == null) return false;
+        string[] statusValues = pet.status.Split('%');
         if (statusValues.Length >= 2 && int.TryParse(statusValues[1], out int happiness))
         {
             return happiness >= maxStatusValue;
@@ -522,12 +468,11 @@ public class PetInfoUIManager : MonoBehaviour
         return false;
     }
 
-    // Check if energy status is at maximum
-    public bool IsEnergyAtMax()
+    public bool IsEnergyAtMax(int playerPetID)
     {
-        if (currentPetDetails == null) return false;
-
-        string[] statusValues = currentPetDetails.status.Split('%');
+        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
+        if (pet == null) return false;
+        string[] statusValues = pet.status.Split('%');
         if (statusValues.Length >= 3 && int.TryParse(statusValues[2], out int energy))
         {
             return energy >= maxStatusValue;
@@ -535,17 +480,15 @@ public class PetInfoUIManager : MonoBehaviour
         return false;
     }
 
-    // Check if all statuses are at maximum
-    public bool IsAllStatusAtMax()
+    public bool IsAllStatusAtMax(int playerPetID)
     {
-        return IsHungerAtMax() && IsHappinessAtMax() && IsEnergyAtMax();
+        return IsHungerAtMax(playerPetID) && IsHappinessAtMax(playerPetID) && IsEnergyAtMax(playerPetID);
     }
 
     // Store the care amount to be used by the feeding panel
     [HideInInspector]
     public int pendingFeedAmount = 0;
 
-    // Show the feeding panel
     public void ShowFeedingPanel(int customCareAmount = 0)
     {
         if (feedingPanel != null)
@@ -565,14 +508,12 @@ public class PetInfoUIManager : MonoBehaviour
         }
     }
 
-    // Update the UI elements in the feeding panel
     private void UpdateFeedingPanelUI()
     {
         // This method can be implemented to update food option buttons, 
         // display current hunger level, etc.
     }
 
-    // Hide feeding panel after a delay
     private System.Collections.IEnumerator HideFeedingPanelAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);

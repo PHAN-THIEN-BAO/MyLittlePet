@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,17 +6,21 @@ using UnityEngine.UI;
 public class NPC : MonoBehaviour, IInteractable
 {
     public NPCDialogue dialogueData;
-    
 
     private DialogueController dialogueUI;
 
     private int dialogueIndex;
     private bool isTyping, isDialogueActive;
 
+    // Thêm biến này để lưu playerPetID
+    public int playerPetID = -1;
+
+    // Nếu bạn có danh sách sprite cho các loại pet, gán ở đây hoặc lấy từ PetInfoUIManager
+    public Sprite[] petSprites;
+
     private void Start()
     {
         dialogueUI = DialogueController.Instance;
-       
     }
 
     public bool CanInteract()
@@ -47,14 +51,49 @@ public class NPC : MonoBehaviour, IInteractable
     {
         isDialogueActive = true;
         dialogueIndex = 0;
-       
-        dialogueUI.SetNPCInfo(dialogueData.npcName, dialogueData.npcPortrait);
+
+        // Lấy thông tin pet theo playerPetID
+        PlayerPet pet = APIPlayerPet.GetPlayerPetById(playerPetID);
+
+        // Lấy tên và hình từ pet
+        string petName = pet != null ? pet.petCustomName : "Unknown Pet";
+        Sprite petSprite = null;
+        if (pet != null && petSprites != null && pet.petID >= 0 && pet.petID < petSprites.Length)
+        {
+            petSprite = petSprites[pet.petID];
+        }
+
+        // Truyền playerPetID cho DialogueController để các thao tác đúng pet
+        dialogueUI.StartDialogueWithPet(playerPetID);
+
+        // Tùy biến hội thoại theo loại pet (ví dụ: mèo thì "meow", chó thì "woof")
+        string[] customLines = GetDialogueLinesForPet(pet);
+        if (customLines != null && customLines.Length > 0)
+        {
+            dialogueData.dialogueLines = customLines;
+        }
+
+        // Set tên và hình cho UI
+        dialogueUI.SetNPCInfo(petName, petSprite);
+
         dialogueUI.ShowDialogueUI(true);
-
         DisplayCurrentLine();
-
     }
-    
+
+    // Hàm này trả về hội thoại riêng cho từng loại pet
+    string[] GetDialogueLinesForPet(PlayerPet pet)
+    {
+        if (pet == null || dialogueData.petDialogues == null)
+            return dialogueData.defaultDialogues ?? new string[] { "Xin chào!" };
+
+        foreach (var set in dialogueData.petDialogues)
+        {
+            if (set.petID == pet.petID)
+                return set.dialogueLines;
+        }
+        return dialogueData.defaultDialogues ?? new string[] { "Xin chào!" };
+    }
+
     void NextLine()
     {
         if (isTyping)
@@ -64,7 +103,6 @@ public class NPC : MonoBehaviour, IInteractable
             isTyping = false;
         }
 
-
         dialogueUI.ClearChoices();
 
         if (dialogueData.endDialogueLines.Length > dialogueIndex && dialogueData.endDialogueLines[dialogueIndex])
@@ -73,9 +111,9 @@ public class NPC : MonoBehaviour, IInteractable
             return;
         }
 
-        foreach(DialogueChoice dialogueChoice in dialogueData.choices)
+        foreach (DialogueChoice dialogueChoice in dialogueData.choices)
         {
-            if(dialogueChoice.dialogueIndex == dialogueIndex)
+            if (dialogueChoice.dialogueIndex == dialogueIndex)
             {
                 DisplayChoices(dialogueChoice);
                 return;
@@ -90,35 +128,38 @@ public class NPC : MonoBehaviour, IInteractable
             EndDialogue();
         }
     }
+
     IEnumerator TypeLine()
     {
         isTyping = true;
-        dialogueUI.SetDialogueText("");  
+        dialogueUI.SetDialogueText("");
         foreach (char letter in dialogueData.dialogueLines[dialogueIndex])
         {
             dialogueUI.SetDialogueText(dialogueUI.dialogueText.text += letter);
             yield return new WaitForSeconds(dialogueData.typingSpeed);
         }
-        
+
         isTyping = false;
         if (dialogueData.autoProgressLines.Length > dialogueIndex && dialogueData.autoProgressLines[dialogueIndex])
         {
             yield return new WaitForSeconds(dialogueData.autoProgressDelay);
             NextLine();
         }
-    }    void DisplayChoices(DialogueChoice choice)
+    }
+
+    void DisplayChoices(DialogueChoice choice)
     {
-        for(int i = 0; i < choice.choices.Length; i++)
+        for (int i = 0; i < choice.choices.Length; i++)
         {
             int nextIndex = choice.nextDialogueIndexes[i];
-            
+
             // Check if this choice has a pet care action assigned
-            if (choice.petCareOptions != null && i < choice.petCareOptions.Length && 
+            if (choice.petCareOptions != null && i < choice.petCareOptions.Length &&
                 choice.petCareOptions[i] != PetCareOptionType.None)
             {
                 // Convert PetCareOptionType to DialogueController.PetCareAction
                 DialogueController.PetCareAction careAction = DialogueController.PetCareAction.None;
-                
+
                 switch (choice.petCareOptions[i])
                 {
                     case PetCareOptionType.Feed:
@@ -134,18 +175,18 @@ public class NPC : MonoBehaviour, IInteractable
                         careAction = DialogueController.PetCareAction.CareForAll;
                         break;
                 }
-                
+
                 // Get custom care amount if specified
                 int customCareAmount = 0;
                 if (choice.customCareAmount != null && i < choice.customCareAmount.Length)
                 {
                     customCareAmount = choice.customCareAmount[i];
                 }
-                
+
                 // Create a pet care choice button that also progresses the dialogue
                 dialogueUI.CreatePetCareChoiceButton(
-                    choice.choices[i], 
-                    careAction, 
+                    choice.choices[i],
+                    careAction,
                     () => ChooseOption(nextIndex),
                     customCareAmount);
             }
@@ -177,5 +218,4 @@ public class NPC : MonoBehaviour, IInteractable
         dialogueUI.SetDialogueText("");
         dialogueUI.ShowDialogueUI(false);
     }
-    
 }

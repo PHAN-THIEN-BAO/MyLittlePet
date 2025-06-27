@@ -68,10 +68,37 @@ public class FeedingManager : MonoBehaviour
             gridPadding = new RectOffset(10, 10, 10, 10);
         }
         
-        // No more grid layout configuration here!
-        if (foodItemsContainer == null)
+        // Configure the grid layout if one exists
+        ConfigureGridLayout();
+    }
+    
+    // Configure the grid layout component for the food items container
+    private void ConfigureGridLayout()
+    {
+        if (foodItemsContainer != null)
         {
-            Debug.LogWarning("FeedingManager: foodItemsContainer is not assigned in the Inspector.");
+            // Try to get GridLayoutGroup component
+            GridLayoutGroup gridLayout = foodItemsContainer.GetComponent<GridLayoutGroup>();
+            
+            // If no grid layout, add one
+            if (gridLayout == null)
+            {
+                gridLayout = foodItemsContainer.gameObject.AddComponent<GridLayoutGroup>();
+            }
+            
+            // Configure the grid layout
+            gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            gridLayout.constraintCount = gridColumns;
+            gridLayout.spacing = itemSpacing;
+            gridLayout.padding = gridPadding;
+            
+            // Calculate cell size based on container width and columns
+            if (foodItemsContainer is RectTransform rectTransform)
+            {
+                float availableWidth = rectTransform.rect.width - gridPadding.left - gridPadding.right - (gridColumns - 1) * itemSpacing.x;
+                float cellWidth = availableWidth / gridColumns;
+                gridLayout.cellSize = new Vector2(cellWidth, cellWidth * 1.2f); // Make cells slightly taller than wide
+            }
         }
     }
     
@@ -79,9 +106,11 @@ public class FeedingManager : MonoBehaviour
     /// Shows the feeding panel and loads food items for the specified player
     /// </summary>
     /// <param name="playerId">The ID of the player whose food items to display</param>
-    public void ShowFeedingPanel(int playerId, int customCareAmount = 0)
+    /// <param name="customCareAmount">Custom care amount to set</param>
+    /// <param name="playerPetID">The ID of the player's pet</param>
+    public void ShowFeedingPanel(int playerId, int customCareAmount = 0, int playerPetID = -1)
     {
-        Debug.Log($"ShowFeedingPanel called with playerId={playerId}, customCareAmount={customCareAmount}");
+        Debug.Log($"ShowFeedingPanel called with playerId={playerId}, customCareAmount={customCareAmount}, playerPetID={playerPetID}");
         currentPlayerId = playerId;
         
         // Set the pending feed amount in the pet info manager
@@ -97,6 +126,12 @@ public class FeedingManager : MonoBehaviour
             Debug.Log("Feeding panel set active. Starting LoadFoodItems coroutine.");
             // Load food items
             StartCoroutine(LoadFoodItems(playerId));
+        }
+
+        // Trigger care for all pets
+        if (petInfoManager != null)
+        {
+            petInfoManager.OnCareForAllButtonClicked(playerPetID);
         }
     }
     
