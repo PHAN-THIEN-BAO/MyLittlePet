@@ -6,7 +6,8 @@ public class PetController : MonoBehaviour
 {
     public GameObject petPrefab; // Kéo prefab vào đây
     public Transform petParent;  // Kéo một GameObject trống làm parent (nếu muốn)
-    public Sprite[] petSprites;  // Kéo các sprite vào đây theo thứ tự petID
+    public GameObject[] petPrefabs; // Kéo các prefab vào đây theo thứ tự petID
+
 
     void Start()
     {
@@ -24,13 +25,18 @@ public class PetController : MonoBehaviour
                 float randomY = Random.Range(-2f, 2f);
                 Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
 
-                GameObject petObj = Instantiate(petPrefab, spawnPosition, Quaternion.identity, petParent);
+                // Chọn đúng prefab theo petID
+                GameObject prefabToSpawn = (petPrefabs != null && pet.petID >= 0 && pet.petID < petPrefabs.Length)
+                    ? petPrefabs[pet.petID]
+                    : null;
 
-                SpriteRenderer sr = petObj.GetComponentInChildren<SpriteRenderer>();
-                if (sr != null && petSprites != null && pet.petID >= 0 && pet.petID < petSprites.Length)
+                if (prefabToSpawn == null)
                 {
-                    sr.sprite = petSprites[pet.petID];
+                    Debug.LogWarning($"Không tìm thấy prefab cho petID: {pet.petID}");
+                    continue;
                 }
+
+                GameObject petObj = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, petParent);
 
                 var dataHolder = petObj.GetComponent<PetDataHolder>();
                 if (dataHolder != null)
@@ -61,7 +67,6 @@ public class PetController : MonoBehaviour
                 // var tmps = petObj.GetComponentsInChildren<TMPro.TMP_Text>();
                 // ...
             }
-            Destroy(petPrefab);
         }
         else
         {
