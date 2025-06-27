@@ -12,13 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72cf070611116134eb47e2ff2bd794fd, type: 3}
   m_Name: NewNPCDialogue
   m_EditorClassIdentifier: 
-  npcName: Whisker
-  npcPortrait: {fileID: 4723107735738678597, guid: 908d5a18042134dbc8be4514567a8b14, type: 3}
-  dialogueLines:
-  - Meoww~~
-  - Meow...meow
-  - Meoooww~~~~~
-  - Meowwww
+  npcName: 
+  npcPortrait: {fileID: 0}
+  dialogueLines: []
   autoProgressLines: 01000000
   endDialogueLines: 00010101
   autoProgressDelay: 1
@@ -32,5 +28,36 @@ MonoBehaviour:
     nextDialogueIndexes: 010000000200000003000000
     petCareOptions: 010000000300000002000000
     customCareAmount: 
-  petDialogues: []
-  defaultDialogues: []
+  petDialogues:
+  - petID: 0
+    dialogueLines:
+    - bokk
+    - bokk..bokk
+    - bokkk
+    - BOKKKKK
+  - petID: 1
+    dialogueLines:
+    - Meoooww~
+    - Moeww
+    - Mew.....
+    - Moewwwwwww
+  - petID: 2
+    dialogueLines:
+    - Meoooww~
+    - Moeww
+    - Mew.....
+    - Moewwwwwww
+  - petID: 3
+    dialogueLines:
+    - Meoooww~
+    - Moeww
+    - Mew.....
+    - Moewwwwwww
+  - petID: 4
+    dialogueLines:
+    - bokk
+    - bokk..bokk
+    - bokkk
+    - BOKKKKK
+  defaultDialogues:
+  - 

@@ -38,6 +38,13 @@ public class PetController : MonoBehaviour
 
                 GameObject petObj = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, petParent);
 
+                var clickHandler = petObj.GetComponent<PetClickHandler>();
+                if (clickHandler != null)
+                {
+                    // Giả sử bạn có một biến tham chiếu tới PetInfoUIManager trong scene
+                    clickHandler.uiManager = FindObjectOfType<PetInfoUIManager>();
+                }
+
                 var dataHolder = petObj.GetComponent<PetDataHolder>();
                 if (dataHolder != null)
                 {

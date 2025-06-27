@@ -69,38 +69,38 @@ public class FeedingManager : MonoBehaviour
         }
         
         // Configure the grid layout if one exists
-        ConfigureGridLayout();
+        //ConfigureGridLayout();
     }
     
     // Configure the grid layout component for the food items container
-    private void ConfigureGridLayout()
-    {
-        if (foodItemsContainer != null)
-        {
-            // Try to get GridLayoutGroup component
-            GridLayoutGroup gridLayout = foodItemsContainer.GetComponent<GridLayoutGroup>();
+    //private void ConfigureGridLayout()
+    //{
+    //    if (foodItemsContainer != null)
+    //    {
+    //        // Try to get GridLayoutGroup component
+    //        GridLayoutGroup gridLayout = foodItemsContainer.GetComponent<GridLayoutGroup>();
             
-            // If no grid layout, add one
-            if (gridLayout == null)
-            {
-                gridLayout = foodItemsContainer.gameObject.AddComponent<GridLayoutGroup>();
-            }
+    //        // If no grid layout, add one
+    //        if (gridLayout == null)
+    //        {
+    //            gridLayout = foodItemsContainer.gameObject.AddComponent<GridLayoutGroup>();
+    //        }
             
-            // Configure the grid layout
-            gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            gridLayout.constraintCount = gridColumns;
-            gridLayout.spacing = itemSpacing;
-            gridLayout.padding = gridPadding;
+    //        // Configure the grid layout
+    //        gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+    //        gridLayout.constraintCount = gridColumns;
+    //        gridLayout.spacing = itemSpacing;
+    //        gridLayout.padding = gridPadding;
             
-            // Calculate cell size based on container width and columns
-            if (foodItemsContainer is RectTransform rectTransform)
-            {
-                float availableWidth = rectTransform.rect.width - gridPadding.left - gridPadding.right - (gridColumns - 1) * itemSpacing.x;
-                float cellWidth = availableWidth / gridColumns;
-                gridLayout.cellSize = new Vector2(cellWidth, cellWidth * 1.2f); // Make cells slightly taller than wide
-            }
-        }
-    }
+    //        // Calculate cell size based on container width and columns
+    //        if (foodItemsContainer is RectTransform rectTransform)
+    //        {
+    //            float availableWidth = rectTransform.rect.width - gridPadding.left - gridPadding.right - (gridColumns - 1) * itemSpacing.x;
+    //            float cellWidth = availableWidth / gridColumns;
+    //            gridLayout.cellSize = new Vector2(cellWidth, cellWidth * 1.2f); // Make cells slightly taller than wide
+    //        }
+    //    }
+    //}
     
     /// <summary>
     /// Shows the feeding panel and loads food items for the specified player

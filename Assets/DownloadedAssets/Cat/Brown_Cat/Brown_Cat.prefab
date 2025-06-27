@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 1404729580834548644}
   - component: {fileID: 8967183560396788454}
   - component: {fileID: 5072604203477412998}
+  - component: {fileID: -1929851193069792078}
+  - component: {fileID: 5828529816736305477}
+  - component: {fileID: 7702062304879763481}
   m_Layer: 0
   m_Name: Brown_Cat
   m_TagString: Untagged
@@ -79,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2653735917790409300, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -185,7 +188,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 4
 --- !u!114 &5072604203477412998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,3 +203,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 1.7
   changeDirectionTime: 2
+--- !u!114 &-1929851193069792078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434985342421290064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 511c107fe86d75f44bdf87f52868ab44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiManager: {fileID: 0}
+--- !u!114 &5828529816736305477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434985342421290064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b2da0fc2956bc4cbcfa2c281a4abc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  petData:
+    playerPetID: 0
+    playerID: 0
+    petID: 0
+    petCustomName: 
+    level: 0
+    status: 
+--- !u!114 &7702062304879763481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434985342421290064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e8b5db91bc52a14d9b7bbc2a664f4b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueData: {fileID: 11400000, guid: d1cb285466607f74ca0ff1c917cce88e, type: 2}
+  playerPetID: -1
+  petSprites:
+  - {fileID: 7892033834191237442, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
+  - {fileID: 7892033834191237442, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
+  - {fileID: 3463857228526754693, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
+  - {fileID: 4516387037990142955, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
+  - {fileID: -6733779939490682605, guid: 82e7420b2992547469500cc3c4cdefd0, type: 3}

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json;
@@ -22,6 +22,7 @@ public class APIPlayerPet : MonoBehaviour
 
     public static PlayerPet GetPlayerPetById(int playerPetId)
     {
+        Debug.Log("Goi API voi playerPetId: " + playerPetId);
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://localhost:7035/PlayerPet/{playerPetId}");
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
         StreamReader reader = new StreamReader(response.GetResponseStream());

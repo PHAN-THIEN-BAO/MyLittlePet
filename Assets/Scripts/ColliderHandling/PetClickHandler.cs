@@ -14,6 +14,7 @@ public class PetClickHandler : MonoBehaviour
         if (dataHolder != null && uiManager != null)
         {
             // Use the petData to show info
+            PetSelectionManager.CurrentPlayerPetID = dataHolder.petData.playerPetID;
             uiManager.ToggleInfoPanel(dataHolder.petData.playerPetID);
         }
         else

@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 9117862959707286888}
   - component: {fileID: 4442727670167175461}
   - component: {fileID: 3558838399696688066}
+  - component: {fileID: -6634434424695484549}
+  - component: {fileID: 4784399002308692863}
+  - component: {fileID: -7338489238845247030}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -200,3 +203,50 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.14, y: 0.15}
   m_EdgeRadius: 0
+--- !u!114 &-6634434424695484549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8127601577889786839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 511c107fe86d75f44bdf87f52868ab44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiManager: {fileID: 0}
+--- !u!114 &4784399002308692863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8127601577889786839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b2da0fc2956bc4cbcfa2c281a4abc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  petData:
+    playerPetID: 0
+    playerID: 0
+    petID: 0
+    petCustomName: 
+    level: 0
+    status: 
+--- !u!114 &-7338489238845247030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8127601577889786839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e8b5db91bc52a14d9b7bbc2a664f4b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueData: {fileID: 11400000, guid: d1cb285466607f74ca0ff1c917cce88e, type: 2}
+  playerPetID: -1
+  petSprites: []

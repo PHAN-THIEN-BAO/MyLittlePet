@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InteractionDetector : MonoBehaviour
@@ -14,17 +14,34 @@ public class InteractionDetector : MonoBehaviour
     {
         if (context.performed)
         {
-            interactableInRange?.Interact();
+            if (interactableInRange is NPC npc)
+            {
+                npc.playerPetID = PetSelectionManager.CurrentPlayerPetID;
+                npc.Interact();
+            }
+            else
+            {
+                interactableInRange?.Interact();
+            }
         }
     }
 
     // Update is called once per frame
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.TryGetComponent(out IInteractable interactable) && interactable.CanInteract())
+        if (collision.TryGetComponent(out IInteractable interactable) && interactable.CanInteract())
         {
             interactableInRange = interactable;
             InteractionIcon.SetActive(true);
+
+            // Nếu là pet, lưu luôn playerPetID
+            if (interactable is PetClickHandler petHandler)
+            {
+                var dataHolder = petHandler.GetComponent<PetDataHolder>();
+                if (dataHolder != null)
+                    PetSelectionManager.CurrentPlayerPetID = dataHolder.petData.playerPetID;
+            }
+            // Nếu là NPC, có thể giữ nguyên logic cũ
         }
     }
    private void OnTriggerExit2D(Collider2D collision)
@@ -48,5 +65,12 @@ public class InteractionDetector : MonoBehaviour
         {
             interactableInRange.StopInteract();
         }
+    }
+
+    // Assuming you have a reference to the NPC (npcInstance)
+    public void InteractWithNPC(NPC npcInstance)
+    {
+        npcInstance.playerPetID = PetSelectionManager.CurrentPlayerPetID;
+        npcInstance.Interact();
     }
 }
