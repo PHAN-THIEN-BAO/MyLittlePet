@@ -61,12 +61,28 @@ public class LoginPlayer : MonoBehaviour
         catch (System.Net.WebException webEx)
         {
             var response = webEx.Response as System.Net.HttpWebResponse;
-            if (response != null && response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            if (response != null)
             {
-                //handle 404 error
-                errorText.color = Color.red;
-                errorText.text = "User not found (404).";
-                Debug.LogWarning("User not found (404).");
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    //handle 404 error
+                    errorText.color = Color.red;
+                    errorText.text = "User not found (404).";
+                    Debug.LogWarning("User not found (404).");
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    // handle 401 error (banned or unauthorized)
+                    errorText.color = Color.white;
+                    errorText.text = "Your account has been banned.";
+                    Debug.LogWarning("User is banned or unauthorized (401).");
+                }
+                else
+                {
+                    errorText.color = Color.red;
+                    errorText.text = "Server error. Please try again.";
+                    Debug.LogException(webEx);
+                }
             }
             else
             {
@@ -74,14 +90,12 @@ public class LoginPlayer : MonoBehaviour
                 errorText.text = "Server error. Please try again.";
                 Debug.LogException(webEx);
             }
-            
         }
         catch (System.Exception ex)
         {
             errorText.color = Color.red;
             errorText.text = "Login failed.";
             Debug.LogException(ex);
-            
         }
     }
 
