@@ -35,7 +35,9 @@ public class APIPlayerPet : MonoBehaviour
     public static IEnumerator UpdatePlayerPetCoroutine(PlayerPet playerPet, System.Action<bool> callback)
     {
         // The API expects a PUT request to /PlayerPet/{id} with query parameters
-        string url = $"https://localhost:7035/PlayerPet/{playerPet.playerPetID}?petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&level={playerPet.level}&status={Uri.EscapeDataString(playerPet.status ?? "100%25100%25100")}";
+        string safeCustomName = playerPet.petCustomName ?? "";
+        string safeStatus = playerPet.status ?? "100%25100%25100";
+        string url = $"https://localhost:7035/PlayerPet/{playerPet.playerPetID}?petCustomName={Uri.EscapeDataString(safeCustomName)}&level={playerPet.level}&status={Uri.EscapeDataString(safeStatus)}";
         
         UnityWebRequest request = UnityWebRequest.Put(url, "");
         request.downloadHandler = new DownloadHandlerBuffer();
