@@ -7,7 +7,7 @@ public class Farm_action : MonoBehaviour
     public Animator plantAnimator;
 
     [Tooltip("Tên của trigger trong Animator")]
-    public string growthTriggerName = "grow_plant";
+    public string growthTriggerName = "plant";
 
     [Header("Cài đặt Tương tác")]
     [Tooltip("Phím để tương tác với đất")]
