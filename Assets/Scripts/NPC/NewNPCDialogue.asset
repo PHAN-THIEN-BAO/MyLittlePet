@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72cf070611116134eb47e2ff2bd794fd, type: 3}
   m_Name: NewNPCDialogue
   m_EditorClassIdentifier: 
-  npcName: 
-  npcPortrait: {fileID: 0}
+  npcName: Boss
+  npcPortrait: {fileID: 211992399548004518, guid: 61f54ade84e13e249a2939f37a020619, type: 3}
   dialogueLines:
   - Meoooww~
   - Moeww
@@ -23,12 +23,4 @@ MonoBehaviour:
   endDialogueLines: 00010101
   autoProgressDelay: 1
   typingSpeed: 0.05
-  choices:
-  - dialogueIndex: 0
-    choices:
-    - Feed
-    - Sleep
-    - Play
-    nextDialogueIndexes: 010000000200000003000000
-    petCareOptions: 010000000300000002000000
-    customCareAmount: 0a0000000a0000000a000000
+  choices: []
