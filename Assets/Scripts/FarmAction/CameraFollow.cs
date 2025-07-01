@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class FarmCameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target; // The target to follow
 

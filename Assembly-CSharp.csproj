@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\Register\CheckBeginer.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\APIPlayerPet.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShowShopProduct.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\Game.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShopProduct.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PetController.cs" />
     <Compile Include="Assets\Scripts\Object\Shop\Shop.cs" />
@@ -102,8 +103,10 @@
     <Compile Include="Assets\Quarium\Script\FishController.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\Achievement.cs" />
     <Compile Include="Assets\Scripts\InfiniteBackground.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\Camerafollow.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\Collectable.cs" />
     <Compile Include="Assets\Scripts\Object\User\UserProfile.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\OldPlayer.cs" />
     <Compile Include="Assets\Scripts\Interactions\InteractionDetector.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
@@ -125,11 +128,14 @@
     <Compile Include="Assets\Mini_game\Scripts\Character\Character.cs" />
     <Compile Include="Assets\Scripts\NPC\DialogueController.cs" />
     <Compile Include="Assets\Scripts\Validate\ShopValidate.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\TileManager.cs" />
     <Compile Include="Assets\Scripts\Login\LoginPlayer.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\GameManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\APIPlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Validate\ShopPetValidate.cs" />
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
     <Compile Include="Assets\Scripts\Login\Menu.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\Inventory.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PlayerPet.cs" />
     <Compile Include="Assets\Quarium\Script\FishControlMovement.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\PetClickHandler.cs" />
@@ -142,6 +148,7 @@
     <Compile Include="Assets\Scripts\NPC\NPC.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\APIPlayerInventory.cs" />
     <Compile Include="Assets\Scripts\LogOut\LogoutUser.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\Player.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\DownloadedAssets\Fonts\NicoFontPack-v1.0\NicoFontPack-v1.0\Bitmap Fonts\14. CleanCraters\BMFont Text\CleanCraters.fnt" />
