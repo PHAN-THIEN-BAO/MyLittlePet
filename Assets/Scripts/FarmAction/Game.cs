@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class Game
+public class GameManager
+
 {
     
 }
