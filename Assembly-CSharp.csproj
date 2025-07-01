@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\UI\PlayingManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\FakePlayerPet.cs" />
     <Compile Include="Assets\Scripts\UI\PetInfoUIManager.cs" />
+    <Compile Include="Assets\Scripts\Dialogue\DialogueManager.cs" />
     <Compile Include="Assets\Scripts\Register\CheckBeginer.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\APIPlayerPet.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShowShopProduct.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Assets\Scripts\FarmAction\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\FarmAction\OldPlayer.cs" />
     <Compile Include="Assets\Scripts\Interactions\InteractionDetector.cs" />
+    <Compile Include="Assets\Scripts\Dialogue\DialougeTrigger.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
     <Compile Include="Assets\Scripts\FarmAction\Farm_action.cs" />
