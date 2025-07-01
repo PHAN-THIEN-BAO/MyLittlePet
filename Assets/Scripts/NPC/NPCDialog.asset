@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acfb7519db803b243bcec6f70cb93aac, type: 3}
+  m_Name: NPCDialog
+  m_EditorClassIdentifier: 
+  npcName: Boss
+  npcPortrait: {fileID: 211992399548004518, guid: 61f54ade84e13e249a2939f37a020619, type: 3}
+  dialogLines:
+  - Looks like you've messed up our customer's plans again.
+  - I told you to act professionally in this company but it seems you didn't understand
+    at all!
+  - FOR THE LAST TIME, IF THIS HAPPENS AGAIN, YOU'RE FIRED
+  - If you intend to leave, BRING YOUR CAT HOME, ITS ANNOYING!!
+  typingSpeed: 0.05
+  autoProgressLines: 01000000
+  autoProgressDelay: 1.5
