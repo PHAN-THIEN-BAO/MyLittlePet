@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{6DA62911-F9E6-470B-AA76-26493096A62D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -55,12 +56,15 @@
     <UnityVersion>6000.0.40f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
-    <Analyzer Include="C:\Users\OS\Documents\Project\ReactJS\SWP391game\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
+    <Analyzer Include="D:\SWP\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Cutscene\ObjectSceneTransition.cs" />
+    <Compile Include="Assets\Scripts\Cutscene\SceneTransitionManager.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
     <Compile Include="Assets\Scripts\Validate\CurenciesValidation.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCDialogue.cs" />
@@ -77,6 +81,7 @@
     <Compile Include="Assets\Scripts\Object\Shop\Shop.cs" />
     <Compile Include="Assets\Quarium\Script\CameraController.cs" />
     <Compile Include="Assets\Scripts\Object\User\APIUser.cs" />
+    <Compile Include="Assets\Scripts\Cutscene\DialogueLine.cs" />
     <Compile Include="Assets\Scripts\Register\RegisterPlayer.cs" />
     <Compile Include="Assets\Scripts\Login\CkeckLogin.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PlayerInventory.cs" />
@@ -85,11 +90,13 @@
     <Compile Include="Assets\Scripts\Object\PlayerPet\LoadChoosePet.cs" />
     <Compile Include="Assets\Scripts\Object\User\User.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlStateAmin.cs" />
+    <Compile Include="Assets\Scripts\NPC\NPCFollower.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Testing.cs" />
     <Compile Include="Assets\Scripts\UI\FoodItemUI.cs" />
     <Compile Include="Assets\Scripts\UI\FeedingManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\AdopPet.cs" />
     <Compile Include="Assets\Scripts\UI\LoadScenes.cs" />
+    <Compile Include="Assets\Scripts\Cutscene\FinishPoint.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\OpenAdopButton.cs" />
     <Compile Include="Assets\Scripts\Loading\ASyncLoading.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerCollisionHandler.cs" />
@@ -115,11 +122,8 @@
     <Compile Include="Assets\Scripts\FarmAction\Farm_action.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\ChoosePet.cs" />
-<<<<<<< HEAD
     <Compile Include="Assets\Scripts\NPC\NPCDialog.cs" />
-=======
     <Compile Include="Assets\Scripts\FarmAction\Movement.cs" />
->>>>>>> Bao1
     <Compile Include="Assets\Scripts\Object\PlayerPet\PetSelectionManager.cs" />
     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PetDataHolder.cs" />
@@ -137,6 +141,7 @@
     <Compile Include="Assets\Scripts\Validate\ShopValidate.cs" />
     <Compile Include="Assets\Scripts\FarmAction\TileManager.cs" />
     <Compile Include="Assets\Scripts\Login\LoginPlayer.cs" />
+    <Compile Include="Assets\Scripts\Cutscene\SceneController.cs" />
     <Compile Include="Assets\Scripts\FarmAction\GameManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\APIPlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Validate\ShopPetValidate.cs" />
