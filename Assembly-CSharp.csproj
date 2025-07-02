@@ -9,8 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{6DA62911-F9E6-470B-AA76-26493096A62D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -63,8 +62,6 @@
     <Analyzer Include="D:\SWP\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Cutscene\ObjectSceneTransition.cs" />
-    <Compile Include="Assets\Scripts\Cutscene\SceneTransitionManager.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
     <Compile Include="Assets\Scripts\Validate\CurenciesValidation.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCDialogue.cs" />
@@ -127,6 +124,7 @@
     <Compile Include="Assets\Scripts\Object\PlayerPet\PetSelectionManager.cs" />
     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PetDataHolder.cs" />
+    <Compile Include="Assets\Scripts\Cutscene\ObjectSceneTransition.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfoMainScene.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\PlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfomation.cs" />
@@ -142,6 +140,7 @@
     <Compile Include="Assets\Scripts\FarmAction\TileManager.cs" />
     <Compile Include="Assets\Scripts\Login\LoginPlayer.cs" />
     <Compile Include="Assets\Scripts\Cutscene\SceneController.cs" />
+    <Compile Include="Assets\Scripts\Cutscene\SceneTransitionManager.cs" />
     <Compile Include="Assets\Scripts\FarmAction\GameManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\APIPlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Validate\ShopPetValidate.cs" />
