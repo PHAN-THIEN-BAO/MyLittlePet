@@ -4173,6 +4173,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Scenename: SampleScene
+  beginnerSceneName: IntroScene
+  useSceneTransition: 0
+  playerSpawnPosition: {x: 0, y: 0, z: 0}
   usernameField: {fileID: 1723672844}
   passwordField: {fileID: 679525079}
   loginButton: {fileID: 1617638754}

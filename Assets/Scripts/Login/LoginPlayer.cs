@@ -1,16 +1,19 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using UnityEngine.SceneManagement;
-
-
 
 public class LoginPlayer : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] public string Scenename;
+
+    [Header("New Player Scene Settings")]
+    [SerializeField] private string beginnerSceneName = "Tutorial"; // Scene cho người chơi mới
+    [SerializeField] private bool useSceneTransition = true; // Sử dụng transition effect
+    [SerializeField] private Vector3 playerSpawnPosition = Vector3.zero; // Vị trí spawn trong scene mới
+
     [Header("UI References")]
     [SerializeField] public TMP_InputField usernameField;
     [SerializeField] public TMP_InputField passwordField;
@@ -18,7 +21,6 @@ public class LoginPlayer : MonoBehaviour
     [SerializeField] public TextMeshProUGUI errorText;
     [SerializeField] public GameObject currentPanel;
     [SerializeField] public GameObject successPanel;
-
 
     public void LogInPlayer()
     {
@@ -47,9 +49,13 @@ public class LoginPlayer : MonoBehaviour
                 PlayerInfomation.SavePlayerInfo(user);
                 // Log user information for debugging
                 Debug.Log("User info: " + JsonUtility.ToJson(user));
+
                 currentPanel.SetActive(false);
                 successPanel.SetActive(true);
                 Debug.Log("Login successful! User ID: " + user.id);
+
+                // Kiểm tra xem có phải người chơi mới không và chuyển hướng phù hợp
+                StartCoroutine(CheckAndRedirectPlayer(user));
             }
             else
             {
@@ -99,5 +105,75 @@ public class LoginPlayer : MonoBehaviour
         }
     }
 
+    private IEnumerator CheckAndRedirectPlayer(User user)
+    {
+        // Đợi một chút để success panel hiển thị
+        yield return new WaitForSeconds(1.5f);
 
+        try
+        {
+            // Kiểm tra số lượng pet của người chơi
+            int petCount = APIUser.GetPlayerPetCount(user.id.ToString());
+
+            if (petCount == 0)
+            {
+                // Người chơi mới - chuyển đến scene cho người mới
+                Debug.Log($"New player detected. Redirecting to beginner scene: {beginnerSceneName}");
+                RedirectToBeginnerScene();
+            }
+            else
+            {
+                // Người chơi cũ - chuyển đến scene bình thường
+                Debug.Log($"Existing player detected. Redirecting to main scene: {Scenename}");
+                RedirectToMainScene();
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error checking player pet count: " + ex.Message);
+            // Fallback: chuyển đến scene bình thường
+            RedirectToMainScene();
+        }
+    }
+
+    private void RedirectToBeginnerScene()
+    {
+        if (string.IsNullOrEmpty(beginnerSceneName))
+        {
+            Debug.LogError("Beginner scene name is not set! Using main scene instead.");
+            RedirectToMainScene();
+            return;
+        }
+
+        // Sử dụng SceneTransitionManager nếu có và được bật
+        if (useSceneTransition && SceneTransitionManager.Instance != null)
+        {
+            SceneTransitionManager.Instance.TransitionToScene(beginnerSceneName, playerSpawnPosition);
+        }
+        else
+        {
+            // Load scene trực tiếp
+            SceneManager.LoadScene(beginnerSceneName);
+        }
+    }
+
+    private void RedirectToMainScene()
+    {
+        if (string.IsNullOrEmpty(Scenename))
+        {
+            Debug.LogError("Main scene name is not set!");
+            return;
+        }
+
+        // Sử dụng SceneTransitionManager nếu có và được bật
+        if (useSceneTransition && SceneTransitionManager.Instance != null)
+        {
+            SceneTransitionManager.Instance.TransitionToScene(Scenename, Vector3.zero);
+        }
+        else
+        {
+            // Load scene trực tiếp
+            SceneManager.LoadScene(Scenename);
+        }
+    }
 }
