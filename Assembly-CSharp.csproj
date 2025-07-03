@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PlayerInventory.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\APIAchievement.cs" />
+    <Compile Include="Assets\Scripts\Cutscene\PlayableDirectorManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\LoadChoosePet.cs" />
     <Compile Include="Assets\Scripts\Object\User\User.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlStateAmin.cs" />
@@ -92,7 +93,6 @@
     <Compile Include="Assets\Scripts\UI\FoodItemUI.cs" />
     <Compile Include="Assets\Scripts\UI\FeedingManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\AdopPet.cs" />
-    <Compile Include="Assets\Scripts\Playable\PlayableOnceController.cs" />
     <Compile Include="Assets\Scripts\UI\LoadScenes.cs" />
     <Compile Include="Assets\Scripts\Cutscene\FinishPoint.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\OpenAdopButton.cs" />
@@ -118,7 +118,6 @@
     <Compile Include="Assets\Scripts\Dialogue\DialougeTrigger.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerPositionLoader.cs" />
     <Compile Include="Assets\Scripts\FarmAction\Farm_action.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\ChoosePet.cs" />
@@ -128,6 +127,7 @@
     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PetDataHolder.cs" />
     <Compile Include="Assets\Scripts\Cutscene\ObjectSceneTransition.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerSpawnManager.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfoMainScene.cs" />
     <Compile Include="Assets\Scripts\UI\UIMuteAudio.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\PlayerAchievement.cs" />
@@ -157,6 +157,7 @@
     <Compile Include="Assets\Scripts\NPC\npc1.cs" />
     <Compile Include="Assets\Scripts\Object\Pet\APIPet.cs" />
     <Compile Include="Assets\Scripts\UI\UIStoreOptionManager.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerPositionManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\UI\ToyItemUI.cs" />
     <Compile Include="Assets\Xander Develops\Ultimate UI Toolkit\CurvedText\Scripts\CurvedText.cs" />

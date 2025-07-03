@@ -2063,8 +2063,9 @@ GameObject:
   - component: {fileID: 404698967}
   - component: {fileID: 404698966}
   - component: {fileID: 404698965}
+  - component: {fileID: 404698968}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2180,12 +2181,30 @@ Transform:
   m_GameObject: {fileID: 404698964}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.42, y: 1.56, z: -0.011449899}
+  m_LocalPosition: {x: -8.46, y: 1.57, z: -0.011449899}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &404698968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404698964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f934087b10565442b4142d471a72ea6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DialogData: {fileID: 11400000, guid: 3e0bb6fbe9393b140a504f553c2e46c4, type: 2}
+  dialogPanel: {fileID: 634734059}
+  dialogText: {fileID: 605754423}
+  nameText: {fileID: 469632601}
+  portraitImage: {fileID: 619441833}
+  targetToDestroy: {fileID: 0}
 --- !u!1 &408920015
 GameObject:
   m_ObjectHideFlags: 0
@@ -15397,11 +15416,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4271493154967609479, guid: f5bed27ee231dc241a705adad358c953, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.285
+      value: 0.46
       objectReference: {fileID: 0}
     - target: {fileID: 4271493154967609479, guid: f5bed27ee231dc241a705adad358c953, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.895
+      value: 3.82
       objectReference: {fileID: 0}
     - target: {fileID: 4271493154967609479, guid: f5bed27ee231dc241a705adad358c953, type: 3}
       propertyPath: m_LocalPosition.z

@@ -17240,7 +17240,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 429724869}
-  - component: {fileID: 429724868}
+  - component: {fileID: 429724870}
   m_Layer: 0
   m_Name: LoadManager
   m_TagString: Untagged
@@ -17248,23 +17248,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &429724868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429724867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4dcbd2f1b23603b4bb70ddf24c2caca6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loadOnStart: 1
-  specificSavePointId: 
-  loadDelay: 0.1
-  defaultPosition: {x: 0, y: 0, z: 0}
-  useDefaultIfNoSave: 1
 --- !u!4 &429724869
 Transform:
   m_ObjectHideFlags: 0
@@ -17280,6 +17263,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &429724870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429724867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e371d5f0d483b41b388956daa74b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTag: Player
+  defaultSpawnPoint: {fileID: 0}
+  autoLoadOnStart: 1
+  preferredSavePointId: 
+  loadLatestSavePoint: 1
+  initialLoadDelay: 0.05
+  reapplyDelay: 10
+  forceReapplyPosition: 1
+  enableDebugLogs: 1
 --- !u!1 &430189544
 GameObject:
   m_ObjectHideFlags: 0
@@ -70812,7 +70816,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -480, y: -270.0818}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1425758508
@@ -90596,13 +90600,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a8d2a03caf2fe44f951795eadd079e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveOnTriggerEnter: 1
-  loadOnStart: 1
-  playerTag: Player
-  savePlayerPosition: 1
-  loadPlayerPosition: 1
-  defaultSpawnPosition: {x: 0, y: 0, z: 0}
-  showDebugLogs: 1
 --- !u!61 &1817675236
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -90694,7 +90691,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 5280097977772955952, guid: 7a2d57a798c3aaf4fa6bf1f65661e474, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -90713,8 +90710,8 @@ Transform:
   m_GameObject: {fileID: 1817675234}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -31.8, y: 18.8, z: 0}
-  m_LocalScale: {x: 6.957779, y: 6.957779, z: 6.957779}
+  m_LocalPosition: {x: -32.35, y: 19.1119, z: 0}
+  m_LocalScale: {x: 4.2602477, y: 4.0085196, z: 6.957779}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -90732,11 +90729,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   savePointId: 
-  saveOnEnter: 1
-  saveOnExit: 0
-  showDebugMessage: 1
-  saveEffectPrefab: {fileID: 0}
+  autoGenerateId: 1
+  saveOnTriggerEnter: 1
+  saveOnTriggerExit: 0
+  saveIndicator: {fileID: 0}
+  indicatorDisplayTime: 2
+  saveMessage: Position Saved!
+  audioSource: {fileID: 0}
   saveSound: {fileID: 0}
+  enableDebugLogs: 1
 --- !u!1 &1826690875
 GameObject:
   m_ObjectHideFlags: 0
@@ -106046,13 +106047,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2111798773}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8af1c18971024054bbf40498aa2ce938, type: 3}
+  m_Script: {fileID: 11500000, guid: bef3bcf9f328a9d4381eee0c787a94aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playableDirector: {fileID: 2111798774}
-  playableId: 
+  cutsceneId: 
   autoPlayOnStart: 1
-  triggerOnPlayerEnter: 0
+  disableAfterPlayed: 1
+  onlyDisablePlayableDirector: 1
 --- !u!1 &2115010776
 GameObject:
   m_ObjectHideFlags: 0

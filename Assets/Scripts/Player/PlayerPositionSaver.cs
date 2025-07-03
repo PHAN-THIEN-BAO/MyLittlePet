@@ -1,167 +1,208 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Component để save/load vị trí player thông qua trigger collider 2D
+/// </summary>
 public class PlayerPositionSaver : MonoBehaviour
 {
-    [Header("Trigger Settings")]
+    [Header("Save Position Settings")]
     [SerializeField] private string savePointId; // ID duy nhất cho save point này
-    [SerializeField] private bool saveOnEnter = true; // Lưu khi player vào trigger
-    [SerializeField] private bool saveOnExit = false; // Lưu khi player rời trigger
-    [SerializeField] private bool showDebugMessage = true;
-    
-    [Header("Visual Feedback (Optional)")]
-    [SerializeField] private GameObject saveEffectPrefab; // Effect khi lưu
-    [SerializeField] private AudioClip saveSound; // Âm thanh khi lưu
-    
-    private AudioSource audioSource;
-    
-    void Start()
+    [SerializeField] private bool autoGenerateId = true; // Tự động tạo ID
+    [SerializeField] private bool saveOnTriggerEnter = true; // Save khi player vào trigger
+    [SerializeField] private bool saveOnTriggerExit = false; // Save khi player rời trigger
+
+    [Header("Visual Feedback")]
+    [SerializeField] private GameObject saveIndicator; // UI hiển thị khi save
+    [SerializeField] private float indicatorDisplayTime = 2f; // Thời gian hiển thị indicator
+    [SerializeField] private string saveMessage = "Position Saved!";
+
+    [Header("Audio Feedback")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip saveSound;
+
+    [Header("Debug")]
+    [SerializeField] private bool enableDebugLogs = true;
+
+    private Collider2D triggerCollider;
+
+    private void Awake()
     {
-        // Tạo ID tự động nếu chưa có
+        // Lấy collider component
+        triggerCollider = GetComponent<Collider2D>();
+        if (triggerCollider == null)
+        {
+            Debug.LogError($"PlayerPositionSaver on {gameObject.name} requires a Collider2D component!");
+            enabled = false;
+            return;
+        }
+
+        // Đảm bảo collider là trigger
+        if (!triggerCollider.isTrigger)
+        {
+            triggerCollider.isTrigger = true;
+            if (enableDebugLogs)
+                Debug.LogWarning($"Collider2D on {gameObject.name} was not set as trigger. Automatically set to trigger.");
+        }
+
+        // Tự động tạo ID nếu cần
+        if (autoGenerateId && string.IsNullOrEmpty(savePointId))
+        {
+            savePointId = gameObject.scene.name + "_" + gameObject.name + "_" + transform.GetSiblingIndex();
+        }
+
+        // Validate save point ID
         if (string.IsNullOrEmpty(savePointId))
         {
-            savePointId = gameObject.name + "_" + transform.position.ToString();
+            Debug.LogError($"PlayerPositionSaver on {gameObject.name} requires a valid savePointId!");
+            enabled = false;
         }
-        
-        // Lấy AudioSource component
-        audioSource = GetComponent<AudioSource>();
     }
-    
-    void OnTriggerEnter2D(Collider2D other)
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (saveOnEnter && other.CompareTag("Player"))
+        if (saveOnTriggerEnter && other.CompareTag("Player"))
         {
             SavePlayerPosition(other.transform);
         }
     }
-    
-    void OnTriggerExit2D(Collider2D other)
+
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (saveOnExit && other.CompareTag("Player"))
+        if (saveOnTriggerExit && other.CompareTag("Player"))
         {
             SavePlayerPosition(other.transform);
         }
     }
-    
+
     /// <summary>
-    /// Lưu vị trí người chơi
+    /// Save vị trí player hiện tại
     /// </summary>
-    /// <param name="playerTransform">Transform của player</param>
-    private void SavePlayerPosition(Transform playerTransform)
+    public void SavePlayerPosition(Transform playerTransform)
     {
-        Vector3 playerPosition = playerTransform.position;
-        
-        // Lưu vị trí vào PlayerPrefs với key duy nhất
-        string positionKey = "PlayerPosition_" + savePointId;
-        string positionData = JsonUtility.ToJson(new SerializableVector3(playerPosition));
-        PlayerPrefs.SetString(positionKey, positionData);
-        
-        // Lưu vị trí chung cho toàn bộ game
-        PlayerPrefs.SetString("LastPlayerPosition", positionData);
-        PlayerPrefs.SetString("LastSavePointId", savePointId);
-        PlayerPrefs.Save();
-        
-        if (showDebugMessage)
+        if (playerTransform == null)
         {
-            Debug.Log($"Đã lưu vị trí player tại {savePointId}: {playerPosition}");
+            Debug.LogError("Cannot save position: Player transform is null!");
+            return;
         }
-        
-        // Hiệu ứng và âm thanh
-        PlaySaveEffects(playerPosition);
+
+        // Lấy thông tin user hiện tại
+        User currentUser = PlayerInfomation.LoadPlayerInfo();
+        if (currentUser == null)
+        {
+            Debug.LogWarning("No user information found. Cannot save player position.");
+            return;
+        }
+
+        string userId = currentUser.id.ToString();
+        Vector3 position = playerTransform.position;
+
+        // Save position
+        PlayerPositionManager.SavePlayerPosition(userId, savePointId, position);
+
+        // Visual feedback
+        ShowSaveIndicator();
+
+        // Audio feedback
+        PlaySaveSound();
+
+        if (enableDebugLogs)
+        {
+            Debug.Log($"Saved player position for user {userId} at save point {savePointId}: {position}");
+        }
     }
-    
+
     /// <summary>
-    /// Phát hiệu ứng khi lưu
+    /// Load vị trí player đã save (nếu có)
     /// </summary>
-    private void PlaySaveEffects(Vector3 position)
+    public bool LoadPlayerPosition(Transform playerTransform)
     {
-        // Hiệu ứng visual
-        if (saveEffectPrefab != null)
+        if (playerTransform == null)
         {
-            GameObject effect = Instantiate(saveEffectPrefab, position, Quaternion.identity);
-            // Tự động xóa effect sau 2 giây
-            Destroy(effect, 2f);
+            Debug.LogError("Cannot load position: Player transform is null!");
+            return false;
         }
-        
-        // Âm thanh
-        if (saveSound != null && audioSource != null)
+
+        // Lấy thông tin user hiện tại
+        User currentUser = PlayerInfomation.LoadPlayerInfo();
+        if (currentUser == null)
+        {
+            Debug.LogWarning("No user information found. Cannot load player position.");
+            return false;
+        }
+
+        string userId = currentUser.id.ToString();
+
+        // Kiểm tra xem có saved position không
+        if (PlayerPositionManager.HasSavedPosition(userId, savePointId))
+        {
+            Vector3 savedPosition = PlayerPositionManager.LoadPlayerPosition(userId, savePointId);
+            playerTransform.position = savedPosition;
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"Loaded player position for user {userId} from save point {savePointId}: {savedPosition}");
+            }
+
+            return true;
+        }
+        else
+        {
+            if (enableDebugLogs)
+            {
+                Debug.Log($"No saved position found for user {userId} at save point {savePointId}");
+            }
+
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Hiển thị indicator khi save
+    /// </summary>
+    private void ShowSaveIndicator()
+    {
+        if (saveIndicator != null)
+        {
+            saveIndicator.SetActive(true);
+
+            // Tìm text component và cập nhật message
+            var textComp = saveIndicator.GetComponentInChildren<UnityEngine.UI.Text>();
+            if (textComp != null) textComp.text = saveMessage;
+
+            var tmpComp = saveIndicator.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            if (tmpComp != null) tmpComp.text = saveMessage;
+
+            // Tự động ẩn sau một thời gian
+            Invoke(nameof(HideSaveIndicator), indicatorDisplayTime);
+        }
+    }
+
+    /// <summary>
+    /// Ẩn save indicator
+    /// </summary>
+    private void HideSaveIndicator()
+    {
+        if (saveIndicator != null)
+        {
+            saveIndicator.SetActive(false);
+        }
+    }
+
+    /// <summary>
+    /// Phát âm thanh khi save
+    /// </summary>
+    private void PlaySaveSound()
+    {
+        if (audioSource != null && saveSound != null)
         {
             audioSource.PlayOneShot(saveSound);
         }
     }
-    
+
     /// <summary>
-    /// Load vị trí đã lưu của player
+    /// Public method để save position từ script khác
     /// </summary>
-    /// <param name="savePointId">ID của save point (null để lấy vị trí cuối cùng)</param>
-    /// <returns>Vị trí đã lưu hoặc Vector3.zero nếu không có</returns>
-    public static Vector3 LoadPlayerPosition(string savePointId = null)
-    {
-        string positionKey;
-        
-        if (string.IsNullOrEmpty(savePointId))
-        {
-            // Lấy vị trí cuối cùng
-            positionKey = "LastPlayerPosition";
-        }
-        else
-        {
-            // Lấy vị trí của save point cụ thể
-            positionKey = "PlayerPosition_" + savePointId;
-        }
-        
-        if (PlayerPrefs.HasKey(positionKey))
-        {
-            string positionData = PlayerPrefs.GetString(positionKey);
-            SerializableVector3 savedPosition = JsonUtility.FromJson<SerializableVector3>(positionData);
-            return savedPosition.ToVector3();
-        }
-        
-        return Vector3.zero;
-    }
-    
-    /// <summary>
-    /// Lấy ID của save point cuối cùng
-    /// </summary>
-    public static string GetLastSavePointId()
-    {
-        return PlayerPrefs.GetString("LastSavePointId", "");
-    }
-    
-    /// <summary>
-    /// Kiểm tra xem có vị trí đã lưu không
-    /// </summary>
-    public static bool HasSavedPosition(string savePointId = null)
-    {
-        string positionKey = string.IsNullOrEmpty(savePointId) ? 
-            "LastPlayerPosition" : 
-            "PlayerPosition_" + savePointId;
-        
-        return PlayerPrefs.HasKey(positionKey);
-    }
-    
-    /// <summary>
-    /// Xóa vị trí đã lưu
-    /// </summary>
-    public static void ClearSavedPosition(string savePointId = null)
-    {
-        if (string.IsNullOrEmpty(savePointId))
-        {
-            // Xóa tất cả
-            PlayerPrefs.DeleteKey("LastPlayerPosition");
-            PlayerPrefs.DeleteKey("LastSavePointId");
-        }
-        else
-        {
-            // Xóa save point cụ thể
-            PlayerPrefs.DeleteKey("PlayerPosition_" + savePointId);
-        }
-        PlayerPrefs.Save();
-    }
-    
-    /// <summary>
-    /// Lưu vị trí thủ công từ bên ngoài
-    /// </summary>
-    public void ManualSave()
+    public void ManualSavePosition()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
@@ -170,25 +211,64 @@ public class PlayerPositionSaver : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Không tìm thấy GameObject với tag 'Player'");
+            Debug.LogError("Cannot find player GameObject with tag 'Player'!");
         }
     }
-}
 
-[System.Serializable]
-public class SerializableVector3
-{
-    public float x, y, z;
-    
-    public SerializableVector3(Vector3 vector)
+    /// <summary>
+    /// Public method để load position từ script khác
+    /// </summary>
+    public bool ManualLoadPosition()
     {
-        x = vector.x;
-        y = vector.y;
-        z = vector.z;
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            return LoadPlayerPosition(player.transform);
+        }
+        else
+        {
+            Debug.LogError("Cannot find player GameObject with tag 'Player'!");
+            return false;
+        }
     }
-    
-    public Vector3 ToVector3()
+
+    /// <summary>
+    /// Reset saved position cho save point này
+    /// </summary>
+    public void ResetSavedPosition()
     {
-        return new Vector3(x, y, z);
+        User currentUser = PlayerInfomation.LoadPlayerInfo();
+        if (currentUser != null)
+        {
+            string userId = currentUser.id.ToString();
+            PlayerPositionManager.ClearSavedPosition(userId, savePointId);
+
+            if (enableDebugLogs)
+            {
+                Debug.Log($"Reset saved position for user {userId} at save point {savePointId}");
+            }
+        }
+    }
+
+    // Gizmos để visualize save point trong editor
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawIcon(transform.position, "SaveIcon", true);
+
+        if (triggerCollider != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
+
+            if (triggerCollider is BoxCollider2D box)
+            {
+                Gizmos.DrawWireCube(box.offset, box.size);
+            }
+            else if (triggerCollider is CircleCollider2D circle)
+            {
+                Gizmos.DrawWireSphere(circle.offset, circle.radius);
+            }
+        }
     }
 }
