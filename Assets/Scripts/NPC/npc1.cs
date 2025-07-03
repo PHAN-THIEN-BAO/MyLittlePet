@@ -10,6 +10,7 @@ public class npc1 : MonoBehaviour, IInteractable
     public GameObject dialogPanel;
     public TMPro.TMP_Text dialogText, nameText;
     public Image portraitImage;
+    public GameObject targetToDestroy; // GameObject sẽ bị phá hủy khi hội thoại kết thúc
 
     private int dialogIndex;
     private bool isTyping, isDialogActive;
@@ -96,6 +97,11 @@ public class npc1 : MonoBehaviour, IInteractable
         dialogText.SetText("");
         dialogPanel.SetActive(false);
 
+        // Phá hủy target GameObject nếu nó tồn tại
+        if (targetToDestroy != null)
+        {
+            Destroy(targetToDestroy);
+        }
     }
     public void StopInteract()
     {
