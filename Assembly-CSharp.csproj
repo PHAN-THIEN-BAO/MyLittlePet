@@ -59,15 +59,18 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
-    <Analyzer Include="D:\SWP\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
+    <Analyzer Include="D:\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scenes\TestScene\PhayerInfomation.cs" />
+    <Compile Include="Assets\FULL MINIGAME VH\Scripts VH\playerconllision.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlStateAmin.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Testing.cs" />
     <Compile Include="Assets\Scripts\UI\LoadScenes.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerCollisionHandler.cs" />
+    <Compile Include="Assets\FULL MINIGAME VH\Scripts VH\Enemy.cs" />
+    <Compile Include="Assets\FULL MINIGAME VH\Scripts VH\AudioManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIManagerWaring.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlMovement.cs" />
     <Compile Include="Assets\Scripts\UI\UISetting.cs" />
@@ -77,12 +80,18 @@
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
+    <Compile Include="Assets\FULL MINIGAME VH\Scripts VH\collision.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Enemy\EnemyRandomMovement.cs" />
+    <Compile Include="Assets\FULL MINIGAME VH\Scripts VH\PlayerController.cs" />
+    <Compile Include="Assets\FULL MINIGAME VH\Scripts VH\GameManager.cs" />
     <Compile Include="Assets\Scripts\UI\UIInventory.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Character.cs" />
+    <Compile Include="Assets\Scripts\Login\LoginPlayer.cs" />
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
     <Compile Include="Assets\Scripts\Login\Menu.cs" />
+    <Compile Include="Assets\FULL MINIGAME VH\Scripts VH\Menu.cs" />
     <Compile Include="Assets\Scripts\UI\UIStoreOptionManager.cs" />
+    <Compile Include="Assets\FULL MINIGAME VH\Scripts VH\PlayerCollision.cs" />
     <Compile Include="Assets\Scripts\UI\UIManager.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\RandomMovement.cs" />
   </ItemGroup>
