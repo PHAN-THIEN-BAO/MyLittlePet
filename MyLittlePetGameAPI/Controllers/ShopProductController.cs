@@ -365,5 +365,145 @@ namespace MyLittlePetGameAPI.Controllers
             
             return NoContent();
         }
+        
+        // PUT: ShopProduct/{id}/Quantity - Update product quantity
+        [HttpPut("{id}/Quantity")]
+        public IActionResult UpdateProductQuantity(int id, [FromBody] int quantity)
+        {
+            try
+            {
+                var product = _context.ShopProducts.Find(id);
+                
+                if (product == null)
+                {
+                    return NotFound("Product not found");
+                }
+                
+                if (quantity < 0)
+                {
+                    return BadRequest("Quantity cannot be negative");
+                }
+                
+                product.Quantity = quantity;
+                _context.SaveChanges();
+                
+                return Ok(new { message = "Product quantity updated successfully", newQuantity = quantity });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
+        // GET: ShopProduct/InStock - Get products that are in stock (quantity > 0)
+        [HttpGet("InStock")]
+        public ActionResult<IEnumerable<object>> GetProductsInStock()
+        {
+            try
+            {
+                var products = _context.ShopProducts
+                    .Include(p => p.Shop)
+                    .Include(p => p.Admin)
+                    .Include(p => p.Pet)
+                    .Where(p => p.Quantity > 0 && p.Status == 1)
+                    .Select(p => new
+                    {
+                        ShopProductId = p.ShopProductId,
+                        Name = p.Name,
+                        Type = p.Type,
+                        Description = p.Description,
+                        ImageUrl = p.ImageUrl,
+                        Price = p.Price,
+                        CurrencyType = p.CurrencyType,
+                        Quantity = p.Quantity,
+                        Status = p.Status,
+                        ShopName = p.Shop.Name,
+                        PetInfo = p.Pet == null ? null : new
+                        {
+                            PetType = p.Pet.PetType,
+                            PetDefaultName = p.Pet.PetDefaultName
+                        }
+                    })
+                    .OrderBy(p => p.Name)
+                    .ToList();
+                
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
+        // GET: ShopProduct/OutOfStock - Get products that are out of stock (quantity = 0)
+        [HttpGet("OutOfStock")]
+        public ActionResult<IEnumerable<object>> GetProductsOutOfStock()
+        {
+            try
+            {
+                var products = _context.ShopProducts
+                    .Include(p => p.Shop)
+                    .Include(p => p.Admin)
+                    .Where(p => p.Quantity == 0 || p.Quantity == null)
+                    .Select(p => new
+                    {
+                        ShopProductId = p.ShopProductId,
+                        Name = p.Name,
+                        Type = p.Type,
+                        Price = p.Price,
+                        CurrencyType = p.CurrencyType,
+                        Quantity = p.Quantity,
+                        Status = p.Status,
+                        ShopName = p.Shop.Name
+                    })
+                    .OrderBy(p => p.Name)
+                    .ToList();
+                
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
+        // POST: ShopProduct/{id}/Purchase - Handle product purchase (decreases quantity)
+        [HttpPost("{id}/Purchase")]
+        public IActionResult PurchaseProduct(int id, [FromBody] int quantityToPurchase = 1)
+        {
+            try
+            {
+                var product = _context.ShopProducts.Find(id);
+                
+                if (product == null)
+                {
+                    return NotFound("Product not found");
+                }
+                
+                if (product.Status != 1)
+                {
+                    return BadRequest("Product is not available for purchase");
+                }
+                
+                if (product.Quantity == null || product.Quantity < quantityToPurchase)
+                {
+                    return BadRequest("Insufficient stock available");
+                }
+                
+                product.Quantity -= quantityToPurchase;
+                _context.SaveChanges();
+                
+                return Ok(new 
+                { 
+                    message = "Product purchased successfully", 
+                    quantityPurchased = quantityToPurchase,
+                    remainingStock = product.Quantity 
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

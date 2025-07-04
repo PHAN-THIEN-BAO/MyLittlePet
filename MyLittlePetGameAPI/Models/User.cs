@@ -27,6 +27,12 @@ public partial class User
 
     public DateTime? JoinDate { get; set; }
 
+    public string? BannedReason { get; set; }
+
+    public float? Position { get; set; }
+
+    public int? Exp { get; set; }
+
     public virtual ICollection<CareHistory> CareHistories { get; set; } = new List<CareHistory>();
 
     public virtual ICollection<GameRecord> GameRecords { get; set; } = new List<GameRecord>();

@@ -18,4 +18,6 @@ public partial class Pet
     public virtual User? Admin { get; set; }
 
     public virtual ICollection<PlayerPet> PlayerPets { get; set; } = new List<PlayerPet>();
+
+    public virtual ICollection<ShopProduct> ShopProducts { get; set; } = new List<ShopProduct>();
 }

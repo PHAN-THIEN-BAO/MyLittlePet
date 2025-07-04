@@ -343,5 +343,113 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        
+        // PUT: PlayerPet/{id}/Experience - Update pet experience
+        [HttpPut("{id}/Experience")]
+        public IActionResult UpdatePetExperience(int id, [FromBody] int exp)
+        {
+            try
+            {
+                var playerPet = _context.PlayerPets.Find(id);
+                
+                if (playerPet == null)
+                {
+                    return NotFound("Pet not found");
+                }
+                
+                playerPet.Exp = exp;
+                playerPet.LastStatusUpdate = DateTime.Now;
+                _context.SaveChanges();
+                
+                return Ok(new { message = "Pet experience updated successfully", newExp = exp });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
+        // PUT: PlayerPet/{id}/LevelUp - Level up a pet (increases level and can modify EXP)
+        [HttpPut("{id}/LevelUp")]
+        public IActionResult LevelUpPet(int id, [FromBody] object? requestBody = null)
+        {
+            try
+            {
+                var playerPet = _context.PlayerPets.Find(id);
+                
+                if (playerPet == null)
+                {
+                    return NotFound("Pet not found");
+                }
+                
+                // Level up logic
+                var currentLevel = playerPet.Level ?? 1;
+                var newLevel = currentLevel + 1;
+                
+                // Reset or adjust EXP for new level (optional logic)
+                var currentExp = playerPet.Exp ?? 0;
+                var expRequiredForLevel = newLevel * 100; // Example: each level requires 100 more EXP
+                var remainingExp = Math.Max(0, currentExp - expRequiredForLevel);
+                
+                playerPet.Level = newLevel;
+                playerPet.Exp = remainingExp;
+                playerPet.LastStatusUpdate = DateTime.Now;
+                _context.SaveChanges();
+                
+                return Ok(new 
+                { 
+                    message = "Pet leveled up successfully", 
+                    newLevel = newLevel,
+                    remainingExp = remainingExp
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        
+        // GET: PlayerPet/{id}/Progress - Get pet level and experience progress
+        [HttpGet("{id}/Progress")]
+        public ActionResult GetPetProgress(int id)
+        {
+            try
+            {
+                var playerPet = _context.PlayerPets
+                    .Include(pp => pp.Pet)
+                    .Include(pp => pp.Player)
+                    .FirstOrDefault(pp => pp.PlayerPetId == id);
+                
+                if (playerPet == null)
+                {
+                    return NotFound("Pet not found");
+                }
+                
+                var currentLevel = playerPet.Level ?? 1;
+                var currentExp = playerPet.Exp ?? 0;
+                var expRequiredForNextLevel = (currentLevel + 1) * 100; // Example calculation
+                var expProgress = Math.Min(100, (double)currentExp / expRequiredForNextLevel * 100);
+                
+                var progress = new
+                {
+                    PlayerPetId = playerPet.PlayerPetId,
+                    PetName = playerPet.PetCustomName ?? playerPet.Pet.PetDefaultName,
+                    CurrentLevel = currentLevel,
+                    CurrentExperience = currentExp,
+                    ExperienceRequiredForNextLevel = expRequiredForNextLevel,
+                    ExperienceProgress = Math.Round(expProgress, 2),
+                    Owner = playerPet.Player.UserName,
+                    PetType = playerPet.Pet.PetType,
+                    Status = playerPet.Status,
+                    LastStatusUpdate = playerPet.LastStatusUpdate
+                };
+                
+                return Ok(progress);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

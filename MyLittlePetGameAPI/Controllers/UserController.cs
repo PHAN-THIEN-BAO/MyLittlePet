@@ -268,5 +268,117 @@ namespace MyLittlePetGameAPI.Controllers
             
             return NoContent();
         }
+        
+        // PUT: User/{id}/Experience - Update user experience
+        [HttpPut("{id}/Experience")]
+        public IActionResult UpdateUserExperience(int id, [FromBody] int exp)
+        {
+            var user = _context.Users.Find(id);
+            
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            
+            user.Exp = exp;
+            _context.SaveChanges();
+            
+            return Ok(new { message = "Experience updated successfully", newExp = exp });
+        }
+        
+        // PUT: User/{id}/Position - Update user position
+        [HttpPut("{id}/Position")]
+        public IActionResult UpdateUserPosition(int id, [FromBody] float position)
+        {
+            var user = _context.Users.Find(id);
+            
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            
+            user.Position = position;
+            _context.SaveChanges();
+            
+            return Ok(new { message = "Position updated successfully", newPosition = position });
+        }
+        
+        // PUT: User/{id}/Ban - Ban a user
+        [HttpPut("{id}/Ban")]
+        public IActionResult BanUser(int id, [FromBody] string reason)
+        {
+            var user = _context.Users.Find(id);
+            
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            
+            user.UserStatus = "BANNED";
+            user.BannedReason = reason;
+            _context.SaveChanges();
+            
+            return Ok(new { message = "User banned successfully", reason = reason });
+        }
+        
+        // PUT: User/{id}/Unban - Unban a user
+        [HttpPut("{id}/Unban")]
+        public IActionResult UnbanUser(int id)
+        {
+            var user = _context.Users.Find(id);
+            
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            
+            user.UserStatus = "ACTIVE";
+            user.BannedReason = null;
+            _context.SaveChanges();
+            
+            return Ok(new { message = "User unbanned successfully" });
+        }
+        
+        // GET: User/{id}/Stats - Get comprehensive user statistics
+        [HttpGet("{id}/Stats")]
+        public ActionResult GetUserStats(int id)
+        {
+            var user = _context.Users.Find(id);
+            
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            
+            var petCount = _context.PlayerPets.Count(pp => pp.PlayerId == id);
+            var inventoryCount = _context.PlayerInventories.Sum(pi => pi.Quantity ?? 0);
+            var achievementCount = _context.PlayerAchievements.Count(pa => pa.PlayerId == id);
+            var collectedAchievements = _context.PlayerAchievements.Count(pa => pa.PlayerId == id && pa.IsCollected == true);
+            var totalGameScore = _context.GameRecords.Where(gr => gr.PlayerId == id).Sum(gr => gr.Score ?? 0);
+            var careActivities = _context.CareHistories.Count(ch => ch.PlayerId == id);
+            
+            var stats = new
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                Level = user.Level,
+                Experience = user.Exp,
+                Position = user.Position,
+                Coins = user.Coin,
+                Diamonds = user.Diamond,
+                Gems = user.Gem,
+                PetCount = petCount,
+                InventoryItemCount = inventoryCount,
+                TotalAchievements = achievementCount,
+                CollectedAchievements = collectedAchievements,
+                TotalGameScore = totalGameScore,
+                CareActivitiesPerformed = careActivities,
+                JoinDate = user.JoinDate,
+                Status = user.UserStatus,
+                BannedReason = user.BannedReason
+            };
+            
+            return Ok(stats);
+        }
     }
 }

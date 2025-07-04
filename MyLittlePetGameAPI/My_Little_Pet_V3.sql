@@ -9,10 +9,10 @@ Create database My_Little_Pet_V3;
     WHERE i.ImageUrl LIKE '%drive.google.com/file/d/%';
 END"  */
 --4 CHAY PHAN CON LAI
-
+select * from ShopProduct
 --GO
-
---Drop database My_Little_Pet_V3;
+select * from [User]
+Drop database My_Little_Pet_V3;
 CREATE TABLE [User] (
     ID INT PRIMARY KEY  IDENTITY(1,1),
 	Role NVARCHAR(50) NOT NULL,
@@ -20,41 +20,16 @@ CREATE TABLE [User] (
     Email NVARCHAR(100) UNIQUE,
     Password NVARCHAR(100) NOT NULL,
 	UserStatus NVARCHAR(20) DEFAULT 'ACTIVE' CHECK (UserStatus IN ('ACTIVE', 'INACTIVE', 'BANNED', 'ONLINE')),  
-
 	Level INT DEFAULT 1,
 	Coin INT,
 	Diamond INT DEFAULT 0,
     Gem INT DEFAULT 0,	
     JoinDate DATETIME DEFAULT GETDATE(),
+	BannedReason NVARCHAR(255) NULL,
+	Position FLOAT,
+	EXP INT
 );
 
-
---Done with Shop and Player 
-CREATE TABLE Pet (
-    PetID INT PRIMARY KEY IDENTITY(1,1),
-	AdminID INT,
-    PetType VARCHAR(50) NOT NULL,  
-	PetDefaultName VARCHAR(50) NOT NULL,
-	PetStatus INT DEFAULt 1,
-    Description TEXT,
-	FOREIGN KEY (AdminID) REFERENCES [User](ID)
-);
-
-
-CREATE TABLE PlayerPet (
-    PlayerPetID INT PRIMARY KEY IDENTITY(1,1),
-    PlayerID INT NOT NULL,
-    PetID INT NOT NULL,
-    PetCustomName VARCHAR(50),             
-    AdoptedAt DATETIME DEFAULT GETDATE(),
-	UNIQUE(PlayerID, PetCustomName),
-    Level INT DEFAULT 1,
-	Status NVARCHAR(50),
-    LastStatusUpdate DATETIME DEFAULT GETDATE(),
-	 
-    FOREIGN KEY (PlayerID) REFERENCES [User](ID),
-    FOREIGN KEY (PetID) REFERENCES Pet(PetID)
-);
 
 
 CREATE TABLE Shop (
@@ -96,8 +71,34 @@ CREATE TABLE PlayerInventory (
 );
 
 
+--Done with Shop and Player 
+CREATE TABLE Pet (
+    PetID INT PRIMARY KEY IDENTITY(1,1),
+	AdminID INT,
+    PetType VARCHAR(50) NOT NULL,  
+	PetDefaultName VARCHAR(50) NOT NULL,
+	PetStatus INT DEFAULt 1,
+    Description TEXT,
+	FOREIGN KEY (AdminID) REFERENCES [User](ID)
+);
 
---CÃ²n playerPet vs ACtivity
+
+
+CREATE TABLE PlayerPet (
+    PlayerPetID INT PRIMARY KEY IDENTITY(1,1),
+    PlayerID INT NOT NULL,
+    PetID INT NOT NULL,
+    PetCustomName VARCHAR(50),             
+    AdoptedAt DATETIME DEFAULT GETDATE(),
+	UNIQUE(PlayerID, PetCustomName),
+    Level INT DEFAULT 1,
+	Status NVARCHAR(50),
+    LastStatusUpdate DATETIME DEFAULT GETDATE(),
+	EXP INT, 
+    FOREIGN KEY (PlayerID) REFERENCES [User](ID),
+    FOREIGN KEY (PetID) REFERENCES Pet(PetID)
+);
+--Còn playerPet vs ACtivity
 CREATE TABLE CareActivity (
     ActivityID INT PRIMARY KEY IDENTITY(1,1),
     ActivityType VARCHAR(50) NOT NULL,   
@@ -177,7 +178,7 @@ END
 
 
 
-
+select * from ShopProduct
 INSERT INTO [User] (Role, UserName, Email, Password, UserStatus, Level, Coin, Diamond, Gem)
 VALUES 
 ('Player', N'CatLover01', 'catlover01@example.com', 'pass1234', 'ACTIVE', 5, 1000, 5, 3),
@@ -190,52 +191,35 @@ VALUES
 ('Player', N'FishyFella', 'fishyfella@example.com', 'fishfish', 'ACTIVE', 3, 600, 1, 1),
 ('Player', N'BirdWatcher', 'birdw@example.com', 'tweet123', 'ACTIVE', 5, 1200, 6, 4),
 ('Player', N'ReptileRider', 'reptrider@example.com', 'reptilepass', 'ACTIVE', 7, 1500, 8, 7);
-
-INSERT INTO Pet (AdminID, PetType, PetDefaultName, Description)
-VALUES 
-(1, 'Cat', 'Mimi', 'Playful and smart'),
-(2, 'Dog', 'Rex', 'Loyal and brave'),
-(1, 'Rabbit', 'Bunny', 'Cute and fast'),
-(1, 'Chicken', 'Chicky', 'This Pet have sth you never know'),
-
-(2, 'Hamster', 'Hamy', 'Tiny and adorable'),
-(1, 'Parrot', 'Polly', 'Talkative and colorful'),
-(2, 'Turtle', 'Slowmo', 'Slow but wise'),
-(1, 'Fish', 'Bubbles', 'Glowy fins'),
-(2, 'Fox', 'Flame', 'Mischievous'),
-(1, 'Panda', 'Pandy', 'Loves bamboo'),
-(2, 'Dragon', 'Draco', 'Rare and powerful');
-INSERT INTO PlayerPet (PlayerID, PetID, PetCustomName, Status)
-VALUES 
-(3, 1, 'Whiskers', '100%50%20'),
-(3, 2, 'Barker', '50%50%100'),
-(4, 3, 'Fluffy', '100%100%100'),
-(5, 4, 'Speedy', '20%50%100'),
-(6, 1, 'Talky', '100%50%20'),
-(6, 2, 'Shell', '50%50%20'),
-(7, 3, 'Splash', '20%20%50'),
-(7, 4, 'Firetail', '100%20%50'),
-(8, 3, 'Bamboo', '50%50%20'),
-(9, 4, 'Skyflame', '100%20%50');
 INSERT INTO Shop (Name, Type, Description)
 VALUES 
 ('Pets Shop', 'Pet', 'Pet adoption and animal companions'),
 ('Item Shop', 'Item', 'Supplies, food and toys for pets');
 
+INSERT INTO Pet (AdminID, PetType, PetDefaultName, Description)
+VALUES 
+(1, 'Cat', 'Mimi', 'Playful and smart'),
+(1, 'Chicken', 'Chicky', 'This Pet have sth you never know'),
+(1, 'Fish', 'Bubbles', 'Glowy fins');
+
 INSERT INTO ShopProduct (ShopID, AdminID,PetID, Name, Type, Description, ImageUrl, Price, CurrencyType)
 VALUES 
 -- Pets Shop (ShopID = 1)
-(1, 1,1, 'Basic Cat', 'Pet', 'A friendly basic cat for beginners', 'https://drive.google.com/file/d/1nkOmQE4OQxJNE_-toGhVN7b0zrQf3L2H/view', 100, 'Coin'),
-(1, 2,2, 'Loyal Dog', 'Pet', 'A loyal dog who loves to play fetch', 'https://drive.google.com/file/d/1dnKvmkFxuECn9T10cQRB1QKFV0-uy97W/view', 120, 'Coin'),
-(1, 1,4, 'Funny Chicken', 'Pet', 'A quirky chicken that lays golden eggs', 'https://drive.google.com/file/d/1fsJXvABMVtfGSPJz7E-_yhqv0H7Fo8oS/view', 150, 'Coin'),
+(1, 1,1, 'Mimi', 'Cat', 'Playful and smart', 'https://drive.google.com/file/d/1nkOmQE4OQxJNE_-toGhVN7b0zrQf3L2H/view', 100, 'Coin'),
+(1, 2,2, 'Chicky', 'Chicken', 'This Pet have sth you never know', 'https://drive.google.com/file/d/1dnKvmkFxuECn9T10cQRB1QKFV0-uy97W/view', 120, 'Coin'),
+(1, 1,3, 'Bubbles', 'Fish', 'Glowy fins', 'https://drive.google.com/file/d/1fsJXvABMVtfGSPJz7E-_yhqv0H7Fo8oS/view', 150, 'Coin'),
+
+Select * from ShopProduct;
+
+UPDATE ShopProduct
+SET Type = 'Pet'
+WHERE ShopID = 1 AND PetID IS NOT NULL;
+
 
 -- Item Shop (ShopID = 2)
 (2, 1,NULL, 'Cat Food', 'Food', 'Nutritious food for healthy cats', 'https://drive.google.com/file/d/1siQWAMVbrnAqCnpnhbN5luvDEDJSgsmV/view', 30, 'Coin'),
 (2, 2,NULL, 'Chicken Food', 'Food', 'Premium grains for chickens', 'https://drive.google.com/file/d/16asRZC5bJStd8OlYVmjuOE1q6IhWlcWp/view', 35, 'Coin'),
 (2, 1,NULL, 'Dog Food', 'Food', 'High-protein dog meal', 'https://drive.google.com/file/d/1UFHJK5hW3A5l5UTgZDT5dy8YBfv_0Qvh/view', 40, 'Coin'),
-(2, 2,NULL, 'Cat Bed', 'Toy', 'A comfy bed that cats love to curl up in', 'img/catbed.png', 60, 'Coin'),
-(2, 1,NULL, 'Scratching Post', 'Toy', 'Keeps cats entertained and claws sharp', 'img/scratchpost.png', 50, 'Coin'),
-(2, 2,NULL, 'Chew Toy', 'Toy', 'Durable chew toy for playful dogs', 'img/chewtoy.png', 45, 'Coin'),
 (2, 1,NULL, 'Cookies', 'Food', 'Sweet and crunchy cookies for your pet to enjoy', 'https://drive.google.com/file/d/1BI3P_--YCN0OQvrpeEWVK1l0dbIPFLOt/view', 40, 'Coin'),
 (2, 1,NULL, 'Chocolate', 'Food', 'A special chocolate treat (non-toxic for pets)', 'https://drive.google.com/file/d/1eeJ-Tx6ztnARuhZF3rTvThSEb1uR9ScH/view', 40, 'Coin'),
 (2, 1,NULL, 'Orange', 'Food', 'Fresh and juicy orange slices full of vitamins', 'https://drive.google.com/file/d/1Mz8_kpl7E1_MAlQ_IF1vdeXpZwEKLK0Y/view', 40, 'Coin'),
@@ -244,29 +228,36 @@ VALUES
 (2, 1,NULL, 'Banana', 'Food', 'Soft and sweet bananas loved by all pets', 'https://drive.google.com/file/d/1gJtCKHc1IBc_JRGLd29yaYbaCUETSM8A/view', 40, 'Coin');
 INSERT INTO PlayerInventory (PlayerID, ShopProductID, Quantity)
 VALUES 
-(3, 1, 1),
-(3, 3, 2),
-(4, 2, 1),
-(4, 4, 1),
-(5, 5, 3),
-(6, 6, 2),
-(6, 7, 1),
-(7, 8, 1),
-(8, 9, 1),
-(9, 10, 1);
+(1, 1, 1),
+(1, 3, 2),
+(1, 2, 1),
+(1, 4, 1),
+(1, 5, 3),
+(2, 6, 2),
+(2, 7, 1),
+(2, 8, 1),
+(2, 9, 1),
+(2, 10, 1);
 
+Select * from [User]
+
+INSERT INTO PlayerPet (PlayerID, PetID, PetCustomName, Status)
+VALUES 
+(2, 1, 'Whiskers', '100%50%20'),
+(2, 2, 'Barker', '50%50%100'),
+(1, 1, 'Fluffy', '100%100%100'),
+(2, 1, 'Speedy', '20%50%100'),
+(4, 2, 'Talky', '100%50%20'),
+(1, 3, 'Shell', '50%50%20'),
+(2, 1, 'Splash', '20%20%50'),
+(5, 2, 'Firetail', '100%20%50'),
+(7, 3, 'Bamboo', '50%50%20'),
+(10, 2, 'Skyflame', '100%20%50');
 INSERT INTO CareActivity (ActivityType, Description)
 VALUES 
 ('Feed', 'Give food to pet'),
-('Play', 'Play with your pet'),
 ('Sleep', 'Put pet to rest'),
-('Bath', 'Clean your pet'),
-('Vet Visit', 'Medical care'),
-('Walk', 'Take a walk'),
-('Training', 'Train pet'),
-('Talk', 'Communicate'),
-('Reward', 'Give treat'),
-('Groom', 'Brush and groom');
+('Play', 'Play with your pet');
 INSERT INTO CareHistory (PlayerPetID, PlayerID, ActivityID)
 VALUES 
 (1, 3, 1),
@@ -293,9 +284,9 @@ VALUES
 ('First Purchase', 'Buy 1 item from the shop to receive a reward');
 INSERT INTO PlayerAchievement (PlayerID, AchievementID)
 VALUES 
-(3, 1),
-(3, 3),
-(4, 1),
+(1, 1),
+(2, 3),
+(1, 1),
 (4, 4),
 (5, 1),
 (6, 2),

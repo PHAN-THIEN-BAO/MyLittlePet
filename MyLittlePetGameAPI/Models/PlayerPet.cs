@@ -21,6 +21,8 @@ public partial class PlayerPet
 
     public DateTime? LastStatusUpdate { get; set; }
 
+    public int? Exp { get; set; }
+
     public virtual ICollection<CareHistory> CareHistories { get; set; } = new List<CareHistory>();
 
     public virtual Pet Pet { get; set; } = null!;

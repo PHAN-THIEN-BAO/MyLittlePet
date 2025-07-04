@@ -168,6 +168,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.EarnedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.IsCollected).HasDefaultValue(false);
 
             entity.HasOne(d => d.Achievement).WithMany(p => p.PlayerAchievements)
                 .HasForeignKey(d => d.AchievementId)
@@ -226,6 +227,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.PetId).HasColumnName("PetID");
             entity.Property(e => e.PlayerId).HasColumnName("PlayerID");
             entity.Property(e => e.Status).HasMaxLength(50);
+            entity.Property(e => e.Exp);
 
             entity.HasOne(d => d.Pet).WithMany(p => p.PlayerPets)
                 .HasForeignKey(d => d.PetId)
@@ -270,13 +272,15 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Type)
                 .HasMaxLength(20)
                 .IsUnicode(false);
+            entity.Property(e => e.Quantity);
+            entity.Property(e => e.Status).HasDefaultValue(1);
 
             entity.HasOne(d => d.Admin).WithMany(p => p.ShopProducts)
                 .HasForeignKey(d => d.AdminId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ShopProdu__Admin__5629CD9C");
 
-            entity.HasOne(d => d.Pet).WithMany()
+            entity.HasOne(d => d.Pet).WithMany(p => p.ShopProducts)
                 .HasForeignKey(d => d.PetId)
                 .HasConstraintName("FK__ShopProdu__PetId");
 
@@ -308,6 +312,9 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.UserStatus)
                 .HasMaxLength(20)
                 .HasDefaultValue("ACTIVE");
+            entity.Property(e => e.BannedReason).HasMaxLength(255);
+            entity.Property(e => e.Position);
+            entity.Property(e => e.Exp);
         });
 
         OnModelCreatingPartial(modelBuilder);
