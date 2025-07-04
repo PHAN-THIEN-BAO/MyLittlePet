@@ -1,15 +1,18 @@
 [System.Serializable]
 public class User
 {
-    public int id;                    
-    public string role;               
-    public string userName;           
-    public string email;
-    public string password;          
-    public string userStatus;
-    public int level;
-    public int coin;
-    public int diamond;
-    public int gem;
-    public System.DateTime joinDate;
+    public int id;                        // ID
+    public string role;                   // Role
+    public string userName;               // UserName
+    public string email;                  // Email
+    public string password;               // Password
+    public string userStatus;             // UserStatus
+    public int level;                     // Level
+    public int coin;                      // Coin
+    public int diamond;                   // Diamond
+    public int gem;                       // Gem
+    public System.DateTime joinDate;      // JoinDate
+    public string bannedReason;           // BannedReason (nullable)
+    public float position;                // Position (FLOAT)
+    public int exp;                       // EXP
 }
