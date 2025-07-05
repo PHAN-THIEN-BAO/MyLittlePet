@@ -7,6 +7,9 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private Animator animator;
+    private bool playingFootsteps = false;
+
+    public float footstepSpeed = 0.5f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,6 +20,16 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         rb.linearVelocity = moveInput * moveSpeed;
+        animator.SetBool("isWalking", rb.linearVelocity.magnitude > 0);
+
+        if(rb.linearVelocity.magnitude > 0 && !playingFootsteps)
+        {
+            StartFootSteps();
+        }
+        else if (rb.linearVelocity.magnitude == 0)
+        {
+            StopFootStep();
+        }
     }
     public void Move(InputAction.CallbackContext context)
     {
@@ -31,5 +44,22 @@ public class PlayerMovement : MonoBehaviour
         moveInput = context.ReadValue<Vector2>(); 
         animator.SetFloat("InputX", moveInput.x);
         animator.SetFloat("InputY", moveInput.y);
+    }
+
+    void StartFootSteps()
+    {
+        playingFootsteps = true;
+        InvokeRepeating(nameof(PlayFootstep), 0f, footstepSpeed);
+        
+    }
+
+    void PlayFootstep()
+    {
+        SoundEffectManager.Play("Footstep");    
+    }
+    void StopFootStep()
+    {
+        playingFootsteps = false;
+        CancelInvoke(nameof(PlayFootstep));
     }
 }
