@@ -51648,7 +51648,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 975752046}
-  - component: {fileID: 975752045}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -51656,18 +51655,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &975752045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 975752044}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d60651d354a83f4ca5bed70210f56fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &975752046
 Transform:
   m_ObjectHideFlags: 0
@@ -75690,7 +75677,7 @@ Transform:
   m_GameObject: {fileID: 1521693871}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -29.48, y: 19.49, z: 0}
+  m_LocalPosition: {x: -29.48, y: 19.72, z: 0}
   m_LocalScale: {x: 1.2928636, y: 1.0451, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -91344,7 +91331,6 @@ GameObject:
   - component: {fileID: 1817675238}
   - component: {fileID: 1817675237}
   - component: {fileID: 1817675236}
-  - component: {fileID: 1817675235}
   - component: {fileID: 1817675239}
   m_Layer: 0
   m_Name: TopDownHouse_FurnitureState1_0 (1)
@@ -91353,18 +91339,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1817675235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817675234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a8d2a03caf2fe44f951795eadd079e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &1817675236
 BoxCollider2D:
   m_ObjectHideFlags: 0

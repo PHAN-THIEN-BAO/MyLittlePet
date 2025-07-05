@@ -615,6 +615,36 @@
     ]
   },
   {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.GameStatsController",
+    "Method": "GetGameStats",
+    "RelativePath": "GameStats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.GameStatsController",
+    "Method": "GetDailyActivity",
+    "RelativePath": "GameStats/DailyActivity",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.GameStatsController",
+    "Method": "GetTopPlayers",
+    "RelativePath": "GameStats/TopPlayers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "MyLittlePetGameAPI.Controllers.MinigameController",
     "Method": "Get",
     "RelativePath": "Minigame",
@@ -1007,6 +1037,27 @@
   },
   {
     "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerAchievementController",
+    "Method": "CollectAchievement",
+    "RelativePath": "PlayerAchievement/{playerId}/{achievementId}/Collect",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "playerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "achievementId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerAchievementController",
     "Method": "GetByAchievementId",
     "RelativePath": "PlayerAchievement/Achievement/{achievementId}",
     "HttpMethod": "GET",
@@ -1095,8 +1146,34 @@
   },
   {
     "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerAchievementController",
+    "Method": "GetCollectedAchievements",
+    "RelativePath": "PlayerAchievement/Player/{playerId}/Collected",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "playerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerAchievementController",
     "Method": "GetUncollectedByPlayerId",
-    "RelativePath": "PlayerAchievement/Player/{playerId}/Uncollected",
+    "RelativePath": "PlayerAchievement/Player/{playerId}/NotCollected",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1110,6 +1187,48 @@
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.IEnumerable\u00601[[MyLittlePetGameAPI.Models.PlayerAchievement, MyLittlePetGameAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerAchievementController",
+    "Method": "GetAchievementStats",
+    "RelativePath": "PlayerAchievement/Player/{playerId}/Stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "playerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerAchievementController",
+    "Method": "GetUncollectedAchievements",
+    "RelativePath": "PlayerAchievement/Player/{playerId}/Uncollected",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "playerId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1433,6 +1552,64 @@
     "Method": "Delete",
     "RelativePath": "PlayerPet/{id}",
     "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerPetController",
+    "Method": "UpdatePetExperience",
+    "RelativePath": "PlayerPet/{id}/Experience",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "exp",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerPetController",
+    "Method": "LevelUpPet",
+    "RelativePath": "PlayerPet/{id}/LevelUp",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "requestBody",
+        "Type": "System.Object",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.PlayerPetController",
+    "Method": "GetPetProgress",
+    "RelativePath": "PlayerPet/{id}/Progress",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -1847,6 +2024,88 @@
   },
   {
     "ContainingType": "MyLittlePetGameAPI.Controllers.ShopProductController",
+    "Method": "PurchaseProduct",
+    "RelativePath": "ShopProduct/{id}/Purchase",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "quantityToPurchase",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.ShopProductController",
+    "Method": "UpdateProductQuantity",
+    "RelativePath": "ShopProduct/{id}/Quantity",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "quantity",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.ShopProductController",
+    "Method": "GetProductsInStock",
+    "RelativePath": "ShopProduct/InStock",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.ShopProductController",
+    "Method": "GetProductsOutOfStock",
+    "RelativePath": "ShopProduct/OutOfStock",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.ShopProductController",
     "Method": "GetByStatus",
     "RelativePath": "ShopProduct/Status/{status}",
     "HttpMethod": "GET",
@@ -2098,6 +2357,48 @@
   },
   {
     "ContainingType": "MyLittlePetGameAPI.Controllers.UserController",
+    "Method": "BanUser",
+    "RelativePath": "User/{id}/Ban",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "reason",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.UserController",
+    "Method": "UpdateUserExperience",
+    "RelativePath": "User/{id}/Experience",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "exp",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.UserController",
     "Method": "GetPetCount",
     "RelativePath": "User/{id}/PetCount",
     "HttpMethod": "GET",
@@ -2121,6 +2422,59 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.UserController",
+    "Method": "UpdateUserPosition",
+    "RelativePath": "User/{id}/Position",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "position",
+        "Type": "System.Single",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.UserController",
+    "Method": "GetUserStats",
+    "RelativePath": "User/{id}/Stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.UserController",
+    "Method": "UnbanUser",
+    "RelativePath": "User/{id}/Unban",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "MyLittlePetGameAPI.Controllers.UserController",
