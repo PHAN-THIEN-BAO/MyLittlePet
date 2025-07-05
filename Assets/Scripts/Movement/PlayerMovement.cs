@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         rb.linearVelocity = moveInput * moveSpeed;
-        //animator.SetBool("IsWalking", rb.linearVelocity.magnitude > 0);
+        animator.SetBool("IsWalking", rb.linearVelocity.magnitude > 0);
 
         //if(rb.linearVelocity.magnitude > 0 && !playingFootsteps)
         //{
