@@ -85,6 +85,7 @@
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\APIAchievement.cs" />
     <Compile Include="Assets\Scripts\Cutscene\PlayableDirectorManager.cs" />
+    <Compile Include="Assets\Scripts\Sounds\SoundEffectManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\LoadChoosePet.cs" />
     <Compile Include="Assets\Scripts\Object\User\User.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlStateAmin.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Assets\Scripts\Object\PlayerPet\PetSelectionManager.cs" />
     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PetDataHolder.cs" />
+    <Compile Include="Assets\Scripts\Sounds\SoundEffectLibrary.cs" />
     <Compile Include="Assets\Scripts\Cutscene\ObjectSceneTransition.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerSpawnManager.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfoMainScene.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Assets\Scripts\Validate\ShopPetValidate.cs" />
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
     <Compile Include="Assets\Scripts\Login\Menu.cs" />
+    <Compile Include="Assets\Scripts\Sounds\MusicManager.cs" />
     <Compile Include="Assets\Scripts\FarmAction\Inventory.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PlayerPet.cs" />
     <Compile Include="Assets\Quarium\Script\FishControlMovement.cs" />
