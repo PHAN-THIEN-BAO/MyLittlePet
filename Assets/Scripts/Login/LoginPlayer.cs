@@ -21,9 +21,12 @@ public class LoginPlayer : MonoBehaviour
     [SerializeField] public TextMeshProUGUI errorText;
     [SerializeField] public GameObject currentPanel;
     [SerializeField] public GameObject successPanel;
+    [SerializeField] public GameObject tapToPlayPanel;
+    [SerializeField] public GameObject newGamePanel;
 
     public void LogInPlayer()
     {
+        
         string username = usernameField.text;
         string password = passwordField.text;
 
@@ -51,7 +54,7 @@ public class LoginPlayer : MonoBehaviour
                 Debug.Log("User info: " + JsonUtility.ToJson(user));
 
                 currentPanel.SetActive(false);
-                successPanel.SetActive(true);
+                successPanel.SetActive(false);
                 Debug.Log("Login successful! User ID: " + user.id);
 
                 // Kiểm tra xem có phải người chơi mới không và chuyển hướng phù hợp
@@ -117,12 +120,18 @@ public class LoginPlayer : MonoBehaviour
 
             if (petCount == 0)
             {
+                successPanel.SetActive(false);
+                tapToPlayPanel.SetActive(false);
+                newGamePanel.SetActive(true);
                 // Người chơi mới - chuyển đến scene cho người mới
                 Debug.Log($"New player detected. Redirecting to beginner scene: {beginnerSceneName}");
                 RedirectToBeginnerScene();
             }
             else
             {
+                successPanel.SetActive(false);
+                tapToPlayPanel.SetActive(false);
+                newGamePanel.SetActive(true);
                 // Người chơi cũ - chuyển đến scene bình thường
                 Debug.Log($"Existing player detected. Redirecting to main scene: {Scenename}");
                 RedirectToMainScene();
@@ -141,6 +150,7 @@ public class LoginPlayer : MonoBehaviour
         if (string.IsNullOrEmpty(beginnerSceneName))
         {
             Debug.LogError("Beginner scene name is not set! Using main scene instead.");
+
             RedirectToMainScene();
             return;
         }
