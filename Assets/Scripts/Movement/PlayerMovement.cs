@@ -20,16 +20,16 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         rb.linearVelocity = moveInput * moveSpeed;
-        animator.SetBool("isWalking", rb.linearVelocity.magnitude > 0);
+        animator.SetBool("IsWalking", rb.linearVelocity.magnitude > 0);
 
-        if(rb.linearVelocity.magnitude > 0 && !playingFootsteps)
-        {
-            StartFootSteps();
-        }
-        else if (rb.linearVelocity.magnitude == 0)
-        {
-            StopFootStep();
-        }
+        //if(rb.linearVelocity.magnitude > 0 && !playingFootsteps)
+        //{
+        //    StartFootSteps();
+        //}
+        //else if (rb.linearVelocity.magnitude == 0)
+        //{
+        //    StopFootStep();
+        //}
     }
     public void Move(InputAction.CallbackContext context)
     {

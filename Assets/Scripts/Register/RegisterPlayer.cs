@@ -28,16 +28,16 @@ public class RegisterPlayer : MonoBehaviour
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) ||
             string.IsNullOrEmpty(confirmPassword) || string.IsNullOrEmpty(email))
         {
-            registerErrorText.text = "Vui lòng điền đầy đủ thông tin.";
+            registerErrorText.text = "Fill all field please!";
             registerErrorText.color = Color.red;
-            Debug.LogError("Đăng ký thất bại. Vui lòng điền đầy đủ thông tin.");
+            Debug.LogError("Fill all field please!");
             return;
         }
 
         // Kiểm tra mật khẩu khớp nhau
         if (password != confirmPassword)
         {
-            registerErrorText.text = "Mật khẩu không khớp.";
+            registerErrorText.text = "Passwords do not match!";
             registerErrorText.color = Color.red;
             Debug.LogError("Đăng ký thất bại. Mật khẩu không khớp.");
             return;
@@ -51,7 +51,7 @@ public class RegisterPlayer : MonoBehaviour
             if (success)
             {
                 // Đăng ký thành công
-                registerErrorText.text = "Đăng ký thành công! Bạn có thể đăng nhập ngay.";
+                registerErrorText.text = "Registration successful!";
                 registerErrorText.color = Color.green;
 
                 // Xóa các trường nhập liệu
@@ -68,7 +68,7 @@ public class RegisterPlayer : MonoBehaviour
             else
             {
                 // Đăng ký thất bại
-                registerErrorText.text = "Tên người dùng đã tồn tại hoặc đăng ký thất bại.";
+                registerErrorText.text = "Username already exists!";
                 registerErrorText.color = Color.red;
                 Debug.LogError("Đăng ký thất bại. Tên người dùng có thể đã tồn tại.");
             }
@@ -76,7 +76,7 @@ public class RegisterPlayer : MonoBehaviour
         catch (System.Exception ex)
         {
             // Bắt bất kỳ ngoại lệ nào trong quá trình gọi API
-            registerErrorText.text = "Lỗi đăng ký. Vui lòng thử lại sau.";
+            registerErrorText.text = "Registration error!";
             registerErrorText.color = Color.red;
             Debug.LogException(ex);
         }

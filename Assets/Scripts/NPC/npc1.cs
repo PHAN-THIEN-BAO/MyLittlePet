@@ -56,20 +56,15 @@ public class npc1 : MonoBehaviour, IInteractable
             dialogText.SetText(DialogData.dialogLines[dialogIndex]);
             isTyping = false;
         }
-        else 
+        else if(++dialogIndex < DialogData.dialogLines.Length)
         {
-            dialogIndex++; // Tăng index trước khi chuyển dòng tiếp theo
-            if (dialogIndex < DialogData.dialogLines.Length)
-            {
-                StartCoroutine(TypeLine());
-            }
-            else
-            {
-                EndDialog();
-            }
+            StartCoroutine(TypeLine());
+        }
+        else
+        {
+            EndDialog();
         }
     }
-
     IEnumerator TypeLine()
     {
         isTyping = true;
