@@ -221,38 +221,18 @@ public class NPCFollower : MonoBehaviour
         // Lật sprite theo hướng di chuyển - ưu tiên hướng so với player
         if (enableDirectionFlip && spriteRenderer != null)
         {
-            if (isMoving && hasTarget)
+            // Luôn luôn quay mặt về hướng player hiện tại, bất kể đang di chuyển hay không
+            Vector2 directionToPlayer = ((Vector2)player.position - (Vector2)transform.position).normalized;
+            
+            if (Mathf.Abs(directionToPlayer.x) > 0.1f)
             {
-                // Sử dụng hướng từ NPC đến target
-                Vector2 directionToTarget = (currentTarget - (Vector2)transform.position).normalized;
-                
-                if (Mathf.Abs(directionToTarget.x) > 0.1f)
+                if (directionToPlayer.x > 0)
                 {
-                    if (directionToTarget.x > 0)
-                    {
-                        spriteRenderer.flipX = false; // Quay phải
-                    }
-                    else
-                    {
-                        spriteRenderer.flipX = true;  // Quay trái
-                    }
+                    spriteRenderer.flipX = false; // Quay phải
                 }
-            }
-            else if (!isMoving)
-            {
-                // Khi đứng yên, quay mặt về hướng player
-                Vector2 directionToPlayer = ((Vector2)player.position - (Vector2)transform.position).normalized;
-                
-                if (Mathf.Abs(directionToPlayer.x) > 0.1f)
+                else
                 {
-                    if (directionToPlayer.x > 0)
-                    {
-                        spriteRenderer.flipX = false; // Quay phải
-                    }
-                    else
-                    {
-                        spriteRenderer.flipX = true;  // Quay trái
-                    }
+                    spriteRenderer.flipX = true;  // Quay trái
                 }
             }
         }
