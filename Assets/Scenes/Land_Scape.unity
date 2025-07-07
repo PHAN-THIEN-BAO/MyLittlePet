@@ -91386,7 +91386,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.22, y: 0.25}
+    oldSize: {x: 1.6875, y: 1.875}
     newSize: {x: 0.22, y: 0.25}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -91438,7 +91438,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5280097977772955952, guid: 7a2d57a798c3aaf4fa6bf1f65661e474, type: 3}
+  m_Sprite: {fileID: 7876782218206307058, guid: 7761b373c1ef07749bb04d4943fc3c46, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -91459,7 +91459,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -32.28, y: 19.1119, z: 0}
-  m_LocalScale: {x: 4.2602477, y: 4.0085196, z: 6.957779}
+  m_LocalScale: {x: 0.53236055, y: 0.5009046, z: 0.869444}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -102288,11 +102288,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   followDistance: 2
-  followSpeed: 3
-  stopDistance: 1
-  smoothTime: 0.3
-  autoFindPlayer: 1
-  playerTag: Player
+  maxQueueSize: 15
+  moveSpeed: 2.5
+  stoppingDistance: 0.8
+  minimumMoveDistance: 0.5
+  accelerationTime: 0.3
+  decelerationTime: 0.2
+  smoothMovement: 1
+  enableDirectionFlip: 1
+  enableAnimation: 1
 --- !u!1 &2028869979
 GameObject:
   m_ObjectHideFlags: 0
