@@ -94,6 +94,7 @@
     <Compile Include="Assets\Scripts\UI\FoodItemUI.cs" />
     <Compile Include="Assets\Scripts\UI\FeedingManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\AdopPet.cs" />
+    <Compile Include="Assets\Scripts\Object\Achievement\CollectAchievement.cs" />
     <Compile Include="Assets\Scripts\UI\LoadScenes.cs" />
     <Compile Include="Assets\Scripts\Cutscene\FinishPoint.cs" />
     <Compile Include="Assets\Scripts\FarmAction\InventoryCollectable.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Assets\Scripts\Validate\ShopPetValidate.cs" />
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
     <Compile Include="Assets\Scripts\Login\Menu.cs" />
+    <Compile Include="Assets\Scripts\Object\Achievement\AchievementProgress.cs" />
     <Compile Include="Assets\Scripts\Sounds\MusicManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PlayerPet.cs" />
     <Compile Include="Assets\Quarium\Script\FishControlMovement.cs" />

@@ -4,10 +4,8 @@ using System.Collections.Generic;
 
 public class AchievementDisplay : MonoBehaviour
 {
-    [SerializeField] public List<TMP_Text> achievementTexts; // pulls the TMP_Text fields from the scene
-    [SerializeField] public List<GameObject> readyCollected;
-    [SerializeField] public List<GameObject> collected;
-    [SerializeField] public List<GameObject> notCollected;
+    [SerializeField] public List<GameObject> achievementItems; // list of achievement items in the scene
+
     /// <summary>
     /// Sets the achievement descriptions in the TMP_Text fields.
     /// </summary>
@@ -17,48 +15,57 @@ public class AchievementDisplay : MonoBehaviour
         List<Achievement> achievements = APIAchievement.GetAllAchievements();
         List<PlayerAchievement> playerAchievements = APIPlayerAchievement.GetAchievementByIdPlayer(user.id);
 
-        int count = Mathf.Min(achievementTexts.Count, achievements.Count);
+        int count = Mathf.Min(achievementItems.Count, achievements.Count);
 
         for (int i = 0; i < count; i++)
         {
-            achievementTexts[i].text = achievements[i].description;
+            // take TMP_Text components from the achievement item
+            TMP_Text achievementText = achievementItems[i].transform.Find("Achievements_Detail").GetComponent<TMP_Text>();
+            TMP_Text achievement_Name = achievementItems[i].transform.Find("Achievement_Name").GetComponent<TMP_Text>();
+            TMP_Text achievementIdText = achievementItems[i].transform.Find("Achievement_Id").GetComponent<TMP_Text>();
+            GameObject readyCollectedBtn = achievementItems[i].transform.Find("Ready_Collected_Button").gameObject;
+            GameObject collectedBtn = achievementItems[i].transform.Find("Collected_Button").gameObject;
+            GameObject notCollectedBtn = achievementItems[i].transform.Find("Not_Collected_Button").gameObject;
 
-            // find the corresponding PlayerAchievement for the current achievement
+            // update the text fields with achievement data
+            achievementText.text = achievements[i].description;
+            achievement_Name.text = achievements[i].achievementName;
+            achievementIdText.text = achievements[i].achievementID.ToString();
+
+            // find the PlayerAchievement corresponding to the current achievement
             PlayerAchievement playerAch = playerAchievements.Find(pa => pa.achievementID == achievements[i].achievementID);
 
+            // update button states based on PlayerAchievement status
             if (playerAch != null)
             {
                 if (!playerAch.isCollected)
                 {
-                    // got achievement not collected
-                    readyCollected[i].SetActive(true);
-                    collected[i].SetActive(false);
-                    notCollected[i].SetActive(false);
+                    // get ready to collect but not collected yet
+                    readyCollectedBtn.SetActive(true);
+                    collectedBtn.SetActive(false);
+                    notCollectedBtn.SetActive(false);
                 }
                 else
                 {
                     // collected
-                    readyCollected[i].SetActive(false);
-                    collected[i].SetActive(true);
-                    notCollected[i].SetActive(false);
+                    readyCollectedBtn.SetActive(false);
+                    collectedBtn.SetActive(true);
+                    notCollectedBtn.SetActive(false);
                 }
             }
             else
             {
-                // not achieved
-                readyCollected[i].SetActive(false);
-                collected[i].SetActive(false);
-                notCollected[i].SetActive(true);
+                // not collected yet
+                readyCollectedBtn.SetActive(false);
+                collectedBtn.SetActive(false);
+                notCollectedBtn.SetActive(true);
             }
         }
 
-        // Clear remaining achievement texts and states if there are more texts than achievements
-        for (int i = count; i < achievementTexts.Count; i++)
+        // hide remaining achievement items if there are more items than achievements
+        for (int i = count; i < achievementItems.Count; i++)
         {
-            achievementTexts[i].text = "";
-            readyCollected[i].SetActive(false);
-            collected[i].SetActive(false);
-            notCollected[i].SetActive(false);
+            achievementItems[i].SetActive(false);
         }
     }
 }
