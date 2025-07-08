@@ -95,6 +95,7 @@
     <Compile Include="Assets\Scripts\Object\PlayerInventory\AdopPet.cs" />
     <Compile Include="Assets\Scripts\UI\LoadScenes.cs" />
     <Compile Include="Assets\Scripts\Cutscene\FinishPoint.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\InventoryCollectable.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\OpenAdopButton.cs" />
     <Compile Include="Assets\Scripts\Loading\ASyncLoading.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPositionSaver.cs" />
@@ -110,10 +111,8 @@
     <Compile Include="Assets\Quarium\Script\FishController.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\Achievement.cs" />
     <Compile Include="Assets\Scripts\InfiniteBackground.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\Collectable.cs" />
     <Compile Include="Assets\Scripts\Object\User\UserProfile.cs" />
     <Compile Include="Assets\Scripts\FarmAction\CameraFollow.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\OldPlayer.cs" />
     <Compile Include="Assets\Scripts\Interactions\InteractionDetector.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialougeTrigger.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
@@ -131,6 +130,7 @@
     <Compile Include="Assets\Scripts\Follow\NPCFollow.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerSpawnManager.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfoMainScene.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\CollectabelItems.cs" />
     <Compile Include="Assets\Scripts\UI\UIMuteAudio.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\PlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfomation.cs" />
@@ -153,7 +153,6 @@
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
     <Compile Include="Assets\Scripts\Login\Menu.cs" />
     <Compile Include="Assets\Scripts\Sounds\MusicManager.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\Inventory.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PlayerPet.cs" />
     <Compile Include="Assets\Quarium\Script\FishControlMovement.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\PetClickHandler.cs" />
@@ -1345,12 +1344,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.AI.Navigation">
-      <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="PsdPlugin">
       <HintPath>Library\ScriptAssemblies\PsdPlugin.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.AI.Navigation">
+      <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.2D.Common.Editor">
@@ -1537,12 +1536,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.Multiplayer.Center.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
-      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.AI.Navigation.Updater">
       <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Updater.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Muse.Sprite.Common.Editor">
@@ -1573,12 +1572,12 @@
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.Mathematics">
-      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.AI.Navigation.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Editor">
