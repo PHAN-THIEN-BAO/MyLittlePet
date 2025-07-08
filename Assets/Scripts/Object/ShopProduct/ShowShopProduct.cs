@@ -7,10 +7,12 @@ using UnityEngine.Networking;
 
 public class ShowShopProduct : MonoBehaviour
 {
+    [SerializeField] public GameObject scrollViewObject;
     [SerializeField] public List<TMP_Text> name;
     [SerializeField] public List<TMP_Text> Id;
     [SerializeField] public List<TMP_Text> Pet_Id;
     [SerializeField] public List<TMP_Text> value;
+    [SerializeField] public List<TMP_Text> description;
     [SerializeField] public List<GameObject> coinDisplay;
     [SerializeField] public List<GameObject> diamondDisplay;
     [SerializeField] public List<GameObject> gemDisplay;
@@ -83,6 +85,7 @@ public class ShowShopProduct : MonoBehaviour
             GameObject newItem = Instantiate(Item, contentPanel);
 
             TMP_Text nameText = newItem.transform.Find("Name_Item").GetComponent<TMP_Text>();
+            TMP_Text descriptionText = newItem.transform.Find("Description").GetComponent<TMP_Text>();
             TMP_Text valueText = newItem.transform.Find("Price").GetComponent<TMP_Text>();
             TMP_Text idText = newItem.transform.Find("Id_Item").GetComponent<TMP_Text>();
             TMP_Text petIdText = newItem.transform.Find("Pet_Id").GetComponent<TMP_Text>();
@@ -92,6 +95,7 @@ public class ShowShopProduct : MonoBehaviour
             GameObject gemImg = newItem.transform.Find("Gem_Img").gameObject;
 
             name.Add(nameText);
+            description.Add(descriptionText);
             value.Add(valueText);
             Id.Add(idText);
             Pet_Id.Add(petIdText);
@@ -106,6 +110,7 @@ public class ShowShopProduct : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             name[i].text = products[i].name;
+            description[i].text = products[i].description;
             value[i].text = products[i].price.ToString();
             Pet_Id[i].text = products[i].petID.HasValue ? products[i].petID.Value.ToString() : "N/A";
 
@@ -135,27 +140,54 @@ public class ShowShopProduct : MonoBehaviour
         {
             name[i].transform.parent.gameObject.SetActive(false);
         }
+        StartCoroutine(ScrollToTop());
     }
 
 
-private IEnumerator LoadImageFromUrl(string url, Image targetImage)
-{
-    UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
-    yield return request.SendWebRequest();
-
-    if (request.result == UnityWebRequest.Result.Success)
+    private IEnumerator LoadImageFromUrl(string url, Image targetImage)
     {
-        Texture2D texture = DownloadHandlerTexture.GetContent(request);
-        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
-        targetImage.sprite = sprite;
-        targetImage.gameObject.SetActive(true);
+        UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Texture2D texture = DownloadHandlerTexture.GetContent(request);
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.one * 0.5f);
+            targetImage.sprite = sprite;
+            targetImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.LogWarning("Failed to load image: " + url + " - " + request.error);
+            targetImage.gameObject.SetActive(false);
+        }
     }
-    else
+
+    private IEnumerator ScrollToTop()
     {
-        Debug.LogWarning("Failed to load image: " + url + " - " + request.error);
-        targetImage.gameObject.SetActive(false);
+        //wait for the end of the frame to ensure all UI elements are laid out
+        yield return null;
+
+        // ensure the canvas is updated before scrolling
+        Canvas.ForceUpdateCanvases();
+
+        // use the scrollViewObject to find the ScrollRect component
+        if (scrollViewObject != null)
+        {
+            ScrollRect scrollRect = scrollViewObject.GetComponent<ScrollRect>();
+            if (scrollRect != null)
+            {
+                // scroll to the top
+                scrollRect.verticalNormalizedPosition = 1f;
+            }
+            else
+            {
+                Debug.LogWarning("ScrollRect component not found on scrollViewObject");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("scrollViewObject is not assigned!");
+        }
     }
-}
-
-
 }
