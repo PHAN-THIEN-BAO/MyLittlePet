@@ -430,7 +430,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1656,7 +1656,7 @@ MonoBehaviour:
   soundEffectGroups:
   - name: Footstep
     audioClips:
-    - {fileID: 0}
+    - {fileID: 8300000, guid: 9c959222049a8ed49a4cc38acbd079cb, type: 3}
 --- !u!1 &298552776
 GameObject:
   m_ObjectHideFlags: 0
@@ -16030,6 +16030,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 1.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7098668647279437839, guid: f5bed27ee231dc241a705adad358c953, type: 3}
+      propertyPath: footstepSpeed
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 9099769163965444293, guid: f5bed27ee231dc241a705adad358c953, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.75
@@ -17609,7 +17613,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -18109,6 +18113,10 @@ PlayableDirector:
     value: {fileID: 1948575687}
   - key: {fileID: -3324068781438273273, guid: f5351c7bbe71807499cd1bf6e27ecb42, type: 2}
     value: {fileID: 521974698}
+  - key: {fileID: -6444713672658909534, guid: f5351c7bbe71807499cd1bf6e27ecb42, type: 2}
+    value: {fileID: 273239288}
+  - key: {fileID: -3006954814270760866, guid: f5351c7bbe71807499cd1bf6e27ecb42, type: 2}
+    value: {fileID: 273239288}
   m_ExposedReferences:
     m_References: []
 --- !u!4 &1924540562
