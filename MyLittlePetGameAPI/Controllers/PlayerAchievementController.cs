@@ -19,161 +19,238 @@ namespace MyLittlePetGameAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<object>> Get()
         {
-            var achievements = _context.PlayerAchievements
-                .Include(pa => pa.Player)
-                .Include(pa => pa.Achievement)
-                .Select(pa => new 
-                {
-                    UserId = pa.PlayerId,
-                    AchievementId = pa.AchievementId,
-                    IsCollected = pa.IsCollected
-                })
-                .ToList();
-                
-            return Ok(achievements);
+            try
+            {
+                var achievements = _context.PlayerAchievements
+                    .Include(pa => pa.Player)
+                    .Include(pa => pa.Achievement)
+                    .Select(pa => new 
+                    {
+                        UserId = pa.PlayerId,
+                        AchievementId = pa.AchievementId,
+                        IsCollected = pa.IsCollected
+                    })
+                    .ToList();
+                    
+                return Ok(achievements);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: PlayerAchievement/Player/{playerId} - Get achievements for a specific player
         [HttpGet("Player/{playerId}")]
         public ActionResult<IEnumerable<object>> GetByPlayerId(int playerId)
         {
-            var player = _context.Users.Find(playerId);
-            if (player == null)
+            try
             {
-                return NotFound("Player not found");
-            }
-            
-            var achievements = _context.PlayerAchievements
-                .Include(pa => pa.Achievement)
-                .Where(pa => pa.PlayerId == playerId)
-                .OrderByDescending(pa => pa.EarnedAt)
-                .Select(pa => new 
+                var player = _context.Users.Find(playerId);
+                if (player == null)
                 {
-                    UserId = pa.PlayerId,
-                    AchievementId = pa.AchievementId,
-                    IsCollected = pa.IsCollected
-                })
-                .ToList();
+                    return NotFound("Player not found");
+                }
                 
-            return Ok(achievements);
+                var achievements = _context.PlayerAchievements
+                    .Include(pa => pa.Achievement)
+                    .Where(pa => pa.PlayerId == playerId)
+                    .OrderByDescending(pa => pa.EarnedAt)
+                    .Select(pa => new 
+                    {
+                        UserId = pa.PlayerId,
+                        AchievementId = pa.AchievementId,
+                        AchievementName = pa.Achievement.AchievementName,
+                        Description = pa.Achievement.Description,
+                        EarnedAt = pa.EarnedAt,
+                        IsCollected = pa.IsCollected
+                    })
+                    .ToList();
+                    
+                return Ok(achievements);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: PlayerAchievement/Player/{playerId}/NotCollected - Get uncollected achievements for a player
         [HttpGet("Player/{playerId}/NotCollected")]
-        public ActionResult<IEnumerable<PlayerAchievement>> GetUncollectedByPlayerId(int playerId)
+        public ActionResult<IEnumerable<object>> GetUncollectedByPlayerId(int playerId)
         {
-            var player = _context.Users.Find(playerId);
-            if (player == null)
+            try
             {
-                return NotFound("Player not found");
-            }
-            
-            var achievements = _context.PlayerAchievements
-                .Include(pa => pa.Achievement)
-                .Where(pa => pa.PlayerId == playerId && (pa.IsCollected == false || pa.IsCollected == null))
-                .OrderByDescending(pa => pa.EarnedAt)
-                .ToList();
+                var player = _context.Users.Find(playerId);
+                if (player == null)
+                {
+                    return NotFound("Player not found");
+                }
                 
-            return Ok(achievements);
+                var achievements = _context.PlayerAchievements
+                    .Include(pa => pa.Achievement)
+                    .Where(pa => pa.PlayerId == playerId && (pa.IsCollected == false || pa.IsCollected == null))
+                    .OrderByDescending(pa => pa.EarnedAt)
+                    .Select(pa => new 
+                    {
+                        AchievementId = pa.AchievementId,
+                        AchievementName = pa.Achievement.AchievementName,
+                        Description = pa.Achievement.Description,
+                        EarnedAt = pa.EarnedAt,
+                        IsCollected = pa.IsCollected
+                    })
+                    .ToList();
+                    
+                return Ok(achievements);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // GET: PlayerAchievement/Achievement/{achievementId} - Get players who earned a specific achievement
         [HttpGet("Achievement/{achievementId}")]
-        public ActionResult<IEnumerable<PlayerAchievement>> GetByAchievementId(int achievementId)
+        public ActionResult<IEnumerable<object>> GetByAchievementId(int achievementId)
         {
-            var achievement = _context.Achievements.Find(achievementId);
-            if (achievement == null)
+            try
             {
-                return NotFound("Achievement not found");
-            }
-            
-            var players = _context.PlayerAchievements
-                .Include(pa => pa.Player)
-                .Where(pa => pa.AchievementId == achievementId)
-                .OrderByDescending(pa => pa.EarnedAt)
-                .ToList();
+                var achievement = _context.Achievements.Find(achievementId);
+                if (achievement == null)
+                {
+                    return NotFound("Achievement not found");
+                }
                 
-            return Ok(players);
+                var players = _context.PlayerAchievements
+                    .Include(pa => pa.Player)
+                    .Where(pa => pa.AchievementId == achievementId)
+                    .OrderByDescending(pa => pa.EarnedAt)
+                    .Select(pa => new 
+                    {
+                        UserId = pa.PlayerId,
+                        PlayerName = pa.Player.UserName,
+                        EarnedAt = pa.EarnedAt,
+                        IsCollected = pa.IsCollected
+                    })
+                    .ToList();
+                    
+                return Ok(players);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // POST: PlayerAchievement - Award an achievement to a player
         [HttpPost]
-        public ActionResult<PlayerAchievement> Create(int playerId, int achievementId, bool? isCollected)
+        public ActionResult Create([FromQuery] int playerId, [FromQuery] int achievementId, [FromQuery] bool? isCollected = false)
         {
-            // Validate player exists
-            var player = _context.Users.Find(playerId);
-            if (player == null)
+            try
             {
-                return BadRequest("Player not found");
-            }
-            
-            // Validate achievement exists
-            var achievement = _context.Achievements.Find(achievementId);
-            if (achievement == null)
-            {
-                return BadRequest("Achievement not found");
-            }
-            
-            // Check if player already has this achievement
-            var existingAchievement = _context.PlayerAchievements
-                .FirstOrDefault(pa => pa.PlayerId == playerId && pa.AchievementId == achievementId);
+                // Validate player exists
+                var player = _context.Users.Find(playerId);
+                if (player == null)
+                {
+                    return BadRequest("Player not found");
+                }
                 
-            if (existingAchievement != null)
-            {
-                return BadRequest("Player already has this achievement");
+                // Validate achievement exists
+                var achievement = _context.Achievements.Find(achievementId);
+                if (achievement == null)
+                {
+                    return BadRequest("Achievement not found");
+                }
+                
+                // Check if player already has this achievement
+                var existingAchievement = _context.PlayerAchievements
+                    .FirstOrDefault(pa => pa.PlayerId == playerId && pa.AchievementId == achievementId);
+                    
+                if (existingAchievement != null)
+                {
+                    return BadRequest("Player already has this achievement");
+                }
+                
+                var playerAchievement = new PlayerAchievement
+                {
+                    PlayerId = playerId,
+                    AchievementId = achievementId,
+                    EarnedAt = DateTime.Now,
+                    IsCollected = isCollected ?? false // Default to false if not provided
+                };
+                
+                _context.PlayerAchievements.Add(playerAchievement);
+                _context.SaveChanges();
+                
+                return Ok(new 
+                {
+                    message = "Achievement awarded successfully",
+                    playerAchievement = new 
+                    {
+                        PlayerId = playerAchievement.PlayerId,
+                        AchievementId = playerAchievement.AchievementId,
+                        EarnedAt = playerAchievement.EarnedAt,
+                        IsCollected = playerAchievement.IsCollected
+                    }
+                });
             }
-            
-            var playerAchievement = new PlayerAchievement
+            catch (Exception ex)
             {
-                PlayerId = playerId,
-                AchievementId = achievementId,
-                EarnedAt = DateTime.Now,
-                IsCollected = isCollected ?? false // Default to false if not provided
-            };
-            
-            _context.PlayerAchievements.Add(playerAchievement);
-            _context.SaveChanges();
-            
-            return CreatedAtAction("GetUncollectedByPlayerId", new { playerId = playerId }, playerAchievement);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // DELETE: PlayerAchievement - Remove an achievement from a player
         [HttpDelete]
         public ActionResult Delete(int playerId, int achievementId)
         {
-            var playerAchievement = _context.PlayerAchievements
-                .FirstOrDefault(pa => pa.PlayerId == playerId && pa.AchievementId == achievementId);
-                
-            if (playerAchievement == null)
+            try
             {
-                return NotFound("Player does not have this achievement");
+                var playerAchievement = _context.PlayerAchievements
+                    .FirstOrDefault(pa => pa.PlayerId == playerId && pa.AchievementId == achievementId);
+                    
+                if (playerAchievement == null)
+                {
+                    return NotFound("Player does not have this achievement");
+                }
+                
+                _context.PlayerAchievements.Remove(playerAchievement);
+                _context.SaveChanges();
+                
+                return NoContent();
             }
-            
-            _context.PlayerAchievements.Remove(playerAchievement);
-            _context.SaveChanges();
-            
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
         
         // PUT: PlayerAchievement/Collect - Mark an achievement as collected
         [HttpPut("Collect")]
         public ActionResult<PlayerAchievement> MarkAsCollected(int playerId, int achievementId, string isCollected)
         {
-            var playerAchievement = _context.PlayerAchievements
-                .FirstOrDefault(pa => pa.PlayerId == playerId && pa.AchievementId == achievementId);
-                
-            if (playerAchievement == null)
+            try
             {
-                return NotFound("Player does not have this achievement");
+                var playerAchievement = _context.PlayerAchievements
+                    .FirstOrDefault(pa => pa.PlayerId == playerId && pa.AchievementId == achievementId);
+                    
+                if (playerAchievement == null)
+                {
+                    return NotFound("Player does not have this achievement");
+                }
+                
+                // Set IsCollected based on input string
+                playerAchievement.IsCollected = string.Equals(isCollected, "true", StringComparison.OrdinalIgnoreCase);
+                
+                _context.PlayerAchievements.Update(playerAchievement);
+                _context.SaveChanges();
+                
+                return Ok(playerAchievement);
             }
-            
-            // Set IsCollected based on input string
-            playerAchievement.IsCollected = string.Equals(isCollected, "true", StringComparison.OrdinalIgnoreCase);
-            
-            _context.PlayerAchievements.Update(playerAchievement);
-            _context.SaveChanges();
-            
-            return Ok(playerAchievement);
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         // PUT: PlayerAchievement/{playerId}/{achievementId}/Collect - Mark achievement as collected
@@ -199,40 +276,6 @@ namespace MyLittlePetGameAPI.Controllers
                 _context.SaveChanges();
                 
                 return Ok(new { message = "Achievement collected successfully" });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-        
-        // GET: PlayerAchievement/Player/{playerId}/Uncollected - Get uncollected achievements
-        [HttpGet("Player/{playerId}/Uncollected")]
-        public ActionResult<IEnumerable<object>> GetUncollectedAchievements(int playerId)
-        {
-            try
-            {
-                var player = _context.Users.Find(playerId);
-                if (player == null)
-                {
-                    return NotFound("Player not found");
-                }
-                
-                var uncollectedAchievements = _context.PlayerAchievements
-                    .Include(pa => pa.Achievement)
-                    .Where(pa => pa.PlayerId == playerId && pa.IsCollected == false)
-                    .OrderBy(pa => pa.EarnedAt)
-                    .Select(pa => new 
-                    {
-                        AchievementId = pa.AchievementId,
-                        AchievementName = pa.Achievement.AchievementName,
-                        Description = pa.Achievement.Description,
-                        EarnedAt = pa.EarnedAt,
-                        IsCollected = pa.IsCollected
-                    })
-                    .ToList();
-                
-                return Ok(uncollectedAchievements);
             }
             catch (Exception ex)
             {
@@ -313,5 +356,13 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+    }
+
+    // Request model for creating player achievements
+    public class CreatePlayerAchievementRequest
+    {
+        public int PlayerId { get; set; }
+        public int AchievementId { get; set; }
+        public bool? IsCollected { get; set; }
     }
 }
