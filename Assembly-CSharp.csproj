@@ -59,7 +59,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
-    <Analyzer Include="D:\SWP\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
+    <Analyzer Include="C:\Users\Admin\Desktop\Unity\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
@@ -97,6 +97,7 @@
     <Compile Include="Assets\Scripts\Object\Achievement\CollectAchievement.cs" />
     <Compile Include="Assets\Scripts\UI\LoadScenes.cs" />
     <Compile Include="Assets\Scripts\Cutscene\FinishPoint.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\InventoryCollectable.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\OpenAdopButton.cs" />
     <Compile Include="Assets\Scripts\Loading\ASyncLoading.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPositionSaver.cs" />
@@ -112,10 +113,8 @@
     <Compile Include="Assets\Quarium\Script\FishController.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\Achievement.cs" />
     <Compile Include="Assets\Scripts\InfiniteBackground.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\Collectable.cs" />
     <Compile Include="Assets\Scripts\Object\User\UserProfile.cs" />
     <Compile Include="Assets\Scripts\FarmAction\CameraFollow.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\OldPlayer.cs" />
     <Compile Include="Assets\Scripts\Interactions\InteractionDetector.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialougeTrigger.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
@@ -133,6 +132,7 @@
     <Compile Include="Assets\Scripts\Follow\NPCFollow.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerSpawnManager.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfoMainScene.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\CollectabelItems.cs" />
     <Compile Include="Assets\Scripts\UI\UIMuteAudio.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\PlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfomation.cs" />
@@ -156,7 +156,6 @@
     <Compile Include="Assets\Scripts\Login\Menu.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementProgress.cs" />
     <Compile Include="Assets\Scripts\Sounds\MusicManager.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\Inventory.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PlayerPet.cs" />
     <Compile Include="Assets\Quarium\Script\FishControlMovement.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\PetClickHandler.cs" />

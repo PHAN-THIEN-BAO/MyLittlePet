@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class AchievementProgress : MonoBehaviour
@@ -138,6 +139,11 @@ public class AchievementProgress : MonoBehaviour
                 {
                     readyButton.SetActive(currentValue >= targetValue);
                     notCollectedButton.SetActive(!(currentValue >= targetValue));
+                    TMP_Text achievementId = achievement.transform.Find("Achievement_Id")?.GetComponent<TMP_Text>();
+                    if (currentValue >= targetValue && APIPlayerAchievement.AddAchievement(int.Parse(achievementId.text)))
+                    {
+                        Debug.Log($"Achievement added successfully.");
+                    }
                 }
             }
         }
@@ -171,6 +177,11 @@ public class AchievementProgress : MonoBehaviour
                 {
                     readyButton.SetActive(currentValue >= targetValue);
                     notCollectedButton.SetActive(!(currentValue >= targetValue));
+                    TMP_Text achievementId = achievement.transform.Find("Achievement_Id")?.GetComponent<TMP_Text>();
+                    if (currentValue >= targetValue && APIPlayerAchievement.AddAchievement(int.Parse(achievementId.text)))
+                    {
+                        Debug.Log($"Achievement added successfully.");
+                    }
                 }
             }
         }

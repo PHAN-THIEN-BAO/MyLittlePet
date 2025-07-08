@@ -1526,30 +1526,14 @@
             "name": "isCollected",
             "in": "query",
             "schema": {
-              "type": "boolean"
+              "type": "boolean",
+              "default": false
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/PlayerAchievement"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PlayerAchievement"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PlayerAchievement"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       },
@@ -1648,25 +1632,19 @@
               "text/plain": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PlayerAchievement"
-                  }
+                  "items": { }
                 }
               },
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PlayerAchievement"
-                  }
+                  "items": { }
                 }
               },
               "text/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PlayerAchievement"
-                  }
+                  "items": { }
                 }
               }
             }
@@ -1697,25 +1675,19 @@
               "text/plain": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PlayerAchievement"
-                  }
+                  "items": { }
                 }
               },
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PlayerAchievement"
-                  }
+                  "items": { }
                 }
               },
               "text/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PlayerAchievement"
-                  }
+                  "items": { }
                 }
               }
             }
@@ -1805,49 +1777,6 @@
         "responses": {
           "200": {
             "description": "OK"
-          }
-        }
-      }
-    },
-    "/PlayerAchievement/Player/{playerId}/Uncollected": {
-      "get": {
-        "tags": [
-          "PlayerAchievement"
-        ],
-        "parameters": [
-          {
-            "name": "playerId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": { }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": { }
-                }
-              }
-            }
           }
         }
       }
