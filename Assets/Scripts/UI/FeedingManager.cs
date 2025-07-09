@@ -34,6 +34,10 @@ public class FeedingManager : MonoBehaviour
     [Header("No Food Message")]
     public GameObject noFoodMessage; // Kéo object này từ Inspector vào
 
+    [Header("Dependency Check Settings")]
+    [Tooltip("Check pet status dependencies before feeding")]
+    public bool enableDependencyCheck = true;
+
     // Reference to the PetInfoUIManager to handle feeding effects
     private PetInfoUIManager petInfoManager;
 
@@ -85,6 +89,22 @@ public class FeedingManager : MonoBehaviour
     public void ShowFeedingPanel(int playerId, int customCareAmount = 0)
     {
         Debug.Log($"ShowFeedingPanel called with playerId={playerId}, customCareAmount={customCareAmount}");
+
+        // CHECK DEPENDENCY BEFORE SHOWING PANEL
+        if (enableDependencyCheck && petInfoManager != null)
+        {
+            var blockReason = petInfoManager.CanPerformAction(PetAction.ActionType.Feed);
+            if (blockReason != PetInfoUIManager.ActionBlockReason.None)
+            {
+                string message = petInfoManager.GetBlockReasonMessage(blockReason, PetAction.ActionType.Feed);
+                Debug.LogWarning($"Cannot show feeding panel: {message}");
+
+                // Show message to user instead of opening panel
+                ShowFeedingBlockedMessage(message);
+                return;
+            }
+        }
+
         currentPlayerId = playerId;
 
         // Set the pending feed amount in the pet info manager
@@ -100,6 +120,57 @@ public class FeedingManager : MonoBehaviour
             Debug.Log("Feeding panel set active. Starting LoadFoodItems coroutine.");
             // Load food items
             StartCoroutine(LoadFoodItems(playerId));
+        }
+    }
+
+    /// <summary>
+    /// Shows message when feeding is blocked due to dependencies
+    /// </summary>
+    private void ShowFeedingBlockedMessage(string message)
+    {
+        // You can implement this as a popup, toast, or temporary UI element
+        Debug.LogWarning($"🚫 FEEDING BLOCKED: {message}");
+
+        // Example: Show temporary message panel
+        StartCoroutine(ShowTemporaryMessage(message));
+    }
+
+    private IEnumerator ShowTemporaryMessage(string message)
+    {
+        // Create temporary message UI
+        GameObject messagePanel = new GameObject("FeedingBlockedMessage");
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas != null)
+        {
+            messagePanel.transform.SetParent(canvas.transform, false);
+
+            // Add background
+            Image bg = messagePanel.AddComponent<Image>();
+            bg.color = new Color(1f, 0.2f, 0.2f, 0.8f); // Red background
+
+            // Add text
+            GameObject textObj = new GameObject("MessageText");
+            textObj.transform.SetParent(messagePanel.transform, false);
+            TMP_Text text = textObj.AddComponent<TMP_Text>();
+            text.text = message;
+            text.color = Color.white;
+            text.fontSize = 18;
+            text.alignment = TextAlignmentOptions.Center;
+
+            // Set size
+            RectTransform rect = messagePanel.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(400, 100);
+            rect.anchoredPosition = Vector2.zero;
+
+            RectTransform textRect = textObj.GetComponent<RectTransform>();
+            textRect.sizeDelta = new Vector2(380, 80);
+            textRect.anchoredPosition = Vector2.zero;
+
+            // Auto-close after 3 seconds
+            yield return new WaitForSeconds(3f);
+
+            if (messagePanel != null)
+                Destroy(messagePanel);
         }
     }
 
@@ -282,11 +353,23 @@ public class FeedingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles food item click events
+    /// Enhanced food item click handler with dependency check
     /// </summary>
-    /// <param name="shopProductId">The ID of the shop product that was clicked</param>
     private void OnFoodItemClicked(int shopProductId)
     {
+        // DOUBLE-CHECK DEPENDENCY BEFORE FEEDING
+        if (enableDependencyCheck && petInfoManager != null)
+        {
+            var blockReason = petInfoManager.CanPerformAction(PetAction.ActionType.Feed);
+            if (blockReason != PetInfoUIManager.ActionBlockReason.None)
+            {
+                string message = petInfoManager.GetBlockReasonMessage(blockReason, PetAction.ActionType.Feed);
+                Debug.LogWarning($"Cannot feed pet: {message}");
+                ShowFeedingBlockedMessage(message);
+                return;
+            }
+        }
+
         // Find the selected food item
         FoodItem selectedItem = foodItems.Find(item => item.ShopProductId == shopProductId);
 
