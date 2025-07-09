@@ -12,10 +12,10 @@ public class SoundEffectManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
-            AudioSource[] audioSources  = GetComponents<AudioSource>();
+            AudioSource[] audioSources = GetComponents<AudioSource>();
             audioSource = audioSources[0];
             randomPitchAudioSource = audioSources[1];
             VoiceAudioSource = audioSources[2];
@@ -25,13 +25,13 @@ public class SoundEffectManager : MonoBehaviour
         else
         {
             Destroy(gameObject); // Destroy duplicate instances
-        } 
+        }
     }
 
     public static void Play(string soundname, bool randomPitch = false)
     {
         AudioClip audioClip = soundEffectLibrary.GetRandomClip(soundname);
-        if (audioClip != null) 
+        if (audioClip != null)
         {
             if (randomPitch)
             {
