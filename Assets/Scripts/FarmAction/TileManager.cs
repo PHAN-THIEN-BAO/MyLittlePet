@@ -1,96 +1,44 @@
-﻿//using UnityEngine;
-//using System.Collections; // Ensure you have the correct namespace for MonoBehaviour
-//using System.Collections.Generic; // Ensure you have the correct namespace for MonoBehaviour
-//using UnityEngine.Tilemaps; // 
+﻿using System.Collections.Generic;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+public class TileManager : MonoBehaviour
+{
+
+    [SerializeField] private Tilemap interactableMap; // Tilemap để quản lý các tile
+
+    [SerializeField] private Tile hiddenInteractableTile; // Tile ẩn khi không tương tác
+
+    [SerializeField] private Tile interactedTile; // Tile hiển thị khi tương tác
 
 
-//public class TileManager : MonoBehaviour
-//{
-//    [SerializeField] private Tilemap interactableMap; // The tilemap to manage
+    void Start()
+    {
+        foreach (var position in interactableMap.cellBounds.allPositionsWithin)
+        {
+            interactableMap.SetTile(position, hiddenInteractableTile); // Đặt tất cả các tile thành tile ẩn
+        }
+    }
 
-//    [SerializeField] private Tile hiddenInteractableTile;
-//    [SerializeField] private Tile interactedTile; // The tile to set for interactable tiles
+    public bool IsInteractableTile(Vector3Int position)
+    {
+        // Kiểm tra xem tile tại vị trí có phải là tile tương tác không
+        TileBase tile = interactableMap.GetTile(position);
+        
+        if(tile != null)
+        {
+            if(tile.name == "FarmInteractable")
+            {
+                return true; // Nếu là tile tương tác, trả về true
+            }
+        }
+        return false; // Nếu không phải là tile tương tác, trả về false
+    }
 
+    public void SetTileInteractable(Vector3Int position)
+    {
+        interactableMap.SetTile(position, interactedTile); // Đặt tile tại vị trí thành tile tương tác
+    }
 
-//    void Start()
-//    {
-//        if (interactableMap == null)
-//        {
-//            Debug.LogError("interactableMap chưa được gán trong Inspector!");
-//            return;
-//        }
-
-//        if (hiddenInteractableTile == null)
-//        {
-//            Debug.LogError("hiddenInteractableTile chưa được gán trong Inspector!");
-//            return;
-//        }
-
-//        if (interactedTile == null)
-//        {
-//            Debug.LogError("interactedTile chưa được gán trong Inspector!");
-//            return;
-//        }
-
-//        // In ra tên của tile để biết cần kiểm tra tên gì
-//        Debug.Log("Hidden tile name: " + hiddenInteractableTile.name);
-
-//        foreach (var position in interactableMap.cellBounds.allPositionsWithin)
-//        {
-//            interactableMap.SetTile(position, hiddenInteractableTile);
-//        }
-//    }
-
-//    public bool IsInteractable(Vector3Int position)
-//    {
-//        if (interactableMap == null)
-//        {
-//            Debug.LogError("interactableMap là null!");
-//            return false;
-//        }
-
-//        TileBase tile = interactableMap.GetTile(position);
-
-//        if (tile != null)
-//        {
-//            // Kiểm tra bằng cách so sánh với object thay vì tên
-//            if (tile == hiddenInteractableTile || tile.name == hiddenInteractableTile.name)
-//            {
-//                return true;
-//            }
-
-//            // In ra tên tile để debug
-//            Debug.Log("Tile name: " + tile.name + ", Expected: " + hiddenInteractableTile.name);
-//        }
-//        return false;
-//    }
-
-
-//    //void Start()
-//    //{
-//    //    foreach (var positon in interactableMap.cellBounds.allPositionsWithin)
-//    //    {
-//    //        interactableMap.SetTile(positon, hiddenInteractableTile); // Set all tiles to the hidden interactable tile
-//    //    }
-//    //}
-
-//    //public bool IsInteractable(Vector3Int position)
-//    //{
-//    //    TileBase tile = interactableMap.GetTile(position); // Get the tile at the specified position
-
-//    //    if(tile != null)
-//    //    {
-//    //        if(tile.name == "FarmInteractable")
-//    //        {
-//    //            return true;
-//    //        }    
-//    //    }   
-//    //    return false; // Return false if the tile is not interactable
-//    //}
-
-//    public void SetInteracted(Vector3Int position)
-//    {
-//        interactableMap.SetTile(position, interactedTile); // Set the tile at the specified position to the interactable tile
-//    }
-
-//}
+}
