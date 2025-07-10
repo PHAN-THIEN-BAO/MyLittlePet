@@ -309,10 +309,6 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(100);
             entity.Property(e => e.Role).HasMaxLength(50);
             entity.Property(e => e.UserName).HasMaxLength(100);
-            entity.Property(e => e.UserStatus)
-                .HasMaxLength(20)
-                .HasDefaultValue("ACTIVE");
-            entity.Property(e => e.BannedReason).HasMaxLength(255);
             entity.Property(e => e.Position);
             entity.Property(e => e.Exp);
         });

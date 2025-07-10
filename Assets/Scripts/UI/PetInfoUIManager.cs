@@ -1,29 +1,31 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic; // Thêm dòng này
+using System.Collections;
 
 public class PetInfoUIManager : MonoBehaviour
 {
     [Header("UI Panel")]
     public GameObject petsInfoPanel;
-    public GameObject feedingPanel; // Panel that appears when feeding the pet
+    public GameObject feedingPanel;
 
     [Header("Pet Details UI")]
     public TMP_Text petNameText;
     public TMP_Text petLevelText;
     public TMP_Text petCustomNameText;
     public TMP_Text petAdoptedDateText;
-    public Image petImage; // 
+    public Image petImage;
 
     [Header("Pet Sprites")]
-    public Sprite[] petSprites; // 
+    public Sprite[] petSprites;
 
     [Header("Status Bar Manager")]
     public PetStatusBarManager statusBarManager;
 
     [Header("Status Decay Settings")]
     [Tooltip("Time in seconds between status decay updates")]
-    public float decayInterval = 300f; // 5 minutes by default
+    public float decayInterval = 300f;
     [Tooltip("Amount to reduce hunger by on decay")]
     public int hungerDecayAmount = 5;
     [Tooltip("Amount to reduce happiness by on decay")]
@@ -43,100 +45,134 @@ public class PetInfoUIManager : MonoBehaviour
     [Tooltip("Maximum value for any status")]
     public int maxStatusValue = 100;
 
+    // === PET STATUS DEPENDENCY SYSTEM ===
+
+    [Header("Pet Need Thresholds")]
+    [Tooltip("Minimum hunger level required to play")]
+    public int minHungerForPlay = 30;
+    [Tooltip("Minimum energy level required to play")]
+    public int minEnergyForPlay = 20;
+    [Tooltip("Minimum hunger level required for effective sleep")]
+    public int minHungerForSleep = 25;
+    [Tooltip("Maximum energy level before sleep becomes less effective")]
+    public int maxEnergyForSleep = 80;
+    [Tooltip("Critical level - pet requires immediate attention")]
+    public int criticalThreshold = 15;
+
+    public enum ActionBlockReason
+    {
+        None,
+        TooHungry,
+        TooTired,
+        TooFull,
+        TooEnergetic,
+        Critical
+    }
+
+    // Action Management
+    [Header("Action Management")]
+    public PetActionManager actionManager;
+    public bool useActionSystem = true;
+
     // Track the current pet being displayed
     private int currentPetID = -1;
-
-    // Store the current pet details
     private PlayerPet currentPetDetails;
-
-    // Track if decay coroutine is running
     private Coroutine decayCoroutine;
 
     private void Start()
     {
-        // Make sure we have a status bar manager
+        // Existing status bar manager setup...
         if (statusBarManager == null)
         {
-            // Try to find one on this GameObject
             statusBarManager = GetComponent<PetStatusBarManager>();
-
-            // If still not found, look for one in children
             if (statusBarManager == null && petsInfoPanel != null)
             {
                 statusBarManager = petsInfoPanel.GetComponentInChildren<PetStatusBarManager>();
             }
-
             if (statusBarManager == null)
             {
                 Debug.LogWarning("No PetStatusBarManager found. Status bars will not be updated.");
             }
         }
 
-        // Start the decay system if we have an active pet
+        // Initialize Action Manager
+        InitializeActionManager();
 
+        // Start the decay system
         StartDecaySystem();
+    }
+
+    // Initialize the Pet Action Manager
+    private void InitializeActionManager()
+    {
+        if (useActionSystem)
+        {
+            // Try to find existing action manager
+            actionManager = PetActionManager.Instance;
+            
+            if (actionManager == null)
+            {
+                // Create new action manager
+                GameObject actionManagerObj = new GameObject("PetActionManager");
+                actionManager = actionManagerObj.AddComponent<PetActionManager>();
+                
+                // Also add scheduler for automatic maintenance
+                actionManagerObj.AddComponent<PetActionScheduler>();
+                
+                Debug.Log("Created new PetActionManager");
+            }
+            else
+            {
+                Debug.Log("Using existing PetActionManager");
+            }
+        }
     }
 
     private void OnDestroy()
     {
-        // Stop the decay coroutine when this component is destroyed
         StopDecaySystem();
     }
 
-    // Public method to toggle the panel and display pet details
     public void ToggleInfoPanel(int petID)
     {
         Debug.Log("ToggleInfoPanel called with petID: " + petID);
 
         bool isActive = petsInfoPanel.activeSelf;
 
-        // If we're already showing this pet's info, just toggle visibility
         if (isActive && currentPetID == petID)
         {
             petsInfoPanel.SetActive(false);
             return;
         }
 
-        // Store the current pet ID
         currentPetID = petID;
-
-        // Show the panel and load the pet details
         petsInfoPanel.SetActive(true);
         DisplayPetDetails(petID);
     }
 
-    // Close the panel
     public void CloseInfoPanel()
     {
         petsInfoPanel.SetActive(false);
     }
 
-    // Check if the panel is currently active
     public bool IsPanelActive()
     {
         return petsInfoPanel != null && petsInfoPanel.activeSelf;
     }
 
-    // Display the pet details for the given pet ID
     private void DisplayPetDetails(int petID)
     {
         try
         {
-            // Get the logged-in player information
             User currentUser = PlayerInfomation.LoadPlayerInfo();
 
             if (currentUser != null)
             {
-                // Fetch the pet details based on playerPetID
                 PlayerPet petDetails = APIPlayerPet.GetPlayerPetById(petID);
 
-                // Verify this pet belongs to the logged-in player
                 if (petDetails != null && petDetails.playerID == currentUser.id)
                 {
-                    // Update UI elements with pet details
                     UpdatePetInfo(petDetails);
-
-                    // Log status values for debugging
                     Debug.Log($"Pet {petID} status: {petDetails.status}");
                 }
                 else
@@ -155,15 +191,12 @@ public class PetInfoUIManager : MonoBehaviour
         }
     }
 
-    // Update the pet information UI elements
     private void UpdatePetInfo(PlayerPet petDetails)
     {
         if (petDetails == null) return;
 
-        // Store the current pet details
         currentPetDetails = petDetails;
 
-        // Update basic pet info text
         if (petNameText != null)
             petNameText.text = petDetails.petCustomName;
 
@@ -176,54 +209,549 @@ public class PetInfoUIManager : MonoBehaviour
         if (petCustomNameText != null)
             petCustomNameText.text = "Custom Name: " + petDetails.petCustomName;
 
-
         if (petImage != null && petSprites != null && petDetails.petID >= 0 && petDetails.petID < petSprites.Length)
         {
             petImage.sprite = petSprites[petDetails.petID];
         }
 
-        // Update status bars using the status bar manager
         if (statusBarManager != null)
         {
-            // Update level slider
             statusBarManager.UpdateLevelSlider(petDetails.level);
-
-            // Update status bars and text
             statusBarManager.UpdatePetStatus(petDetails.status);
         }
 
-        // Update UI button states
         UpdateCareButtonStates();
-
-        // Start the decay system if it's not running
         StartDecaySystem();
     }
 
-    // Coroutine to handle status decay over time
+    // === UPDATED PET CARE SYSTEM WITH DEPENDENCY CHECKS ===
+
+    public void FeedPet()
+    {
+        if (currentPetDetails == null) return;
+
+        // Check dependency
+        ActionBlockReason blockReason = CanPerformAction(PetAction.ActionType.Feed);
+        if (blockReason != ActionBlockReason.None)
+        {
+            string message = GetBlockReasonMessage(blockReason, PetAction.ActionType.Feed);
+            Debug.LogWarning(message);
+            ShowStatusMessage(message, Color.red);
+            return;
+        }
+
+        if (useActionSystem && actionManager != null)
+        {
+            actionManager.FeedPet(feedIncreaseAmount);
+        }
+        else
+        {
+            UpdatePetStatus(0, feedIncreaseAmount);
+        }
+        
+        Debug.Log($"Fed pet {currentPetDetails.playerPetID}, increasing hunger by {feedIncreaseAmount}");
+        ShowStatusMessage("Pet has been fed! 🍎", Color.green);
+    }
+
+    public void PlayWithPet()
+    {
+        if (currentPetDetails == null) return;
+
+        // Check dependency
+        ActionBlockReason blockReason = CanPerformAction(PetAction.ActionType.Play);
+        if (blockReason != ActionBlockReason.None)
+        {
+            string message = GetBlockReasonMessage(blockReason, PetAction.ActionType.Play);
+            Debug.LogWarning(message);
+            ShowStatusMessage(message, Color.red);
+            return;
+        }
+
+        if (IsHappinessAtMax())
+        {
+            Debug.Log($"Pet {currentPetDetails.playerPetID} is already completely happy");
+            ShowStatusMessage("Pet is already very happy! 😊", Color.yellow);
+            return;
+        }
+
+        if (useActionSystem && actionManager != null)
+        {
+            actionManager.PlayWithPet(playIncreaseAmount);
+        }
+        else
+        {
+            UpdatePetStatus(1, playIncreaseAmount);
+        }
+        
+        Debug.Log($"Played with pet {currentPetDetails.playerPetID}, increasing happiness by {playIncreaseAmount}");
+        ShowStatusMessage("Pet enjoyed playing! 🎾", Color.green);
+    }
+
+    public void SleepPet()
+    {
+        if (currentPetDetails == null) return;
+
+        // Check dependency
+        ActionBlockReason blockReason = CanPerformAction(PetAction.ActionType.Sleep);
+        if (blockReason != ActionBlockReason.None)
+        {
+            string message = GetBlockReasonMessage(blockReason, PetAction.ActionType.Sleep);
+            Debug.LogWarning(message);
+            ShowStatusMessage(message, Color.red);
+            return;
+        }
+
+        if (IsEnergyAtMax())
+        {
+            Debug.Log($"Pet {currentPetDetails.playerPetID} is already full of energy");
+            ShowStatusMessage("Pet is already fully energized! ⚡", Color.yellow);
+            return;
+        }
+
+        if (useActionSystem && actionManager != null)
+        {
+            actionManager.PetSleep(sleepIncreaseAmount);
+        }
+        else
+        {
+            UpdatePetStatus(2, sleepIncreaseAmount);
+        }
+        
+        Debug.Log($"Pet {currentPetDetails.playerPetID} slept, increasing energy by {sleepIncreaseAmount}");
+        ShowStatusMessage("Pet had a good rest! 😴", Color.green);
+    }
+
+    // === NEW METHODS FOR ADVANCED ACTION SCHEDULING ===
+
+    // Schedule a complete care sequence with dependencies
+    public void ScheduleComplexCare()
+    {
+        if (!useActionSystem || actionManager == null)
+        {
+            Debug.LogWarning("Action system not available, using direct care");
+            OnCareForAllButtonClicked();
+            return;
+        }
+
+        string sequenceId = $"complex_care_{Time.time}";
+        
+        // Create actions with proper dependencies
+        var checkStatusAction = new PetAction($"{sequenceId}_check", PetAction.ActionType.StatusDecay, PetAction.ActionPriority.High);
+        
+        var feedAction = new PetAction($"{sequenceId}_feed", PetAction.ActionType.Feed, PetAction.ActionPriority.Normal);
+        feedAction.SetParameter("amount", feedIncreaseAmount);
+        feedAction.AddDependency(checkStatusAction.actionId);
+        
+        var playAction = new PetAction($"{sequenceId}_play", PetAction.ActionType.Play, PetAction.ActionPriority.Normal);
+        playAction.SetParameter("amount", playIncreaseAmount);
+        playAction.AddDependency(feedAction.actionId); // Play after feeding
+        
+        var sleepAction = new PetAction($"{sequenceId}_sleep", PetAction.ActionType.Sleep, PetAction.ActionPriority.Normal);
+        sleepAction.SetParameter("amount", sleepIncreaseAmount);
+        sleepAction.AddDependency(playAction.actionId); // Sleep after playing
+        
+        var updateDbAction = new PetAction($"{sequenceId}_update", PetAction.ActionType.UpdateDatabase, PetAction.ActionPriority.Critical);
+        updateDbAction.AddDependency(sleepAction.actionId); // Update DB at the end
+        
+        // Add all actions - they will be executed in topological order
+        actionManager.AddAction(checkStatusAction);
+        actionManager.AddAction(feedAction);
+        actionManager.AddAction(playAction);
+        actionManager.AddAction(sleepAction);
+        actionManager.AddAction(updateDbAction);
+        
+        Debug.Log("Scheduled complex care sequence with dependencies");
+    }
+
+    // Schedule emergency care (high priority)
+    public void ScheduleEmergencyCare()
+    {
+        if (!useActionSystem || actionManager == null) return;
+
+        string emergencyId = $"emergency_{Time.time}";
+        
+        // Create emergency actions with high priority
+        if (!IsHungerAtMax())
+        {
+            var emergencyFeed = new PetAction($"{emergencyId}_feed", PetAction.ActionType.Feed, PetAction.ActionPriority.Critical);
+            emergencyFeed.SetParameter("amount", feedIncreaseAmount * 2); // Double amount for emergency
+            actionManager.AddAction(emergencyFeed);
+        }
+
+        if (!IsHappinessAtMax())
+        {
+            var emergencyPlay = new PetAction($"{emergencyId}_play", PetAction.ActionType.Play, PetAction.ActionPriority.Critical);
+            emergencyPlay.SetParameter("amount", playIncreaseAmount * 2);
+            actionManager.AddAction(emergencyPlay);
+        }
+
+        if (!IsEnergyAtMax())
+        {
+            var emergencySleep = new PetAction($"{emergencyId}_sleep", PetAction.ActionType.Sleep, PetAction.ActionPriority.Critical);
+            emergencySleep.SetParameter("amount", sleepIncreaseAmount * 2);
+            actionManager.AddAction(emergencySleep);
+        }
+
+        Debug.Log("Scheduled emergency care with high priority");
+    }
+
+    // Schedule maintenance care for specific statuses
+    public void ScheduleMaintenanceCare(bool feedNeeded = true, bool playNeeded = true, bool sleepNeeded = true)
+    {
+        if (!useActionSystem || actionManager == null) return;
+
+        string maintenanceId = $"maintenance_{Time.time}";
+        var actions = new List<PetAction>();
+
+        if (feedNeeded && !IsHungerAtMax())
+        {
+            var feedAction = new PetAction($"{maintenanceId}_feed", PetAction.ActionType.Feed);
+            feedAction.SetParameter("amount", feedIncreaseAmount);
+            actions.Add(feedAction);
+        }
+
+        if (playNeeded && !IsHappinessAtMax())
+        {
+            var playAction = new PetAction($"{maintenanceId}_play", PetAction.ActionType.Play);
+            playAction.SetParameter("amount", playIncreaseAmount);
+            actions.Add(playAction);
+        }
+
+        if (sleepNeeded && !IsEnergyAtMax())
+        {
+            var sleepAction = new PetAction($"{maintenanceId}_sleep", PetAction.ActionType.Sleep);
+            sleepAction.SetParameter("amount", sleepIncreaseAmount);
+            actions.Add(sleepAction);
+        }
+
+        // Add database update after all care actions
+        if (actions.Count > 0)
+        {
+            var updateAction = new PetAction($"{maintenanceId}_update", PetAction.ActionType.UpdateDatabase, PetAction.ActionPriority.Normal);
+            
+            // Make update depend on all care actions
+            foreach (var action in actions)
+            {
+                updateAction.AddDependency(action.actionId);
+            }
+            
+            // Add all actions
+            foreach (var action in actions)
+            {
+                actionManager.AddAction(action);
+            }
+            actionManager.AddAction(updateAction);
+        }
+
+        Debug.Log($"Scheduled maintenance care for {actions.Count} statuses");
+    }
+
+    // === SMART CARE WITH DEPENDENCY ORDERING ===
+
+    public void ScheduleSmartCare()
+    {
+        if (!useActionSystem || actionManager == null)
+        {
+            PerformDirectSmartCare();
+            return;
+        }
+
+        var (hunger, happiness, energy) = GetCurrentStatusValues();
+        string smartCareId = $"smart_care_{Time.time}";
+        
+        // Create actions based on current needs and dependencies
+        var actions = new List<PetAction>();
+        
+        // Step 1: Handle critical situations first
+        if (hunger <= criticalThreshold)
+        {
+            var emergencyFeed = new PetAction($"{smartCareId}_emergency_feed", 
+                PetAction.ActionType.Feed, PetAction.ActionPriority.Critical);
+            emergencyFeed.SetParameter("amount", feedIncreaseAmount * 2);
+            actions.Add(emergencyFeed);
+        }
+        
+        // Step 2: Feed if needed (must come before play/sleep if hunger is low)
+        if (hunger < minHungerForPlay && hunger > criticalThreshold)
+        {
+            var feedAction = new PetAction($"{smartCareId}_feed", 
+                PetAction.ActionType.Feed, PetAction.ActionPriority.High);
+            feedAction.SetParameter("amount", feedIncreaseAmount);
+            actions.Add(feedAction);
+        }
+        
+        // Step 3: Play (requires adequate hunger and energy)
+        if (happiness < maxStatusValue)
+        {
+            var playAction = new PetAction($"{smartCareId}_play", 
+                PetAction.ActionType.Play, PetAction.ActionPriority.Normal);
+            playAction.SetParameter("amount", playIncreaseAmount);
+            
+            // Add dependency on feeding if hunger is currently too low
+            if (hunger < minHungerForPlay)
+            {
+                var dependentFeedAction = actions.Find(a => a.type == PetAction.ActionType.Feed);
+                if (dependentFeedAction != null)
+                {
+                    playAction.AddDependency(dependentFeedAction.actionId);
+                }
+            }
+            
+            actions.Add(playAction);
+        }
+        
+        // Step 4: Sleep (requires adequate hunger, comes after play to tire pet out)
+        if (energy < maxStatusValue)
+        {
+            var sleepAction = new PetAction($"{smartCareId}_sleep", 
+                PetAction.ActionType.Sleep, PetAction.ActionPriority.Normal);
+            sleepAction.SetParameter("amount", sleepIncreaseAmount);
+            
+            // Add dependency on feeding if hunger is too low
+            if (hunger < minHungerForSleep)
+            {
+                var dependentFeedAction = actions.Find(a => a.type == PetAction.ActionType.Feed);
+                if (dependentFeedAction != null)
+                {
+                    sleepAction.AddDependency(dependentFeedAction.actionId);
+                }
+            }
+            
+            // Add dependency on playing to tire pet out first
+            var playAction = actions.Find(a => a.type == PetAction.ActionType.Play);
+            if (playAction != null)
+            {
+                sleepAction.AddDependency(playAction.actionId);
+            }
+            
+            actions.Add(sleepAction);
+        }
+        
+        // Step 5: Database update (depends on all other actions)
+        if (actions.Count > 0)
+        {
+            var updateAction = new PetAction($"{smartCareId}_update", 
+                PetAction.ActionType.UpdateDatabase, PetAction.ActionPriority.Critical);
+            
+            foreach (var action in actions)
+            {
+                updateAction.AddDependency(action.actionId);
+            }
+            
+            actions.Add(updateAction);
+        }
+        
+        // Add all actions to manager
+        foreach (var action in actions)
+        {
+            actionManager.AddAction(action);
+        }
+        
+        Debug.Log($"Scheduled smart care with {actions.Count} actions and proper dependencies");
+        ShowStatusMessage($"Scheduled {actions.Count-1} care actions in optimal order!", Color.blue);
+    }
+
+    // Fallback direct care for when action system is disabled
+    private void PerformDirectSmartCare()
+    {
+        var (hunger, happiness, energy) = GetCurrentStatusValues();
+        var actionsPerformed = new List<string>();
+        
+        // Feed first if critically hungry or if needed for other actions
+        if (hunger <= criticalThreshold || 
+            (hunger < minHungerForPlay && happiness < maxStatusValue) ||
+            (hunger < minHungerForSleep && energy < maxStatusValue))
+        {
+            if (CanPerformAction(PetAction.ActionType.Feed) == ActionBlockReason.None)
+            {
+                UpdatePetStatus(0, feedIncreaseAmount);
+                actionsPerformed.Add("Fed");
+                
+                // Update current values after feeding
+                (hunger, _, _) = GetCurrentStatusValues();
+            }
+        }
+        
+        // Play if needed and now possible
+        if (happiness < maxStatusValue && 
+            CanPerformAction(PetAction.ActionType.Play) == ActionBlockReason.None)
+        {
+            UpdatePetStatus(1, playIncreaseAmount);
+            actionsPerformed.Add("Played");
+        }
+        
+        // Sleep if needed and possible
+        if (energy < maxStatusValue && 
+            CanPerformAction(PetAction.ActionType.Sleep) == ActionBlockReason.None)
+        {
+            UpdatePetStatus(2, sleepIncreaseAmount);
+            actionsPerformed.Add("Slept");
+        }
+        
+        if (actionsPerformed.Count > 0)
+        {
+            string message = $"Smart care completed: {string.Join(", ", actionsPerformed)}";
+            Debug.Log(message);
+            ShowStatusMessage(message, Color.green);
+        }
+        else
+        {
+            ShowStatusMessage("Pet doesn't need care right now or some dependencies aren't met!", Color.yellow);
+        }
+    }
+
+    // Existing UpdatePetStatus method (still needed for direct calls)
+    public void UpdatePetStatus(int statusIndex, int increaseAmount)
+    {
+        if (currentPetDetails == null) return;
+
+        string[] statusValues = currentPetDetails.status.Split('%');
+        if (statusValues.Length < 3)
+        {
+            Debug.LogError($"Invalid status format: {currentPetDetails.status}");
+            return;
+        }
+
+        int statusValue;
+        if (!int.TryParse(statusValues[statusIndex], out statusValue))
+        {
+            Debug.LogError($"Failed to parse status value: {statusValues[statusIndex]}");
+            return;
+        }
+
+        statusValue += increaseAmount;
+        statusValue = Mathf.Min(statusValue, maxStatusValue);
+        statusValues[statusIndex] = statusValue.ToString();
+
+        string newStatus = string.Join("%", statusValues);
+        currentPetDetails.status = newStatus;
+
+        if (statusBarManager != null)
+        {
+            statusBarManager.UpdatePetStatus(newStatus);
+        }
+
+        UpdateCareButtonStates();
+        StartCoroutine(UpdatePetInDatabase());
+
+        Debug.Log($"Updated pet status to: {newStatus}");
+    }
+
+    // === UPDATED BUTTON HANDLERS ===
+
+    public void OnFeedButtonClicked()
+    {
+        if (feedingPanel != null && feedingPanel.activeSelf)
+        {
+            if (useActionSystem && actionManager != null)
+            {
+                var feedAction = new PetAction($"panel_feed_{Time.time}", PetAction.ActionType.Feed, PetAction.ActionPriority.High);
+                feedAction.SetParameter("amount", pendingFeedAmount);
+                actionManager.AddAction(feedAction);
+            }
+            else
+            {
+                UpdatePetStatus(0, pendingFeedAmount);
+            }
+
+            feedingPanel.SetActive(false);
+            Debug.Log($"Pet fed with {pendingFeedAmount} amount of food");
+        }
+        else
+        {
+            FeedPet();
+        }
+    }
+
+    public void OnPlayButtonClicked()
+    {
+        PlayWithPet();
+    }
+
+    public void OnSleepButtonClicked()
+    {
+        SleepPet();
+    }
+
+    public void OnCareForAllButtonClicked()
+    {
+        if (currentPetDetails == null) return;
+
+        // Use smart care instead of simple care for all
+        ScheduleSmartCare();
+        
+        Debug.Log($"Initiated smart care sequence for pet {currentPetDetails.playerPetID}");
+    }
+
+    public void OnEmergencyCareButtonClicked()
+    {
+        var (hunger, happiness, energy) = GetCurrentStatusValues();
+        
+        if (hunger <= criticalThreshold || energy <= criticalThreshold)
+        {
+            // Force feed with double amount
+            UpdatePetStatus(0, feedIncreaseAmount * 2);
+            ShowStatusMessage("Emergency feeding performed! 🚨", Color.red);
+            
+            // Then schedule regular care
+            ScheduleSmartCare();
+        }
+        else
+        {
+            ShowStatusMessage("Pet is not in critical condition.", Color.yellow);
+        }
+    }
+
+    // === NEW UI METHODS FOR ACTION SYSTEM ===
+
+    // Button handler for complex care sequence
+    public void OnComplexCareButtonClicked()
+    {
+        ScheduleComplexCare();
+    }
+
+    // Button handler for smart care sequence
+    public void OnSmartCareButtonClicked()
+    {
+        ScheduleSmartCare();
+    }
+
+    // Toggle action system on/off
+    public void ToggleActionSystem(bool enabled)
+    {
+        useActionSystem = enabled;
+        Debug.Log($"Action system {(enabled ? "enabled" : "disabled")}");
+    }
+
+    // Clear all pending actions
+    public void ClearAllActions()
+    {
+        if (actionManager != null)
+        {
+            actionManager.ClearAllActions();
+            Debug.Log("Cleared all pending actions");
+        }
+    }
+
+    // Rest of the existing methods remain the same...
     private System.Collections.IEnumerator StatusDecayCoroutine()
     {
-        // Wait for the initial delay
         yield return new WaitForSeconds(decayInterval);
 
         while (true)
         {
-            // Check if the current pet details are available
             if (currentPetDetails != null)
             {
-                // Decay each status value
                 bool wasDecayed = false;
-
-                // Parse the status string to get individual values
                 string[] statusValues = currentPetDetails.status.Split('%');
+                
                 if (statusValues.Length >= 3)
                 {
-                    // Try to parse each status value
                     int hunger, happiness, energy;
                     if (int.TryParse(statusValues[0], out hunger) &&
                         int.TryParse(statusValues[1], out happiness) &&
                         int.TryParse(statusValues[2], out energy))
                     {
-                        // Only decay if above the minimum value
                         if (hunger > minStatusValue)
                         {
                             hunger -= hungerDecayAmount;
@@ -242,23 +770,17 @@ public class PetInfoUIManager : MonoBehaviour
                             wasDecayed = true;
                         }
 
-                        // Update the status string if any value was decayed
                         if (wasDecayed)
                         {
-                            // Create the new status string
                             string newStatus = $"{hunger}%{happiness}%{energy}";
                             currentPetDetails.status = newStatus;
 
-                            // Update the UI
                             if (statusBarManager != null)
                             {
                                 statusBarManager.UpdatePetStatus(newStatus);
                             }
 
-                            // Update button states as statuses may have changed from maxed
                             UpdateCareButtonStates();
-
-                            // Update the database
                             StartCoroutine(UpdatePetInDatabase());
 
                             Debug.Log($"Pet status decayed: {newStatus}");
@@ -275,17 +797,14 @@ public class PetInfoUIManager : MonoBehaviour
                 }
             }
 
-            // Wait for the decay interval before next update
             yield return new WaitForSeconds(decayInterval);
         }
     }
 
-    // Update the pet information in the database
-    private System.Collections.IEnumerator UpdatePetInDatabase()
+    public System.Collections.IEnumerator UpdatePetInDatabase()
     {
         if (currentPetDetails != null)
         {
-            // Call the API method to update the pet
             yield return APIPlayerPet.UpdatePlayerPetCoroutine(currentPetDetails, success =>
             {
                 if (success)
@@ -300,18 +819,13 @@ public class PetInfoUIManager : MonoBehaviour
         }
     }
 
-    // Start the decay system if it's not already running
     private void StartDecaySystem()
     {
-        // Stop any existing decay coroutine first
         StopDecaySystem();
-
-        // Start a new decay coroutine
         decayCoroutine = StartCoroutine(StatusDecayCoroutine());
         Debug.Log("Started pet status decay system");
     }
 
-    // Stop the decay system
     private void StopDecaySystem()
     {
         if (decayCoroutine != null)
@@ -322,170 +836,29 @@ public class PetInfoUIManager : MonoBehaviour
         }
     }
 
-    // --- Pet Care System ---
-
-    // Feed the pet to increase hunger status
-    public void FeedPet()
-    {
-        if (currentPetDetails == null) return;
-
-        // Skip if already at max
-        if (IsHungerAtMax())
-        {
-            Debug.Log($"Pet {currentPetDetails.playerPetID} is already full");
-            return;
-        }
-
-        UpdatePetStatus(0, feedIncreaseAmount); // Index 0 is hunger
-        Debug.Log($"Fed pet {currentPetDetails.playerPetID}, increasing hunger by {feedIncreaseAmount}");
-    }
-
-    // Play with the pet to increase happiness status
-    public void PlayWithPet()
-    {
-        if (currentPetDetails == null) return;
-
-        // Skip if already at max
-        if (IsHappinessAtMax())
-        {
-            Debug.Log($"Pet {currentPetDetails.playerPetID} is already completely happy");
-            return;
-        }
-
-        UpdatePetStatus(1, playIncreaseAmount); // Index 1 is happiness
-        Debug.Log($"Played with pet {currentPetDetails.playerPetID}, increasing happiness by {playIncreaseAmount}");
-    }
-
-    // Let the pet sleep to increase energy status
-    public void SleepPet()
-    {
-        if (currentPetDetails == null) return;
-
-        // Skip if already at max
-        if (IsEnergyAtMax())
-        {
-            Debug.Log($"Pet {currentPetDetails.playerPetID} is already full of energy");
-            return;
-        }
-
-        UpdatePetStatus(2, sleepIncreaseAmount); // Index 2 is energy
-        Debug.Log($"Pet {currentPetDetails.playerPetID} slept, increasing energy by {sleepIncreaseAmount}");
-    }
-
-    // Update a specific pet status value
-    public void UpdatePetStatus(int statusIndex, int increaseAmount)
-    {
-        if (currentPetDetails == null) return;
-
-        // Parse the current status string
-        string[] statusValues = currentPetDetails.status.Split('%');
-        if (statusValues.Length < 3)
-        {
-            Debug.LogError($"Invalid status format: {currentPetDetails.status}");
-            return;
-        }
-
-        // Parse the status value to update
-        int statusValue;
-        if (!int.TryParse(statusValues[statusIndex], out statusValue))
-        {
-            Debug.LogError($"Failed to parse status value: {statusValues[statusIndex]}");
-            return;
-        }
-
-        // Increase the status value, capped at the maximum
-        statusValue += increaseAmount;
-        statusValue = Mathf.Min(statusValue, maxStatusValue);
-
-        // Update the status array
-        statusValues[statusIndex] = statusValue.ToString();
-
-        // Create the new status string
-        string newStatus = string.Join("%", statusValues);
-        currentPetDetails.status = newStatus;
-
-        // Update the UI
-        if (statusBarManager != null)
-        {
-            statusBarManager.UpdatePetStatus(newStatus);
-        }
-
-        // Update button states if the status reached max
-        UpdateCareButtonStates();
-
-        // Update the database
-        StartCoroutine(UpdatePetInDatabase());
-
-        Debug.Log($"Updated pet status to: {newStatus}");
-    }
-
-    // --- UI Button Handlers ---
-
-    // Handler for the Feed button
-    public void OnFeedButtonClicked()
-    {
-        // If the feeding panel is active, use the pending feed amount
-        if (feedingPanel != null && feedingPanel.activeSelf)
-        {
-            // Use the pending feed amount to update hunger
-            UpdatePetStatus(0, pendingFeedAmount); // 0 is hunger index
-
-            // Hide the panel after feeding
-            feedingPanel.SetActive(false);
-
-            Debug.Log($"Pet fed with {pendingFeedAmount} amount of food");
-        }
-        else
-        {
-            // Default behavior when button is clicked outside of the feeding panel flow
-            FeedPet();
-        }
-    }
-
-    // Handler for the Play button
-    public void OnPlayButtonClicked()
-    {
-        PlayWithPet();
-    }
-
-    // Handler for the Sleep button
-    public void OnSleepButtonClicked()
-    {
-        SleepPet();
-    }
-
-    // Care for all pet needs at once (for convenience)
-    public void OnCareForAllButtonClicked()
-    {
-        if (currentPetDetails == null) return;
-
-        FeedPet();
-        PlayWithPet();
-        SleepPet();
-
-        Debug.Log($"Provided complete care for pet {currentPetDetails.playerPetID}");
-    }
-
-    // Update UI button interactable states based on pet status
     private void UpdateCareButtonStates()
     {
-        // Find care buttons in the scene if they exist
         Button[] buttons = petsInfoPanel.GetComponentsInChildren<Button>(true);
 
         foreach (Button button in buttons)
         {
-            // Check button name/tag to determine its function
             if (button.name.Contains("Feed") || button.tag == "FeedButton")
             {
-                button.interactable = !IsHungerAtMax();
+                ActionBlockReason reason = CanPerformAction(PetAction.ActionType.Feed);
+                button.interactable = (reason == ActionBlockReason.None);
+                UpdateButtonVisual(button, reason, PetAction.ActionType.Feed);
             }
             else if (button.name.Contains("Play") || button.tag == "PlayButton")
             {
-                button.interactable = !IsHappinessAtMax();
+                ActionBlockReason reason = CanPerformAction(PetAction.ActionType.Play);
+                button.interactable = (reason == ActionBlockReason.None && !IsHappinessAtMax());
+                UpdateButtonVisual(button, reason, PetAction.ActionType.Play);
             }
             else if (button.name.Contains("Sleep") || button.tag == "SleepButton")
             {
-                button.interactable = !IsEnergyAtMax();
+                ActionBlockReason reason = CanPerformAction(PetAction.ActionType.Sleep);
+                button.interactable = (reason == ActionBlockReason.None && !IsEnergyAtMax());
+                UpdateButtonVisual(button, reason, PetAction.ActionType.Sleep);
             }
             else if (button.name.Contains("CareAll") || button.tag == "CareAllButton")
             {
@@ -494,9 +867,67 @@ public class PetInfoUIManager : MonoBehaviour
         }
     }
 
-    // --- Status Check Methods ---
+    private void UpdateButtonVisual(Button button, ActionBlockReason reason, PetAction.ActionType actionType)
+    {
+        var colors = button.colors;
+        
+        switch (reason)
+        {
+            case ActionBlockReason.None:
+                colors.normalColor = Color.white;
+                colors.disabledColor = Color.gray;
+                break;
+                
+            case ActionBlockReason.Critical:
+                colors.normalColor = Color.red;
+                colors.disabledColor = Color.red * 0.7f;
+                break;
+                
+            case ActionBlockReason.TooHungry:
+            case ActionBlockReason.TooTired:
+                colors.normalColor = Color.yellow;
+                colors.disabledColor = Color.yellow * 0.7f;
+                break;
+                
+            case ActionBlockReason.TooFull:
+            case ActionBlockReason.TooEnergetic:
+                colors.normalColor = Color.green;
+                colors.disabledColor = Color.green * 0.7f;
+                break;
+        }
+        
+        button.colors = colors;
+        
+        // Update button text with dependency info
+        var buttonText = button.GetComponentInChildren<TMP_Text>();
+        if (buttonText != null && reason != ActionBlockReason.None)
+        {
+            string baseText = actionType.ToString();
+            string statusText = "";
+            
+            switch (reason)
+            {
+                case ActionBlockReason.Critical:
+                    statusText = " (CRITICAL!)";
+                    break;
+                case ActionBlockReason.TooHungry:
+                    statusText = " (Need Food First)";
+                    break;
+                case ActionBlockReason.TooTired:
+                    statusText = " (Need Sleep First)";
+                    break;
+                case ActionBlockReason.TooFull:
+                    statusText = " (Already Full)";
+                    break;
+                case ActionBlockReason.TooEnergetic:
+                    statusText = " (Too Energetic)";
+                    break;
+            }
+            
+            buttonText.text = baseText + statusText;
+        }
+    }
 
-    // Check if hunger status is at maximum
     public bool IsHungerAtMax()
     {
         if (currentPetDetails == null) return false;
@@ -509,7 +940,6 @@ public class PetInfoUIManager : MonoBehaviour
         return false;
     }
 
-    // Check if happiness status is at maximum
     public bool IsHappinessAtMax()
     {
         if (currentPetDetails == null) return false;
@@ -522,7 +952,6 @@ public class PetInfoUIManager : MonoBehaviour
         return false;
     }
 
-    // Check if energy status is at maximum
     public bool IsEnergyAtMax()
     {
         if (currentPetDetails == null) return false;
@@ -535,28 +964,20 @@ public class PetInfoUIManager : MonoBehaviour
         return false;
     }
 
-    // Check if all statuses are at maximum
     public bool IsAllStatusAtMax()
     {
         return IsHungerAtMax() && IsHappinessAtMax() && IsEnergyAtMax();
     }
 
-    // Store the care amount to be used by the feeding panel
     [HideInInspector]
     public int pendingFeedAmount = 0;
 
-    // Show the feeding panel
     public void ShowFeedingPanel(int customCareAmount = 0)
     {
         if (feedingPanel != null)
         {
-            // Store the care amount for use by buttons in the feeding panel
             pendingFeedAmount = customCareAmount > 0 ? customCareAmount : feedIncreaseAmount;
-
-            // Activate the feeding panel
             feedingPanel.SetActive(true);
-
-            // Optional: Update UI elements in the feeding panel to show available food options
             UpdateFeedingPanelUI();
         }
         else
@@ -565,7 +986,6 @@ public class PetInfoUIManager : MonoBehaviour
         }
     }
 
-    // Update the UI elements in the feeding panel
     private void UpdateFeedingPanelUI()
     {
         // This method can be implemented to update food option buttons, 
@@ -580,5 +1000,95 @@ public class PetInfoUIManager : MonoBehaviour
         {
             feedingPanel.SetActive(false);
         }
+    }
+
+    // === PET STATUS DEPENDENCY SYSTEM ===
+
+    // Get current status values helper
+    public (int hunger, int happiness, int energy) GetCurrentStatusValues()
+    {
+        if (currentPetDetails == null || string.IsNullOrEmpty(currentPetDetails.status))
+            return (0, 0, 0);
+
+        string[] statusValues = currentPetDetails.status.Split('%');
+        if (statusValues.Length < 3) return (0, 0, 0);
+
+        int.TryParse(statusValues[0], out int hunger);
+        int.TryParse(statusValues[1], out int happiness);
+        int.TryParse(statusValues[2], out int energy);
+
+        return (hunger, happiness, energy);
+    }
+
+    // Check if action is allowed based on dependencies
+    public ActionBlockReason CanPerformAction(PetAction.ActionType actionType)
+    {
+        var (hunger, happiness, energy) = GetCurrentStatusValues();
+        
+        // Critical status check - blocks all actions except feeding
+        if ((hunger <= criticalThreshold || energy <= criticalThreshold) && actionType != PetAction.ActionType.Feed)
+        {
+            return ActionBlockReason.Critical;
+        }
+
+        switch (actionType)
+        {
+            case PetAction.ActionType.Feed:
+                if (hunger >= maxStatusValue)
+                    return ActionBlockReason.TooFull;
+                break;
+
+            case PetAction.ActionType.Play:
+                if (hunger < minHungerForPlay)
+                    return ActionBlockReason.TooHungry;
+                if (energy < minEnergyForPlay)
+                    return ActionBlockReason.TooTired;
+                if (happiness >= maxStatusValue)
+                    return ActionBlockReason.None; // Will be handled by existing check
+                break;
+
+            case PetAction.ActionType.Sleep:
+                if (hunger < minHungerForSleep)
+                    return ActionBlockReason.TooHungry;
+                if (energy >= maxStatusValue)
+                    return ActionBlockReason.TooEnergetic;
+                break;
+        }
+
+        return ActionBlockReason.None;
+    }
+
+    // Get user-friendly message for blocked actions
+    public string GetBlockReasonMessage(ActionBlockReason reason, PetAction.ActionType actionType)
+    {
+        switch (reason)
+        {
+            case ActionBlockReason.TooHungry:
+                return $"Pet is too hungry to {actionType.ToString().ToLower()}! Feed it first (minimum {(actionType == PetAction.ActionType.Play ? minHungerForPlay : minHungerForSleep)} hunger).";
+            
+            case ActionBlockReason.TooTired:
+                return $"Pet is too tired to play! Let it sleep first (minimum {minEnergyForPlay} energy).";
+            
+            case ActionBlockReason.TooFull:
+                return "Pet is already full and doesn't need food right now.";
+            
+            case ActionBlockReason.TooEnergetic:
+                return "Pet has too much energy to sleep effectively. Play with it first!";
+            
+            case ActionBlockReason.Critical:
+                return "🚨 CRITICAL: Pet is in emergency condition! Feed it immediately before doing anything else!";
+            
+            default:
+                return "";
+        }
+    }
+
+    // Show status message on UI
+    public void ShowStatusMessage(string message, Color color)
+    {
+        Debug.Log($"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{message}</color>");
+        
+        // TODO: Implement actual UI popup/toast message
+        // For now, just log with color
     }
 }

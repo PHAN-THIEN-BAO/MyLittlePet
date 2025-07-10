@@ -96,61 +96,92 @@ public class DialogueController : MonoBehaviour
     public GameObject CreatePetCareChoiceButton(string choiceText, PetCareAction careAction, UnityEngine.Events.UnityAction additionalAction = null, int customCareAmount = 0)
     {
         GameObject choiceButton = Instantiate(choiceButtonPrefab, choiceContainer);
-        choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText;
-
         Button button = choiceButton.GetComponent<Button>();
+        
+        // ========== THÊM DEPENDENCY CHECK ==========
+        bool disableButton = false;
+        string modifiedText = choiceText;
+        
+        if (petInfoManager != null)
+        {
+            // Convert DialogueController.PetCareAction to PetAction.ActionType
+            PetAction.ActionType actionType = ConvertToPetActionType(careAction);
+            
+            // Check dependency
+            var blockReason = petInfoManager.CanPerformAction(actionType);
+            
+            if (blockReason != PetInfoUIManager.ActionBlockReason.None)
+            {
+                disableButton = true;
+                string reason = GetShortBlockReason(blockReason);
+                modifiedText = $"{choiceText} ({reason})";
+            }
+            else
+            {
+                // Original max status checks
+                switch (careAction)
+                {
+                    case PetCareAction.Feed:
+                        disableButton = petInfoManager.IsHungerAtMax();
+                        if (disableButton) modifiedText = choiceText + " (Full)";
+                        break;
+                        
+                    case PetCareAction.Play:
+                        disableButton = petInfoManager.IsHappinessAtMax();
+                        if (disableButton) modifiedText = choiceText + " (Happy)";
+                        break;
+                        
+                    case PetCareAction.Sleep:
+                        disableButton = petInfoManager.IsEnergyAtMax();
+                        if (disableButton) modifiedText = choiceText + " (Energetic)";
+                        break;
+                        
+                    case PetCareAction.CareForAll:
+                        disableButton = petInfoManager.IsAllStatusAtMax();
+                        if (disableButton) modifiedText = choiceText + " (Not Needed)";
+                        break;
+                }
+            }
+        }
+        
+        choiceButton.GetComponentInChildren<TMP_Text>().text = modifiedText;
+        button.interactable = !disableButton;
+        
+        // Rest of existing code...
         button.onClick.AddListener(() => PerformPetCareAction(careAction, customCareAmount));
-
-        // Add any additional action that should be performed (like advancing dialogue)
         if (additionalAction != null)
         {
             button.onClick.AddListener(additionalAction);
         }
-
-        // Disable the button if the corresponding status is already at max
-        if (petInfoManager != null)
-        {
-            bool disableButton = false;
-
-            switch (careAction)
-            {
-                case PetCareAction.Feed:
-                    disableButton = petInfoManager.IsHungerAtMax();
-                    if (disableButton)
-                    {
-                        choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText + " (Full)";
-                    }
-                    break;
-
-                case PetCareAction.Play:
-                    disableButton = petInfoManager.IsHappinessAtMax();
-                    if (disableButton)
-                    {
-                        choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText + " (Happy)";
-                    }
-                    break;
-
-                case PetCareAction.Sleep:
-                    disableButton = petInfoManager.IsEnergyAtMax();
-                    if (disableButton)
-                    {
-                        choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText + " (Energetic)";
-                    }
-                    break;
-
-                case PetCareAction.CareForAll:
-                    disableButton = petInfoManager.IsAllStatusAtMax();
-                    if (disableButton)
-                    {
-                        choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText + " (Not Needed)";
-                    }
-                    break;
-            }
-
-            button.interactable = !disableButton;
-        }
-
+        
         return choiceButton;
+    }
+
+    // Helper method to convert action types
+    private PetAction.ActionType ConvertToPetActionType(PetCareAction careAction)
+    {
+        switch (careAction)
+        {
+            case PetCareAction.Feed: return PetAction.ActionType.Feed;
+            case PetCareAction.Play: return PetAction.ActionType.Play;
+            case PetCareAction.Sleep: return PetAction.ActionType.Sleep;
+            case PetCareAction.CareForAll: return PetAction.ActionType.CareForAll;
+            default: return PetAction.ActionType.Feed;
+        }
+    }
+
+    // Helper method for short block reasons
+    private string GetShortBlockReason(PetInfoUIManager.ActionBlockReason reason)
+    {
+        switch (reason)
+        {
+            case PetInfoUIManager.ActionBlockReason.TooHungry: return "Need Food";
+            case PetInfoUIManager.ActionBlockReason.TooTired: return "Need Sleep";
+            case PetInfoUIManager.ActionBlockReason.Critical: return "CRITICAL!";
+            case PetInfoUIManager.ActionBlockReason.TooFull: return "Full";
+            case PetInfoUIManager.ActionBlockReason.TooEnergetic: return "Too Energetic";
+            default: return "Blocked";
+        }
     }
 
     // Execute the selected pet care action
@@ -162,7 +193,19 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        int playerId = PlayerInfomation.LoadPlayerInfo().id; // Khai báo 1 lần ở đây
+        // ========== THÊM DEPENDENCY CHECK ==========
+        PetAction.ActionType actionType = ConvertToPetActionType(action);
+        var blockReason = petInfoManager.CanPerformAction(actionType);
+        
+        if (blockReason != PetInfoUIManager.ActionBlockReason.None)
+        {
+            string message = petInfoManager.GetBlockReasonMessage(blockReason, actionType);
+            Debug.LogWarning($"Dialogue action blocked: {message}");
+            petInfoManager.ShowStatusMessage(message, Color.red);
+            return;
+        }
+
+        int playerId = PlayerInfomation.LoadPlayerInfo().id;
 
         switch (action)
         {
@@ -189,7 +232,7 @@ public class DialogueController : MonoBehaviour
                 {
                     if (customCareAmount > 0)
                     {
-                        petInfoManager.UpdatePetStatus(1, customCareAmount); // 1 is happiness index
+                        petInfoManager.UpdatePetStatus(1, customCareAmount);
                         Debug.Log($"Dialogue choice: Play with pet with custom amount: {customCareAmount}");
                     }
                     else
@@ -203,7 +246,7 @@ public class DialogueController : MonoBehaviour
             case PetCareAction.Sleep:
                 if (customCareAmount > 0)
                 {
-                    petInfoManager.UpdatePetStatus(2, customCareAmount); // 2 is energy index
+                    petInfoManager.UpdatePetStatus(2, customCareAmount);
                     Debug.Log($"Dialogue choice: Pet sleeps with custom amount: {customCareAmount}");
                 }
                 else
@@ -216,16 +259,9 @@ public class DialogueController : MonoBehaviour
             case PetCareAction.CareForAll:
                 if (customCareAmount > 0)
                 {
-                    if (!petInfoManager.IsHungerAtMax())
-                        petInfoManager.UpdatePetStatus(0, customCareAmount); // 0 is hunger index
-
-                    if (!petInfoManager.IsHappinessAtMax())
-                        petInfoManager.UpdatePetStatus(1, customCareAmount); // 1 is happiness index
-
-                    if (!petInfoManager.IsEnergyAtMax())
-                        petInfoManager.UpdatePetStatus(2, customCareAmount); // 2 is energy index
-
-                    Debug.Log($"Dialogue choice: Care for all pet needs with custom amount: {customCareAmount}");
+                    // Smart care với custom amount
+                    petInfoManager.ScheduleSmartCare();
+                    Debug.Log($"Dialogue choice: Smart care for all pet needs");
                 }
                 else
                 {
@@ -236,7 +272,6 @@ public class DialogueController : MonoBehaviour
 
             case PetCareAction.None:
             default:
-                // No pet care action to perform
                 break;
         }
     }

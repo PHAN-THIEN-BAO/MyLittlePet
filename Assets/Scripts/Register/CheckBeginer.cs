@@ -18,11 +18,23 @@ public class CheckBeginer : MonoBehaviour
         {
             // If the player is a beginner, show the choose pet panel
             choosePetPannel.SetActive(true);
+            // Add a default achievement for the beginner player
+            AddDefaultAchievement();
         }
         else
         {
             // If the player is not a beginner, hide the choose pet panel
             choosePetPannel.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// Adds a default achievement for the player if they are a beginner.
+    /// </summary>
+    private void AddDefaultAchievement()
+    {
+        User user = PlayerInfomation.LoadPlayerInfo();
+        APIPlayerAchievement.AddAchievement(1);
+
     }
 }

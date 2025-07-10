@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.21, y: 1, z: 0}
-  m_LocalScale: {x: 3.897306, y: 3.897306, z: 3.897306}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -177,7 +177,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0043404996, y: -0.05064028}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -187,7 +187,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.25, y: 0.18}
+  m_Size: {x: 0.18344408, y: 0.05942803}
   m_EdgeRadius: 0
 --- !u!114 &2933741895523953712
 MonoBehaviour:
@@ -220,6 +220,7 @@ MonoBehaviour:
   dialogText: {fileID: 0}
   nameText: {fileID: 0}
   portraitImage: {fileID: 0}
+  targetToDestroy: {fileID: 0}
 --- !u!114 &8029905144658877012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,11 +235,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   followDistance: 3
-  followSpeed: 1
-  stopDistance: 3
-  smoothTime: 0.3
-  autoFindPlayer: 1
-  playerTag: Player
+  maxQueueSize: 15
+  moveSpeed: 2.5
+  stoppingDistance: 0.8
+  minimumMoveDistance: 0.5
+  accelerationTime: 0.3
+  decelerationTime: 0.2
+  smoothMovement: 1
+  enableDirectionFlip: 1
+  enableAnimation: 1
 --- !u!114 &-1293394600889445330
 MonoBehaviour:
   m_ObjectHideFlags: 0

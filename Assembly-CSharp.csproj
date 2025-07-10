@@ -55,10 +55,11 @@
     <UnityVersion>6000.0.40f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
-    <Analyzer Include="C:\Users\OS\Documents\Project\ReactJS\SWP391game\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
+    <Analyzer Include="D:\SWP\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Assets\Scripts\UI\PetInfoUIManager.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueManager.cs" />
     <Compile Include="Assets\Scripts\Register\CheckBeginer.cs" />
+    <Compile Include="Assets\Scripts\PetActionSystem\PetActionScheduler.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\APIPlayerPet.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShowShopProduct.cs" />
     <Compile Include="Assets\Scripts\FarmAction\Game.cs" />
@@ -77,12 +79,10 @@
     <Compile Include="Assets\Scripts\Object\Shop\Shop.cs" />
     <Compile Include="Assets\Quarium\Script\CameraController.cs" />
     <Compile Include="Assets\Scripts\Object\User\APIUser.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\ScriptableObject\ItemData.cs" />
     <Compile Include="Assets\Scripts\Cutscene\DialogueLine.cs" />
     <Compile Include="Assets\Scripts\Register\RegisterPlayer.cs" />
     <Compile Include="Assets\Scripts\Login\CkeckLogin.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PlayerInventory.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\Item.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\APIAchievement.cs" />
     <Compile Include="Assets\Scripts\Cutscene\PlayableDirectorManager.cs" />
@@ -123,18 +123,20 @@
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
     <Compile Include="Assets\Scripts\FarmAction\Farm_action.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
+    <Compile Include="Assets\Scripts\PetActionSystem\PetActionManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\ChoosePet.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCDialog.cs" />
     <Compile Include="Assets\Scripts\FarmAction\Movement.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PetSelectionManager.cs" />
     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\CollectableItems.cs" />
+    <Compile Include="Assets\Scripts\PetActionSystem\PetAction.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PetDataHolder.cs" />
     <Compile Include="Assets\Scripts\Sounds\SoundEffectLibrary.cs" />
     <Compile Include="Assets\Scripts\Cutscene\ObjectSceneTransition.cs" />
     <Compile Include="Assets\Scripts\Follow\NPCFollow.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerSpawnManager.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfoMainScene.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\CollectabelItems.cs" />
     <Compile Include="Assets\Scripts\UI\UIMuteAudio.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\PlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfomation.cs" />

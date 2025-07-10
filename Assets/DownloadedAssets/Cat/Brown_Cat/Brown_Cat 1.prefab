@@ -33,8 +33,8 @@ Transform:
   m_GameObject: {fileID: 434985342421290064}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.798, y: -1.409, z: 0}
-  m_LocalScale: {x: -2.3757021, y: 2.3757024, z: 2.3757024}
+  m_LocalPosition: {x: 5.8053, y: -1.4163, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -150,7 +150,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0048968494, y: 0.0048968084}
+  m_Offset: {x: 0.0006063692, y: -0.02763968}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -160,7 +160,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.31202626, y: 0.22243908}
+  m_Size: {x: 0.1547069, y: 0.06154433}
   m_EdgeRadius: 0
 --- !u!50 &8967183560396788454
 Rigidbody2D:
@@ -196,7 +196,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434985342421290064}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14b317dbeb8bf4b9f871fe611d58d3a7, type: 3}
   m_Name: 
@@ -229,7 +229,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434985342421290064}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f934087b10565442b4142d471a72ea6, type: 3}
   m_Name: 
@@ -239,6 +239,7 @@ MonoBehaviour:
   dialogText: {fileID: 0}
   nameText: {fileID: 0}
   portraitImage: {fileID: 0}
+  targetToDestroy: {fileID: 0}
 --- !u!114 &6916857918196913964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,8 +254,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   followDistance: 2
-  followSpeed: 3
-  stopDistance: 1
-  smoothTime: 0.3
-  autoFindPlayer: 1
-  playerTag: Player
+  maxQueueSize: 15
+  moveSpeed: 2.5
+  stoppingDistance: 0.8
+  minimumMoveDistance: 0.5
+  accelerationTime: 0.3
+  decelerationTime: 0.2
+  smoothMovement: 1
+  enableDirectionFlip: 1
+  enableAnimation: 1
