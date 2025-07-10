@@ -3361,13 +3361,6 @@
             }
           },
           {
-            "name": "userStatus",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "level",
             "in": "query",
             "schema": {
@@ -3536,13 +3529,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "userStatus",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -3669,13 +3655,6 @@
         "parameters": [
           {
             "name": "userName",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "email",
             "in": "query",
             "schema": {
               "type": "string"
@@ -3823,71 +3802,6 @@
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/User/{id}/Ban": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "string"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/User/{id}/Unban": {
-      "put": {
-        "tags": [
-          "User"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -4393,10 +4307,6 @@
             "type": "string",
             "nullable": true
           },
-          "userStatus": {
-            "type": "string",
-            "nullable": true
-          },
           "level": {
             "type": "integer",
             "format": "int32",
@@ -4420,10 +4330,6 @@
           "joinDate": {
             "type": "string",
             "format": "date-time",
-            "nullable": true
-          },
-          "bannedReason": {
-            "type": "string",
             "nullable": true
           },
           "position": {

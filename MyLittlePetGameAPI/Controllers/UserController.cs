@@ -74,7 +74,7 @@ namespace MyLittlePetGameAPI.Controllers
         
         // POST: User/register - Register a new player
         [HttpPost("register")]
-        public ActionResult<User> RegisterPlayer(string userName, string password, 
+        public ActionResult<User> RegisterPlayer(string userName, string password, string? email = null,
             int? coin = 100, int? diamond = 0, int? gem = 0)
         {
             // Validate required fields
@@ -89,12 +89,18 @@ namespace MyLittlePetGameAPI.Controllers
                 return BadRequest("Username already exists");
             }
             
+            // Check if email already exists (if provided)
+            if (!string.IsNullOrEmpty(email) && _context.Users.Any(u => u.Email == email))
+            {
+                return BadRequest("Email already exists");
+            }
+            
             var newPlayer = new User
             {
                 Role = "Player", // Always set role to Player for this endpoint
                 UserName = userName,
                 Password = password,
-                Email = null, // Email is now optional/null
+                Email = email, // Email can be null or provided
                 Level = 1,
                 Coin = coin ?? 100, // Default starting coins
                 Diamond = diamond ?? 0,
