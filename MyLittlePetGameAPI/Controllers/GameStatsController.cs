@@ -22,9 +22,10 @@ namespace MyLittlePetGameAPI.Controllers
             try
             {
                 var totalUsers = _context.Users.Count();
-                var activeUsers = _context.Users.Count(u => u.UserStatus == "ACTIVE");
-                var bannedUsers = _context.Users.Count(u => u.UserStatus == "BANNED");
-                var onlineUsers = _context.Users.Count(u => u.UserStatus == "ONLINE");
+                // Since UserStatus is removed, we'll just count all users as active
+                var activeUsers = _context.Users.Count();
+                var bannedUsers = 0; // No banned users since UserStatus is removed
+                var onlineUsers = 0; // No online status tracking since UserStatus is removed
                 
                 var totalPets = _context.Pets.Count();
                 var activePets = _context.Pets.Count(p => p.PetStatus == 1);
@@ -110,7 +111,7 @@ namespace MyLittlePetGameAPI.Controllers
             try
             {
                 var topPlayersByLevel = _context.Users
-                    .Where(u => u.UserStatus == "ACTIVE")
+                    .Where(u => u.Role == "Player") // Filter by Player role instead of UserStatus
                     .OrderByDescending(u => u.Level)
                     .ThenByDescending(u => u.Exp)
                     .Take(10)
@@ -127,7 +128,7 @@ namespace MyLittlePetGameAPI.Controllers
                     .ToList();
                 
                 var topPlayersByWealth = _context.Users
-                    .Where(u => u.UserStatus == "ACTIVE")
+                    .Where(u => u.Role == "Player") // Filter by Player role instead of UserStatus
                     .OrderByDescending(u => (u.Coin ?? 0) + (u.Diamond ?? 0) * 10 + (u.Gem ?? 0) * 5)
                     .Take(10)
                     .Select(u => new
@@ -142,7 +143,7 @@ namespace MyLittlePetGameAPI.Controllers
                     .ToList();
                 
                 var topPlayersByPets = _context.Users
-                    .Where(u => u.UserStatus == "ACTIVE")
+                    .Where(u => u.Role == "Player") // Filter by Player role instead of UserStatus
                     .Select(u => new
                     {
                         u.Id,
