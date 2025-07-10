@@ -6,25 +6,25 @@ public class GameRestartManager : MonoBehaviour
     // Hàm này sẽ được gọi khi nhấn button Restart
     public void RestartGame()
     {
-        // Reset time scale về 1 để game chạy bình thường
+        // reset time scale to 1 to ensure the game runs normally after restart
         Time.timeScale = 1;
-        
-        // Reload scene hiện tại
+
+        // Reload the current scene to restart the game
         Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.buildIndex);
     }
 
-    // Hàm này sẽ được gọi khi nhấn button Menu (nếu có)
+    // this function will be called when the Return to Menu button is pressed
     public void ReturnToMenu()
     {
         // Reset time scale về 1
         Time.timeScale = 1;
-        
-        // Load scene Menu (thay "Menu" bằng tên scene menu của bạn)
+
+        // Load scene Menu, replacing the current scene
         SceneManager.LoadScene("Menu");
     }
 
-    // Hàm này sẽ được gọi khi nhấn button Quit
+    // this function will be called when the Quit button is pressed
     public void QuitGame()
     {
         #if UNITY_EDITOR
