@@ -182,7 +182,7 @@ public static class APIUser
         try
         {
             // Create a request to the API endpoint with required parameters
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/User/" + user.id + "?role=" + user.role +"&userName=" + user.userName + "&password=" + user.password + "&email=" + user.email + "&level=" + user.level + "&coin=" + user.coin +"&diamond=" + user.diamond +"&gem=" + user.gem +"&userStatus=ACTIVE");
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/User/" + user.id + "?role=" + user.role +"&userName=" + user.userName + "&password=" + user.password + "&email=" + user.email + "&level=" + user.level + "&coin=" + user.coin +"&diamond=" + user.diamond +"&gem=" + user.gem);
             request.Method = "PUT";
             request.ContentType = "application/json";
             // Serialize the user object to JSON

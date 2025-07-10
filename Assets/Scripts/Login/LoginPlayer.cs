@@ -79,13 +79,6 @@ public class LoginPlayer : MonoBehaviour
                     errorText.text = "User not found (404).";
                     Debug.LogWarning("User not found (404).");
                 }
-                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    // handle 401 error (banned or unauthorized)
-                    errorText.color = Color.white;
-                    errorText.text = "Your account has been banned.";
-                    Debug.LogWarning("User is banned or unauthorized (401).");
-                }
                 else
                 {
                     errorText.color = Color.red;
