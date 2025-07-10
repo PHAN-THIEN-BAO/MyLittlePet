@@ -90,10 +90,12 @@
     <Compile Include="Assets\Scripts\Object\PlayerPet\LoadChoosePet.cs" />
     <Compile Include="Assets\Scripts\Object\User\User.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlStateAmin.cs" />
+    <Compile Include="Assets\Mini_game\Scripts\Player_Controller\RestartGame.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCFollower.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Testing.cs" />
     <Compile Include="Assets\Scripts\UI\FoodItemUI.cs" />
     <Compile Include="Assets\Scripts\UI\FeedingManager.cs" />
+    <Compile Include="Assets\Mini_game\Scripts\Player_Controller\TimeScale.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\AdopPet.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\CollectAchievement.cs" />
     <Compile Include="Assets\Scripts\UI\LoadScenes.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="Assets\Scripts\Player\PlayerPositionSaver.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerCollisionHandler.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PlayerInventoryDisplay.cs" />
+    <Compile Include="Assets\Scripts\MiniGame\MiniGameResultSender.cs" />
     <Compile Include="Assets\Scripts\Interactions\IInteractable.cs" />
     <Compile Include="Assets\Scripts\Audio\PlayAudio.cs" />
     <Compile Include="Assets\Scripts\UI\UIManagerWaring.cs" />

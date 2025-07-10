@@ -91838,13 +91838,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315659a06f463554a9eff44947acb22f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playingPanel: {fileID: 197271912}
-  toyItemsContainer: {fileID: 1064840366}
-  toyItemPrefab: {fileID: 1800368765629093431, guid: 801889402dbab5f4fb0de068dfe50d1f, type: 3}
-  closeButton: {fileID: 1239716239}
-  scrollView: {fileID: 1198335154}
-  noToyMessage: {fileID: 1567694297}
-  apiBaseUrl: https://localhost:7035
+  miniGamePanel: {fileID: 89074445}
+  closeButton: {fileID: 1570165835}
+  startMiniGameButton: {fileID: 1202589788}
+  miniGameTitle: {fileID: 0}
+  miniGameDescription: {fileID: 0}
+  miniGameSceneName: Mini_Game_1
+  defaultHappinessReward: 20
+  winBonusReward: 10
   enableDependencyCheck: 1
 --- !u!4 &2029979641
 Transform:
