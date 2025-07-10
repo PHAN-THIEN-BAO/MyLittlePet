@@ -19,13 +19,11 @@ CREATE TABLE [User] (
 	UserName NVARCHAR(100),
     Email NVARCHAR(100) UNIQUE,
     Password NVARCHAR(100) NOT NULL,
-	UserStatus NVARCHAR(20) DEFAULT 'ACTIVE' CHECK (UserStatus IN ('ACTIVE', 'INACTIVE', 'BANNED', 'ONLINE')),  
 	Level INT DEFAULT 1,
 	Coin INT,
 	Diamond INT DEFAULT 0,
     Gem INT DEFAULT 0,	
     JoinDate DATETIME DEFAULT GETDATE(),
-	BannedReason NVARCHAR(255) NULL,
 	Position FLOAT,
 	EXP INT
 );
@@ -98,7 +96,7 @@ CREATE TABLE PlayerPet (
     FOREIGN KEY (PlayerID) REFERENCES [User](ID),
     FOREIGN KEY (PetID) REFERENCES Pet(PetID)
 );
---Còn playerPet vs ACtivity
+--C n playerPet vs ACtivity
 CREATE TABLE CareActivity (
     ActivityID INT PRIMARY KEY IDENTITY(1,1),
     ActivityType VARCHAR(50) NOT NULL,   
@@ -134,7 +132,7 @@ CREATE TABLE PlayerAchievement (
     FOREIGN KEY (PlayerID) REFERENCES [User](ID),
     FOREIGN KEY (AchievementID) REFERENCES Achievement(AchievementID)
 );
-
+select * from ShopProduct
 
 
 --Player vs Minigame
@@ -205,11 +203,11 @@ VALUES
 INSERT INTO ShopProduct (ShopID, AdminID,PetID, Name, Type, Description, ImageUrl, Price, CurrencyType)
 VALUES 
 -- Pets Shop (ShopID = 1)
-(1, 1,1, 'Mimi', 'Cat', 'Playful and smart', 'https://drive.google.com/file/d/1nkOmQE4OQxJNE_-toGhVN7b0zrQf3L2H/view', 100, 'Coin'),
-(1, 2,2, 'Chicky', 'Chicken', 'This Pet have sth you never know', 'https://drive.google.com/file/d/1dnKvmkFxuECn9T10cQRB1QKFV0-uy97W/view', 120, 'Coin'),
-(1, 1,3, 'Bubbles', 'Fish', 'Glowy fins', 'https://drive.google.com/file/d/1fsJXvABMVtfGSPJz7E-_yhqv0H7Fo8oS/view', 150, 'Coin'),
+(1, 1,1, 'Mimi', 'Pet', 'Playful and smart', 'https://drive.google.com/file/d/1nkOmQE4OQxJNE_-toGhVN7b0zrQf3L2H/view', 100, 'Coin'),
+(1, 2,2, 'Chicky', 'Pet', 'This Pet have sth you never know', 'https://drive.google.com/file/d/1dnKvmkFxuECn9T10cQRB1QKFV0-uy97W/view', 120, 'Coin'),
+(1, 1,3, 'Bubbles', 'Pet', 'Glowy fins', 'https://drive.google.com/file/d/1fsJXvABMVtfGSPJz7E-_yhqv0H7Fo8oS/view', 150, 'Coin')
 
-Select * from ShopProduct;
+Select * from [User]
 
 UPDATE ShopProduct
 SET Type = 'Pet'
@@ -272,16 +270,13 @@ VALUES
 (9, 8, 5);
 INSERT INTO Achievement (AchievementName, Description)
 VALUES
-('Welcome Aboard!', 'First Login to receive a reward'),
-('Cat Collector', 'Own 2 Cats to receive a reward'),
-('Big Spender', 'Spend 2000 Coins to receive a reward'),
-('Big Spender', 'Spend 5000 Coins to receive a reward'),
-('Big Spender', 'Spend 7000 Coins to receive a reward'),
-('Pet Lover', 'Own 3 pets to receive a reward'),
-('Pet Lover', 'Own 5 pets to receive a reward'),
-('Caring Owne', 'Feed your pets 10 times to receive a reward'),
-('Game On!', 'Play your first minigame to receive a reward'),
-('First Purchase', 'Buy 1 item from the shop to receive a reward');
+('Welcome Aboard!', 'First login to receive a reward'),
+('Pet Collector I', 'Own 2 pets to receive a reward'),
+('Pet Collector II', 'Own 4 pets to receive a reward'),
+('Pet Collector III', 'Own 6 pets to receive a reward'),
+('Wealthy I', 'Own 1,000 coins to receive a reward'),
+('Wealthy II', 'Own 5,000 coins to receive a reward'),
+('Wealthy III', 'Own 10,000 coins to receive a reward');
 INSERT INTO PlayerAchievement (PlayerID, AchievementID)
 VALUES 
 (1, 1),
@@ -291,9 +286,7 @@ VALUES
 (5, 1),
 (6, 2),
 (6, 5),
-(7, 6),
-(8, 7),
-(9, 10);
+(7, 6);
 INSERT INTO Minigame (Name, Description)
 VALUES 
 ('Fetch Frenzy', 'Throw and catch game'),

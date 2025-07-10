@@ -11,7 +11,6 @@ public class RegisterPlayer : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] public TMP_InputField registerUsernameField;
-    [SerializeField] public TMP_InputField registerEmailField;
     [SerializeField] public TMP_InputField registerPasswordField;
     [SerializeField] public TMP_InputField confirmPasswordField;
     [SerializeField] public Button registerButton;
@@ -20,13 +19,12 @@ public class RegisterPlayer : MonoBehaviour
     public void RegisterNewUser()
     {
         string username = registerUsernameField.text;
-        string email = registerEmailField.text;
         string password = registerPasswordField.text;
         string confirmPassword = confirmPasswordField.text;
 
         // Kiểm tra các trường trống
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) ||
-            string.IsNullOrEmpty(confirmPassword) || string.IsNullOrEmpty(email))
+            string.IsNullOrEmpty(confirmPassword))
         {
             registerErrorText.text = "Fill all field please!";
             registerErrorText.color = Color.red;
@@ -45,8 +43,8 @@ public class RegisterPlayer : MonoBehaviour
 
         try
         {
-            // Gọi API để đăng ký người dùng
-            bool success = APIUser.RegisterAPI(username, password, email);
+            // Gọi API để đăng ký người dùng (bỏ email)
+            bool success = APIUser.RegisterAPI(username, password);
 
             if (success)
             {
@@ -58,7 +56,6 @@ public class RegisterPlayer : MonoBehaviour
                 registerUsernameField.text = "";
                 registerPasswordField.text = "";
                 confirmPasswordField.text = "";
-                registerEmailField.text = "";
 
                 Debug.Log("Đăng ký thành công cho người dùng: " + username);
 

@@ -11580,6 +11580,7 @@ MonoBehaviour:
   description: {fileID: 1679488837}
   successPanel: {fileID: 798473175}
   failPanel: {fileID: 380108310}
+  cutsceneGameObject: {fileID: 0}
   petController: {fileID: 1339297965}
 --- !u!114 &253174116
 MonoBehaviour:
@@ -54596,6 +54597,7 @@ MonoBehaviour:
   apiBaseUrl: https://localhost:7035
   defaultFeedIncreaseAmount: 15
   noFoodMessage: {fileID: 697802053}
+  enableDependencyCheck: 1
 --- !u!1 &1173983760
 GameObject:
   m_ObjectHideFlags: 0
@@ -57189,6 +57191,7 @@ MonoBehaviour:
   description: {fileID: 198670959}
   successPanel: {fileID: 798473175}
   failPanel: {fileID: 380108310}
+  cutsceneGameObject: {fileID: 0}
   petController: {fileID: 1339297965}
 --- !u!114 &1225406844
 MonoBehaviour:
@@ -64344,6 +64347,13 @@ MonoBehaviour:
   playIncreaseAmount: 15
   sleepIncreaseAmount: 15
   maxStatusValue: 100
+  minHungerForPlay: 30
+  minEnergyForPlay: 20
+  minHungerForSleep: 25
+  maxEnergyForSleep: 80
+  criticalThreshold: 15
+  actionManager: {fileID: 0}
+  useActionSystem: 1
   pendingFeedAmount: 0
 --- !u!4 &1381390384
 Transform:
@@ -68345,6 +68355,7 @@ MonoBehaviour:
   description: {fileID: 2057306945}
   successPanel: {fileID: 798473175}
   failPanel: {fileID: 380108310}
+  cutsceneGameObject: {fileID: 0}
   petController: {fileID: 1339297965}
 --- !u!1 &1493037662
 GameObject:
@@ -93112,6 +93123,7 @@ MonoBehaviour:
   scrollView: {fileID: 1198335154}
   noToyMessage: {fileID: 1567694297}
   apiBaseUrl: https://localhost:7035
+  enableDependencyCheck: 1
 --- !u!4 &2029979641
 Transform:
   m_ObjectHideFlags: 0

@@ -21,7 +21,8 @@ namespace MyLittlePetGameAPI.Controllers
         {
             return Ok(_context.Users.ToList());
         }
-          // GET: User/{id} - Get user by ID
+        
+        // GET: User/{id} - Get user by ID
         [HttpGet("{id}")]
         public ActionResult<User> GetById(int id)
         {
@@ -49,7 +50,9 @@ namespace MyLittlePetGameAPI.Controllers
             var petCount = _context.PlayerPets.Count(pp => pp.PlayerId == id);
             
             return Ok(new { UserId = id, PetCount = petCount });
-        }        // GET: User/login - Get user by username and password
+        }
+        
+        // GET: User/login - Get user by username and password
         [HttpGet("login")]
         public ActionResult GetByLogin(string userName, string password)
         {
@@ -65,25 +68,19 @@ namespace MyLittlePetGameAPI.Controllers
                 return NotFound("User not found");
             }
             
-            // Check if the user is banned
-            if (user.UserStatus == "BANNED")
-            {
-                return Unauthorized("Mày bị ban rồi, cút!!");
-            }
-            
             // Return the full user object for all roles including Player
             return Ok(user);
         }
         
         // POST: User/register - Register a new player
         [HttpPost("register")]
-        public ActionResult<User> RegisterPlayer(string userName, string email, string password, 
+        public ActionResult<User> RegisterPlayer(string userName, string password, 
             int? coin = 100, int? diamond = 0, int? gem = 0)
         {
             // Validate required fields
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
             {
-                return BadRequest("Username, email, and password are required");
+                return BadRequest("Username and password are required");
             }
             
             // Check if username already exists
@@ -92,19 +89,12 @@ namespace MyLittlePetGameAPI.Controllers
                 return BadRequest("Username already exists");
             }
             
-            // Check if email already exists
-            if (_context.Users.Any(u => u.Email == email))
-            {
-                return BadRequest("Email already exists");
-            }
-            
             var newPlayer = new User
             {
                 Role = "Player", // Always set role to Player for this endpoint
                 UserName = userName,
                 Password = password,
-                Email = email,
-                UserStatus = "ACTIVE",
+                Email = null, // Email is now optional/null
                 Level = 1,
                 Coin = coin ?? 100, // Default starting coins
                 Diamond = diamond ?? 0,
@@ -122,7 +112,7 @@ namespace MyLittlePetGameAPI.Controllers
         // POST: User - Create a new user
         [HttpPost]
         public ActionResult<User> Create(string role, string userName, string password, string? email, 
-            string? userStatus, int? level, int? coin, int? diamond, int? gem)
+            int? level, int? coin, int? diamond, int? gem)
         {
             // Validate required fields
             if (string.IsNullOrEmpty(role) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
@@ -148,7 +138,6 @@ namespace MyLittlePetGameAPI.Controllers
                 UserName = userName,
                 Password = password,
                 Email = email,
-                UserStatus = userStatus ?? "ACTIVE", // Default to ACTIVE if not provided
                 Level = level ?? 1, // Default to level 1 if not provided
                 Coin = coin ?? 0, // Default to 0 if not provided
                 Diamond = diamond ?? 0, // Default to 0 if not provided
@@ -165,7 +154,7 @@ namespace MyLittlePetGameAPI.Controllers
         // PUT: User/{id} - Update an existing user
         [HttpPut("{id}")]
         public ActionResult<User> Update(int id, string? role, string? userName, string? password, 
-            string? email, int? level, int? coin, int? diamond, int? gem, string? userStatus)
+            string? email, int? level, int? coin, int? diamond, int? gem)
         {
             var user = _context.Users.Find(id);
             
@@ -209,11 +198,6 @@ namespace MyLittlePetGameAPI.Controllers
                 user.Email = email;
             }
             
-            if (!string.IsNullOrEmpty(userStatus))
-            {
-                user.UserStatus = userStatus;
-            }
-            
             if (level.HasValue)
             {
                 user.Level = level;
@@ -237,7 +221,8 @@ namespace MyLittlePetGameAPI.Controllers
             _context.Users.Update(user);
             _context.SaveChanges();
             
-            return Ok(user);        }
+            return Ok(user);
+        }
         
         // DELETE: User/{id} - Delete a user
         [HttpDelete("{id}")]
@@ -303,42 +288,6 @@ namespace MyLittlePetGameAPI.Controllers
             return Ok(new { message = "Position updated successfully", newPosition = position });
         }
         
-        // PUT: User/{id}/Ban - Ban a user
-        [HttpPut("{id}/Ban")]
-        public IActionResult BanUser(int id, [FromBody] string reason)
-        {
-            var user = _context.Users.Find(id);
-            
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
-            
-            user.UserStatus = "BANNED";
-            user.BannedReason = reason;
-            _context.SaveChanges();
-            
-            return Ok(new { message = "User banned successfully", reason = reason });
-        }
-        
-        // PUT: User/{id}/Unban - Unban a user
-        [HttpPut("{id}/Unban")]
-        public IActionResult UnbanUser(int id)
-        {
-            var user = _context.Users.Find(id);
-            
-            if (user == null)
-            {
-                return NotFound("User not found");
-            }
-            
-            user.UserStatus = "ACTIVE";
-            user.BannedReason = null;
-            _context.SaveChanges();
-            
-            return Ok(new { message = "User unbanned successfully" });
-        }
-        
         // GET: User/{id}/Stats - Get comprehensive user statistics
         [HttpGet("{id}/Stats")]
         public ActionResult GetUserStats(int id)
@@ -373,9 +322,7 @@ namespace MyLittlePetGameAPI.Controllers
                 CollectedAchievements = collectedAchievements,
                 TotalGameScore = totalGameScore,
                 CareActivitiesPerformed = careActivities,
-                JoinDate = user.JoinDate,
-                Status = user.UserStatus,
-                BannedReason = user.BannedReason
+                JoinDate = user.JoinDate
             };
             
             return Ok(stats);

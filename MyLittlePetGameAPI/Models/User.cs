@@ -15,8 +15,6 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public string? UserStatus { get; set; }
-
     public int? Level { get; set; }
 
     public int? Coin { get; set; }
@@ -26,8 +24,6 @@ public partial class User
     public int? Gem { get; set; }
 
     public DateTime? JoinDate { get; set; }
-
-    public string? BannedReason { get; set; }
 
     public float? Position { get; set; }
 
