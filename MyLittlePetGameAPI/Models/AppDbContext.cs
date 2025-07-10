@@ -296,7 +296,8 @@ public partial class AppDbContext : DbContext
 
             entity.ToTable("User");
 
-            entity.HasIndex(e => e.Email, "UQ__User__A9D10534B334BD88").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__User__A9D10534B334BD88").IsUnique()
+                .HasFilter("[Email] IS NOT NULL");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Diamond).HasDefaultValue(0);
