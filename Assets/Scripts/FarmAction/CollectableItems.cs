@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CollectabelItems : MonoBehaviour
+public class CollectableItems : MonoBehaviour
 {
     [Header("Loại Vật Phẩm")]
     [SerializeField] private ItemType itemType = ItemType.CarrotSeed;

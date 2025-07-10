@@ -77,10 +77,12 @@
     <Compile Include="Assets\Scripts\Object\Shop\Shop.cs" />
     <Compile Include="Assets\Quarium\Script\CameraController.cs" />
     <Compile Include="Assets\Scripts\Object\User\APIUser.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\ScriptableObject\ItemData.cs" />
     <Compile Include="Assets\Scripts\Cutscene\DialogueLine.cs" />
     <Compile Include="Assets\Scripts\Register\RegisterPlayer.cs" />
     <Compile Include="Assets\Scripts\Login\CkeckLogin.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PlayerInventory.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\Item.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\APIAchievement.cs" />
     <Compile Include="Assets\Scripts\Cutscene\PlayableDirectorManager.cs" />
@@ -126,13 +128,13 @@
     <Compile Include="Assets\Scripts\FarmAction\Movement.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PetSelectionManager.cs" />
     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\CollectableItems.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\PetDataHolder.cs" />
     <Compile Include="Assets\Scripts\Sounds\SoundEffectLibrary.cs" />
     <Compile Include="Assets\Scripts\Cutscene\ObjectSceneTransition.cs" />
     <Compile Include="Assets\Scripts\Follow\NPCFollow.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerSpawnManager.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfoMainScene.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\CollectabelItems.cs" />
     <Compile Include="Assets\Scripts\UI\UIMuteAudio.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\PlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Object\User\PlayerInfomation.cs" />
