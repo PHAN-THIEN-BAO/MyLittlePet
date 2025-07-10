@@ -118,6 +118,7 @@
     <Compile Include="Assets\Scripts\FarmAction\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\Interactions\InteractionDetector.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialougeTrigger.cs" />
+    <Compile Include="Assets\Scripts\FarmAction\FarmGameManager.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
     <Compile Include="Assets\Scripts\FarmAction\Farm_action.cs" />
@@ -152,7 +153,6 @@
     <Compile Include="Assets\Scripts\Login\LoginPlayer.cs" />
     <Compile Include="Assets\Scripts\Cutscene\SceneController.cs" />
     <Compile Include="Assets\Scripts\Cutscene\SceneTransitionManager.cs" />
-    <Compile Include="Assets\Scripts\FarmAction\GameManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\APIPlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Validate\ShopPetValidate.cs" />
     <Compile Include="Assets\Scripts\UI\UIProfileManager.cs" />
