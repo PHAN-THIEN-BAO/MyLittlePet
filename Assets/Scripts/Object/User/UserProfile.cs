@@ -20,7 +20,7 @@ public class UserProfile : MonoBehaviour
         {
             namePlayer.text = user.userName;
             levelPlayer.text = "Lv: " + user.level.ToString();
-            petOwned.text = "Pets Owned:                              " + APIUser.GetPlayerPetCount(user.id.ToString()).ToString();
+            petOwned.text = "Pets Owned:             " + APIUser.GetPlayerPetCount(user.id.ToString()).ToString();
         }
         else
         {
