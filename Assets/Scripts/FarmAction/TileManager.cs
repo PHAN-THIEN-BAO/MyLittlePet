@@ -1,57 +1,4 @@
-﻿//using System.Collections.Generic;
-//using System.Collections;
-//using UnityEngine;
-//using UnityEngine.Tilemaps;
-
-//public class TileManager : MonoBehaviour
-//{
-//    [SerializeField] private Tilemap interactableMap; // Tilemap để quản lý các tile
-//    [SerializeField] private Tile hiddenInteractableTile; // Tile ẩn khi không tương tác
-//    [SerializeField] private Tile interactedTile; // Tile hiển thị khi tương tác
-
-//    void Start()
-//    {
-//        // In ra tên của các tile để debug
-//        Debug.Log("Hidden Interactable Tile name: " + hiddenInteractableTile.name);
-//        Debug.Log("Interacted Tile name: " + interactedTile.name);
-
-//        // Thay thế tất cả các tile ban đầu trên map bằng hiddenInteractableTile
-//        foreach (var position in interactableMap.cellBounds.allPositionsWithin)
-//        {
-//            TileBase tile = interactableMap.GetTile(position);
-
-//            // Kiểm tra nếu có tile tại vị trí này
-//            if (tile != null)
-//            {
-//                // Thay thế tất cả các tile có sẵn trên map bằng hiddenInteractableTile
-//                interactableMap.SetTile(position, hiddenInteractableTile);
-//            }
-//        }
-//    }
-
-//    public bool IsInteractableTile(Vector3Int position)
-//    {
-//        // Kiểm tra xem tile tại vị trí có phải là hiddenInteractableTile không
-//        TileBase tile = interactableMap.GetTile(position);
-
-//        if (tile != null)
-//        {
-//            // Thay vì dựa vào tên, so sánh trực tiếp với object hiddenInteractableTile
-//            if (tile == hiddenInteractableTile)
-//            {
-//                return true; // Nếu là tile tương tác, trả về true
-//            }
-//        }
-//        return false; // Nếu không phải là tile tương tác, trả về false
-//    }
-
-//    public void SetTileInteractable(Vector3Int position)
-//    {
-//        interactableMap.SetTile(position, interactedTile); // Đặt tile tại vị trí thành tile tương tác
-//    }
-//}
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -67,15 +14,46 @@ public class TileManager : MonoBehaviour
     [SerializeField] private Tile growingTile; // Tile cây đang lớn
     [SerializeField] private Tile harvestReadyTile; // Tile cây đã sẵn sàng thu hoạch
 
+    // Thêm tilemap riêng cho highlight
+    [SerializeField] private Tilemap highlightMap; // Tilemap để hiển thị highlight
+    [SerializeField] private Tile highlightTile; // Tile dùng để hiển thị highlight
+
+    [Header("Highlight Settings")]
+    [SerializeField] private float highlightRadius = 2f;
+    [SerializeField] private Color defaultColor = Color.white;
+    [SerializeField] private Color soilColor = new Color(2f, 2f, 0f, 0.5f); // Màu vàng cho đất ban đầu
+    [SerializeField] private Color plowedColor = new Color(0f, 2f, 0f, 0.5f); // Màu xanh lá cho đất đã cày
+    [SerializeField] private Color harvestColor = new Color(2f, 0f, 0f, 0.5f); // Màu đỏ cho cây sẵn sàng thu hoạch
+    [SerializeField] private bool enableHighlight = true; // Bật/tắt hiệu ứng highlight
+
     // Từ điển để theo dõi trạng thái của mỗi ô đất
     private Dictionary<Vector3Int, int> tileStages = new Dictionary<Vector3Int, int>();
     // Trạng thái: 0 = đất ban đầu, 1 = đất đã cày, 2 = đã trồng, 3 = đang lớn, 4 = sẵn sàng thu hoạch
 
+    private Player player;
+    private bool debugMode = true;
+
     void Start()
     {
         // In ra tên của các tile để debug
-        Debug.Log("Hidden Interactable Tile name: " + hiddenInteractableTile.name);
-        Debug.Log("Interacted Tile name: " + interactedTile.name);
+        Debug.Log("TileManager Start");
+        Debug.Log("Hidden Interactable Tile name: " + (hiddenInteractableTile != null ? hiddenInteractableTile.name : "NULL"));
+        Debug.Log("Interacted Tile name: " + (interactedTile != null ? interactedTile.name : "NULL"));
+        Debug.Log("Highlight Tile name: " + (highlightTile != null ? highlightTile.name : "NULL"));
+
+        // Kiểm tra các component cần thiết
+        if (interactableMap == null)
+        {
+            Debug.LogError("interactableMap không được gán!");
+        }
+        if (highlightMap == null)
+        {
+            Debug.LogError("highlightMap không được gán! Tạo một Tilemap mới và gán vào Inspector.");
+        }
+        if (highlightTile == null)
+        {
+            Debug.LogError("highlightTile không được gán! Tạo một Tile mới và gán vào Inspector.");
+        }
 
         // Thay thế tất cả các tile ban đầu trên map bằng hiddenInteractableTile
         foreach (var position in interactableMap.cellBounds.allPositionsWithin)
@@ -89,6 +67,161 @@ public class TileManager : MonoBehaviour
                 interactableMap.SetTile(position, hiddenInteractableTile);
                 tileStages[position] = 0; // Đặt trạng thái ban đầu
             }
+        }
+
+        // Tìm player trong scene
+        player = FindObjectOfType<Player>();
+        if (player == null)
+        {
+            Debug.LogWarning("Không tìm thấy Player trong scene!");
+        }
+
+        // Test highlight một số tile để kiểm tra
+        StartCoroutine(TestHighlightAfterDelay());
+    }
+
+    // Test highlight sau một khoảng thời gian ngắn
+    private IEnumerator TestHighlightAfterDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        TestHighlight();
+    }
+
+    // Test highlight để kiểm tra system
+    private void TestHighlight()
+    {
+        if (highlightMap == null || highlightTile == null) return;
+
+        Debug.Log("Test highlight...");
+        // Xóa highlight cũ
+        highlightMap.ClearAllTiles();
+
+        // Test highlight ở vị trí (0,0)
+        Vector3Int center = Vector3Int.zero;
+        highlightMap.SetTile(center, highlightTile);
+        highlightMap.SetColor(center, Color.red);
+        Debug.Log("Đã đặt highlight test tại " + center);
+
+        // Test highlight ở một vùng 3x3 xung quanh người chơi nếu có
+        if (player != null)
+        {
+            Vector3Int playerPos = interactableMap.WorldToCell(player.transform.position);
+            Debug.Log("Player position: " + player.transform.position + ", Cell: " + playerPos);
+
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
+                {
+                    Vector3Int pos = playerPos + new Vector3Int(x, y, 0);
+                    highlightMap.SetTile(pos, highlightTile);
+                    highlightMap.SetColor(pos, Color.yellow);
+                }
+            }
+            Debug.Log("Đã đặt highlight test quanh người chơi");
+        }
+    }
+
+    void Update()
+    {
+        // Tìm player nếu chưa có
+        if (player == null)
+        {
+            player = FindObjectOfType<Player>();
+            if (player == null) return;
+        }
+
+        // Test key để debug
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            TestHighlight();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            enableHighlight = !enableHighlight;
+            Debug.Log("Highlight " + (enableHighlight ? "bật" : "tắt"));
+            if (!enableHighlight)
+            {
+                highlightMap.ClearAllTiles();
+            }
+        }
+
+        // Chỉ cập nhật highlight nếu được bật
+        if (enableHighlight && highlightMap != null && highlightTile != null)
+        {
+            UpdateHighlight();
+        }
+    }
+
+    // Cập nhật highlight cho các tile gần người chơi
+    private void UpdateHighlight()
+    {
+        if (player == null) return;
+
+        // Xóa tất cả highlight hiện tại
+        highlightMap.ClearAllTiles();
+
+        Vector3Int playerCell = interactableMap.WorldToCell(player.transform.position);
+        if (debugMode)
+        {
+            Debug.Log("Player position: " + player.transform.position + ", Cell: " + playerCell);
+        }
+
+        int highlightCount = 0;
+
+        // Tìm và highlight các tile xung quanh người chơi
+        for (int x = -Mathf.FloorToInt(highlightRadius); x <= Mathf.FloorToInt(highlightRadius); x++)
+        {
+            for (int y = -Mathf.FloorToInt(highlightRadius); y <= Mathf.FloorToInt(highlightRadius); y++)
+            {
+                Vector3Int cellPos = playerCell + new Vector3Int(x, y, 0);
+
+                // Chỉ highlight các ô trong phạm vi hình tròn
+                if (Vector2.Distance(Vector2Int.zero, new Vector2Int(x, y)) <= highlightRadius)
+                {
+                    // Kiểm tra nếu tile tại vị trí này có thể tương tác
+                    if (IsInteractableTile(cellPos))
+                    {
+                        // Lấy trạng thái của tile
+                        int stage = 0;
+                        tileStages.TryGetValue(cellPos, out stage);
+
+                        // Chỉ highlight các tile có thể tương tác (giai đoạn 0, 1, hoặc 4)
+                        if (stage == 0 || stage == 1 || stage == 4)
+                        {
+                            // Đặt highlight tile
+                            highlightMap.SetTile(cellPos, highlightTile);
+
+                            // Chọn màu highlight tùy theo trạng thái
+                            Color highlightColor;
+                            switch (stage)
+                            {
+                                case 0: // Đất ban đầu
+                                    highlightColor = soilColor;
+                                    break;
+                                case 1: // Đất đã cày, có thể trồng
+                                    highlightColor = plowedColor;
+                                    break;
+                                case 4: // Cây sẵn sàng thu hoạch
+                                    highlightColor = harvestColor;
+                                    break;
+                                default:
+                                    highlightColor = defaultColor;
+                                    break;
+                            }
+
+                            // Đặt màu cho highlight tile
+                            highlightMap.SetColor(cellPos, highlightColor);
+                            highlightCount++;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (debugMode)
+        {
+            Debug.Log("Đã highlight " + highlightCount + " tiles");
         }
     }
 
@@ -154,6 +287,12 @@ public class TileManager : MonoBehaviour
                 Debug.Log("Cây đang phát triển, hãy đợi thêm...");
                 break;
         }
+
+        // Cập nhật highlight ngay lập tức sau khi tương tác
+        if (enableHighlight && highlightMap != null && highlightTile != null)
+        {
+            UpdateHighlight();
+        }
     }
 
     // Coroutine để mô phỏng quá trình tăng trưởng của cây
@@ -174,6 +313,12 @@ public class TileManager : MonoBehaviour
         interactableMap.SetTile(position, harvestReadyTile);
         tileStages[position] = 4;
         Debug.Log("Cây đã sẵn sàng để thu hoạch!");
+
+        // Cập nhật highlight ngay khi cây sẵn sàng thu hoạch
+        if (enableHighlight && highlightMap != null && highlightTile != null)
+        {
+            UpdateHighlight();
+        }
     }
 
     // Phương thức để sinh ra vật phẩm thu hoạch
@@ -205,5 +350,15 @@ public class TileManager : MonoBehaviour
     public void SetTileInteractable(Vector3Int position)
     {
         InteractWithTile(position);
+    }
+
+    // Thêm để hiển thị phạm vi highlight trong Scene view
+    private void OnDrawGizmosSelected()
+    {
+        if (player != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(player.transform.position, highlightRadius);
+        }
     }
 }

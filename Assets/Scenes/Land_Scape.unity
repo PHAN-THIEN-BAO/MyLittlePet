@@ -14227,6 +14227,10 @@ MonoBehaviour:
   plantedTile: {fileID: 11400000, guid: 5c34910ee6dbbbf4f989c3ef62ed20d4, type: 2}
   growingTile: {fileID: 11400000, guid: 1f668c82d68040247af7c206dc037b33, type: 2}
   harvestReadyTile: {fileID: 11400000, guid: 8d66fd63d6d1334418341fdae6f86774, type: 2}
+  highlightRadius: 5
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  highlightColor: {r: 0.6150943, g: 0.6150943, b: 0.0916838, a: 1}
+  enableHighlight: 1
 --- !u!1 &331508447
 GameObject:
   m_ObjectHideFlags: 0
@@ -23210,6 +23214,10 @@ MonoBehaviour:
   plantedTile: {fileID: 0}
   growingTile: {fileID: 0}
   harvestReadyTile: {fileID: 0}
+  highlightRadius: 2
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  highlightColor: {r: 1.2, g: 1.2, b: 0.8, a: 1}
+  enableHighlight: 1
 --- !u!1 &531490159
 GameObject:
   m_ObjectHideFlags: 0
@@ -66689,7 +66697,7 @@ Transform:
   m_GameObject: {fileID: 1341831240}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -33.37, y: 16.07, z: 0}
+  m_LocalPosition: {x: -38.5, y: 8.3, z: 0}
   m_LocalScale: {x: 3.9613965, y: 5.040131, z: 2.5508025}
   m_ConstrainProportionsScale: 0
   m_Children: []
