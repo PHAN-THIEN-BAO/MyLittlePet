@@ -4,7 +4,7 @@
 public class CollectableItems : MonoBehaviour
 {
     [Header("Loại Vật Phẩm")]
-    [SerializeField] private ItemType itemType = ItemType.CarrotSeed;
+    [SerializeField] private ItemType itemType = ItemType.Gem;
 
     [Header("Hiệu Ứng")]
     [SerializeField] private bool playSound = true;
@@ -64,6 +64,12 @@ public class CollectableItems : MonoBehaviour
     {
         switch (itemType)
         {
+            case ItemType.Gem:
+                // Cập nhật số lượng Gem trong dữ liệu người dùng
+                AddCurrency("gem", 1);
+                Debug.Log("Đã thu thập 1 Gem");
+                break;
+
             case ItemType.CarrotSeed:
                 player.numCarrotSeed++;
                 Debug.Log("Đã thu thập hạt giống cà rốt. Tổng số: " + player.numCarrotSeed);
@@ -78,6 +84,61 @@ public class CollectableItems : MonoBehaviour
             default:
                 Debug.Log("Thu thập vật phẩm không xác định");
                 break;
+        }
+
+        // Nếu là gem, cập nhật giao diện hiển thị tiền tệ
+        if (itemType == ItemType.Gem)
+        {
+            UpdateCurrencyUI();
+            SaveUserData();
+        }
+    }
+
+    // Cập nhật loại tiền tệ trong dữ liệu người dùng
+    private void AddCurrency(string currencyType, int amount)
+    {
+        PlayerInfomation.UpdatePlayerInfo(user => {
+            // Cập nhật loại tiền tương ứng
+            switch (currencyType.ToLower())
+            {
+                case "gem":
+                    user.gem += amount;
+                    Debug.Log($"Đã cập nhật Gem: {user.gem}");
+                    break;
+                case "diamond":
+                    user.diamond += amount;
+                    Debug.Log($"Đã cập nhật Diamond: {user.diamond}");
+                    break;
+                case "coin":
+                    user.coin += amount;
+                    Debug.Log($"Đã cập nhật Coin: {user.coin}");
+                    break;
+            }
+        });
+    }
+
+    // Cập nhật giao diện hiển thị tiền tệ
+    private void UpdateCurrencyUI()
+    {
+        // Tìm PlayerInfoMainScene để cập nhật thông tin tiền tệ
+        PlayerInfoMainScene playerInfoUI = FindObjectOfType<PlayerInfoMainScene>();
+        if (playerInfoUI != null)
+        {
+            playerInfoUI.UpdateUI(); // Cập nhật hiển thị tiền tệ trên UI
+        }
+    }
+
+    // Lưu dữ liệu người dùng vào database
+    private void SaveUserData()
+    {
+        bool success = APIUser.UpdateUser();
+        if (success)
+        {
+            Debug.Log("Đã lưu dữ liệu người dùng vào database thành công");
+        }
+        else
+        {
+            Debug.LogWarning("Không thể lưu dữ liệu người dùng vào database");
         }
     }
 
