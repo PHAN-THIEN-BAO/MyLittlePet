@@ -182,7 +182,7 @@ public class DialogueController : MonoBehaviour
         {
             case PetInfoUIManager.ActionBlockReason.TooHungry: return "Need Food";
             case PetInfoUIManager.ActionBlockReason.TooTired: return "Need Sleep";
-            case PetInfoUIManager.ActionBlockReason.Critical: return "CRITICAL!";
+            case PetInfoUIManager.ActionBlockReason.Critical: return " ";
             case PetInfoUIManager.ActionBlockReason.TooFull: return "Full";
             case PetInfoUIManager.ActionBlockReason.TooEnergetic: return "Too Energetic";
             default: return "Blocked";
