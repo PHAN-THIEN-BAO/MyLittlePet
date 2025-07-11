@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ebd6aba9232dec143aa882d5301829fb
+guid: dea04cf565ae1ce4d96bde864245774e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 158571636818912160
-    second: TitleBox_64x16_0
+      213: -896200791414747952
+    second: Search_Man_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TitleBox_64x16_0
+      name: Search_Man_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 64
-        height: 16
+        x: 151
+        y: 19
+        width: 675
+        height: 942
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 12, y: 8, z: 14, w: 8}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0a32b04401c533200800000000000000
-      internalID: 158571636818912160
+      spriteID: 0dccc44e02e0093f0800000000000000
+      internalID: -896200791414747952
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: b75091b8c85b0824d9add4081a03558d
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      TitleBox_64x16_0: 158571636818912160
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

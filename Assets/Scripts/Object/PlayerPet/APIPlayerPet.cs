@@ -136,6 +136,8 @@ public class APIPlayerPet : MonoBehaviour
         }
     }
 
+    
+
 
 
     //public static bool AddPlayerPet(PlayerPet playerPet)
@@ -221,5 +223,72 @@ public class APIPlayerPet : MonoBehaviour
             return false;
         }
     }
+
+
+
+
+    /// <summary>
+    /// Gets all player pets for a specific user by their ID
+    /// </summary>
+    /// <param name="userId">The ID of the user whose pets to retrieve</param>
+    /// <returns>A list of PlayerPet objects or null if an error occurs</returns>
+    public static List<PlayerPet> GetPlayerPetByPlayerId(int userId)
+    {
+        string url = $"https://localhost:7035/PlayerPet/Player/{userId}";
+        try
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        string jsonResponse = reader.ReadToEnd();
+                        Debug.Log($"Retrieved {userId}'s pets: " + jsonResponse);
+
+                        // Deserialize the JSON array into a list of PlayerPet objects
+                        // Including the nested petInfo object
+                        var settings = new JsonSerializerSettings
+                        {
+                            NullValueHandling = NullValueHandling.Ignore,
+                            Error = (sender, args) => args.ErrorContext.Handled = true
+                        };
+
+                        return JsonConvert.DeserializeObject<List<PlayerPet>>(jsonResponse, settings);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Error getting player pets: " + response.StatusDescription);
+                    return null;
+                }
+            }
+        }
+        catch (WebException ex)
+        {
+            if (ex.Response != null)
+            {
+                using (StreamReader reader = new StreamReader(ex.Response.GetResponseStream()))
+                {
+                    Debug.LogError("GetPlayerPetByPlayerId error: " + reader.ReadToEnd());
+                }
+            }
+            else
+            {
+                Debug.LogError("GetPlayerPetByPlayerId error: " + ex.Message);
+            }
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Unexpected error during GetPlayerPetByPlayerId: " + ex.Message);
+            return null;
+        }
+    }
+
+
 
 }

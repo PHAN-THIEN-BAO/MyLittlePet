@@ -224,4 +224,95 @@ public static class APIUser
             return false;
         }
     }
+
+
+    public static List<User> SearchUser(string searchTerm)
+    {
+        string url = $"https://localhost:7035/User/search?searchTerm={searchTerm}";
+        try
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                string jsonResponse = reader.ReadToEnd();
+
+                // parse the JSON response into a SearchResult object
+                var result = JsonConvert.DeserializeObject<SearchResult>(jsonResponse);
+
+                // return the list of players
+                return result?.players ?? new List<User>();
+            }
+        }
+        catch (WebException ex)
+        {
+            Debug.LogError("SearchUser error: " + ex.Message);
+            return new List<User>();
+        }
+    }
+
+    // Create a class to match the JSON structure returned by the API
+    [System.Serializable]
+    public class SearchResult
+    {
+        public string message;
+        public List<User> players;
+    }
+
+
+
+    /// <summary>
+    /// Gets a user by their ID
+    /// </summary>
+    /// <param name="userId">The ID of the user to retrieve</param>
+    /// <returns>User object if found, null if not found or error occurs</returns>
+    public static User GetUserById(int userId)
+    {
+        string url = $"https://localhost:7035/User/{userId}";
+        try
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = "GET";
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+            {
+                string jsonResponse = reader.ReadToEnd();
+
+                // Check if response is successful (status code 200-299)
+                if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
+                {
+                    // Parse the JSON response into a User object using JsonConvert
+                    return JsonConvert.DeserializeObject<User>(jsonResponse);
+                }
+                else
+                {
+                    Debug.LogError($"GetUserById failed with status code: {response.StatusCode}");
+                    return null;
+                }
+            }
+        }
+        catch (WebException ex)
+        {
+            if (ex.Response is HttpWebResponse errorResponse && errorResponse.StatusCode == HttpStatusCode.NotFound)
+            {
+                Debug.LogWarning($"User with ID {userId} not found.");
+            }
+            else
+            {
+                Debug.LogError($"GetUserById error: {ex.Message}");
+            }
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Unexpected error in GetUserById: {ex.Message}");
+            return null;
+        }
+    }
+
+
+
+
 }
