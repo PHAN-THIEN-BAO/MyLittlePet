@@ -147,8 +147,13 @@ public class DialogueController : MonoBehaviour
         choiceButton.GetComponentInChildren<TMP_Text>().text = modifiedText;
         button.interactable = !disableButton;
         
-        // Rest of existing code...
-        button.onClick.AddListener(() => PerformPetCareAction(careAction, customCareAmount));
+        // Modified: Add action to perform pet care and close dialogue
+        button.onClick.AddListener(() => {
+            PerformPetCareAction(careAction, customCareAmount);
+            // Close the dialogue panel after performing care action
+            ShowDialogueUI(false);
+        });
+        
         if (additionalAction != null)
         {
             button.onClick.AddListener(additionalAction);

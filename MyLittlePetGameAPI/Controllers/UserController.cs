@@ -368,5 +368,41 @@ namespace MyLittlePetGameAPI.Controllers
             
             return Ok(stats);
         }
+        
+        // GET: User/search - Search for players by name (case-insensitive partial match)
+        [HttpGet("search")]
+        public ActionResult SearchPlayers(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return BadRequest("Search term is required");
+            }
+            
+            // Search for players (role = "Player") whose username contains the search term (case-insensitive)
+            var players = _context.Users
+                .Where(u => u.Role == "Player" && 
+                           u.UserName != null && 
+                           u.UserName.ToLower().Contains(searchTerm.ToLower()))
+                .Select(u => new 
+                {
+                    u.Id,
+                    u.UserName,
+                    u.Level,
+                    u.Coin,
+                    u.Diamond,
+                    u.Gem,
+                    u.JoinDate,
+                    u.Exp,
+                    u.Position
+                })
+                .ToList();
+            
+            if (!players.Any())
+            {
+                return Ok(new { Message = "No players found", Players = new List<object>() });
+            }
+            
+            return Ok(new { Message = $"Found {players.Count} player(s)", Players = players });
+        }
     }
 }
