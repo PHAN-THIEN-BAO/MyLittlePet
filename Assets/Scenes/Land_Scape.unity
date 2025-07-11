@@ -12186,7 +12186,7 @@ Transform:
   m_GameObject: {fileID: 286979393}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -43.7349, y: -5.7619, z: 0.039153922}
+  m_LocalPosition: {x: -48.07, y: -1.38, z: 0.039153922}
   m_LocalScale: {x: 0.5397335, y: 7.775122, z: 6.8602}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -29524,7 +29524,7 @@ Transform:
   m_GameObject: {fileID: 666713525}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -42.7434, y: -6.8773, z: 0.039153922}
+  m_LocalPosition: {x: -46.1, y: -7.88, z: 0.039153922}
   m_LocalScale: {x: 5.6483, y: 0.3542692, z: 6.8602}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -55506,6 +55506,10 @@ PrefabInstance:
     - target: {fileID: 4828551190351548142, guid: 6e816eb1bdf2a254481061542a511d07, type: 3}
       propertyPath: m_SortingLayerID
       value: -2040601249
+      objectReference: {fileID: 0}
+    - target: {fileID: 6785879710534888049, guid: 6e816eb1bdf2a254481061542a511d07, type: 3}
+      propertyPath: m_Mass
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7575681957346784164, guid: 6e816eb1bdf2a254481061542a511d07, type: 3}
       propertyPath: m_Name
@@ -98805,6 +98809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   petsInfoPanel: {fileID: 0}
   feedingPanel: {fileID: 0}
+  closeButton: {fileID: 0}
   petNameText: {fileID: 0}
   petLevelText: {fileID: 0}
   petCustomNameText: {fileID: 0}
@@ -103749,7 +103754,7 @@ Transform:
   m_GameObject: {fileID: 2094292148}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -42.5894, y: -4.602, z: 0.039153922}
+  m_LocalPosition: {x: -46.9245, y: -0.22009945, z: 0.039153922}
   m_LocalScale: {x: 5.446132, y: 0.28663835, z: 6.8602}
   m_ConstrainProportionsScale: 0
   m_Children: []
