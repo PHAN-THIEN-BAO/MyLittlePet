@@ -66,8 +66,8 @@ public class CollectableItems : MonoBehaviour
         {
             case ItemType.Gem:
                 // Cập nhật số lượng Gem trong dữ liệu người dùng
-                AddCurrency("gem", 1);
-                Debug.Log("Đã thu thập 1 Gem");
+                AddCurrency("gem", 5);
+                Debug.Log("Đã thu thập 5 Gem");
                 break;
 
             case ItemType.CarrotSeed:
