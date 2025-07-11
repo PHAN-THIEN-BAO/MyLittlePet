@@ -13695,11 +13695,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df8265029d3e334cbacdfb2e168944a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  playSound: 1
-  collectSound: {fileID: 0}
-  collectEffect: {fileID: 0}
-  destroyDelay: 0.2
 --- !u!50 &319317482
 Rigidbody2D:
   serializedVersion: 5
@@ -22226,11 +22221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df8265029d3e334cbacdfb2e168944a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  playSound: 1
-  collectSound: {fileID: 0}
-  collectEffect: {fileID: 0}
-  destroyDelay: 0.2
 --- !u!50 &499097583
 Rigidbody2D:
   serializedVersion: 5
@@ -25110,13 +25100,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315659a06f463554a9eff44947acb22f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playingPanel: {fileID: 0}
-  toyItemsContainer: {fileID: 0}
-  toyItemPrefab: {fileID: 1800368765629093431, guid: 801889402dbab5f4fb0de068dfe50d1f, type: 3}
+  miniGamePanel: {fileID: 0}
   closeButton: {fileID: 0}
-  scrollView: {fileID: 0}
-  noToyMessage: {fileID: 0}
-  apiBaseUrl: https://localhost:7035
+  startMiniGameButton: {fileID: 0}
+  miniGameTitle: {fileID: 0}
+  miniGameDescription: {fileID: 0}
+  miniGameSceneName: Mini_Game_1
+  defaultHappinessReward: 20
+  winBonusReward: 10
   enableDependencyCheck: 1
 --- !u!4 &560232923
 Transform:
@@ -42905,11 +42896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df8265029d3e334cbacdfb2e168944a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  playSound: 1
-  collectSound: {fileID: 0}
-  collectEffect: {fileID: 0}
-  destroyDelay: 0.2
 --- !u!50 &827655787
 Rigidbody2D:
   serializedVersion: 5
@@ -64498,6 +64484,8 @@ GameObject:
   - component: {fileID: 1271209409}
   - component: {fileID: 1271209411}
   - component: {fileID: 1271209410}
+  - component: {fileID: 1271209413}
+  - component: {fileID: 1271209412}
   m_Layer: 5
   m_Name: DialoguePanel
   m_TagString: Untagged
@@ -64567,6 +64555,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271209408}
   m_CullTransparentMesh: 1
+--- !u!114 &1271209412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271209408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b8716783afed64f97b9fdf2268af84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogue:
+    dialogueLines: []
+  dialoguePanel: {fileID: 0}
+  triggerOnContact: 1
+  triggerOnce: 0
+  onDialogueStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1271209413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271209408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d63617027f51ad45a2ef5c2102f07d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterIcon: {fileID: 895610605}
+  characterName: {fileID: 638338126}
+  dialogueText: {fileID: 972674716}
+  isDialogueActive: 0
+  typingSpeed: 0.05
+  animator: {fileID: 0}
 --- !u!1 &1272355777
 GameObject:
   m_ObjectHideFlags: 0
@@ -67224,11 +67253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df8265029d3e334cbacdfb2e168944a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  playSound: 1
-  collectSound: {fileID: 0}
-  collectEffect: {fileID: 0}
-  destroyDelay: 0.2
 --- !u!1 &1342263448
 GameObject:
   m_ObjectHideFlags: 0
@@ -88142,11 +88166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670999f4405074c4f9a7ab4f509d9307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  optionItems: {fileID: 1911823210}
   optionPets: {fileID: 2007722319}
   optionConsumption: {fileID: 2000617441}
-  optionMedicine: {fileID: 2137592903}
-  optionOther: {fileID: 1750665011}
 --- !u!4 &1733157405
 Transform:
   m_ObjectHideFlags: 0
