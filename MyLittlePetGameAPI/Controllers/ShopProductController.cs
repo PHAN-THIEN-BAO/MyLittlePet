@@ -505,5 +505,63 @@ namespace MyLittlePetGameAPI.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        
+        // GET: ShopProduct/Pet/{petId} - Get products by pet ID
+        [HttpGet("Pet/{petId}")]
+        public ActionResult<IEnumerable<object>> GetByPetId(int petId)
+        {
+            try
+            {
+                var products = _context.ShopProducts
+                    .Include(p => p.Shop)
+                    .Include(p => p.Admin)
+                    .Include(p => p.Pet)
+                    .Where(p => p.PetId == petId)
+                    .Select(p => new
+                    {
+                        ShopProductId = p.ShopProductId,
+                        ShopId = p.ShopId,
+                        AdminId = p.AdminId,
+                        PetId = p.PetId,
+                        Name = p.Name,
+                        Type = p.Type,
+                        Description = p.Description,
+                        ImageUrl = p.ImageUrl,
+                        Price = p.Price,
+                        CurrencyType = p.CurrencyType,
+                        Status = p.Status,
+                        ShopInfo = new
+                        {
+                            ShopId = p.Shop.ShopId,
+                            Name = p.Shop.Name,
+                            Type = p.Shop.Type
+                        },
+                        AdminInfo = new
+                        {
+                            Id = p.Admin.Id,
+                            UserName = p.Admin.UserName
+                        },
+                        PetInfo = p.Pet == null ? null : new
+                        {
+                            PetId = p.Pet.PetId,
+                            PetType = p.Pet.PetType,
+                            PetDefaultName = p.Pet.PetDefaultName,
+                            Description = p.Pet.Description
+                        }
+                    })
+                    .ToList();
+                
+                if (!products.Any())
+                {
+                    return Ok(new { Message = "No products found for this pet", Products = new List<object>() });
+                }
+                    
+                return Ok(new { Message = $"Found {products.Count} product(s) for pet ID {petId}", Products = products });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }
