@@ -13695,11 +13695,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df8265029d3e334cbacdfb2e168944a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  playSound: 1
-  collectSound: {fileID: 0}
-  collectEffect: {fileID: 0}
-  destroyDelay: 0.2
 --- !u!50 &319317482
 Rigidbody2D:
   serializedVersion: 5
@@ -14372,6 +14367,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileManager: {fileID: 0}
+  harvestedItemPrefab: {fileID: 0}
 --- !u!4 &329112633
 Transform:
   m_ObjectHideFlags: 0
@@ -14402,6 +14398,9 @@ MonoBehaviour:
   interactableMap: {fileID: 1744907800}
   hiddenInteractableTile: {fileID: 11400000, guid: 73e795d949cc5804894e8cacbf5f8dbe, type: 2}
   interactedTile: {fileID: 11400000, guid: 75bc5ff2836585a4489e4093764fe4a7, type: 2}
+  plantedTile: {fileID: 11400000, guid: 5c34910ee6dbbbf4f989c3ef62ed20d4, type: 2}
+  growingTile: {fileID: 11400000, guid: 1f668c82d68040247af7c206dc037b33, type: 2}
+  harvestReadyTile: {fileID: 11400000, guid: 8d66fd63d6d1334418341fdae6f86774, type: 2}
 --- !u!1 &331508447
 GameObject:
   m_ObjectHideFlags: 0
@@ -22222,11 +22221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df8265029d3e334cbacdfb2e168944a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  playSound: 1
-  collectSound: {fileID: 0}
-  collectEffect: {fileID: 0}
-  destroyDelay: 0.2
 --- !u!50 &499097583
 Rigidbody2D:
   serializedVersion: 5
@@ -23562,6 +23556,9 @@ MonoBehaviour:
   interactableMap: {fileID: 1744907800}
   hiddenInteractableTile: {fileID: 11400000, guid: 73e795d949cc5804894e8cacbf5f8dbe, type: 2}
   interactedTile: {fileID: 0}
+  plantedTile: {fileID: 0}
+  growingTile: {fileID: 0}
+  harvestReadyTile: {fileID: 0}
 --- !u!1 &531490159
 GameObject:
   m_ObjectHideFlags: 0
@@ -25103,13 +25100,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315659a06f463554a9eff44947acb22f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playingPanel: {fileID: 0}
-  toyItemsContainer: {fileID: 0}
-  toyItemPrefab: {fileID: 1800368765629093431, guid: 801889402dbab5f4fb0de068dfe50d1f, type: 3}
+  miniGamePanel: {fileID: 0}
   closeButton: {fileID: 0}
-  scrollView: {fileID: 0}
-  noToyMessage: {fileID: 0}
-  apiBaseUrl: https://localhost:7035
+  startMiniGameButton: {fileID: 0}
+  miniGameTitle: {fileID: 0}
+  miniGameDescription: {fileID: 0}
+  miniGameSceneName: Mini_Game_1
+  defaultHappinessReward: 20
+  winBonusReward: 10
   enableDependencyCheck: 1
 --- !u!4 &560232923
 Transform:
@@ -28581,6 +28579,66 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2088942573}
   m_SourcePrefab: {fileID: 100100000, guid: f5bed27ee231dc241a705adad358c953, type: 3}
+--- !u!1 &653494502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 653494503}
+  - component: {fileID: 653494505}
+  - component: {fileID: 653494504}
+  m_Layer: 0
+  m_Name: UITestSeed
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &653494503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653494502}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 17.432083, y: -95.83104, z: -0.03383422}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1600920351}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &653494504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653494502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c8c9dbc9ff08840b48d8d5e29394b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numCarrotSeed: 1000
+  interactionRadius: 1
+--- !u!114 &653494505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653494502}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ef30be9e31d25144b308e359edfd217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PanelUI: {fileID: 1723568407}
 --- !u!1 &654435106
 GameObject:
   m_ObjectHideFlags: 0
@@ -42838,11 +42896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df8265029d3e334cbacdfb2e168944a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  playSound: 1
-  collectSound: {fileID: 0}
-  collectEffect: {fileID: 0}
-  destroyDelay: 0.2
 --- !u!50 &827655787
 Rigidbody2D:
   serializedVersion: 5
@@ -64431,6 +64484,8 @@ GameObject:
   - component: {fileID: 1271209409}
   - component: {fileID: 1271209411}
   - component: {fileID: 1271209410}
+  - component: {fileID: 1271209413}
+  - component: {fileID: 1271209412}
   m_Layer: 5
   m_Name: DialoguePanel
   m_TagString: Untagged
@@ -64500,6 +64555,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271209408}
   m_CullTransparentMesh: 1
+--- !u!114 &1271209412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271209408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b8716783afed64f97b9fdf2268af84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogue:
+    dialogueLines: []
+  dialoguePanel: {fileID: 0}
+  triggerOnContact: 1
+  triggerOnce: 0
+  onDialogueStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1271209413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1271209408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d63617027f51ad45a2ef5c2102f07d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterIcon: {fileID: 895610605}
+  characterName: {fileID: 638338126}
+  dialogueText: {fileID: 972674716}
+  isDialogueActive: 0
+  typingSpeed: 0.05
+  animator: {fileID: 0}
 --- !u!1 &1272355777
 GameObject:
   m_ObjectHideFlags: 0
@@ -67157,11 +67253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df8265029d3e334cbacdfb2e168944a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemType: 0
-  playSound: 1
-  collectSound: {fileID: 0}
-  collectEffect: {fileID: 0}
-  destroyDelay: 0.2
 --- !u!1 &1342263448
 GameObject:
   m_ObjectHideFlags: 0
@@ -77984,6 +78075,7 @@ Transform:
   - {fileID: 1937915092}
   - {fileID: 1257761063}
   - {fileID: 2054113173}
+  - {fileID: 653494503}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1600997583
@@ -88074,11 +88166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670999f4405074c4f9a7ab4f509d9307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  optionItems: {fileID: 1911823210}
   optionPets: {fileID: 2007722319}
   optionConsumption: {fileID: 2000617441}
-  optionMedicine: {fileID: 2137592903}
-  optionOther: {fileID: 1750665011}
 --- !u!4 &1733157405
 Transform:
   m_ObjectHideFlags: 0
@@ -88472,7 +88561,7 @@ GameObject:
   - component: {fileID: 1744907800}
   - component: {fileID: 1744907799}
   m_Layer: 0
-  m_Name: FarmInteractable
+  m_Name: Farm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98916,8 +99005,8 @@ Transform:
   m_GameObject: {fileID: 1983715033}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -43.51, y: 15.42, z: 0}
-  m_LocalScale: {x: 9.021402, y: 19.266136, z: 6.8602}
+  m_LocalPosition: {x: -43.51, y: 14.3855, z: 0}
+  m_LocalScale: {x: 9.021402, y: 25.351576, z: 6.8602}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
