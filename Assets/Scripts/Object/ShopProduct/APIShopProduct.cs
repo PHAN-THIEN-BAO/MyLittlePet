@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -44,5 +45,54 @@ public class APIShopProduct : MonoBehaviour
         return JsonConvert.DeserializeObject<ShopProduct>(jsonResponse);
     }
 
+    /// <summary>
+    /// Fetches a shop product by pet ID from the API.
+    /// </summary>
+    /// <param name="petId">The ID of the pet</param>
+    /// <returns>A ShopProduct associated with the specified pet ID</returns>
+    public static ShopProduct GetShopProductByIdPet(int petId)
+    {
+        try
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://localhost:7035/ShopProduct/Pet/{petId}");
+            request.Method = "GET";
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        string jsonResponse = reader.ReadToEnd();
+
+                        // Parse the JSON response into a ShopProduct object
+                        return JsonConvert.DeserializeObject<ShopProduct>(jsonResponse);
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"Error fetching shop product for pet ID {petId}: {response.StatusDescription}");
+                    return null;
+                }
+            }
+        }
+        catch (WebException ex)
+        {
+            if (ex.Response is HttpWebResponse errorResponse && errorResponse.StatusCode == HttpStatusCode.NotFound)
+            {
+                Debug.LogWarning($"No shop product found for pet ID {petId}");
+            }
+            else
+            {
+                Debug.LogError($"Error in GetShopProductByIdPet: {ex.Message}");
+            }
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Unexpected error in GetShopProductByIdPet: {ex.Message}");
+            return null;
+        }
+    }
 
 }

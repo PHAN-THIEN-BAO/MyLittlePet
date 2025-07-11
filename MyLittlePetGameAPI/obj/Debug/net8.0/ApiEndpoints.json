@@ -2070,6 +2070,32 @@
   },
   {
     "ContainingType": "MyLittlePetGameAPI.Controllers.ShopProductController",
+    "Method": "GetByPetId",
+    "RelativePath": "ShopProduct/Pet/{petId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "petId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[System.Object, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "MyLittlePetGameAPI.Controllers.ShopProductController",
     "Method": "GetByStatus",
     "RelativePath": "ShopProduct/Status/{status}",
     "HttpMethod": "GET",
