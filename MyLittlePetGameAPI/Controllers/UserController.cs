@@ -74,39 +74,78 @@ namespace MyLittlePetGameAPI.Controllers
         
         // POST: User/register - Register a new player
         [HttpPost("register")]
-        public ActionResult<User> RegisterPlayer(string userName, string password, 
+        public ActionResult<User> RegisterPlayer(string userName, string password,
             int? coin = 100, int? diamond = 0, int? gem = 0)
         {
-            // Validate required fields
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+            try
             {
-                return BadRequest("Username and password are required");
+                // Validate required fields
+                if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+                {
+                    return BadRequest("Username and password are required");
+                }
+                
+                // Trim whitespace from inputs
+                userName = userName.Trim();
+                password = password.Trim();
+                
+                // Additional validation
+                if (userName.Length > 100)
+                {
+                    return BadRequest("Username cannot exceed 100 characters");
+                }
+                
+                if (password.Length > 100)
+                {
+                    return BadRequest("Password cannot exceed 100 characters");
+                }
+                
+                // Check if username already exists
+                if (_context.Users.Any(u => u.UserName == userName))
+                {
+                    return BadRequest("Username already exists");
+                }
+                
+                var newPlayer = new User
+                {
+                    Role = "Player", // Always set role to Player for this endpoint
+                    UserName = userName,
+                    Password = password,
+                    Email = $"user_{Guid.NewGuid():N}@placeholder.com", // Generate unique placeholder email
+                    Level = 1,
+                    Coin = coin ?? 100, // Default starting coins
+                    Diamond = diamond ?? 0,
+                    Gem = gem ?? 0,
+                    Position = null, // Initialize Position field
+                    Exp = 0, // Initialize EXP field
+                    JoinDate = DateTime.Now
+                };
+                
+                // Add some debugging
+                Console.WriteLine($"Creating user: {newPlayer.UserName}, Role: {newPlayer.Role}");
+                
+                _context.Users.Add(newPlayer);
+                
+                // Save and get more detailed error info
+                var result = _context.SaveChanges();
+                Console.WriteLine($"SaveChanges result: {result}");
+                
+                // Return only the ID for security
+                return Ok(new { PlayerId = newPlayer.Id, Message = "Registration successful" });
             }
-            
-            // Check if username already exists
-            if (_context.Users.Any(u => u.UserName == userName))
+            catch (Exception ex)
             {
-                return BadRequest("Username already exists");
+                // Log the actual error for debugging
+                var innerException = ex.InnerException?.Message ?? "No inner exception";
+                var stackTrace = ex.StackTrace ?? "No stack trace";
+                
+                return StatusCode(500, new { 
+                    Message = "An error occurred during registration", 
+                    Error = ex.Message,
+                    InnerException = innerException,
+                    StackTrace = stackTrace
+                });
             }
-            
-            var newPlayer = new User
-            {
-                Role = "Player", // Always set role to Player for this endpoint
-                UserName = userName,
-                Password = password,
-                Email = null, // Email is now optional/null
-                Level = 1,
-                Coin = coin ?? 100, // Default starting coins
-                Diamond = diamond ?? 0,
-                Gem = gem ?? 0,
-                JoinDate = DateTime.Now
-            };
-            
-            _context.Users.Add(newPlayer);
-            _context.SaveChanges();
-            
-            // Return only the ID for security
-            return Ok(new { PlayerId = newPlayer.Id, Message = "Registration successful" });
         }
         
         // POST: User - Create a new user
@@ -142,6 +181,8 @@ namespace MyLittlePetGameAPI.Controllers
                 Coin = coin ?? 0, // Default to 0 if not provided
                 Diamond = diamond ?? 0, // Default to 0 if not provided
                 Gem = gem ?? 0, // Default to 0 if not provided
+                Position = null, // Initialize Position field
+                Exp = 0, // Initialize EXP field
                 JoinDate = DateTime.Now
             };
             
