@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class PlayerInfoMainScene : MonoBehaviour
@@ -35,6 +35,13 @@ public class PlayerInfoMainScene : MonoBehaviour
         {
             Debug.LogError("User information is not available.");
         }
+    }
+
+    // Thêm phương thức UpdateUI để tiện cho việc gọi từ các script khác
+    public void UpdateUI()
+    {
+        // Gọi MainSceneInfo để cập nhật giao diện
+        MainSceneInfo();
     }
 
 }
