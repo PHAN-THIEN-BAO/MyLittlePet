@@ -9,6 +9,7 @@ public class PetInfoUIManager : MonoBehaviour
     [Header("UI Panel")]
     public GameObject petsInfoPanel;
     public GameObject feedingPanel;
+    public Button closeButton;
 
     [Header("Pet Details UI")]
     public TMP_Text petNameText;
@@ -95,11 +96,27 @@ public class PetInfoUIManager : MonoBehaviour
             }
         }
 
+        // Initialize close button
+        InitializeCloseButton();
+
         // Initialize Action Manager
         InitializeActionManager();
 
         // Start the decay system
         StartDecaySystem();
+    }
+
+    // Initialize the close button functionality
+    private void InitializeCloseButton()
+    {
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(OnCloseButtonClicked);
+        }
+        else
+        {
+            Debug.LogWarning("Close button is not assigned in the inspector!");
+        }
     }
 
     // Initialize the Pet Action Manager
@@ -131,6 +148,12 @@ public class PetInfoUIManager : MonoBehaviour
     private void OnDestroy()
     {
         StopDecaySystem();
+        
+        // Remove close button listener to prevent memory leaks
+        if (closeButton != null)
+        {
+            closeButton.onClick.RemoveListener(OnCloseButtonClicked);
+        }
     }
 
     public void ToggleInfoPanel(int petID)
@@ -153,6 +176,13 @@ public class PetInfoUIManager : MonoBehaviour
     public void CloseInfoPanel()
     {
         petsInfoPanel.SetActive(false);
+    }
+
+    // Close button click handler
+    public void OnCloseButtonClicked()
+    {
+        CloseInfoPanel();
+        Debug.Log("Pet info panel closed via close button");
     }
 
     public bool IsPanelActive()

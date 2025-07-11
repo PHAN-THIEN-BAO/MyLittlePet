@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -8108252588573675206}
   - component: {fileID: 5371502234254064561}
   - component: {fileID: 8842326296918133176}
+  - component: {fileID: 2089218525913505268}
   m_Layer: 0
   m_Name: Orange_Cat
   m_TagString: Untagged
@@ -80,8 +81,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 711862721
-  m_SortingLayer: 4
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -1452714511649490640, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -128,7 +129,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 100
+  m_Mass: 1000
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_GravityScale: 0
@@ -196,7 +197,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7575681957346784164}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14b317dbeb8bf4b9f871fe611d58d3a7, type: 3}
   m_Name: 
@@ -248,3 +249,17 @@ MonoBehaviour:
     petCustomName: 
     level: 0
     status: 
+--- !u!114 &2089218525913505268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7575681957346784164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7abeec905f4aeaa48adc50f669b29cde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 0.2
+  changeDirectionTime: 2

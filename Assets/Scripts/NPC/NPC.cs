@@ -143,11 +143,14 @@ public class NPC : MonoBehaviour, IInteractable
                     customCareAmount = choice.customCareAmount[i];
                 }
 
-                // Create a pet care choice button that also progresses the dialogue
+                // Create a pet care choice button that also progresses the dialogue and closes it
                 dialogueUI.CreatePetCareChoiceButton(
                     choice.choices[i],
                     careAction,
-                    () => ChooseOption(nextIndex),
+                    () => {
+                        // Close dialogue immediately when care button is pressed
+                        EndDialogue();
+                    },
                     customCareAmount);
             }
             else
