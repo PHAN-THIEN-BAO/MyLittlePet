@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,6 +9,10 @@ public class PetActionManager : MonoBehaviour
     [Header("Action Settings")]
     [SerializeField] private float maxConcurrentActions = 3;
     [SerializeField] private bool enableLogging = true;
+    
+    [Header("Dependency Management")]
+    [SerializeField] private bool requirePetInfoManager = true;
+    [SerializeField] private float retryFindManagerInterval = 2f;
     
     // Action storage
     private Dictionary<string, PetAction> allActions = new Dictionary<string, PetAction>();
@@ -22,6 +26,7 @@ public class PetActionManager : MonoBehaviour
     
     // Reference to PetInfoUIManager
     private PetInfoUIManager petInfoManager;
+    private Coroutine findManagerCoroutine;
     
     public static PetActionManager Instance { get; private set; }
 
@@ -40,22 +45,81 @@ public class PetActionManager : MonoBehaviour
 
     private void Start()
     {
-        petInfoManager = FindObjectOfType<PetInfoUIManager>();
-        if (petInfoManager == null)
+        FindPetInfoManager();
+        
+        // Start coroutine to periodically search for PetInfoUIManager if not found
+        if (petInfoManager == null && requirePetInfoManager)
         {
-            Debug.LogWarning("PetInfoUIManager not found! Some actions may not work properly.");
+            findManagerCoroutine = StartCoroutine(RetryFindPetInfoManager());
         }
     }
 
     private void Update()
     {
-        ProcessActionQueue();
-        UpdateExecutingActions();
+        // Only process actions if we have PetInfoUIManager or if it's not required
+        if (petInfoManager != null || !requirePetInfoManager)
+        {
+            ProcessActionQueue();
+            UpdateExecutingActions();
+        }
+    }
+
+    /// <summary>
+    /// Find PetInfoUIManager in scene
+    /// </summary>
+    private void FindPetInfoManager()
+    {
+        petInfoManager = FindObjectOfType<PetInfoUIManager>();
+        if (petInfoManager != null)
+        {
+            if (enableLogging)
+                Debug.Log("✅ PetInfoUIManager found and connected to PetActionManager");
+            
+            // Stop retry coroutine if running
+            if (findManagerCoroutine != null)
+            {
+                StopCoroutine(findManagerCoroutine);
+                findManagerCoroutine = null;
+            }
+        }
+        else if (requirePetInfoManager)
+        {
+            Debug.LogWarning("⚠️ PetInfoUIManager not found! PetActionManager will retry finding it.");
+        }
+    }
+
+    /// <summary>
+    /// Coroutine to periodically retry finding PetInfoUIManager
+    /// </summary>
+    private IEnumerator RetryFindPetInfoManager()
+    {
+        while (petInfoManager == null)
+        {
+            yield return new WaitForSeconds(retryFindManagerInterval);
+            FindPetInfoManager();
+        }
+    }
+
+    /// <summary>
+    /// Manually set PetInfoUIManager reference (useful for late initialization)
+    /// </summary>
+    public void SetPetInfoUIManager(PetInfoUIManager manager)
+    {
+        petInfoManager = manager;
+        if (enableLogging)
+            Debug.Log("✅ PetInfoUIManager manually set for PetActionManager");
     }
 
     // Add action with automatic topological sorting
     public void AddAction(PetAction action)
     {
+        // Check if we can add actions that require PetInfoUIManager
+        if (requirePetInfoManager && petInfoManager == null && RequiresPetInfoManager(action.type))
+        {
+            Debug.LogWarning($"Cannot add action {action.actionId} of type {action.type}: PetInfoUIManager not found!");
+            return;
+        }
+
         if (allActions.ContainsKey(action.actionId))
         {
             Debug.LogWarning($"Action with ID {action.actionId} already exists!");
@@ -86,6 +150,26 @@ public class PetActionManager : MonoBehaviour
         if (enableLogging)
         {
             Debug.Log($"Added action: {action.actionId} (Type: {action.type}, Priority: {action.priority})");
+        }
+    }
+
+    /// <summary>
+    /// Check if action type requires PetInfoUIManager
+    /// </summary>
+    private bool RequiresPetInfoManager(PetAction.ActionType actionType)
+    {
+        switch (actionType)
+        {
+            case PetAction.ActionType.Feed:
+            case PetAction.ActionType.Play:
+            case PetAction.ActionType.Sleep:
+            case PetAction.ActionType.CareForAll:
+            case PetAction.ActionType.UpdateDatabase:
+                return true;
+            case PetAction.ActionType.StatusDecay:
+            case PetAction.ActionType.LevelUp:
+            default:
+                return false;
         }
     }
 
@@ -172,6 +256,14 @@ public class PetActionManager : MonoBehaviour
         {
             PetAction nextAction = actionQueue.Dequeue();
             
+            // Skip actions that require PetInfoUIManager if it's not available
+            if (RequiresPetInfoManager(nextAction.type) && petInfoManager == null)
+            {
+                if (enableLogging)
+                    Debug.LogWarning($"Skipping action {nextAction.actionId}: PetInfoUIManager not available");
+                continue;
+            }
+            
             // Check if dependencies are met
             if (AreDependenciesMet(nextAction))
             {
@@ -237,9 +329,33 @@ public class PetActionManager : MonoBehaviour
     // Execute specific action types
     private IEnumerator ExecuteActionByType(PetAction action)
     {
+        // Early exit for actions that don't require PetInfoUIManager
+        if (!RequiresPetInfoManager(action.type))
+        {
+            switch (action.type)
+            {
+                case PetAction.ActionType.StatusDecay:
+                    // Handle status decay without PetInfoUIManager
+                    yield return new WaitForSeconds(0.1f);
+                    break;
+                    
+                case PetAction.ActionType.LevelUp:
+                    // Handle level up logic without PetInfoUIManager
+                    yield return new WaitForSeconds(1.0f);
+                    break;
+                    
+                default:
+                    yield return new WaitForSeconds(0.1f);
+                    break;
+            }
+            yield break;
+        }
+
+        // For actions that require PetInfoUIManager
         if (petInfoManager == null)
         {
-            Debug.LogWarning("PetInfoUIManager not found! Cannot execute pet actions.");
+            Debug.LogError($"Cannot execute action {action.actionId}: PetInfoUIManager is required but not found!");
+            action.OnActionFailed?.Invoke(action);
             yield break;
         }
 
@@ -259,6 +375,20 @@ public class PetActionManager : MonoBehaviour
 
             case PetAction.ActionType.Sleep:
                 int sleepAmount = action.GetParameter("amount", petInfoManager.sleepIncreaseAmount);
+                
+                // ========== INTEGRATE WITH PETSLEEPMANAGER ==========
+                if (PetSleepManager.Instance != null)
+                {
+                    int petID = action.GetParameter("petID", -1);
+                    float sleepDuration = action.GetParameter("duration", 5f);
+                    
+                    if (petID != -1)
+                    {
+                        PetSleepManager.Instance.PutPetToSleep(petID, sleepDuration);
+                        yield return new WaitForSeconds(sleepDuration);
+                    }
+                }
+                
                 petInfoManager.UpdatePetStatus(2, sleepAmount); // 2 = energy
                 yield return new WaitForSeconds(2.0f);
                 break;
@@ -277,18 +407,8 @@ public class PetActionManager : MonoBehaviour
                 yield return new WaitForSeconds(0.2f);
                 break;
 
-            case PetAction.ActionType.StatusDecay:
-                // This would be handled by the existing decay system
-                yield return new WaitForSeconds(0.1f);
-                break;
-
             case PetAction.ActionType.UpdateDatabase:
                 yield return StartCoroutine(petInfoManager.UpdatePetInDatabase());
-                break;
-
-            case PetAction.ActionType.LevelUp:
-                // Implement level up logic here
-                yield return new WaitForSeconds(1.0f);
                 break;
 
             default:
@@ -333,10 +453,12 @@ public class PetActionManager : MonoBehaviour
         AddAction(action);
     }
 
-    public void PetSleep(int amount = 0, string dependsOn = null)
+    public void PetSleep(int petID, int amount = 0, float duration = 5f, string dependsOn = null)
     {
         var action = new PetAction($"sleep_{Time.time}", PetAction.ActionType.Sleep, PetAction.ActionPriority.Normal);
         if (amount > 0) action.SetParameter("amount", amount);
+        action.SetParameter("petID", petID);
+        action.SetParameter("duration", duration);
         if (!string.IsNullOrEmpty(dependsOn)) action.AddDependency(dependsOn);
         AddAction(action);
     }
@@ -368,5 +490,21 @@ public class PetActionManager : MonoBehaviour
     public bool IsActionExecuting(string actionId)
     {
         return allActions.ContainsKey(actionId) && allActions[actionId].isExecuting;
+    }
+    
+    /// <summary>
+    /// Check if PetInfoUIManager is available
+    /// </summary>
+    public bool HasPetInfoUIManager()
+    {
+        return petInfoManager != null;
+    }
+
+    private void OnDestroy()
+    {
+        if (findManagerCoroutine != null)
+        {
+            StopCoroutine(findManagerCoroutine);
+        }
     }
 }

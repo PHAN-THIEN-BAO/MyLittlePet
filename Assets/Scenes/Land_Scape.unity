@@ -71542,6 +71542,8 @@ MonoBehaviour:
   portraitImage: {fileID: 0}
   choiceContainer: {fileID: 0}
   choiceButtonPrefab: {fileID: 688944461797453089, guid: 57b0c49217847eb4bbbf0e367d5c4be0, type: 3}
+  dialogueSleepDuration: 8
+  showSleepMessage: 1
 --- !u!1 &1449916374
 GameObject:
   m_ObjectHideFlags: 0
@@ -82949,7 +82951,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1705213753
 RectTransform:
   m_ObjectHideFlags: 0
