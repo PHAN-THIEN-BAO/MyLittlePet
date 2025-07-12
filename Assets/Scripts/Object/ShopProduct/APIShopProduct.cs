@@ -64,9 +64,25 @@ public class APIShopProduct : MonoBehaviour
                     using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                     {
                         string jsonResponse = reader.ReadToEnd();
+                        Debug.Log($"[API] Raw JSON for petId {petId}: {jsonResponse}");
 
-                        // Parse the JSON response into a ShopProduct object
-                        return JsonConvert.DeserializeObject<ShopProduct>(jsonResponse);
+                        // Parse JSON to ShopProductResponse
+                        var productResponse = JsonConvert.DeserializeObject<ShopProductResponse>(jsonResponse);
+
+                        // check if products list is not null and has at least one product
+                        if (productResponse != null &&
+                            productResponse.products != null &&
+                            productResponse.products.Count > 0)
+                        {
+                            var product = productResponse.products[0];
+                            Debug.Log($"[API] GetShopProductByIdPet({petId}) => imageUrl: {product.imageUrl}");
+                            return product;
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"No shop products found in response for pet ID {petId}");
+                            return null;
+                        }
                     }
                 }
                 else
@@ -94,5 +110,17 @@ public class APIShopProduct : MonoBehaviour
             return null;
         }
     }
+
+    [Serializable]
+    public class ShopProductResponse
+    {
+        public string message;
+        public List<ShopProduct> products;
+    }
+
+
+
+
+
 
 }
