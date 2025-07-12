@@ -887,7 +887,7 @@ public class PetInfoUIManager : MonoBehaviour
             else if (button.name.Contains("Sleep") || button.tag == "SleepButton")
             {
                 ActionBlockReason reason = CanPerformAction(PetAction.ActionType.Sleep);
-                button.interactable = (reason == ActionBlockReason.None && !IsEnergyAtMax());
+                button.interactable = (reason == ActionBlockReason.None);
                 UpdateButtonVisual(button, reason, PetAction.ActionType.Sleep);
             }
             else if (button.name.Contains("CareAll") || button.tag == "CareAllButton")
@@ -901,6 +901,7 @@ public class PetInfoUIManager : MonoBehaviour
     {
         var colors = button.colors;
         
+        // Chỉ thay đổi màu sắc, không thay đổi text của button
         switch (reason)
         {
             case ActionBlockReason.None:
@@ -928,33 +929,92 @@ public class PetInfoUIManager : MonoBehaviour
         
         button.colors = colors;
         
-        // Update button text with dependency info
-        var buttonText = button.GetComponentInChildren<TMP_Text>();
-        if (buttonText != null && reason != ActionBlockReason.None)
+        // Cập nhật tooltip thay vì button text
+        UpdateButtonTooltip(button, reason, actionType);
+    }
+
+    private void UpdateButtonTooltip(Button button, ActionBlockReason reason, PetAction.ActionType actionType)
+    {
+        TooltipTrigger tooltip = button.GetComponent<TooltipTrigger>();
+        
+        // Nếu chưa có TooltipTrigger, thêm vào
+        if (tooltip == null)
         {
-            string baseText = actionType.ToString();
-            string statusText = "";
+            tooltip = button.gameObject.AddComponent<TooltipTrigger>();
+        }
+        
+        // Tạo dynamic tooltip content
+        tooltip.GetDynamicTooltip = () => GetButtonTooltipText(button, reason, actionType);
+        
+        // Set tooltip colors based on reason
+        Color bgColor, textColor;
+        GetTooltipColors(reason, out bgColor, out textColor);
+        tooltip.SetTooltipColors(bgColor, textColor);
+    }
+
+    private string GetButtonTooltipText(Button button, ActionBlockReason reason, PetAction.ActionType actionType)
+    {
+        string baseText = $"{actionType} Pet";
+        
+        if (reason == ActionBlockReason.None)
+        {
+            // Hiển thị thông tin cơ bản khi không có vấn đề
+            var (hunger, happiness, energy) = GetCurrentStatusValues();
+            string statusInfo = "";
             
-            switch (reason)
+            switch (actionType)
             {
-                case ActionBlockReason.Critical:
-                    statusText = " (CRITICAL!)";
+                case PetAction.ActionType.Feed:
+                    statusInfo = $"Current Hunger: {hunger}/{maxStatusValue}\nWill increase by: {feedIncreaseAmount}";
                     break;
-                case ActionBlockReason.TooHungry:
-                    statusText = " (Need Food First)";
+                case PetAction.ActionType.Play:
+                    statusInfo = $"Current Happiness: {happiness}/{maxStatusValue}\nWill increase by: {playIncreaseAmount}";
                     break;
-                case ActionBlockReason.TooTired:
-                    statusText = " (Need Sleep First)";
-                    break;
-                case ActionBlockReason.TooFull:
-                    statusText = " (Already Full)";
-                    break;
-                case ActionBlockReason.TooEnergetic:
-                    statusText = " (Too Energetic)";
+                case PetAction.ActionType.Sleep:
+                    statusInfo = $"Current Energy: {energy}/{maxStatusValue}\nWill increase by: {sleepIncreaseAmount}";
                     break;
             }
             
-            buttonText.text = baseText + statusText;
+            return $"{baseText}\n\n{statusInfo}";
+        }
+        else
+        {
+            // Hiển thị lý do tại sao không thể thực hiện
+            string reasonMessage = GetBlockReasonMessage(reason, actionType);
+            return $"{baseText}\n\n❌ {reasonMessage}";
+        }
+    }
+
+    private void GetTooltipColors(ActionBlockReason reason, out Color backgroundColor, out Color textColor)
+    {
+        switch (reason)
+        {
+            case ActionBlockReason.None:
+                backgroundColor = new Color(0.2f, 0.4f, 0.2f, 0.9f); // Green tint
+                textColor = Color.white;
+                break;
+                
+            case ActionBlockReason.Critical:
+                backgroundColor = new Color(0.6f, 0.1f, 0.1f, 0.9f); // Red
+                textColor = Color.white;
+                break;
+                
+            case ActionBlockReason.TooHungry:
+            case ActionBlockReason.TooTired:
+                backgroundColor = new Color(0.6f, 0.4f, 0.1f, 0.9f); // Orange/Yellow
+                textColor = Color.white;
+                break;
+                
+            case ActionBlockReason.TooFull:
+            case ActionBlockReason.TooEnergetic:
+                backgroundColor = new Color(0.1f, 0.3f, 0.6f, 0.9f); // Blue
+                textColor = Color.white;
+                break;
+                
+            default:
+                backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.9f); // Dark gray
+                textColor = Color.white;
+                break;
         }
     }
 
