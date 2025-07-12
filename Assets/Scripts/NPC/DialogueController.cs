@@ -12,6 +12,9 @@ public class DialogueController : MonoBehaviour
     public Transform choiceContainer;
     public GameObject choiceButtonPrefab;
 
+    [Header("UI Controls")]
+    public Button closeButton; // Add close button reference
+
     // Reference to the PetInfoUIManager to interact with pet care functionality
     private PetInfoUIManager petInfoManager;
     private FeedingManager feedingManager; // Add FeedingManager reference
@@ -21,6 +24,9 @@ public class DialogueController : MonoBehaviour
     [Header("Sleep Settings")]
     [SerializeField] private float dialogueSleepDuration = 8f;
     [SerializeField] private bool showSleepMessage = true;
+
+    // ========== FIX: TRACK CURRENT NPC ==========
+    private NPC currentNPC; // Track which NPC is currently in dialogue
 
     // Types of pet care actions that can be performed via dialogue
     public enum PetCareAction
@@ -47,6 +53,9 @@ public class DialogueController : MonoBehaviour
 
     void Start()
     {
+        // Initialize close button
+        InitializeCloseButton();
+
         // Find the PetInfoUIManager in the scene
         petInfoManager = FindObjectOfType<PetInfoUIManager>();
         if (petInfoManager == null)
@@ -75,6 +84,88 @@ public class DialogueController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Initialize the close button functionality
+    /// </summary>
+    private void InitializeCloseButton()
+    {
+        if (closeButton != null)
+        {
+            closeButton.onClick.RemoveAllListeners();
+            closeButton.onClick.AddListener(CloseDialogue);
+            
+            // Add tooltip to close button
+            TooltipTrigger tooltip = closeButton.gameObject.GetComponent<TooltipTrigger>();
+            if (tooltip == null)
+            {
+                tooltip = closeButton.gameObject.AddComponent<TooltipTrigger>();
+            }
+            tooltip.GetDynamicTooltip = () => "❌ Close dialogue";
+            tooltip.SetTooltipColors(new Color(0.3f, 0.3f, 0.3f, 0.9f), Color.white);
+            
+            Debug.Log("✅ Close button initialized for DialogueController");
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Close button not assigned in DialogueController!");
+        }
+    }
+
+    /// <summary>
+    /// Close the dialogue panel and cleanup - FIX: Notify NPC
+    /// </summary>
+    public void CloseDialogue()
+    {
+        if (dialoguePanel != null && dialoguePanel.activeInHierarchy)
+        {
+            // ========== FIX: NOTIFY CURRENT NPC TO END DIALOGUE ==========
+            if (currentNPC != null)
+            {
+                currentNPC.EndDialogue();
+                currentNPC = null; // Clear reference
+                Debug.Log("🔄 NPC dialogue state reset");
+            }
+            
+            // Clear any existing choices
+            ClearChoices();
+            
+            // Hide the dialogue UI
+            ShowDialogueUI(false);
+            
+            // Clear dialogue text
+            if (dialogueText != null)
+                dialogueText.text = "";
+            
+            // Fire close event if needed
+            OnDialogueClosed?.Invoke();
+            
+            Debug.Log("🚪 Dialogue closed by user");
+        }
+    }
+
+    /// <summary>
+    /// Set current NPC - called when NPC starts dialogue
+    /// </summary>
+    public void SetCurrentNPC(NPC npc)
+    {
+        currentNPC = npc;
+        Debug.Log($"🎭 Current NPC set: {(npc != null ? npc.name : "null")}");
+    }
+
+    /// <summary>
+    /// Clear current NPC reference - called when dialogue ends normally
+    /// </summary>
+    public void ClearCurrentNPC()
+    {
+        currentNPC = null;
+        Debug.Log("🎭 Current NPC cleared");
+    }
+
+    /// <summary>
+    /// Event fired when dialogue is closed
+    /// </summary>
+    public System.Action OnDialogueClosed;
+
     public void ShowDialogueUI(bool show)
     {
         dialoguePanel.SetActive(show);
@@ -83,6 +174,18 @@ public class DialogueController : MonoBehaviour
         if (!show && TooltipSystem.Instance != null)
         {
             TooltipSystem.Instance.HideTooltip();
+        }
+
+        // ========== SETUP CLOSE BUTTON VISIBILITY ==========
+        if (closeButton != null)
+        {
+            closeButton.gameObject.SetActive(show);
+        }
+
+        // ========== FIX: CLEAR NPC REFERENCE WHEN HIDING ==========
+        if (!show && currentNPC != null)
+        {
+            ClearCurrentNPC();
         }
     }
 
@@ -457,5 +560,47 @@ public class DialogueController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    /// <summary>
+    /// Alternative method to close dialogue (can be called from external scripts)
+    /// </summary>
+    public void CloseDialogueExternal()
+    {
+        CloseDialogue();
+    }
+
+    /// <summary>
+    /// Check if dialogue is currently active
+    /// </summary>
+    public bool IsDialogueActive()
+    {
+        return dialoguePanel != null && dialoguePanel.activeInHierarchy;
+    }
+
+    /// <summary>
+    /// Force close dialogue (for emergency situations)
+    /// </summary>
+    public void ForceCloseDialogue()
+    {
+        if (dialoguePanel != null)
+        {
+            dialoguePanel.SetActive(false);
+        }
+        
+        // ========== FIX: RESET NPC STATE ==========
+        if (currentNPC != null)
+        {
+            currentNPC.EndDialogue();
+            currentNPC = null;
+        }
+        
+        // Clear everything
+        ClearChoices();
+        if (dialogueText != null) dialogueText.text = "";
+        if (nameText != null) nameText.text = "";
+        if (portraitImage != null) portraitImage.sprite = null;
+        
+        Debug.Log("🚪 Dialogue force closed");
     }
 }

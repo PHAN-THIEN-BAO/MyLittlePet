@@ -7,7 +7,6 @@ public class NPC : MonoBehaviour, IInteractable
 {
     public NPCDialogue dialogueData;
 
-
     private DialogueController dialogueUI;
 
     private int dialogueIndex;
@@ -16,7 +15,6 @@ public class NPC : MonoBehaviour, IInteractable
     private void Start()
     {
         dialogueUI = DialogueController.Instance;
-
     }
 
     public bool CanInteract()
@@ -48,11 +46,14 @@ public class NPC : MonoBehaviour, IInteractable
         isDialogueActive = true;
         dialogueIndex = 0;
 
-        dialogueUI.SetNPCInfo(dialogueData.npcName, dialogueData.npcPortrait);
-        dialogueUI.ShowDialogueUI(true);
+        if (dialogueUI != null)
+        {
+            dialogueUI.SetCurrentNPC(this);
+            dialogueUI.SetNPCInfo(dialogueData.npcName, dialogueData.npcPortrait);
+            dialogueUI.ShowDialogueUI(true);
+        }
 
         DisplayCurrentLine();
-
     }
 
     void NextLine()
@@ -63,7 +64,6 @@ public class NPC : MonoBehaviour, IInteractable
             dialogueUI.SetDialogueText(dialogueData.dialogueLines[dialogueIndex]);
             isTyping = false;
         }
-
 
         dialogueUI.ClearChoices();
 
@@ -90,6 +90,7 @@ public class NPC : MonoBehaviour, IInteractable
             EndDialogue();
         }
     }
+
     IEnumerator TypeLine()
     {
         isTyping = true;
@@ -107,17 +108,16 @@ public class NPC : MonoBehaviour, IInteractable
             NextLine();
         }
     }
+
     void DisplayChoices(DialogueChoice choice)
     {
         for (int i = 0; i < choice.choices.Length; i++)
         {
             int nextIndex = choice.nextDialogueIndexes[i];
 
-            // Check if this choice has a pet care action assigned
             if (choice.petCareOptions != null && i < choice.petCareOptions.Length &&
                 choice.petCareOptions[i] != PetCareOptionType.None)
             {
-                // Convert PetCareOptionType to DialogueController.PetCareAction
                 DialogueController.PetCareAction careAction = DialogueController.PetCareAction.None;
 
                 switch (choice.petCareOptions[i])
@@ -136,26 +136,22 @@ public class NPC : MonoBehaviour, IInteractable
                         break;
                 }
 
-                // Get custom care amount if specified
                 int customCareAmount = 0;
                 if (choice.customCareAmount != null && i < choice.customCareAmount.Length)
                 {
                     customCareAmount = choice.customCareAmount[i];
                 }
 
-                // Create a pet care choice button that also progresses the dialogue and closes it
                 dialogueUI.CreatePetCareChoiceButton(
                     choice.choices[i],
                     careAction,
                     () => {
-                        // Close dialogue immediately when care button is pressed
                         EndDialogue();
                     },
                     customCareAmount);
             }
             else
             {
-                // Create a regular choice button
                 dialogueUI.CreateChoiceButton(choice.choices[i], () => ChooseOption(nextIndex));
             }
         }
@@ -178,8 +174,14 @@ public class NPC : MonoBehaviour, IInteractable
     {
         StopAllCoroutines();
         isDialogueActive = false;
-        dialogueUI.SetDialogueText("");
-        dialogueUI.ShowDialogueUI(false);
-    }
 
+        if (dialogueUI != null)
+        {
+            dialogueUI.ClearCurrentNPC();
+            dialogueUI.SetDialogueText("");
+            dialogueUI.ShowDialogueUI(false);
+        }
+
+        Debug.Log($"🎭 {name} dialogue ended, ready for new interaction");
+    }
 }

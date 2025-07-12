@@ -46297,19 +46297,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 917941631}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2071104523}
-        m_TargetAssemblyTypeName: NPC, Assembly-CSharp
-        m_MethodName: EndDialogue
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &917941631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47902,6 +47890,7 @@ MonoBehaviour:
   portraitImage: {fileID: 2041762426}
   choiceContainer: {fileID: 984100158}
   choiceButtonPrefab: {fileID: 688944461797453089, guid: 57b0c49217847eb4bbbf0e367d5c4be0, type: 3}
+  closeButton: {fileID: 917941630}
   dialogueSleepDuration: 8
   showSleepMessage: 0
 --- !u!1 &939294952
