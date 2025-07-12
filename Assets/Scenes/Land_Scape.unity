@@ -15903,16 +15903,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue:
-    dialogueLines: []
+    dialogueLines:
+    - character:
+        name: Cris
+        icon: {fileID: 104178132242338865, guid: 78c980917f0b2304295511b0f816539e, type: 3}
+      line: Go inside .....
   dialoguePanel: {fileID: 1271209408}
   indicatorPrefab: {fileID: 3177871889576272409, guid: 9b926ac5246fede42a69a9d7219399ae, type: 3}
-  indicatorOffset: {x: -1, y: -2, z: 0}
+  indicatorOffset: {x: -1.1, y: -1.3, z: 0}
   bobSpeed: 0
   bobHeight: 0
   rotationSpeed: 0
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 90}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 0
@@ -15988,8 +15994,8 @@ Transform:
   m_GameObject: {fileID: 360267963}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -28.92, y: 21.2255, z: 0}
-  m_LocalScale: {x: 24.364101, y: 24.636797, z: 6.8602}
+  m_LocalPosition: {x: -28.407, y: 20.8012, z: 0}
+  m_LocalScale: {x: 27.382814, y: 27.132505, z: 6.8602}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -52711,6 +52717,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 0
@@ -55607,6 +55615,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 0
@@ -61563,6 +61573,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 0
@@ -64860,6 +64872,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 0
@@ -76714,6 +76728,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 1
@@ -96573,6 +96589,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 1
@@ -99981,6 +99999,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 1
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 1
@@ -101065,7 +101085,7 @@ Transform:
   m_GameObject: {fileID: 2004976687}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -28.06, y: 16.25, z: 0}
+  m_LocalPosition: {x: -32.79, y: 14.04, z: 0}
   m_LocalScale: {x: 1.1767293, y: 1.1767293, z: 1.1767293}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -101102,6 +101122,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 0
@@ -103448,6 +103470,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 0
@@ -104293,6 +104317,8 @@ MonoBehaviour:
   continuousRotation: 1
   rotationAxis: 2
   maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 0}
   showIndicatorWithDialogue: 1
   triggerOnContact: 1
   triggerOnce: 0
