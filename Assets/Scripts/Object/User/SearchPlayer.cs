@@ -1,3 +1,13 @@
+﻿
+
+
+
+
+
+
+
+
+//=============================Restore===================================
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
@@ -10,6 +20,11 @@ public class SearchPlayer : MonoBehaviour
     [SerializeField] Transform playerContainer; // container to hold player clones
     [SerializeField] TMP_Text warring;
     [SerializeField] GameObject guidePannel;
+
+
+
+
+
     private List<GameObject> playerClones = new List<GameObject>(); // save player clones
 
     public void Search()
