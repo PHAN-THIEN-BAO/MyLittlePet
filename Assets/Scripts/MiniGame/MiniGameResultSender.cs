@@ -54,6 +54,6 @@ public class MiniGameResultSender : MonoBehaviour
         PlayerPrefs.SetInt("MiniGameCompleted", 1);
         PlayerPrefs.SetInt("MiniGameWon", 0);
         PlayerPrefs.Save();
-        SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("SampleScene");
     }
 }

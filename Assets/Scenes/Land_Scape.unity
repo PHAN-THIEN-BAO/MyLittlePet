@@ -55223,6 +55223,14 @@ PrefabInstance:
       propertyPath: maxQueueSize
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8029905144658877012, guid: 6e816eb1bdf2a254481061542a511d07, type: 3}
+      propertyPath: enableDirectionFlip
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8945441891037826052, guid: 6e816eb1bdf2a254481061542a511d07, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9184878498681749160, guid: 6e816eb1bdf2a254481061542a511d07, type: 3}
       propertyPath: m_LocalPosition.x
       value: -72.54
@@ -71542,6 +71550,7 @@ MonoBehaviour:
   portraitImage: {fileID: 0}
   choiceContainer: {fileID: 0}
   choiceButtonPrefab: {fileID: 688944461797453089, guid: 57b0c49217847eb4bbbf0e367d5c4be0, type: 3}
+  closeButton: {fileID: 0}
   dialogueSleepDuration: 8
   showSleepMessage: 1
 --- !u!1 &1449916374

@@ -151,7 +151,7 @@ namespace MyLittlePetGameAPI.Controllers
         // POST: User - Create a new user
         [HttpPost]
         public ActionResult<User> Create(string role, string userName, string password, string? email, 
-            int? level, int? coin, int? diamond, int? gem)
+            int? level, int? coin, int? diamond, int? gem, int? exp)
         {
             // Validate required fields
             if (string.IsNullOrEmpty(role) || string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
@@ -182,7 +182,7 @@ namespace MyLittlePetGameAPI.Controllers
                 Diamond = diamond ?? 0, // Default to 0 if not provided
                 Gem = gem ?? 0, // Default to 0 if not provided
                 Position = null, // Initialize Position field
-                Exp = 0, // Initialize EXP field
+                Exp = exp ?? 0, // Default to 0 if not provided
                 JoinDate = DateTime.Now
             };
             
