@@ -176,6 +176,9 @@ public class CollectableItems : MonoBehaviour
             if (itemComponent.rb2d == null)
                 itemComponent.rb2d = itemComponent.GetComponent<Rigidbody2D>();
 
+            // Đảm bảo Body Type là Dynamic
+            itemComponent.rb2d.bodyType = RigidbodyType2D.Dynamic;
+
             // Cấu hình Rigidbody2D
             itemComponent.rb2d.gravityScale = gravityScale;
             itemComponent.rb2d.linearDamping = dragForce;
