@@ -48023,7 +48023,7 @@ MonoBehaviour:
   choiceContainer: {fileID: 984100158}
   choiceButtonPrefab: {fileID: 688944461797453089, guid: 57b0c49217847eb4bbbf0e367d5c4be0, type: 3}
   closeButton: {fileID: 917941630}
-  dialogueSleepDuration: 8
+  dialogueSleepDuration: 30
   showSleepMessage: 0
 --- !u!1 &939294952
 GameObject:
@@ -70370,7 +70370,7 @@ MonoBehaviour:
   - {fileID: -1452714511649490640, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
   - {fileID: -6070312079883712170, guid: 82e7420b2992547469500cc3c4cdefd0, type: 3}
   statusBarManager: {fileID: 1968438915}
-  decayInterval: 10
+  decayInterval: 50
   hungerDecayAmount: 5
   happinessDecayAmount: 5
   energyDecayAmount: 5
