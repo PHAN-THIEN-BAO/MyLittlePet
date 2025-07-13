@@ -203,7 +203,10 @@ public class CollectableItems : MonoBehaviour
     private void Update()
     {
         // Thêm hiệu ứng xoay nhẹ để trông sinh động hơn
-        if (shouldFloat && itemComponent != null && itemComponent.rb2d.linearVelocity.magnitude < 0.5f)
+        if (shouldFloat && itemComponent != null &&
+            itemComponent.rb2d != null &&
+            itemComponent.rb2d.bodyType != RigidbodyType2D.Static &&
+            itemComponent.rb2d.linearVelocity.magnitude < 0.5f)
         {
             // Nếu vật phẩm gần như đứng yên, cho nó xoay nhẹ
             if (Mathf.Abs(itemComponent.rb2d.angularVelocity) < 20f)
