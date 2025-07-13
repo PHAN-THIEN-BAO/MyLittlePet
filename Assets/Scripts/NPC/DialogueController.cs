@@ -100,7 +100,7 @@ public class DialogueController : MonoBehaviour
             {
                 tooltip = closeButton.gameObject.AddComponent<TooltipTrigger>();
             }
-            tooltip.GetDynamicTooltip = () => "❌ Close dialogue";
+            tooltip.GetDynamicTooltip = () => "Close dialogue";
             tooltip.SetTooltipColors(new Color(0.3f, 0.3f, 0.3f, 0.9f), Color.white);
             
             Debug.Log("✅ Close button initialized for DialogueController");
@@ -486,7 +486,7 @@ public class DialogueController : MonoBehaviour
                             float remainingTime = petSleepManager.GetRemainingSleepTime(currentPetId);
                             if (showSleepMessage)
                             {
-                                petInfoManager.ShowStatusMessage($"😴 Pet is already sleeping ({remainingTime:F1}s remaining)", Color.yellow);
+                                petInfoManager.ShowStatusMessage($"Pet is already sleeping", Color.yellow);
                             }
                             return;
                         }
@@ -507,10 +507,10 @@ public class DialogueController : MonoBehaviour
                         }
                         
                         // Show sleep message
-                        if (showSleepMessage)
-                        {
-                            petInfoManager.ShowStatusMessage($"😴 Pet is now sleeping for {dialogueSleepDuration} seconds", Color.blue);
-                        }
+                        //if (showSleepMessage)
+                        //{
+                        //    petInfoManager.ShowStatusMessage($"Pet is now sleeping for {dialogueSleepDuration} seconds", Color.blue);
+                        //}
                     }
                     else
                     {

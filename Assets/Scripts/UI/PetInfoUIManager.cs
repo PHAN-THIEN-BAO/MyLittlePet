@@ -102,8 +102,25 @@ public class PetInfoUIManager : MonoBehaviour
         // Initialize Action Manager
         InitializeActionManager();
 
+        // Force immediate registration with PetActionManager
+        if (PetActionManager.Instance != null)
+        {
+            PetActionManager.Instance.SetPetInfoUIManager(this);
+            Debug.Log("✅ PetInfoUIManager registered with PetActionManager at Start");
+        }
+
         // Start the decay system
         StartDecaySystem();
+    }
+
+    private void OnEnable()
+    {
+        // Re-register with PetActionManager when scene becomes active
+        if (PetActionManager.Instance != null)
+        {
+            PetActionManager.Instance.SetPetInfoUIManager(this);
+            Debug.Log("✅ PetInfoUIManager re-registered with PetActionManager on scene load");
+        }
     }
 
     // Initialize the close button functionality

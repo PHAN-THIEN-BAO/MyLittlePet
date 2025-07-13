@@ -12702,6 +12702,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 294040433}
   m_CullTransparentMesh: 1
+--- !u!1 &295935963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 295935966}
+  - component: {fileID: 295935964}
+  - component: {fileID: 295935965}
+  m_Layer: 0
+  m_Name: PetAction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &295935964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295935963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 864bb8ed6b79d0b44ba733556ed39965, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxConcurrentActions: 3
+  enableLogging: 1
+  requirePetInfoManager: 1
+  retryFindManagerInterval: 2
+--- !u!114 &295935965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295935963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f5c473cd4617694ea66ee9417687229, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableAutoScheduling: 0
+  schedulingInterval: 30
+--- !u!4 &295935966
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295935963}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 364.49057, y: 311.95035, z: -8.177729}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &296278318
 GameObject:
   m_ObjectHideFlags: 0
@@ -19292,7 +19355,7 @@ MonoBehaviour:
   loadLatestSavePoint: 1
   initialLoadDelay: 0.05
   reapplyDelay: 10
-  forceReapplyPosition: 1
+  forceReapplyPosition: 0
   enableDebugLogs: 1
 --- !u!1 &431897157
 GameObject:
@@ -99897,7 +99960,7 @@ MonoBehaviour:
   minHungerForSleep: 25
   maxEnergyForSleep: 80
   criticalThreshold: 15
-  actionManager: {fileID: 0}
+  actionManager: {fileID: 295935964}
   useActionSystem: 1
   pendingFeedAmount: 0
 --- !u!4 &1981692897
@@ -242424,6 +242487,7 @@ SceneRoots:
   - {fileID: 530517135}
   - {fileID: 559018298}
   - {fileID: 942072042}
+  - {fileID: 295935966}
   - {fileID: 560232923}
   - {fileID: 648244755}
   - {fileID: 1981692897}
