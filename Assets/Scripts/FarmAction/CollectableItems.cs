@@ -172,6 +172,10 @@ public class CollectableItems : MonoBehaviour
 
         if (shouldFloat && itemComponent != null)
         {
+            // Đảm bảo rb2d được khởi tạo
+            if (itemComponent.rb2d == null)
+                itemComponent.rb2d = itemComponent.GetComponent<Rigidbody2D>();
+
             // Cấu hình Rigidbody2D
             itemComponent.rb2d.gravityScale = gravityScale;
             itemComponent.rb2d.linearDamping = dragForce;

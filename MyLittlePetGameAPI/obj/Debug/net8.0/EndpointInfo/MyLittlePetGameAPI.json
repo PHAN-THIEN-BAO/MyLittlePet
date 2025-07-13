@@ -3580,6 +3580,14 @@
               "type": "integer",
               "format": "int32"
             }
+          },
+          {
+            "name": "exp",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         ],
         "responses": {
