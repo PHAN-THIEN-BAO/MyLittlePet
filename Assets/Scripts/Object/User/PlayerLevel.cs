@@ -137,10 +137,14 @@ public class PlayerLevel : MonoBehaviour
 
             // Hiển thị panel lên cấp và phần thưởng
             ShowLevelUpRewards(oldLevel);
+            PlayerInfomation.SavePlayerInfo(currentUser);
 
             // Kiểm tra tiếp nếu đủ exp để lên thêm level nữa
             CheckLevelUp();
         }
+        PlayerInfomation.SavePlayerInfo(currentUser);
+        Debug.Log("currentUser save exp: " + currentUser.exp);
+        APIUser.UpdateUser();
     }
 
     // Hàm hiển thị phần thưởng lên cấp
@@ -170,7 +174,10 @@ public class PlayerLevel : MonoBehaviour
 
         // Hiển thị panel lên cấp
         nextLevelPanel.SetActive(true);
-
+        nextLevelPanel.transform.localScale = Vector3.zero;
+        LeanTween.scale(nextLevelPanel, new Vector3(1, 1, 1), 1f)
+            .setDelay(0)
+            .setEase(LeanTweenType.easeOutElastic);
         // Lưu thông tin người chơi sau khi cập nhật phần thưởng
         SavePlayerInfo();
     }
@@ -189,3 +196,14 @@ public class PlayerLevel : MonoBehaviour
             nextLevelPanel.SetActive(false);
     }
 }
+
+
+
+
+
+// how to use AddExp method
+/*PlayerLevel playerLevel = GameObject.Find("Player").GetComponent<PlayerLevel>();
+if (playerLevel != null)
+{
+    playerLevel.AddExp(100); // Thêm 100 exp
+}*/
