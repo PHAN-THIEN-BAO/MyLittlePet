@@ -11,9 +11,30 @@ public class npc1 : MonoBehaviour, IInteractable
     public TMPro.TMP_Text dialogText, nameText;
     public Image portraitImage;
     public GameObject targetToDestroy; // GameObject sẽ bị phá hủy khi hội thoại kết thúc
+    
+    [Header("Close Button Integration")]
+    public Button closeButton; // Assign the close button in inspector
 
     private int dialogIndex;
     private bool isTyping, isDialogActive;
+
+    private void Start()
+    {
+        // Setup close button if assigned
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(OnCloseButtonClicked);
+        }
+    }
+
+    // Called when close button is clicked
+    private void OnCloseButtonClicked()
+    {
+        if (isDialogActive)
+        {
+            EndDialog();
+        }
+    }
 
     public bool CanInteract()
     {
@@ -35,6 +56,7 @@ public class npc1 : MonoBehaviour, IInteractable
             StartDialog();
         }
     }
+    
     void StartDialog()
     {
         isDialogActive = true;
@@ -65,6 +87,7 @@ public class npc1 : MonoBehaviour, IInteractable
             EndDialog();
         }
     }
+    
     IEnumerator TypeLine()
     {
         isTyping = true;
@@ -99,8 +122,13 @@ public class npc1 : MonoBehaviour, IInteractable
             Destroy(targetToDestroy);
         }
     }
+    
     public void StopInteract()
     {
-        throw new System.NotImplementedException();
+        // Implement StopInteract to handle when player exits interaction area
+        if (isDialogActive)
+        {
+            EndDialog();
+        }
     }
 }

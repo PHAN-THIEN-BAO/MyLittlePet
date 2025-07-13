@@ -2466,7 +2466,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.098632336, y: 0.39453053}
+  m_Offset: {x: -0.098632336, y: -0.36304998}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -2476,7 +2476,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.1972647, y: 2.676753}
+  m_Size: {x: 1.1972647, y: 4.191914}
   m_EdgeRadius: 0
 --- !u!4 &404698967
 Transform:
@@ -2511,6 +2511,7 @@ MonoBehaviour:
   nameText: {fileID: 469632601}
   portraitImage: {fileID: 619441833}
   targetToDestroy: {fileID: 0}
+  closeButton: {fileID: 0}
 --- !u!1 &408920015
 GameObject:
   m_ObjectHideFlags: 0
@@ -4252,6 +4253,7 @@ MonoBehaviour:
   nameText: {fileID: 469632601}
   portraitImage: {fileID: 619441833}
   targetToDestroy: {fileID: 404698964}
+  closeButton: {fileID: 1992146699}
 --- !u!1 &605754420
 GameObject:
   m_ObjectHideFlags: 0
@@ -13439,6 +13441,7 @@ MonoBehaviour:
   nameText: {fileID: 469632601}
   portraitImage: {fileID: 619441833}
   targetToDestroy: {fileID: 0}
+  closeButton: {fileID: 0}
 --- !u!61 &1134900425
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -17011,7 +17014,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1717193207}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac7c7208762f9bf4c8af27f8219ae841, type: 3}
   m_Name: 
@@ -20373,19 +20376,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1992146700}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1134900424}
-        m_TargetAssemblyTypeName: npc1, Assembly-CSharp
-        m_MethodName: EndDialog
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1992146700
 MonoBehaviour:
   m_ObjectHideFlags: 0
