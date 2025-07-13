@@ -170,7 +170,13 @@ public class CollectableItems : MonoBehaviour
     {
         itemComponent = GetComponent<Item>();
 
-        if (shouldFloat && itemComponent != null)
+        // Đảm bảo rb2d đã được khởi tạo trước khi sử dụng
+        if (itemComponent != null && itemComponent.rb2d == null)
+        {
+            itemComponent.rb2d = GetComponent<Rigidbody2D>();
+        }
+
+        if (shouldFloat && itemComponent != null && itemComponent.rb2d != null)
         {
             // Cấu hình Rigidbody2D
             itemComponent.rb2d.gravityScale = gravityScale;
@@ -178,19 +184,19 @@ public class CollectableItems : MonoBehaviour
             itemComponent.rb2d.angularDamping = 0.1f;
             itemComponent.rb2d.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
-            // Thêm một lực xoay ngẫu nhiên
-            float randomRotation = Random.Range(-1f, 1f);
-            itemComponent.rb2d.angularVelocity = randomRotation * rotationSpeed;
-
-            // Phóng vật phẩm theo một hướng ngẫu nhiên
-            LaunchItem();
-
-            // Cho phép thu thập sau một khoảng thời gian
-            Invoke("EnableCollection", collectionDelay);
+            // Các thiết lập khác...
         }
         else
         {
             canBeCollected = true;
+            if (itemComponent == null)
+            {
+                Debug.LogWarning("Thành phần Item không tồn tại trên GameObject này!");
+            }
+            else if (itemComponent.rb2d == null)
+            {
+                Debug.LogWarning("Không tìm thấy Rigidbody2D trên GameObject này!");
+            }
         }
     }
 
