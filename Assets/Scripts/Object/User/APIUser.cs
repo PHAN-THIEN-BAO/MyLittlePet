@@ -179,26 +179,45 @@ public static class APIUser
             Debug.LogError("User information not found.");
             return false;
         }
+        Debug.Log("Updating API user EXP: " + user.exp);
         try
         {
-            // Create a request to the API endpoint with required parameters
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/User/" + user.id + "?role=" + user.role +"&userName=" + user.userName + "&password=" + user.password + "&email=" + user.email + "&level=" + user.level + "&coin=" + user.coin +"&diamond=" + user.diamond +"&gem=" + user.gem);
+            // Ensure exp has a value (default to 0 if null)
+            int expValue = user.exp.GetValueOrDefault(0);
+
+            // Create a request to the API endpoint with required parameters including exp
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/User/" + user.id +
+                "?role=" + user.role +
+                "&userName=" + user.userName +
+                "&password=" + user.password +
+                "&email=" + user.email +
+                "&level=" + user.level +
+                "&coin=" + user.coin +
+                "&diamond=" + user.diamond +
+                "&gem=" + user.gem +
+                "&exp=" + expValue);  // Added exp parameter
+
             request.Method = "PUT";
             request.ContentType = "application/json";
+
             // Serialize the user object to JSON
             string jsonData = JsonUtility.ToJson(user);
             using (StreamWriter writer = new StreamWriter(request.GetRequestStream()))
             {
                 writer.Write(jsonData);
             }
+
             // Get the response
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
             // Check if request was successful (status code 200-299)
             bool success = (int)response.StatusCode >= 200 && (int)response.StatusCode < 300;
+
             // Read and parse the response if needed
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string jsonResponse = reader.ReadToEnd();
             reader.Close();
+
             Debug.Log("Update response: " + jsonResponse);
             return success;
         }
@@ -224,6 +243,7 @@ public static class APIUser
             return false;
         }
     }
+
 
 
     public static List<User> SearchUser(string searchTerm)
