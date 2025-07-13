@@ -61237,6 +61237,18 @@ MonoBehaviour:
           m_StringArgument: Mini_Game_1
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1381390383}
+        m_TargetAssemblyTypeName: PetInfoUIManager, Assembly-CSharp
+        m_MethodName: PlayWithPet
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1202589789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69302,6 +69314,65 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1353726796}
   m_CullTransparentMesh: 1
+--- !u!1 &1353878605
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1353878608}
+  - component: {fileID: 1353878607}
+  - component: {fileID: 1353878606}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1353878606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353878605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c429047901ca744bbdd8013f293ff4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableDebugLogs: 1
+  forceResetOnSceneLoad: 1
+--- !u!114 &1353878607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353878605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51cc3eb8815db0540b09de1871f22578, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1353878608
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353878605}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.5395913, y: 3.7691, z: 0}
+  m_LocalScale: {x: 4.811545, y: 3.1335335, z: 2.6461184}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1355948780
 GameObject:
   m_ObjectHideFlags: 0
@@ -111032,3 +111103,4 @@ SceneRoots:
   - {fileID: 672399407}
   - {fileID: 656855820}
   - {fileID: 600671971}
+  - {fileID: 1353878608}

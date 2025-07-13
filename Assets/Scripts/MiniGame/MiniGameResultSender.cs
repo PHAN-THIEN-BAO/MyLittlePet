@@ -24,6 +24,10 @@ public class MiniGameResultSender : MonoBehaviour
     /// </summary>
     private void SendResult(bool won)
     {
+        // Reset Time.timeScale về 1 trước khi chuyển scene
+        Time.timeScale = 1f;
+        Debug.Log("🔧 Time.timeScale reset to 1 before returning to SampleScene");
+        
         // Lưu kết quả vào PlayerPrefs (như PlayingManager đã expect)
         PlayerPrefs.SetInt("MiniGameCompleted", 1);
         PlayerPrefs.SetInt("MiniGameWon", won ? 1 : 0);
@@ -40,6 +44,9 @@ public class MiniGameResultSender : MonoBehaviour
     /// </summary>
     public void OnWinButtonClick()
     {
+        // Reset Time.timeScale về 1 trước khi chuyển scene
+        Time.timeScale = 1f;
+        
         PlayerPrefs.SetInt("MiniGameCompleted", 1);
         PlayerPrefs.SetInt("MiniGameWon", 1);
         PlayerPrefs.Save();
@@ -51,6 +58,9 @@ public class MiniGameResultSender : MonoBehaviour
     /// </summary>
     public void OnLoseButtonClick()
     {
+        // Reset Time.timeScale về 1 trước khi chuyển scene
+        Time.timeScale = 1f;
+        
         PlayerPrefs.SetInt("MiniGameCompleted", 1);
         PlayerPrefs.SetInt("MiniGameWon", 0);
         PlayerPrefs.Save();

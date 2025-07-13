@@ -195,7 +195,7 @@ namespace MyLittlePetGameAPI.Controllers
         // PUT: User/{id} - Update an existing user
         [HttpPut("{id}")]
         public ActionResult<User> Update(int id, string? role, string? userName, string? password, 
-            string? email, int? level, int? coin, int? diamond, int? gem)
+            string? email, int? level, int? coin, int? diamond, int? gem, int? exp)
         {
             var user = _context.Users.Find(id);
             
@@ -257,6 +257,11 @@ namespace MyLittlePetGameAPI.Controllers
             if (gem.HasValue)
             {
                 user.Gem = gem;
+            }
+            
+            if (exp.HasValue)
+            {
+                user.Exp = exp;
             }
             
             _context.Users.Update(user);
