@@ -36,7 +36,7 @@ public class APIPlayerPet : MonoBehaviour
     {
         // The API expects a PUT request to /PlayerPet/{id} with query parameters
         string safeCustomName = playerPet.petCustomName ?? "";
-        string safeStatus = playerPet.status ?? "100%25100%25100";
+        string safeStatus = playerPet.status ?? "50%2550%2550";
         string url = $"https://localhost:7035/PlayerPet/{playerPet.playerPetID}?petCustomName={Uri.EscapeDataString(safeCustomName)}&level={playerPet.level}&status={Uri.EscapeDataString(safeStatus)}";
         
         UnityWebRequest request = UnityWebRequest.Put(url, "");
@@ -59,7 +59,7 @@ public class APIPlayerPet : MonoBehaviour
 
     public static IEnumerator AddPlayerPetCoroutine(PlayerPet playerPet, System.Action<bool> callback)
     {
-        string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=100%25100%25100";
+        string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=50%2550%2550";
 
         // create a WWWForm to send data
         WWWForm form = new WWWForm();
@@ -142,7 +142,7 @@ public class APIPlayerPet : MonoBehaviour
 
     //public static bool AddPlayerPet(PlayerPet playerPet)
     //{
-    //    string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=100%25100%25100";
+    //    string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=50%2550%2550";
     //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
     //    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
     //    StreamReader reader = new StreamReader(response.GetResponseStream());
@@ -186,7 +186,7 @@ public class APIPlayerPet : MonoBehaviour
     {
         try
         {
-            string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=100%25100%25100";
+            string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=50%2550%2550";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
 
