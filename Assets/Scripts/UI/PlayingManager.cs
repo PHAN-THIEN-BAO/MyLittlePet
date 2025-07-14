@@ -16,6 +16,8 @@ public class PlayingManager : MonoBehaviour
     [SerializeField] private string miniGameSceneName = "Mini_Game_1";
     [SerializeField] private int defaultHappinessReward = 20;
     [SerializeField] private int winBonusReward = 10;
+    [SerializeField] private int expRewardPerPlay = 15; // Experience gained per mini-game
+    [SerializeField] private int expWinBonus = 5; // Extra experience for winning
 
     [Header("Dependency Check Settings")]
     [Tooltip("Check pet status dependencies before playing")]
@@ -166,12 +168,33 @@ public class PlayingManager : MonoBehaviour
             // Tăng happiness cho pet
             OnMiniGameCompleted(won, totalReward);
             
+            // ADD EXPERIENCE FOR PLAYING MINI-GAME
+            AddExperienceForPlaying(won);
+            
             // Clear PlayerPrefs
             PlayerPrefs.DeleteKey("MiniGameCompleted");
             PlayerPrefs.DeleteKey("MiniGameWon");
             PlayerPrefs.DeleteKey("MiniGameHappinessReward");
             PlayerPrefs.DeleteKey("MiniGameWinBonus");
             PlayerPrefs.DeleteKey("CurrentPlayerId");
+        }
+    }
+
+    /// <summary>
+    /// Adds experience to the player when playing a mini-game
+    /// </summary>
+    private void AddExperienceForPlaying(bool won)
+    {
+        PlayerLevel playerLevel = GameObject.Find("Player").GetComponent<PlayerLevel>();
+        if (playerLevel != null)
+        {
+            int totalExp = expRewardPerPlay + (won ? expWinBonus : 0);
+            playerLevel.AddExp(totalExp);
+            Debug.Log($"Added {totalExp} experience for playing mini-game (Won: {won})");
+        }
+        else
+        {
+            Debug.LogWarning("PlayerLevel component not found on Player GameObject");
         }
     }
 

@@ -45,25 +45,15 @@ public class AdopPet : MonoBehaviour
         };
 
         // Thêm pet mới
-        StartCoroutine(APIPlayerPet.AddPlayerPetCoroutine(newPlayerPet, (addResult) =>
+        StartCoroutine(APIPlayerPet.AddPlayerPetCoroutine(newPlayerPet, (createdPet) =>
         {
-            if (addResult)
+            if (createdPet != null)
             {
-                // Lấy PlayerPet vừa tạo để có PlayerPetID
-                PlayerPet createdPet = APIPlayerPet.GetPlayerPetByPlayerIdAndPetId(playerId, shopProduct.petID.Value);
+                adopPetSuccessPanel.SetActive(true);
                 
-                if (createdPet != null)
+                if (petController != null)
                 {
-                    adopPetSuccessPanel.SetActive(true);
-                    
-                    if (petController != null)
-                    {
-                        petController.SpawnPet(createdPet); // Sử dụng pet có PlayerPetID
-                    }
-                }
-                else
-                {
-                    adopPetFailPanel.SetActive(true);
+                    petController.SpawnPet(createdPet); // ✅ Sử dụng pet có PlayerPetID từ API
                 }
 
                 // Tạo PlayerInventory object để update hoặc delete
@@ -88,7 +78,6 @@ public class AdopPet : MonoBehaviour
             }
             else
             {
-                // Hiển thị panel thất bại
                 adopPetFailPanel.SetActive(true);
             }
         }));

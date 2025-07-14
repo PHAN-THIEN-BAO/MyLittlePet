@@ -331,7 +331,7 @@ public class DialogueController : MonoBehaviour
             if (currentPetId != -1 && petSleepManager.IsPetSleeping(currentPetId))
             {
                 float remainingTime = petSleepManager.GetRemainingSleepTime(currentPetId);
-                return $"😴 Pet is already sleeping ({remainingTime:F1}s remaining)";
+                return $"Pet is sleeping";
             }
         }
         
@@ -358,6 +358,11 @@ public class DialogueController : MonoBehaviour
                 
             case PetInfoUIManager.ActionBlockReason.Critical:
                 backgroundColor = new Color(0.7f, 0.1f, 0.1f, 0.9f); // Red
+                textColor = Color.white;
+                break;
+                
+            case PetInfoUIManager.ActionBlockReason.HappinessAtMax:
+                backgroundColor = new Color(0.1f, 0.3f, 0.6f, 0.9f); // Blue (same as satisfied states)
                 textColor = Color.white;
                 break;
                 
@@ -391,6 +396,7 @@ public class DialogueController : MonoBehaviour
             case PetInfoUIManager.ActionBlockReason.Critical: return "Critical!";
             case PetInfoUIManager.ActionBlockReason.TooFull: return "Full";
             case PetInfoUIManager.ActionBlockReason.TooEnergetic: return "Too Energetic";
+            case PetInfoUIManager.ActionBlockReason.HappinessAtMax: return "Very Happy";
             default: return "Blocked";
         }
     }
@@ -486,7 +492,7 @@ public class DialogueController : MonoBehaviour
                             float remainingTime = petSleepManager.GetRemainingSleepTime(currentPetId);
                             if (showSleepMessage)
                             {
-                                petInfoManager.ShowStatusMessage($"Pet is already sleeping", Color.yellow);
+                                petInfoManager.ShowStatusMessage($"Pet is sleeping", Color.yellow);
                             }
                             return;
                         }

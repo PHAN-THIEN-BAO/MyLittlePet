@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
 
 public class PetController : MonoBehaviour
 {
@@ -51,6 +53,12 @@ public class PetController : MonoBehaviour
         if (clickHandler != null)
         {
             clickHandler.uiManager = FindObjectOfType<PetInfoUIManager>();
+        }
+
+        var interactablePet = petObj.GetComponent<InteractablePet>();
+        if (interactablePet != null)
+        {
+            interactablePet.uiManager = FindObjectOfType<PetInfoUIManager>();
         }
 
         var dataHolder = petObj.GetComponent<PetDataHolder>();

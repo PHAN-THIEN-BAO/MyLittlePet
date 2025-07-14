@@ -67,7 +67,8 @@ public class PetInfoUIManager : MonoBehaviour
         TooTired,
         TooFull,
         TooEnergetic,
-        Critical
+        Critical,
+        HappinessAtMax
     }
 
     // Action Management
@@ -1010,24 +1011,25 @@ public class PetInfoUIManager : MonoBehaviour
                 backgroundColor = new Color(0.2f, 0.4f, 0.2f, 0.9f); // Green tint
                 textColor = Color.white;
                 break;
-                
+
             case ActionBlockReason.Critical:
                 backgroundColor = new Color(0.6f, 0.1f, 0.1f, 0.9f); // Red
                 textColor = Color.white;
                 break;
-                
+
             case ActionBlockReason.TooHungry:
             case ActionBlockReason.TooTired:
                 backgroundColor = new Color(0.6f, 0.4f, 0.1f, 0.9f); // Orange/Yellow
                 textColor = Color.white;
                 break;
-                
+
             case ActionBlockReason.TooFull:
             case ActionBlockReason.TooEnergetic:
+            case ActionBlockReason.HappinessAtMax:
                 backgroundColor = new Color(0.1f, 0.3f, 0.6f, 0.9f); // Blue
                 textColor = Color.white;
                 break;
-                
+
             default:
                 backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.9f); // Dark gray
                 textColor = Color.white;
@@ -1146,12 +1148,12 @@ public class PetInfoUIManager : MonoBehaviour
                 break;
 
             case PetAction.ActionType.Play:
+                if (happiness >= maxStatusValue)
+                    return ActionBlockReason.HappinessAtMax;
                 if (hunger < minHungerForPlay)
                     return ActionBlockReason.TooHungry;
                 if (energy < minEnergyForPlay)
                     return ActionBlockReason.TooTired;
-                if (happiness >= maxStatusValue)
-                    return ActionBlockReason.None; // Will be handled by existing check
                 break;
 
             case PetAction.ActionType.Sleep:
@@ -1184,6 +1186,9 @@ public class PetInfoUIManager : MonoBehaviour
             
             case ActionBlockReason.Critical:
                 return "🚨 CRITICAL: Pet is in emergency condition! Feed it immediately before doing anything else!";
+            
+            case ActionBlockReason.HappinessAtMax:
+                return "Pet is already completely happy! 😊 No need to play right now.";
             
             default:
                 return "";

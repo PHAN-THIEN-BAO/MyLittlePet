@@ -56,15 +56,17 @@ public class APIPlayerPet : MonoBehaviour
         }
     }
 
+    public class AddPlayerPetResponse
+    {
+        public string message { get; set; }
+        public PlayerPet playerPet { get; set; }
+    }
 
-    public static IEnumerator AddPlayerPetCoroutine(PlayerPet playerPet, System.Action<bool> callback)
+    public static IEnumerator AddPlayerPetCoroutine(PlayerPet playerPet, System.Action<PlayerPet> callback)
     {
         string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=50%2550%2550";
 
-        // create a WWWForm to send data
         WWWForm form = new WWWForm();
-
-        // create form fields
         UnityWebRequest request = UnityWebRequest.Post(url, form);
         request.downloadHandler = new DownloadHandlerBuffer();
 
@@ -73,19 +75,33 @@ public class APIPlayerPet : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("Add response: " + request.downloadHandler.text);
-            callback?.Invoke(true);
+            
+            try
+            {
+                // Deserialize response object thay vì array
+                var response = JsonConvert.DeserializeObject<AddPlayerPetResponse>(request.downloadHandler.text);
+                if (response != null && response.playerPet != null)
+                {
+                    callback?.Invoke(response.playerPet); // Trả về PlayerPet có PlayerPetID
+                }
+                else
+                {
+                    Debug.LogError("Invalid response format or missing playerPet data");
+                    callback?.Invoke(null);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError("Error parsing AddPlayerPet response: " + ex.Message);
+                callback?.Invoke(null);
+            }
         }
         else
         {
             Debug.LogError("Error adding player pet: " + request.error);
-            callback?.Invoke(false);
+            callback?.Invoke(null);
         }
     }
-
-
-
-
-
 
     public static PlayerPet GetPlayerPetByPlayerIdAndPetId(int playerId, int petId)
     {
@@ -224,9 +240,6 @@ public class APIPlayerPet : MonoBehaviour
         }
     }
 
-
-
-
     /// <summary>
     /// Gets all player pets for a specific user by their ID
     /// </summary>
@@ -288,7 +301,4 @@ public class APIPlayerPet : MonoBehaviour
             return null;
         }
     }
-
-
-
 }

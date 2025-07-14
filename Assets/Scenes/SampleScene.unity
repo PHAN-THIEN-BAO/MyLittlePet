@@ -1791,13 +1791,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 16
-  m_fontSizeBase: 16
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -14189,6 +14189,7 @@ MonoBehaviour:
   defaultSleepDuration: 20
   showSleepVisuals: 1
   sleepEffectPrefab: {fileID: 0}
+  expRewardPerSleep: 5
   blockMovementDuringSleep: 1
   blockActionsDuringSleep: 1
 --- !u!1 &287272862
@@ -62287,6 +62288,7 @@ MonoBehaviour:
     m_Bottom: 1
   apiBaseUrl: https://localhost:7035
   defaultFeedIncreaseAmount: 15
+  expRewardPerFeed: 50
   noFoodMessage: {fileID: 697802053}
   enableDependencyCheck: 1
 --- !u!1 &1173983760
@@ -66016,7 +66018,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: -----
+  m_text: ----
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b4db6c4a2e0624e42be593d9dda047e8, type: 2}
   m_sharedMaterial: {fileID: 1290958960979662165, guid: b4db6c4a2e0624e42be593d9dda047e8, type: 2}
@@ -66043,13 +66045,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -71224,6 +71226,8 @@ MonoBehaviour:
   - {fileID: 7816097896322837007, guid: 6dd4c7f67ba6ef14f997165c5c44a295, type: 3}
   - {fileID: 7575681957346784164, guid: d4591898751b35d4d92f6665d04f6049, type: 3}
   - {fileID: 8127601577889786839, guid: c20c6905d96b7c9428cbaaa3179260f7, type: 3}
+  - {fileID: 3530165756714779403, guid: b449d5a45ba3454478162a313fd3921c, type: 3}
+  - {fileID: 3305312009468169975, guid: 8d68960625e072846bfce5cece5e43c7, type: 3}
 --- !u!114 &1339297966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73365,6 +73369,8 @@ MonoBehaviour:
   - {fileID: 1075993247170539406, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
   - {fileID: -1452714511649490640, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
   - {fileID: -6070312079883712170, guid: 82e7420b2992547469500cc3c4cdefd0, type: 3}
+  - {fileID: -1297488002485053291, guid: 3812a6aa739686c42b39fea6434f9cd4, type: 3}
+  - {fileID: -7572331185381252921, guid: 074694dccca49bc4eb5d2a68d4ac06c8, type: 3}
   statusBarManager: {fileID: 1968438915}
   decayInterval: 15
   hungerDecayAmount: 2
@@ -74806,7 +74812,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: -----
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5e80d180c78bd284eb3f36dca134734b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b4db6c4a2e0624e42be593d9dda047e8, type: 2}
   m_sharedMaterial: {fileID: 5656071993018174840, guid: 5e80d180c78bd284eb3f36dca134734b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -74837,7 +74843,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -74872,7 +74878,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1417972179
@@ -81820,7 +81826,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -93159,13 +93165,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 26
+  m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -108517,6 +108523,8 @@ MonoBehaviour:
   miniGameSceneName: Mini_Game_1
   defaultHappinessReward: 20
   winBonusReward: 10
+  expRewardPerPlay: 15
+  expWinBonus: 5
   enableDependencyCheck: 1
 --- !u!4 &2029979641
 Transform:

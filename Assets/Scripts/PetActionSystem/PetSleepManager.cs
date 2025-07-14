@@ -11,6 +11,7 @@ public class PetSleepManager : MonoBehaviour
     [SerializeField] private float defaultSleepDuration = 10f;
     [SerializeField] private bool showSleepVisuals = true;
     [SerializeField] private GameObject sleepEffectPrefab;
+    [SerializeField] private int expRewardPerSleep = 5; // Experience gained per sleep action
     
     [Header("Movement Blocking")]
     [SerializeField] private bool blockMovementDuringSleep = true;
@@ -34,6 +35,7 @@ public class PetSleepManager : MonoBehaviour
         public List<MonoBehaviour> disabledComponents;
         public float sleepStartTime;
         public float sleepDuration;
+        public bool expAwarded; // Track if experience has been awarded for this sleep
     }
 
     private void Awake()
@@ -73,7 +75,27 @@ public class PetSleepManager : MonoBehaviour
             return;
         }
 
+        // Add experience for putting pet to sleep
+        AddExperienceForSleep();
+
         StartCoroutine(SleepPetCoroutine(petID, petObject, duration));
+    }
+
+    /// <summary>
+    /// Adds experience to the player when putting a pet to sleep
+    /// </summary>
+    private void AddExperienceForSleep()
+    {
+        PlayerLevel playerLevel = GameObject.Find("Player").GetComponent<PlayerLevel>();
+        if (playerLevel != null)
+        {
+            playerLevel.AddExp(expRewardPerSleep);
+            Debug.Log($"Added {expRewardPerSleep} experience for putting pet to sleep");
+        }
+        else
+        {
+            Debug.LogWarning("PlayerLevel component not found on Player GameObject");
+        }
     }
 
     /// <summary>
@@ -143,7 +165,8 @@ public class PetSleepManager : MonoBehaviour
             sleepEffect = sleepEffect,
             disabledComponents = disabledComponents,
             sleepStartTime = Time.time,
-            sleepDuration = duration
+            sleepDuration = duration,
+            expAwarded = true // Experience already awarded when sleep started
         };
         
         sleepingPets[petID] = sleepData;

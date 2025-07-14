@@ -14728,69 +14728,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 295108737}
   m_CullTransparentMesh: 1
---- !u!1 &295935963
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 295935966}
-  - component: {fileID: 295935964}
-  - component: {fileID: 295935965}
-  m_Layer: 0
-  m_Name: PetAction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &295935964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 295935963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 864bb8ed6b79d0b44ba733556ed39965, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxConcurrentActions: 3
-  enableLogging: 1
-  requirePetInfoManager: 1
-  retryFindManagerInterval: 2
---- !u!114 &295935965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 295935963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f5c473cd4617694ea66ee9417687229, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enableAutoScheduling: 0
-  schedulingInterval: 30
---- !u!4 &295935966
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 295935963}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 364.49057, y: 311.95035, z: -8.177729}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &298205826
 GameObject:
   m_ObjectHideFlags: 0
@@ -15236,6 +15173,7 @@ Transform:
   - {fileID: 1009193404}
   - {fileID: 559219549}
   - {fileID: 1297494089}
+  - {fileID: 1723840230}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &304330733
@@ -33987,7 +33925,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &659151328
 RectTransform:
   m_ObjectHideFlags: 0
@@ -98995,6 +98933,107 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &1723840229
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1723840230}
+  - component: {fileID: 1723840233}
+  - component: {fileID: 1723840232}
+  - component: {fileID: 1723840231}
+  m_Layer: 5
+  m_Name: Canvas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1723840230
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723840229}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 304266642}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!114 &1723840231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723840229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!114 &1723840232
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723840229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+  m_PresetInfoIsWorld: 0
+--- !u!223 &1723840233
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1723840229}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 0
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1725087858
 GameObject:
   m_ObjectHideFlags: 0
@@ -112270,82 +112309,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1981080233}
   m_CullTransparentMesh: 1
---- !u!1 &1981692895
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1981692897}
-  - component: {fileID: 1981692896}
-  m_Layer: 0
-  m_Name: PetInfoUIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1981692896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1981692895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 792d482efae70cf4ba25e54adeca98ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  petsInfoPanel: {fileID: 0}
-  feedingPanel: {fileID: 0}
-  closeButton: {fileID: 0}
-  petNameText: {fileID: 0}
-  petLevelText: {fileID: 0}
-  petCustomNameText: {fileID: 0}
-  petAdoptedDateText: {fileID: 0}
-  petImage: {fileID: 0}
-  petSprites:
-  - {fileID: 21300000, guid: d23445ac76727964781644fdf4c0c7fb, type: 2}
-  - {fileID: 7892033834191237442, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
-  - {fileID: 1075993247170539406, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
-  - {fileID: -1452714511649490640, guid: e0be44b457fdfc44d9867b77fa620f39, type: 3}
-  - {fileID: -6070312079883712170, guid: 82e7420b2992547469500cc3c4cdefd0, type: 3}
-  statusBarManager: {fileID: 648244754}
-  decayInterval: 10
-  hungerDecayAmount: 5
-  happinessDecayAmount: 5
-  energyDecayAmount: 5
-  minStatusValue: 10
-  feedIncreaseAmount: 15
-  playIncreaseAmount: 15
-  sleepIncreaseAmount: 15
-  maxStatusValue: 100
-  minHungerForPlay: 30
-  minEnergyForPlay: 20
-  minHungerForSleep: 25
-  maxEnergyForSleep: 80
-  criticalThreshold: 15
-  actionManager: {fileID: 295935964}
-  useActionSystem: 1
-  pendingFeedAmount: 0
---- !u!4 &1981692897
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1981692895}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.5395913, y: 3.7691, z: 0}
-  m_LocalScale: {x: 4.811545, y: 3.1335335, z: 2.6461184}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1983715033
 GameObject:
   m_ObjectHideFlags: 0
@@ -255301,10 +255264,8 @@ SceneRoots:
   - {fileID: 559018298}
   - {fileID: 304266642}
   - {fileID: 942072042}
-  - {fileID: 295935966}
   - {fileID: 560232923}
   - {fileID: 648244755}
-  - {fileID: 1981692897}
   - {fileID: 945272006}
   - {fileID: 329112633}
   - {fileID: 1244280425}

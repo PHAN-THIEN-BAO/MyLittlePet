@@ -30,6 +30,7 @@ public class FeedingManager : MonoBehaviour
 
     [Header("Feeding Settings")]
     [SerializeField] private int defaultFeedIncreaseAmount = 15;
+    [SerializeField] private int expRewardPerFeed = 10; // Experience gained per feeding
 
     [Header("No Food Message")]
     public GameObject noFoodMessage; // Kéo object này từ Inspector vào
@@ -99,8 +100,7 @@ public class FeedingManager : MonoBehaviour
                 string message = petInfoManager.GetBlockReasonMessage(blockReason, PetAction.ActionType.Feed);
                 Debug.LogWarning($"Cannot show feeding panel: {message}");
 
-                // Show message to user instead of opening panel
-                ShowFeedingBlockedMessage(message);
+                // Disable the button instead of showing message
                 return;
             }
         }
@@ -365,7 +365,7 @@ public class FeedingManager : MonoBehaviour
             {
                 string message = petInfoManager.GetBlockReasonMessage(blockReason, PetAction.ActionType.Feed);
                 Debug.LogWarning($"Cannot feed pet: {message}");
-                ShowFeedingBlockedMessage(message);
+                // Disable the message display - just return without showing message
                 return;
             }
         }
@@ -383,8 +383,28 @@ public class FeedingManager : MonoBehaviour
                 petInfoManager.OnFeedButtonClicked();
             }
 
+            // ADD EXPERIENCE FOR FEEDING
+            AddExperienceForFeeding();
+
             // Call API to update inventory (reduce quantity by 1)
             StartCoroutine(UpdateInventory(selectedItem));
+        }
+    }
+
+    /// <summary>
+    /// Adds experience to the player when feeding a pet
+    /// </summary>
+    private void AddExperienceForFeeding()
+    {
+        PlayerLevel playerLevel = GameObject.Find("Player").GetComponent<PlayerLevel>();
+        if (playerLevel != null)
+        {
+            playerLevel.AddExp(expRewardPerFeed);
+            Debug.Log($"Added {expRewardPerFeed} experience for feeding pet");
+        }
+        else
+        {
+            Debug.LogWarning("PlayerLevel component not found on Player GameObject");
         }
     }
 

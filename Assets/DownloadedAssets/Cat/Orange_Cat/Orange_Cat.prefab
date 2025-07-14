@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 5371502234254064561}
   - component: {fileID: 8842326296918133176}
   - component: {fileID: 2089218525913505268}
+  - component: {fileID: 2667129876098836668}
   m_Layer: 0
   m_Name: Orange_Cat
   m_TagString: Untagged
@@ -263,3 +264,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 0.2
   changeDirectionTime: 2
+--- !u!114 &2667129876098836668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7575681957346784164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8a783bf70d1a5549b28914b3c3e5952, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiManager: {fileID: 0}
