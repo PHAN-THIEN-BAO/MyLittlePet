@@ -40,23 +40,30 @@ public class AdopPet : MonoBehaviour
             playerID = playerId,
             petID = shopProduct.petID.Value,
             petCustomName = customNamePet,
-            status = "100%25100%25100",
+            status = "50%2550%2550",
             level = 1
         };
-
 
         // Thêm pet mới
         StartCoroutine(APIPlayerPet.AddPlayerPetCoroutine(newPlayerPet, (addResult) =>
         {
             if (addResult)
             {
-                // Hiển thị panel thành công
-                adopPetSuccessPanel.SetActive(true);
-
-                // Spawn pet ngay lập tức
-                if (petController != null)
+                // Lấy PlayerPet vừa tạo để có PlayerPetID
+                PlayerPet createdPet = APIPlayerPet.GetPlayerPetByPlayerIdAndPetId(playerId, shopProduct.petID.Value);
+                
+                if (createdPet != null)
                 {
-                    petController.SpawnPet(newPlayerPet);
+                    adopPetSuccessPanel.SetActive(true);
+                    
+                    if (petController != null)
+                    {
+                        petController.SpawnPet(createdPet); // Sử dụng pet có PlayerPetID
+                    }
+                }
+                else
+                {
+                    adopPetFailPanel.SetActive(true);
                 }
 
                 // Tạo PlayerInventory object để update hoặc delete
@@ -85,24 +92,5 @@ public class AdopPet : MonoBehaviour
                 adopPetFailPanel.SetActive(true);
             }
         }));
-
     }
-
-
-    //// Spawn the pet GameObject
-    //if (petPrefab != null)
-    //{
-    //    GameObject petObj = Instantiate(petPrefab, Vector3.zero, Quaternion.identity);
-    //    PetController petController = petObj.GetComponent<PetController>();
-    //    if (petController != null)
-    //    {
-    //        petController.playerPet = newPlayerPet;
-    //    }
-    //    // Lưu thông tin pet vào PlayerPrefs (ví dụ cho 1 pet)
-
-    //    PlayerPrefs.SetFloat("SavedPetPosX", petObj.transform.position.x);
-    //    PlayerPrefs.SetFloat("SavedPetPosY", petObj.transform.position.y);
-    //    PlayerPrefs.SetFloat("SavedPetPosZ", petObj.transform.position.z);
-    //    PlayerPrefs.Save();
-    //}
 }
