@@ -63,7 +63,7 @@ public class PlayerLevel : MonoBehaviour
 
         // Cập nhật text hiển thị exp
         if (expText != null)
-            expText.text = exp + "/" + totalExpNeeded;
+            expText.text = exp + "/" + totalExpNeeded + " exp";
 
         // Cập nhật thanh exp
         if (expBarFill != null)
