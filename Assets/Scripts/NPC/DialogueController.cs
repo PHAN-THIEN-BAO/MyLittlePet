@@ -429,10 +429,9 @@ public class DialogueController : MonoBehaviour
             return;
         }
 
-        // ========== THÊM DEPENDENCY CHECK ==========
         PetAction.ActionType actionType = ConvertToPetActionType(action);
         var blockReason = petInfoManager.CanPerformAction(actionType);
-        
+
         if (blockReason != PetInfoUIManager.ActionBlockReason.None)
         {
             string message = petInfoManager.GetBlockReasonMessage(blockReason, actionType);
@@ -442,6 +441,7 @@ public class DialogueController : MonoBehaviour
         }
 
         int playerId = PlayerInfomation.LoadPlayerInfo().id;
+        int currentPetId = GetCurrentPetId();
 
         switch (action)
         {
@@ -456,6 +456,8 @@ public class DialogueController : MonoBehaviour
                     petInfoManager.ShowFeedingPanel(customCareAmount);
                     Debug.Log("Showing feeding panel (PetInfoUIManager fallback)");
                 }
+                // Gọi thêm with history
+                petInfoManager.OnFeedButtonClickedWithHistory();
                 break;
 
             case PetCareAction.Play:
@@ -477,16 +479,15 @@ public class DialogueController : MonoBehaviour
                         Debug.Log("Dialogue choice: Play with pet");
                     }
                 }
+                // Gọi thêm with history
+                //petInfoManager.OnPlayButtonClickedWithHistory();
                 break;
 
             case PetCareAction.Sleep:
-                // ========== ENHANCED SLEEP ACTION ==========
                 if (petSleepManager != null)
                 {
-                    int currentPetId = GetCurrentPetId();
                     if (currentPetId != -1)
                     {
-                        // Check if pet is already sleeping
                         if (petSleepManager.IsPetSleeping(currentPetId))
                         {
                             float remainingTime = petSleepManager.GetRemainingSleepTime(currentPetId);
@@ -496,11 +497,8 @@ public class DialogueController : MonoBehaviour
                             }
                             return;
                         }
-                        
-                        // Put pet to sleep
                         petSleepManager.PutPetToSleep(currentPetId, dialogueSleepDuration);
-                        
-                        // Update pet status (energy)
+
                         if (customCareAmount > 0)
                         {
                             petInfoManager.UpdatePetStatus(2, customCareAmount);
@@ -511,17 +509,10 @@ public class DialogueController : MonoBehaviour
                             petInfoManager.SleepPet();
                             Debug.Log("Dialogue choice: Pet sleeps");
                         }
-                        
-                        // Show sleep message
-                        //if (showSleepMessage)
-                        //{
-                        //    petInfoManager.ShowStatusMessage($"Pet is now sleeping for {dialogueSleepDuration} seconds", Color.blue);
-                        //}
                     }
                     else
                     {
                         Debug.LogWarning("Could not find current pet ID for sleep action");
-                        // Fallback to normal sleep
                         if (customCareAmount > 0)
                         {
                             petInfoManager.UpdatePetStatus(2, customCareAmount);
@@ -534,7 +525,6 @@ public class DialogueController : MonoBehaviour
                 }
                 else
                 {
-                    // Fallback to normal sleep if PetSleepManager not available
                     if (customCareAmount > 0)
                     {
                         petInfoManager.UpdatePetStatus(2, customCareAmount);
@@ -546,12 +536,13 @@ public class DialogueController : MonoBehaviour
                         Debug.Log("Dialogue choice: Pet sleeps");
                     }
                 }
+                // Gọi thêm with history
+                petInfoManager.OnSleepButtonClickedWithHistory();
                 break;
 
             case PetCareAction.CareForAll:
                 if (customCareAmount > 0)
                 {
-                    // Smart care với custom amount
                     petInfoManager.ScheduleSmartCare();
                     Debug.Log($"Dialogue choice: Smart care for all pet needs");
                 }
@@ -608,5 +599,78 @@ public class DialogueController : MonoBehaviour
         if (portraitImage != null) portraitImage.sprite = null;
         
         Debug.Log("🚪 Dialogue force closed");
+    }
+
+    // ========== NEW: EXTERNAL DIALOGUE STARTER ==========
+    /// <summary>
+    /// Start dialogue with specific NPC externally (called from UI buttons)
+    /// </summary>
+    /// <param name="npc">The NPC to start dialogue with</param>
+    /// <returns>True if dialogue was started successfully</returns>
+    public bool StartDialogueWithNPC(NPC npc)
+    {
+        if (npc == null)
+        {
+            Debug.LogError("Cannot start dialogue: NPC is null");
+            return false;
+        }
+
+        if (!npc.CanInteract())
+        {
+            Debug.LogWarning($"Cannot start dialogue: NPC {npc.name} is busy");
+            return false;
+        }
+
+        if (!npc.HasDialogueData())
+        {
+            Debug.LogWarning($"Cannot start dialogue: NPC {npc.name} has no dialogue data");
+            return false;
+        }
+
+        if (IsDialogueActive())
+        {
+            Debug.LogWarning("Cannot start dialogue: Another dialogue is already active");
+            return false;
+        }
+
+        try
+        {
+            // Use the NPC's existing interaction method
+            npc.StartDialogueExternal();
+            Debug.Log($"✅ Successfully started external dialogue with NPC: {npc.name}");
+            return true;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Failed to start dialogue with NPC {npc.name}: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Find and start dialogue with any available NPC in the scene
+    /// </summary>
+    /// <returns>True if dialogue was started with any NPC</returns>
+    public bool StartDialogueWithAnyNPC()
+    {
+        NPC[] npcs = FindObjectsOfType<NPC>();
+        
+        if (npcs == null || npcs.Length == 0)
+        {
+            Debug.LogWarning("No NPCs found in the scene");
+            return false;
+        }
+
+        // Try to find an available NPC with dialogue data
+        foreach (NPC npc in npcs)
+        {
+            if (npc.CanInteract() && npc.HasDialogueData())
+            {
+                return StartDialogueWithNPC(npc);
+            }
+        }
+
+        Debug.LogWarning("No available NPCs with dialogue data found");
+        return false;
     }
 }

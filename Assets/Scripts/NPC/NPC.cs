@@ -36,6 +36,57 @@ public class NPC : MonoBehaviour, IInteractable
         }
     }
 
+    /// <summary>
+    /// Start dialogue externally (called from PetInfoUIManager)
+    /// </summary>
+    public void StartDialogueExternal()
+    {
+        if (dialogueData == null)
+        {
+            Debug.LogWarning($"No dialogue data assigned to NPC: {name}");
+            return;
+        }
+
+        if (isDialogueActive)
+        {
+            Debug.LogWarning($"NPC {name} is already in dialogue");
+            return;
+        }
+
+        StartDialogue();
+        Debug.Log($"🎭 External dialogue started with NPC: {name}");
+    }
+
+    /// <summary>
+    /// Force end dialogue (for cleanup purposes)
+    /// </summary>
+    public void ForceEndDialogue()
+    {
+        if (isDialogueActive)
+        {
+            EndDialogue();
+            Debug.Log($"🎭 Force ended dialogue with NPC: {name}");
+        }
+    }
+
+    /// <summary>
+    /// Check if this NPC has dialogue data assigned
+    /// </summary>
+    public bool HasDialogueData()
+    {
+        return dialogueData != null && dialogueData.dialogueLines != null && dialogueData.dialogueLines.Length > 0;
+    }
+
+    /// <summary>
+    /// Get NPC display name for UI
+    /// </summary>
+    public string GetDisplayName()
+    {
+        return dialogueData != null && !string.IsNullOrEmpty(dialogueData.npcName) 
+            ? dialogueData.npcName 
+            : name;
+    }
+
     public void StopInteract()
     {
         throw new System.NotImplementedException();
@@ -83,6 +134,7 @@ public class NPC : MonoBehaviour, IInteractable
         }
         if (dialogueIndex + 1 < dialogueData.dialogueLines.Length)
         {
+            dialogueIndex++;
             DisplayCurrentLine();
         }
         else

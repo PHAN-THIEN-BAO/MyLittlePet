@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Validate\CurenciesValidation.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCDialogue.cs" />
     <Compile Include="Assets\Scripts\UI\PlayingManager.cs" />
+    <Compile Include="Assets\Scripts\Object\CareHistory\PetCareHistoryExtensions.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\FakePlayerPet.cs" />
     <Compile Include="Assets\Scripts\UI\PetInfoUIManager.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueManager.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Assets\Scripts\UI\UIManagerWaring.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\PlayerControlMovement.cs" />
     <Compile Include="Assets\Scripts\UI\UISetting.cs" />
+    <Compile Include="Assets\Scripts\Object\CareHistory\CareHistoryRecorder.cs" />
     <Compile Include="Assets\Scripts\Transaction\BuyItem.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\APIShopProduct.cs" />
     <Compile Include="Assets\Quarium\Script\FishController.cs" />
@@ -149,15 +151,20 @@
     <Compile Include="Assets\LeanTween\Framework\LeanSmooth.cs" />
     <Compile Include="Assets\Scripts\Object\User\UserProfile.cs" />
     <Compile Include="Assets\Scripts\FarmAction\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\Object\CareHistory\CareHistoryManager.cs" />
     <Compile Include="Assets\LeanTween\Testing\TestingMaxTweens.cs" />
     <Compile Include="Assets\Scripts\Interactions\InteractionDetector.cs" />
+    <Compile Include="Assets\Scripts\NPC\NPCDialogueTrigger.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralUISpace.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSplines.cs" />
+    <Compile Include="Assets\Scripts\Object\CareHistory\CareHistory.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialougeTrigger.cs" />
     <Compile Include="Assets\Scripts\FarmAction\FarmGameManager.cs" />
+    <Compile Include="Assets\Scripts\Object\CareHistory\CareHistoryItemUI.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralCameraShake.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\ClickHandler1.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
+    <Compile Include="Assets\Scripts\Object\CareHistory\APICareHistory.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCRandomMovement.cs" />
     <Compile Include="Assets\Scripts\FarmAction\Farm_action.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
@@ -207,6 +214,7 @@
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralSimpleUI.cs" />
     <Compile Include="Assets\Scripts\Cutscene\SceneController.cs" />
     <Compile Include="Assets\Scripts\Cutscene\SceneTransitionManager.cs" />
+    <Compile Include="Assets\Scripts\Object\CareHistory\CareHistoryLoader.cs" />
     <Compile Include="Assets\Scripts\FarmAction\GemSpawner.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerAchievement\APIPlayerAchievement.cs" />
     <Compile Include="Assets\Scripts\Validate\ShopPetValidate.cs" />
@@ -235,6 +243,7 @@
     <Compile Include="Assets\Xander Develops\Ultimate UI Toolkit\CurvedText\Scripts\CurvedText.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\RandomMovement.cs" />
     <Compile Include="Assets\Scripts\NPC\NPC.cs" />
+    <Compile Include="Assets\Scripts\Object\CareHistory\CareHistorySetup.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\APIPlayerInventory.cs" />
     <Compile Include="Assets\Scripts\LogOut\LogoutUser.cs" />
     <Compile Include="Assets\Scripts\Object\User\TestLevel.cs" />

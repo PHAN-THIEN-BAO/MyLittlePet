@@ -353,7 +353,7 @@ public class FeedingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Enhanced food item click handler with dependency check
+    /// Enhanced food item click handler với care history recording
     /// </summary>
     private void OnFoodItemClicked(int shopProductId)
     {
@@ -365,7 +365,6 @@ public class FeedingManager : MonoBehaviour
             {
                 string message = petInfoManager.GetBlockReasonMessage(blockReason, PetAction.ActionType.Feed);
                 Debug.LogWarning($"Cannot feed pet: {message}");
-                // Disable the message display - just return without showing message
                 return;
             }
         }
@@ -381,6 +380,9 @@ public class FeedingManager : MonoBehaviour
             if (petInfoManager != null)
             {
                 petInfoManager.OnFeedButtonClicked();
+                
+                // ========== RECORD CARE HISTORY ==========
+                
             }
 
             // ADD EXPERIENCE FOR FEEDING
@@ -388,6 +390,28 @@ public class FeedingManager : MonoBehaviour
 
             // Call API to update inventory (reduce quantity by 1)
             StartCoroutine(UpdateInventory(selectedItem));
+        }
+    }
+    
+    /// <summary>
+    /// Record feeding history cho FeedingManager
+    /// </summary>
+    private void RecordFeedingHistory()
+    {
+        if (CareHistoryRecorder.Instance != null)
+        {
+            User currentUser = PlayerInfomation.LoadPlayerInfo();
+            if (currentUser != null)
+            {
+                // Lấy current pet ID (có thể cần thêm logic để xác định pet nào đang được feed)
+                var pets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
+                if (pets != null && pets.Count > 0)
+                {
+                    // Sử dụng pet đầu tiên hoặc implement logic để xác định current active pet
+                    int playerPetId = pets[0].playerPetID;
+                    CareHistoryRecorder.Instance.RecordFeedingHistory(playerPetId, currentUser.id);
+                }
+            }
         }
     }
 

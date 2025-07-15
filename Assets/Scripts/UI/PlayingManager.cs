@@ -210,7 +210,30 @@ public class PlayingManager : MonoBehaviour
                 
             petInfoManager.ShowStatusMessage(message, won ? Color.green : Color.yellow);
             
+            // ========== RECORD CARE HISTORY ==========
+            RecordPlayingHistory();
+            
             Debug.Log($"🎮 Mini-game result: Won={won}, Happiness=+{happinessAmount}");
+        }
+    }
+    
+    /// <summary>
+    /// Record playing history cho PlayingManager
+    /// </summary>
+    private void RecordPlayingHistory()
+    {
+        if (CareHistoryRecorder.Instance != null)
+        {
+            User currentUser = PlayerInfomation.LoadPlayerInfo();
+            if (currentUser != null)
+            {
+                var pets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
+                if (pets != null && pets.Count > 0)
+                {
+                    int playerPetId = pets[0].playerPetID;
+                    CareHistoryRecorder.Instance.RecordPlayingHistory(playerPetId, currentUser.id);
+                }
+            }
         }
     }
 
