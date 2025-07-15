@@ -1394,7 +1394,7 @@ public class PetInfoUIManager : MonoBehaviour
     public void FeedPetWithHistory()
     {
         // Thực hiện feeding logic như bình thường
-        FeedPet();
+        //FeedPet();
 
         // Record care history
         this.RecordFeedingAction();

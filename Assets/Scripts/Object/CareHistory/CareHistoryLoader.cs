@@ -23,12 +23,65 @@ public class CareHistoryLoader : MonoBehaviour
     [SerializeField] private bool sortByMostRecent = true;
     [SerializeField] private bool showActivityDetails = true;
 
+    [Header("Sort Options")]
+    [SerializeField] private TMP_Dropdown sortDropdown;
+
     private List<CareHistory> currentCareHistory = new List<CareHistory>();
     private User currentUser;
 
     private void Start()
     {
+        SetupSortDropdown();
         LoadCareHistoryData();
+    }
+
+    private void SetupSortDropdown()
+    {
+        if (sortDropdown != null)
+        {
+            sortDropdown.ClearOptions();
+            sortDropdown.AddOptions(new List<string> {
+                "Most Recent",
+                "Pet Name (A-Z)",
+                "Activity Type (A-Z)"
+            });
+            sortDropdown.onValueChanged.AddListener(OnSortDropdownChanged);
+        }
+    }
+
+    private void OnSortDropdownChanged(int option)
+    {
+        switch (option)
+        {
+            case 0: // Most Recent
+                sortByMostRecent = true;
+                ProcessAndDisplayHistory(currentCareHistory);
+                break;
+            case 1: // Pet Name (A-Z)
+                sortByMostRecent = false;
+                // Get all pets of current user
+                var playerPets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
+                currentCareHistory = currentCareHistory
+                    .OrderBy(h => {
+                        var pet = playerPets.FirstOrDefault(p => p.playerPetID == h.playerPetId);
+                        return pet != null ? pet.petCustomName : "";
+                    })
+                    .ToList();
+                DisplayCareHistory();
+                break;
+            //case 2: // Activity Type (A-Z)
+            //    sortByMostRecent = false;
+            //    // Get all activities
+            //    var activities = APICareActivity.GetAllCareActivities();
+            //    currentCareHistory = currentCareHistory
+            //        .OrderBy(h => {
+            //            var activity = activities.FirstOrDefault(a => a.ActivityId == h.activityId);
+            //            return activity != null ? activity.ActivityType : "";
+            //        })
+            //        .ToList();
+            //    DisplayCareHistory();
+            //    break;
+        }
     }
 
     /// <summary>
@@ -154,13 +207,13 @@ public class CareHistoryLoader : MonoBehaviour
     {
         currentCareHistory = historyData;
 
-        // Sort by most recent if enabled
         if (sortByMostRecent)
         {
-            currentCareHistory = currentCareHistory.OrderByDescending(h => h.performedAt).ToList();
+            currentCareHistory = currentCareHistory
+                .OrderByDescending(h => h.performedAt)
+                .ToList();
         }
 
-        // Limit the number of items
         if (maxHistoryItems > 0 && currentCareHistory.Count > maxHistoryItems)
         {
             currentCareHistory = currentCareHistory.Take(maxHistoryItems).ToList();
