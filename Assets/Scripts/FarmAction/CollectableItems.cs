@@ -150,9 +150,10 @@ public class CollectableItems : MonoBehaviour
     [SerializeField] private float rotationSpeed = 100f; // Tốc độ xoay
     [SerializeField] private float bounceForce = 2f; // Lực nảy khi chạm đất
     [SerializeField] private float dragForce = 0.5f; // Lực cản không khí
+    [SerializeField] private bool enableRotation = false; // Tắt/bật hiệu ứng xoay
 
     private Item itemComponent;
-    private bool canBeCollected = false; // Ngăn việc thu thập ngay lập tức
+    private bool canBeCollected = true; // Thay đổi thành true để có thể nhặt ngay lập tức
     private float collectionDelay = 0.5f; // Thời gian trước khi có thể thu thập
     private bool hasBounced = false; // Theo dõi nếu vật phẩm đã nảy lần đầu
 
@@ -184,7 +185,12 @@ public class CollectableItems : MonoBehaviour
             itemComponent.rb2d.angularDamping = 0.1f;
             itemComponent.rb2d.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
-            // Các thiết lập khác...
+            // Phóng vật phẩm theo hướng ngẫu nhiên
+            LaunchItem();
+
+            // Đặt thời gian trước khi có thể thu thập
+            Invoke("EnableCollection", collectionDelay);
+            canBeCollected = false; // Ban đầu đặt là false nếu sử dụng delay
         }
         else
         {
@@ -202,8 +208,8 @@ public class CollectableItems : MonoBehaviour
 
     private void Update()
     {
-        // Thêm hiệu ứng xoay nhẹ để trông sinh động hơn
-        if (shouldFloat && itemComponent != null &&
+        // Chỉ thêm hiệu ứng xoay nếu enableRotation được bật
+        if (enableRotation && shouldFloat && itemComponent != null &&
             itemComponent.rb2d != null &&
             itemComponent.rb2d.bodyType != RigidbodyType2D.Static &&
             itemComponent.rb2d.linearVelocity.magnitude < 0.5f)
