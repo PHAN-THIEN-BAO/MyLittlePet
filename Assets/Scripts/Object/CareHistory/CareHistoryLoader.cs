@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
@@ -26,12 +26,19 @@ public class CareHistoryLoader : MonoBehaviour
     [Header("Sort Options")]
     [SerializeField] private TMP_Dropdown sortDropdown;
 
+    [Header("Sort/Filter Dropdowns")]
+    [SerializeField] private TMP_Dropdown petNameDropdown;
+    [SerializeField] private TMP_Dropdown activityTypeDropdown;
+    [SerializeField] private TMP_Dropdown mostRecentDropdown;
+
     private List<CareHistory> currentCareHistory = new List<CareHistory>();
     private User currentUser;
 
     private void Start()
     {
-        SetupSortDropdown();
+        SetupPetNameDropdown();
+        SetupActivityTypeDropdown();
+        SetupMostRecentDropdown();
         LoadCareHistoryData();
     }
 
@@ -46,6 +53,42 @@ public class CareHistoryLoader : MonoBehaviour
                 "Activity Type (A-Z)"
             });
             sortDropdown.onValueChanged.AddListener(OnSortDropdownChanged);
+        }
+    }
+
+    private void SetupPetNameDropdown()
+    {
+        if (petNameDropdown != null)
+        {
+            var playerPets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
+            var petNames = playerPets.Select(p => p.petCustomName).OrderBy(n => n).ToList();
+            petNames.Insert(0, "All Pets");
+            petNameDropdown.ClearOptions();
+            petNameDropdown.AddOptions(petNames);
+            petNameDropdown.onValueChanged.AddListener(OnPetNameDropdownChanged);
+        }
+    }
+
+    private void SetupActivityTypeDropdown()
+    {
+        if (activityTypeDropdown != null)
+        {
+            var activities = APICareActivity.GetAllCareActivities();
+            var activityTypes = activities.Select(a => a.activityType).OrderBy(t => t).ToList();
+            activityTypes.Insert(0, "All Activities");
+            activityTypeDropdown.ClearOptions();
+            activityTypeDropdown.AddOptions(activityTypes);
+            activityTypeDropdown.onValueChanged.AddListener(OnActivityTypeDropdownChanged);
+        }
+    }
+
+    private void SetupMostRecentDropdown()
+    {
+        if (mostRecentDropdown != null)
+        {
+            mostRecentDropdown.ClearOptions();
+            mostRecentDropdown.AddOptions(new List<string> { "Most Recent", "Oldest First" });
+            mostRecentDropdown.onValueChanged.AddListener(OnMostRecentDropdownChanged);
         }
     }
 
@@ -69,19 +112,61 @@ public class CareHistoryLoader : MonoBehaviour
                     .ToList();
                 DisplayCareHistory();
                 break;
-            //case 2: // Activity Type (A-Z)
-            //    sortByMostRecent = false;
-            //    // Get all activities
-            //    var activities = APICareActivity.GetAllCareActivities();
-            //    currentCareHistory = currentCareHistory
-            //        .OrderBy(h => {
-            //            var activity = activities.FirstOrDefault(a => a.ActivityId == h.activityId);
-            //            return activity != null ? activity.ActivityType : "";
-            //        })
-            //        .ToList();
-            //    DisplayCareHistory();
-            //    break;
+                //case 2: // Activity Type (A-Z)
+                //    sortByMostRecent = false;
+                //    // Get all activities
+                //    var activities = APICareActivity.GetAllCareActivities();
+                //    currentCareHistory = currentCareHistory
+                //        .OrderBy(h => {
+                //            var activity = activities.FirstOrDefault(a => a.ActivityId == h.activityId);
+                //            return activity != null ? activity.ActivityType : "";
+                //        })
+                //        .ToList();
+                //    DisplayCareHistory();
+                //    break;
         }
+    }
+
+    private void OnPetNameDropdownChanged(int index)
+    {
+        var playerPets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
+        if (index == 0)
+        {
+            // Tất cả pet
+            LoadCareHistoryData();
+        }
+        else
+        {
+            var selectedPet = playerPets.OrderBy(p => p.petCustomName).ElementAt(index - 1);
+            SetLoadPetHistory(selectedPet.playerPetID);
+        }
+    }
+
+    private void OnActivityTypeDropdownChanged(int index)
+    {
+        var activities = APICareActivity.GetAllCareActivities();
+        if (index == 0)
+        {
+            // Tất cả activity
+            LoadCareHistoryData();
+        }
+        else
+        {
+            var selectedType = activities.OrderBy(a => a.activityType).ElementAt(index - 1).activityType;
+            currentCareHistory = currentCareHistory
+                .Where(h => {
+                    var activity = activities.FirstOrDefault(a => a.activityId == h.activityId);
+                    return activity != null && activity.activityType == selectedType;
+                })
+                .ToList();
+            DisplayCareHistory();
+        }
+    }
+
+    private void OnMostRecentDropdownChanged(int index)
+    {
+        sortByMostRecent = (index == 0);
+        ProcessAndDisplayHistory(currentCareHistory);
     }
 
     /// <summary>
