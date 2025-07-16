@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GITHUB\\MyLittlePet\\MyLittlePetGameAPI\\MyLittlePetGameAPI.csproj": {}
+    "D:\\SWP\\MyLittlePet\\MyLittlePetGameAPI\\MyLittlePetGameAPI.csproj": {}
   },
   "projects": {
-    "D:\\GITHUB\\MyLittlePet\\MyLittlePetGameAPI\\MyLittlePetGameAPI.csproj": {
+    "D:\\SWP\\MyLittlePet\\MyLittlePetGameAPI\\MyLittlePetGameAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GITHUB\\MyLittlePet\\MyLittlePetGameAPI\\MyLittlePetGameAPI.csproj",
+        "projectUniqueName": "D:\\SWP\\MyLittlePet\\MyLittlePetGameAPI\\MyLittlePetGameAPI.csproj",
         "projectName": "MyLittlePetGameAPI",
-        "projectPath": "D:\\GITHUB\\MyLittlePet\\MyLittlePetGameAPI\\MyLittlePetGameAPI.csproj",
-        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-        "outputPath": "D:\\GITHUB\\MyLittlePet\\MyLittlePetGameAPI\\obj\\",
+        "projectPath": "D:\\SWP\\MyLittlePet\\MyLittlePetGameAPI\\MyLittlePetGameAPI.csproj",
+        "packagesPath": "C:\\Users\\minhtrandeptraibodoi\\.nuget\\packages\\",
+        "outputPath": "D:\\SWP\\MyLittlePet\\MyLittlePetGameAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\minhtrandeptraibodoi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -76,6 +76,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.17, 8.0.17]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[8.0.17, 8.0.17]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.17, 8.0.17]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.17, 8.0.17]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
