@@ -113,9 +113,12 @@ public class DialogueManager : MonoBehaviour
                 yield return new WaitForSeconds(typingSpeed);
             }
 
+            // Đợi 5 giây sau khi hiển thị xong dòng chữ
+            yield return new WaitForSeconds(2f);
+
             // Tùy chọn: Chờ người dùng nhấn để tiếp tục
             // yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
-            // DisplayNextDialogueLine();
+            DisplayNextDialogueLine();
         }
     }
 
