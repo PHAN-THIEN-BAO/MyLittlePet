@@ -2300,11 +2300,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47645404}
   m_CullTransparentMesh: 1
---- !u!1 &49381406 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1427198836738229314, guid: e9208769493dcbb43a9832a00ca07fbb, type: 3}
-  m_PrefabInstance: {fileID: 300570011377271419}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &49381407 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2118379702237225488, guid: e9208769493dcbb43a9832a00ca07fbb, type: 3}
@@ -17786,7 +17781,7 @@ MonoBehaviour:
         name: Cris
         icon: {fileID: 104178132242338865, guid: 78c980917f0b2304295511b0f816539e, type: 3}
       line: Go inside .....
-  dialoguePanel: {fileID: 49381406}
+  dialoguePanel: {fileID: 659151327}
   indicatorPrefab: {fileID: 3177871889576272409, guid: 9b926ac5246fede42a69a9d7219399ae, type: 3}
   indicatorOffset: {x: -1.1, y: -1.3, z: 0}
   bobSpeed: 0
@@ -253704,6 +253699,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialoguePanel_Visible
       objectReference: {fileID: 0}
+    - target: {fileID: 1427198836738229314, guid: e9208769493dcbb43a9832a00ca07fbb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2118379702237225488, guid: e9208769493dcbb43a9832a00ca07fbb, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -253801,6 +253800,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialoguePanel
       objectReference: {fileID: 0}
+    - target: {fileID: 4145351480241360498, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4998497044252949434, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
+      propertyPath: dialogPanel
+      value: 
+      objectReference: {fileID: 659151327}
     - target: {fileID: 7924402538795841410, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
