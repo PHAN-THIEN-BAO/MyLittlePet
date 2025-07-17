@@ -38,6 +38,13 @@ public class npc1 : MonoBehaviour, IInteractable
 
     public bool CanInteract()
     {
+        if (DialogData.npcName == "Boss" && !DialogManager.Instance.hasTalkedToBob)
+        {
+            // Có thể thêm phản hồi cho người chơi: "Bạn cần nói chuyện với NPC Bob trước"
+            Debug.Log("You need to talk to NPC Bob first!");
+            return false;
+        }
+
         return !isDialogActive;
     }
 
@@ -115,6 +122,13 @@ public class npc1 : MonoBehaviour, IInteractable
         isDialogActive = false;
         dialogText.SetText("");
         dialogPanel.SetActive(false);
+
+        //Đánh dấu đã nói chuyện với NPC Bob
+        if (DialogData.npcName == "Bob")  // Tên phải khớp với phần Inspector
+        {
+            DialogManager.Instance.hasTalkedToBob = true;
+        }
+
 
         // Phá hủy target GameObject nếu nó tồn tại
         if (targetToDestroy != null)
