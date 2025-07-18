@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MyLittlePetGameAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3e009aed4345eeeb74e08342f29296d608367670")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ce7c9a4d8d7d75cc870fe0c7e4381fdb7f280c1")]
 [assembly: System.Reflection.AssemblyProductAttribute("MyLittlePetGameAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MyLittlePetGameAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

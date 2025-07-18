@@ -32,7 +32,10 @@ public class CareHistoryLoader : MonoBehaviour
     [SerializeField] private TMP_Dropdown mostRecentDropdown;
 
     private List<CareHistory> currentCareHistory = new List<CareHistory>();
+    private List<CareHistory> allCareHistory = new List<CareHistory>();
     private User currentUser;
+    private int selectedPetIndex = 0;
+    private int selectedActivityIndex = 0;
 
     private void Start()
     {
@@ -129,44 +132,49 @@ public class CareHistoryLoader : MonoBehaviour
 
     private void OnPetNameDropdownChanged(int index)
     {
-        var playerPets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
-        if (index == 0)
-        {
-            // Tất cả pet
-            LoadCareHistoryData();
-        }
-        else
-        {
-            var selectedPet = playerPets.OrderBy(p => p.petCustomName).ElementAt(index - 1);
-            SetLoadPetHistory(selectedPet.playerPetID);
-        }
+        selectedPetIndex = index;
+        ApplyCombinedFilter();
     }
 
     private void OnActivityTypeDropdownChanged(int index)
     {
-        var activities = APICareActivity.GetAllCareActivities();
-        if (index == 0)
-        {
-            // Tất cả activity
-            LoadCareHistoryData();
-        }
-        else
-        {
-            var selectedType = activities.OrderBy(a => a.activityType).ElementAt(index - 1).activityType;
-            currentCareHistory = currentCareHistory
-                .Where(h => {
-                    var activity = activities.FirstOrDefault(a => a.activityId == h.activityId);
-                    return activity != null && activity.activityType == selectedType;
-                })
-                .ToList();
-            DisplayCareHistory();
-        }
+        selectedActivityIndex = index;
+        ApplyCombinedFilter();
     }
 
     private void OnMostRecentDropdownChanged(int index)
     {
         sortByMostRecent = (index == 0);
         ProcessAndDisplayHistory(currentCareHistory);
+    }
+
+    private void ApplyCombinedFilter()
+    {
+        var playerPets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
+        var activities = APICareActivity.GetAllCareActivities();
+
+        IEnumerable<CareHistory> filtered = allCareHistory;
+
+        // Filter theo pet
+        if (selectedPetIndex > 0)
+        {
+            var selectedPet = playerPets.OrderBy(p => p.petCustomName).ElementAt(selectedPetIndex - 1);
+            filtered = filtered.Where(h => h.playerPetId == selectedPet.playerPetID);
+        }
+
+        // Filter theo activity
+        if (selectedActivityIndex > 0)
+        {
+            var selectedType = activities.OrderBy(a => a.activityType).ElementAt(selectedActivityIndex - 1).activityType;
+            filtered = filtered.Where(h =>
+            {
+                var activity = activities.FirstOrDefault(a => a.activityId == h.activityId);
+                return activity != null && activity.activityType == selectedType;
+            });
+        }
+
+        currentCareHistory = filtered.ToList();
+        DisplayCareHistory();
     }
 
     /// <summary>
@@ -290,6 +298,7 @@ public class CareHistoryLoader : MonoBehaviour
     /// </summary>
     private void ProcessAndDisplayHistory(List<CareHistory> historyData)
     {
+        allCareHistory = historyData; // Lưu lại danh sách gốc
         currentCareHistory = historyData;
 
         if (sortByMostRecent)
