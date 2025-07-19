@@ -2,11 +2,12 @@
 // This was created with assistance from Muse, a Unity Artificial Intelligence product
 
 using UnityEngine;
-using TMPro; // Import thư viện TextMeshPro
+using TMPro;
+using System.Collections.Generic; // Import thư viện TextMeshPro
 
 public class PlayerCollisionHandler : MonoBehaviour
 {
-    public int collisionLimit = 3; // maximum number of collisions allowed before game over
+    private int collisionLimit = 3; // maximum number of collisions allowed before game over
     public GameObject gameOverCanvas; // reference to GameOver_Panel
     public GameObject youWonCanvas; // reference to YouWon_Panel
     public TMP_Text livesTMPText; // reference to TextMeshPro for displaying lives
@@ -106,6 +107,22 @@ public class PlayerCollisionHandler : MonoBehaviour
         if (youWonCanvas != null)
         {
             youWonCanvas.SetActive(true); // show You Won UI
+
+            // set score to api
+            User user = PlayerInfomation.LoadPlayerInfo();
+            List<GameRecord> gameRecordList = APIGameRecord.GetGameRecordByPlayerID(user.id);
+            // get gameRecordList with minigameID = 1
+            GameRecord gameRecord = gameRecordList.Find(gr => gr.minigameID == 1);
+            if (gameRecord != null)
+            {
+                gameRecord.score += 1; // increment score by 1
+                APIGameRecord.SendGameRecord("PUT", user.id, 1, gameRecord.score); // update game record
+            }
+            else
+            {
+                APIGameRecord.SendGameRecord("POST", user.id, 1, 1);
+            }
+
         }
 
         Time.timeScale = 0; // stop the game
