@@ -4122,7 +4122,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &89074446
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9684,9 +9684,9 @@ RectTransform:
   - {fileID: 803262675}
   m_Father: {fileID: 1996656040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 186.6325, y: -236.05}
   m_SizeDelta: {x: 373.265, y: 475.243}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &197873029
@@ -111724,7 +111724,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.00018637425, y: 0.00002002716}
-  m_SizeDelta: {x: 0, y: 472.1}
+  m_SizeDelta: {x: 373.265, y: 472.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1996656041
 MonoBehaviour:
@@ -121864,6 +121864,18 @@ PrefabInstance:
       propertyPath: movementBlocker
       value: 
       objectReference: {fileID: 699879658}
+    - target: {fileID: 7045376955678508702, guid: 7377dd34d5c251a48b42cac27cd3b249, type: 3}
+      propertyPath: movementBlockers.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7045376955678508702, guid: 7377dd34d5c251a48b42cac27cd3b249, type: 3}
+      propertyPath: 'movementBlockers.Array.data[0]'
+      value: 
+      objectReference: {fileID: 699879658}
+    - target: {fileID: 7045376955678508702, guid: 7377dd34d5c251a48b42cac27cd3b249, type: 3}
+      propertyPath: 'movementBlockers.Array.data[1]'
+      value: 
+      objectReference: {fileID: 220495839}
     - target: {fileID: 7814556627701945224, guid: 7377dd34d5c251a48b42cac27cd3b249, type: 3}
       propertyPath: m_Size.x
       value: 0.7551781
