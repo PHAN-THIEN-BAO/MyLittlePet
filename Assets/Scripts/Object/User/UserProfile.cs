@@ -49,7 +49,6 @@ public class UserProfile : MonoBehaviour
     [SerializeField] public TMP_Text levelPlayer;
     [SerializeField] public TMP_Text petOwned;
     [SerializeField] public TMP_Text Achievements;
-    [SerializeField] private TMP_Text MinigameWon;
 
     [Header("Rename System")]
     [SerializeField] private GameObject renamePanel;
@@ -84,21 +83,6 @@ public class UserProfile : MonoBehaviour
         User user = PlayerInfomation.LoadPlayerInfo();
         List<Achievement> listAchievement = APIAchievement.GetAllAchievements();
         List<PlayerAchievement> playerAchievements = APIPlayerAchievement.GetAchievementByIdPlayer(user.id);
-        // get gamerecord
-        List<GameRecord> gameRecordList = APIGameRecord.GetGameRecordByPlayerID(user.id);
-        // get gameRecordList with minigameID = 1
-        if (gameRecordList != null && gameRecordList.Count > 0)
-        {
-            // get gameRecordList with minigameID = 1
-            GameRecord gameRecord = gameRecordList.Find(gr => gr.minigameID == 1);
-            MinigameWon.text = "Mini Game Won:          " + gameRecord.score.ToString();
-        }
-        else
-        {
-            MinigameWon.text = "Mini Game Won:          0";
-        }
-
-
         if (user != null)
         {
             namePlayer.text = user.userName;
@@ -151,13 +135,24 @@ public class UserProfile : MonoBehaviour
 
         string newName = renameInput.text.Trim();
 
-        // Cập nhật tên người dùng
+        // Cập nhật tên người dùng trong PlayerPrefs
         PlayerInfomation.UpdatePlayerInfo(user => {
             user.userName = newName;
         });
 
         // Cập nhật UI
         namePlayer.text = newName;
+
+        // Cập nhật thông tin lên database
+        bool updateSuccess = APIUser.UpdateUser();
+        if (updateSuccess)
+        {
+            Debug.Log("Đã cập nhật tên người dùng lên database thành công!");
+        }
+        else
+        {
+            Debug.LogWarning("Cập nhật tên người dùng lên database không thành công. Thay đổi chỉ được lưu cục bộ.");
+        }
 
         // Đóng panel đổi tên
         CloseRenamePanel();
