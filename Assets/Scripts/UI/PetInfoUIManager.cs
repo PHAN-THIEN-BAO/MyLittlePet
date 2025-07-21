@@ -328,7 +328,7 @@ public class PetInfoUIManager : MonoBehaviour
         }
 
         // Update button state
-        bool canTalk = (defaultNPC != null && defaultNPC.CanInteract());
+        bool canTalk = (defaultNPC != null);
         talkToNPCButton.interactable = canTalk;
 
         // Update button visual based on state

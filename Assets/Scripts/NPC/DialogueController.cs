@@ -118,27 +118,27 @@ public class DialogueController : MonoBehaviour
     {
         if (dialoguePanel != null && dialoguePanel.activeInHierarchy)
         {
-            // ========== FIX: NOTIFY CURRENT NPC TO END DIALOGUE ==========
+            // Notify NPC to end dialogue and reset state
             if (currentNPC != null)
             {
                 currentNPC.EndDialogue();
-                currentNPC = null; // Clear reference
+                currentNPC = null;
                 Debug.Log("🔄 NPC dialogue state reset");
             }
-            
+
             // Clear any existing choices
             ClearChoices();
-            
+
             // Hide the dialogue UI
             ShowDialogueUI(false);
-            
+
             // Clear dialogue text
             if (dialogueText != null)
                 dialogueText.text = "";
-            
+
             // Fire close event if needed
             OnDialogueClosed?.Invoke();
-            
+
             Debug.Log("🚪 Dialogue closed by user");
         }
     }
@@ -414,7 +414,7 @@ public class DialogueController : MonoBehaviour
             var pets = APIPlayerPet.GetPetsByPlayerId(user.id);
             if (pets != null && pets.Count > 0)
             {
-                return pets[0].petID;
+                return pets[0].playerPetID;
             }
         }
         return -1;

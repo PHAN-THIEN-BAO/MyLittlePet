@@ -14946,7 +14946,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultSleepDuration: 20
   showSleepVisuals: 1
-  sleepEffectPrefab: {fileID: 0}
+  sleepEffectPrefab: {fileID: 9057664245928733209, guid: 6a098c064c4e43e4b891dbb7b9761aa6, type: 3}
   expRewardPerSleep: 5
   blockMovementDuringSleep: 1
   blockActionsDuringSleep: 1
@@ -18703,7 +18703,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -274.85, y: -258}
+  m_AnchoredPosition: {x: 301, y: -263.59}
   m_SizeDelta: {x: -956.9653, y: -571.82}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &352847523
@@ -19040,7 +19040,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 280, y: 49.719}
+  m_AnchoredPosition: {x: -66, y: 49.719}
   m_SizeDelta: {x: -922.1107, y: -345.343}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &356345267
@@ -62665,10 +62665,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 350027521}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 938896991}
+        m_TargetAssemblyTypeName: DialogueController, Assembly-CSharp
+        m_MethodName: CloseDialogue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1173204309}
+        m_TargetAssemblyTypeName: FeedingManager, Assembly-CSharp
+        m_MethodName: CloseFeedingPanel
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -96839,7 +96851,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -274.85107, y: 34}
+  m_AnchoredPosition: {x: 301, y: 34}
   m_SizeDelta: {x: -945.412, y: -316.0901}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1703093637
@@ -111232,7 +111244,7 @@ MonoBehaviour:
   soundEffectGroups:
   - name: Footstep
     audioClips:
-    - {fileID: 8300000, guid: 9c959222049a8ed49a4cc38acbd079cb, type: 3}
+    - {fileID: 0}
 --- !u!1 &1995246554
 GameObject:
   m_ObjectHideFlags: 0
@@ -121811,6 +121823,10 @@ PrefabInstance:
     - target: {fileID: 4538271838302995755, guid: 7377dd34d5c251a48b42cac27cd3b249, type: 3}
       propertyPath: m_Radius
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5644930721582069810, guid: 7377dd34d5c251a48b42cac27cd3b249, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6158517877496803209, guid: 7377dd34d5c251a48b42cac27cd3b249, type: 3}
       propertyPath: m_LocalPosition.x

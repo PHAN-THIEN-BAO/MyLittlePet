@@ -13,6 +13,7 @@ public class NPCRandomMovement : MonoBehaviour
     
     private int currentDirection = -1; // Lưu direction hiện tại
     private bool isMovementPaused = false; // Để tạm dừng movement khi đang tương tác
+    public bool isMoving; // GOOD: per-pet instance
 
     void Start()
     {
