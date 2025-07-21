@@ -1,8 +1,6 @@
 using UnityEngine;
-
 public class FakePlayerPet : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         PlayerPet playerPet = new PlayerPet
@@ -18,8 +16,6 @@ public class FakePlayerPet : MonoBehaviour
         else
         {
             Debug.LogError("Failed to add Fake Player Pet.");
-
         }
-
     }
 }

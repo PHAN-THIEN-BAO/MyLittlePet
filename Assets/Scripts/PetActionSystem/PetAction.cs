@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
 [System.Serializable]
 public class PetAction
 {
@@ -15,7 +14,6 @@ public class PetAction
         CareForAll,
         UpdateDatabase
     }
-
     public enum ActionPriority
     {
         Low = 0,
@@ -23,7 +21,6 @@ public class PetAction
         High = 2,
         Critical = 3
     }
-
     public string actionId;
     public ActionType type;
     public ActionPriority priority;
@@ -31,18 +28,11 @@ public class PetAction
     public float duration;
     public bool isCompleted;
     public bool isExecuting;
-    
-    // Dependencies - actions that must complete before this one can execute
     public List<string> dependencies;
-    
-    // Action parameters
     public Dictionary<string, object> parameters;
-    
-    // Events
     public System.Action<PetAction> OnActionStarted;
     public System.Action<PetAction> OnActionCompleted;
     public System.Action<PetAction> OnActionFailed;
-
     public PetAction(string id, ActionType actionType, ActionPriority actionPriority = ActionPriority.Normal)
     {
         actionId = id;
@@ -55,7 +45,6 @@ public class PetAction
         executionTime = Time.time;
         duration = 0f;
     }
-
     public void AddDependency(string dependencyId)
     {
         if (!dependencies.Contains(dependencyId))
@@ -63,12 +52,10 @@ public class PetAction
             dependencies.Add(dependencyId);
         }
     }
-
     public void SetParameter(string key, object value)
     {
         parameters[key] = value;
     }
-
     public T GetParameter<T>(string key, T defaultValue = default(T))
     {
         if (parameters.ContainsKey(key) && parameters[key] is T)

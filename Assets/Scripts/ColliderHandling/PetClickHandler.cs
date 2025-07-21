@@ -1,11 +1,8 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
-
 public class PetClickHandler : MonoBehaviour
 {
-    // Reference to the UI manager that will handle displaying pet info
     public PetInfoUIManager uiManager;
-
     [Header("Pet Click Audio Settings")]
     [Tooltip("Enable pet click sound effects")]
     public bool enableClickAudio = true;
@@ -16,18 +13,13 @@ public class PetClickHandler : MonoBehaviour
     public float clickSoundVolume = 0.8f;
     [Tooltip("Array of direct audio clips for each petID (fallback if SoundEffectManager not available)")]
     public AudioClip[] petClickAudioClips;
-
     private void OnMouseDown()
     {
         Debug.Log("Clicked pet: " + gameObject.name);
-        
         var dataHolder = GetComponent<PetDataHolder>();
         if (dataHolder != null && uiManager != null)
         {
-            // ========== PLAY PET CLICK AUDIO ==========
             PlayPetClickAudio(dataHolder.petData.petID);
-
-            // Use the petData to show info
             uiManager.ToggleInfoPanel(dataHolder.petData.playerPetID);
         }
         else
@@ -35,36 +27,21 @@ public class PetClickHandler : MonoBehaviour
             Debug.LogWarning("PetDataHolder or PetInfoUIManager is not assigned to " + gameObject.name);
         }
     }
-
-    /// <summary>
-    /// Plays pet-specific click audio based on petID
-    /// </summary>
     private void PlayPetClickAudio(int petID)
     {
         if (!enableClickAudio) return;
-
-        // Generate sound name based on petID
         string petSoundName = $"pet_{petID}_click";
-        
         try
         {
-            // Try to use SoundEffectManager first (preferred method)
             SoundEffectManager.Play(petSoundName, randomPitch);
-            Debug.Log($"🔊 Played pet click sound: {petSoundName}");
+            Debug.Log($"?? Played pet click sound: {petSoundName}");
         }
         catch (System.Exception ex)
         {
             Debug.LogWarning($"SoundEffectManager not available or sound '{petSoundName}' not found: {ex.Message}");
-            
-            // Fallback: Use direct AudioClip array
             PlayPetClickAudioFallback(petID);
         }
     }
-
-    /// <summary>
-    /// Fallback method to play pet click audio when SoundEffectManager is not available
-    /// Uses the petClickAudioClips array indexed by petID
-    /// </summary>
     private void PlayPetClickAudioFallback(int petID)
     {
         if (petClickAudioClips == null || petClickAudioClips.Length == 0)
@@ -72,8 +49,6 @@ public class PetClickHandler : MonoBehaviour
             Debug.LogWarning("No fallback audio clips assigned for pet click sounds");
             return;
         }
-
-        // Check if petID is within the array bounds
         if (petID >= 0 && petID < petClickAudioClips.Length)
         {
             AudioClip clipToPlay = petClickAudioClips[petID];
@@ -84,68 +59,44 @@ public class PetClickHandler : MonoBehaviour
             else
             {
                 Debug.LogWarning($"No audio clip assigned for petID {petID} in fallback array");
-                // Try to play a default sound if available
                 PlayDefaultPetClickSound();
             }
         }
         else
         {
             Debug.LogWarning($"PetID {petID} is out of range for petClickAudioClips array (length: {petClickAudioClips.Length})");
-            // Try to play a default sound if available
             PlayDefaultPetClickSound();
         }
     }
-
-    /// <summary>
-    /// Plays a default pet click sound when specific pet sound is not available
-    /// </summary>
     private void PlayDefaultPetClickSound()
     {
-        // Try to use the first available clip as default
         if (petClickAudioClips != null && petClickAudioClips.Length > 0 && petClickAudioClips[0] != null)
         {
             PlayAudioClipDirect(petClickAudioClips[0], "TempPetClickAudio_Default");
-            Debug.Log("🔊 Played default pet click sound");
+            Debug.Log("?? Played default pet click sound");
         }
         else
         {
             Debug.LogWarning("No default pet click audio available");
         }
     }
-
-    /// <summary>
-    /// Direct method to play an AudioClip using temporary AudioSource
-    /// </summary>
     private void PlayAudioClipDirect(AudioClip audioClip, string tempObjectName)
     {
         if (audioClip == null) return;
-
-        // Create temporary GameObject for audio playback
         GameObject tempAudioGO = new GameObject(tempObjectName);
         tempAudioGO.transform.position = transform.position;
-        
         AudioSource audioSource = tempAudioGO.AddComponent<AudioSource>();
         audioSource.clip = audioClip;
         audioSource.volume = clickSoundVolume;
-        audioSource.spatialBlend = 0f; // 2D sound
-        
-        // Add random pitch if enabled
+        audioSource.spatialBlend = 0f;
         if (randomPitch)
         {
             audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         }
-        
         audioSource.Play();
-        
-        // Destroy temporary GameObject after audio finishes
         Destroy(tempAudioGO, audioClip.length + 0.1f);
-        
-        Debug.Log($"🔊 Played pet click sound using fallback method: {audioClip.name}");
+        Debug.Log($"?? Played pet click sound using fallback method: {audioClip.name}");
     }
-
-    /// <summary>
-    /// Public method to test pet click sounds (useful for debugging)
-    /// </summary>
     [ContextMenu("Test Pet Click Sound")]
     public void TestPetClickSound()
     {
@@ -159,19 +110,11 @@ public class PetClickHandler : MonoBehaviour
             Debug.LogWarning("Cannot test pet click sound: No PetDataHolder or petData found");
         }
     }
-
-    /// <summary>
-    /// Public method to set audio clips programmatically
-    /// </summary>
     public void SetPetClickAudioClips(AudioClip[] audioClips)
     {
         petClickAudioClips = audioClips;
         Debug.Log($"Pet click audio clips set: {audioClips?.Length ?? 0} clips assigned");
     }
-
-    /// <summary>
-    /// Public method to enable/disable click audio
-    /// </summary>
     public void SetClickAudioEnabled(bool enabled)
     {
         enableClickAudio = enabled;

@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-
 public class SoundEffectManager : MonoBehaviour
 {
     private static SoundEffectManager Instance;
@@ -9,7 +8,6 @@ public class SoundEffectManager : MonoBehaviour
     private static AudioSource VoiceAudioSource;
     private static SoundEffectLibrary soundEffectLibrary;
     [SerializeField] private Slider sfxSlider;
-
     private void Awake()
     {
         if (Instance == null)
@@ -20,14 +18,13 @@ public class SoundEffectManager : MonoBehaviour
             randomPitchAudioSource = audioSources[1];
             VoiceAudioSource = audioSources[2];
             soundEffectLibrary = GetComponent<SoundEffectLibrary>();
-            DontDestroyOnLoad(gameObject); // Keep this object across scenes
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject); // Destroy duplicate instances
+            Destroy(gameObject);
         }
     }
-
     public static void Play(string soundname, bool randomPitch = false)
     {
         AudioClip audioClip = soundEffectLibrary.GetRandomClip(soundname);
@@ -44,26 +41,21 @@ public class SoundEffectManager : MonoBehaviour
             }
         }
     }
-
     public static void PlayVoice(AudioClip audioClip, float pitch = 1f)
     {
         VoiceAudioSource.pitch = pitch;
         VoiceAudioSource.PlayOneShot(audioClip);
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         sfxSlider.onValueChanged.AddListener(delegate { OnValueChanged(); });
     }
-
-    // Update is called once per frame
     public static void SetVolume(float volume)
     {
         audioSource.volume = volume;
         randomPitchAudioSource.volume = volume;
         VoiceAudioSource.volume = volume;
     }
-
     public void OnValueChanged()
     {
         SetVolume(sfxSlider.value);

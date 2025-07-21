@@ -3,12 +3,10 @@ using TMPro;
 using UnityEngine.UI;
 using NUnit.Framework;
 using System.Collections.Generic;
-
 public class ShopValidate : MonoBehaviour
 {
     public bool CheckCanBuy(GameObject notEnoughMoneyPanel)
     {
-        // take user information
         User user = PlayerInfomation.LoadPlayerInfo();
         if (user == null)
         {
@@ -17,8 +15,6 @@ public class ShopValidate : MonoBehaviour
                 notEnoughMoneyPanel.SetActive(true);
             return false;
         }
-
-        // take product ID from sibling Id_Item
         Transform idItemTransform = transform.parent.Find("Id_Item");
         if (idItemTransform == null)
         {
@@ -27,7 +23,6 @@ public class ShopValidate : MonoBehaviour
                 notEnoughMoneyPanel.SetActive(true);
             return false;
         }
-
         TMP_Text idText = idItemTransform.GetComponent<TMP_Text>();
         if (idText == null)
         {
@@ -36,10 +31,7 @@ public class ShopValidate : MonoBehaviour
                 notEnoughMoneyPanel.SetActive(true);
             return false;
         }
-
         int shopProductID = int.Parse(idText.text);
-
-        // take product from database by ID
         ShopProduct product = APIShopProduct.GetShopProductById(shopProductID);
         if (product == null)
         {
@@ -48,8 +40,6 @@ public class ShopValidate : MonoBehaviour
                 notEnoughMoneyPanel.SetActive(true);
             return false;
         }
-
-        // take user currency based on product's currency type
         int userCurrency = 0;
         if (product.currencyType == "Coin")
             userCurrency = user.coin;
@@ -57,36 +47,25 @@ public class ShopValidate : MonoBehaviour
             userCurrency = user.diamond;
         else if (product.currencyType == "Gem")
             userCurrency = user.gem;
-
         int quantity = 1;
-
-        // check if user has enough currency to buy the product
         bool canBuy = CurenciesValidation.ValidateCurrencies(userCurrency, product.price, quantity);
         if (!canBuy)
         {
             Debug.LogWarning("Not enough money to buy!");
             if (notEnoughMoneyPanel != null)
-                notEnoughMoneyPanel.SetActive(true); // show panel if not enough money
+                notEnoughMoneyPanel.SetActive(true);
             return false;
         }
         else
         {
             if (notEnoughMoneyPanel != null)
-                notEnoughMoneyPanel.SetActive(false); // hide panel if enough money
+                notEnoughMoneyPanel.SetActive(false);
             return true;
         }
     }
-    /// <summary>
-    /// Check if the player can buy a pet based on their existing pets.
-    /// </summary>
-    /// <param name="OwnedPetPanel"></param>
-    /// <param name="petId"></param>
-    /// <returns></returns>
     public bool CheckCanBuyPet(GameObject OwnedPetPanel, int petId, int playerId)
     {
         PlayerPet playerPet = APIPlayerPet.GetPlayerPetByPlayerIdAndPetId(playerId ,petId);
-
-
         if (playerPet == null)
         {
             Debug.Log("Player pet not found, ok can buy");
@@ -101,5 +80,4 @@ public class ShopValidate : MonoBehaviour
             return false;
         }
     }
-
 }

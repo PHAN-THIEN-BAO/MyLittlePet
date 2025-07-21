@@ -6,35 +6,24 @@ using System.IO;
 using System.Net;
 using UnityEngine;
 using UnityEngine.Networking;
-
 public class APIPlayerInventory : MonoBehaviour
 {
-
     public static List<PlayerInventory> GetPlayerInventory(string playerId)
     {
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/PlayerInventory/Player/" + playerId);
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-        // Read the response stream and convert it to a string
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string jsonResponse = reader.ReadToEnd();
         reader.Close();
-        // Parse the JSON response into a list of PlayerInventory objects
         return JsonConvert.DeserializeObject<List<PlayerInventory>>(jsonResponse);
     }
-
-
     public static IEnumerator AddPlayerInventoryCoroutine(PlayerInventory playerInventory, System.Action<bool> callback)
     {
         string url = $"https://localhost:7035/PlayerInventory?playerId={playerInventory.playerID}&shopProductId={playerInventory.shopProductID}&quantity={playerInventory.quantity}";
-
-        // Using UnityWebRequest to send a POST request
         WWWForm form = new WWWForm();
         UnityWebRequest request = UnityWebRequest.Post(url, form);
         request.downloadHandler = new DownloadHandlerBuffer();
-
         yield return request.SendWebRequest();
-
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("Add response: " + request.downloadHandler.text);
@@ -46,49 +35,18 @@ public class APIPlayerInventory : MonoBehaviour
             callback?.Invoke(false);
         }
     }
-
-
-
-
-    //public static IEnumerator UpdatePlayerInventoryCoroutine(PlayerInventory playerInventory, System.Action<bool> callback)
-    //{
-    //    // URL for the PUT request
-    //    string url = $"https://localhost:7035/PlayerInventory?playerId={playerInventory.playerID}&shopProductId={playerInventory.shopProductID}&quantity={playerInventory.quantity}";
-
-    //    // using UnityWebRequest to send a PUT request
-    //    UnityWebRequest request = UnityWebRequest.Put(url, "");
-    //    request.downloadHandler = new DownloadHandlerBuffer();
-
-    //    yield return request.SendWebRequest();
-
-    //    if (request.result == UnityWebRequest.Result.Success)
-    //    {
-    //        Debug.Log("Update response: " + request.downloadHandler.text);
-    //        callback?.Invoke(true);
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Error updating player inventory: " + request.error);
-    //        callback?.Invoke(false);
-    //    }
-    //}
-
-
     public static IEnumerator UpdatePlayerInventoryCoroutine(PlayerInventory playerInventory, System.Action<bool> callback)
     {
         string url = "https://localhost:7035/PlayerInventory?playerId=" + playerInventory.playerID
             + "&shopProductId=" + playerInventory.shopProductID
             + "&quantity=" + playerInventory.quantity;
-
         string jsonData = JsonUtility.ToJson(playerInventory);
         UnityWebRequest request = new UnityWebRequest(url, "POST");
         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
-
         yield return request.SendWebRequest();
-
         if (request.result == UnityWebRequest.Result.Success)
         {
             callback?.Invoke(true);
@@ -99,9 +57,6 @@ public class APIPlayerInventory : MonoBehaviour
             callback?.Invoke(false);
         }
     }
-
-
-
     public static bool DeletePlayerInventory(int playerId, int shopProductId)
     {
         try
@@ -109,16 +64,12 @@ public class APIPlayerInventory : MonoBehaviour
             string url = $"https://localhost:7035/PlayerInventory?playerId={playerId}&shopProductId={shopProductId}";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "DELETE";
-
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             bool success = (int)response.StatusCode >= 200 && (int)response.StatusCode < 300;
-
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string jsonResponse = reader.ReadToEnd();
             reader.Close();
-
             Debug.Log("DeletePlayerInventory response: " + jsonResponse);
-
             return success;
         }
         catch (WebException ex)
@@ -142,17 +93,12 @@ public class APIPlayerInventory : MonoBehaviour
             return false;
         }
     }
-
-    // version using UnityWebRequest for coroutine
     public static IEnumerator DeletePlayerInventoryCoroutine(int playerId, int shopProductId, System.Action<bool> callback)
     {
         string url = $"https://localhost:7035/PlayerInventory?playerId={playerId}&shopProductId={shopProductId}";
-
         UnityWebRequest request = UnityWebRequest.Delete(url);
         request.downloadHandler = new DownloadHandlerBuffer();
-
         yield return request.SendWebRequest();
-
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("Delete response: " + request.downloadHandler.text);
@@ -164,6 +110,4 @@ public class APIPlayerInventory : MonoBehaviour
             callback?.Invoke(false);
         }
     }
-
-
 }

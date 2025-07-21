@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class TurnManager : MonoBehaviour
 {
     public GolfBall playerBall;
@@ -7,17 +6,13 @@ public class TurnManager : MonoBehaviour
     public Transform hole;
     public PetAIController petAI;
     public PlayerController playerController;
-
     public GameObject playerCamera;
     public GameObject petCamera;
-
     private bool isPlayerTurn = true;
     private bool ballIsMoving = false;
     private bool petAIMovedThisTurn = false;
     private float stopTimer = 0f;
-    private float waitAfterStop = 1.5f; // Số giây chờ sau khi bóng dừng
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private float waitAfterStop = 1.5f;
     void Start()
     {
         if (isPlayerTurn)
@@ -26,18 +21,13 @@ public class TurnManager : MonoBehaviour
             Debug.Log("Đến lượt Pet");
         UpdateCamera();
     }
-
-    // Update is called once per frame
     void Update()
     {
-        // Cập nhật trạng thái lượt cho PlayerController
         playerController.isMyTurn = isPlayerTurn;
-
         if (!ballIsMoving)
         {
             if (isPlayerTurn)
             {
-                // Chờ PlayerController xử lý input và đánh bóng
                 if (playerBall.IsMoving())
                 {
                     ballIsMoving = true;
@@ -63,29 +53,24 @@ public class TurnManager : MonoBehaviour
                     ballIsMoving = false;
                     isPlayerTurn = !isPlayerTurn;
                     petAIMovedThisTurn = false;
-
-                    // Thông báo lượt
                     if (isPlayerTurn)
                         Debug.Log("Đến lượt Player");
                     else
                         Debug.Log("Đến lượt Pet");
-
                     UpdateCamera();
                     stopTimer = 0f;
                 }
             }
             else
             {
-                stopTimer = 0f; // Nếu bóng lại di chuyển, reset timer
+                stopTimer = 0f;
             }
         }
     }
-
     private void UpdateCamera()
     {
         playerCamera.SetActive(isPlayerTurn);
         petCamera.SetActive(!isPlayerTurn);
-
         var playerListener = playerCamera.GetComponent<AudioListener>();
         var petListener = petCamera.GetComponent<AudioListener>();
         if (playerListener != null) playerListener.enabled = isPlayerTurn;

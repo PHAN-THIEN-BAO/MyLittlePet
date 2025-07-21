@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
-
 public class CareHistoryItemUI : MonoBehaviour
 {
     [Header("UI Components")]
@@ -12,15 +11,12 @@ public class CareHistoryItemUI : MonoBehaviour
     [SerializeField] private TMP_Text playerNameText;
     [SerializeField] private Image activityIcon;
     [SerializeField] private Button detailsButton;
-
     [Header("Activity Icons")]
     [SerializeField] private Sprite feedingIcon;
     [SerializeField] private Sprite sleepIcon;
     [SerializeField] private Sprite playIcon;
     [SerializeField] private Sprite defaultIcon;
-
     private CareHistory historyData;
-
     private void Start()
     {
         if (detailsButton != null)
@@ -28,58 +24,37 @@ public class CareHistoryItemUI : MonoBehaviour
             detailsButton.onClick.AddListener(ShowDetails);
         }
     }
-
-    /// <summary>
-    /// Set up the history item with care history data
-    /// </summary>
     public void SetupHistoryItem(CareHistory history, bool showDetails = true)
     {
         historyData = history;
-
-        // Set date and time
         if (dateTimeText != null)
         {
             dateTimeText.text = FormatDateTime(history.performedAt);
         }
-
-        // Set activity type
         if (activityTypeText != null)
         {
             activityTypeText.text = GetActivityTypeText(history.activityId);
         }
-
-        // Set pet information
         if (petNameText != null)
         {
             SetPetInfo(history.playerPetId);
         }
-
-        // Set player information
         if (playerNameText != null)
         {
             SetPlayerInfo(history.playerId);
         }
-
-        // Set activity icon
         if (activityIcon != null)
         {
             activityIcon.sprite = GetActivityIcon(history.activityId);
         }
-
-        // Show/hide details button
         if (detailsButton != null)
         {
             detailsButton.gameObject.SetActive(showDetails);
         }
     }
-
-    /// <summary>
-    /// Format the DateTime for display
-    /// </summary>
     private string FormatDateTime(DateTime dateTime)
     {
         TimeSpan timeDiff = DateTime.Now - dateTime;
-
         if (timeDiff.TotalMinutes < 1)
             return "Just now";
         else if (timeDiff.TotalMinutes < 60)
@@ -91,13 +66,8 @@ public class CareHistoryItemUI : MonoBehaviour
         else
             return dateTime.ToString("MMM dd, yyyy");
     }
-
-    /// <summary>
-    /// Get activity type text based on activity ID
-    /// </summary>
     private string GetActivityTypeText(int activityId)
     {
-        // You can customize this based on your activity types
         switch (activityId)
         {
             case 1: return "Feeding";
@@ -106,10 +76,6 @@ public class CareHistoryItemUI : MonoBehaviour
             default: return $"Activity {activityId}";
         }
     }
-
-    /// <summary>
-    /// Get activity icon based on activity ID
-    /// </summary>
     private Sprite GetActivityIcon(int activityId)
     {
         switch (activityId)
@@ -120,10 +86,6 @@ public class CareHistoryItemUI : MonoBehaviour
             default: return defaultIcon;
         }
     }
-
-    /// <summary>
-    /// Set pet information
-    /// </summary>
     private void SetPetInfo(int playerPetId)
     {
         try
@@ -144,10 +106,6 @@ public class CareHistoryItemUI : MonoBehaviour
             petNameText.text = $"Pet {playerPetId}";
         }
     }
-
-    /// <summary>
-    /// Set player information
-    /// </summary>
     private void SetPlayerInfo(int playerId)
     {
         try
@@ -168,30 +126,17 @@ public class CareHistoryItemUI : MonoBehaviour
             playerNameText.text = $"Player {playerId}";
         }
     }
-
-    /// <summary>
-    /// Show detailed information about this care history item
-    /// </summary>
     private void ShowDetails()
     {
         if (historyData == null) return;
-
         string details = $"Care History Details:\n" +
                         $"Date: {historyData.performedAt:MMM dd, yyyy HH:mm:ss}\n" +
                         $"Activity: {GetActivityTypeText(historyData.activityId)}\n" +
                         $"Pet ID: {historyData.playerPetId}\n" +
                         $"Player ID: {historyData.playerId}\n" +
                         $"History ID: {historyData.careHistoryId}";
-
         Debug.Log(details);
-        
-        // You can implement a popup or tooltip system here
-        // For now, just log the details
     }
-
-    /// <summary>
-    /// Get the history data for this item
-    /// </summary>
     public CareHistory GetHistoryData()
     {
         return historyData;

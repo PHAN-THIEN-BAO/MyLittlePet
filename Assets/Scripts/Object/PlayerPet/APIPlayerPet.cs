@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
 using Newtonsoft.Json;
@@ -7,7 +7,6 @@ using System.IO;
 using System.Net;
 using System;
 using static System.Net.WebRequestMethods;
-
 public class APIPlayerPet : MonoBehaviour
 {
     public static List<PlayerPet> GetPetsByPlayerId(int playerId)
@@ -19,7 +18,6 @@ public class APIPlayerPet : MonoBehaviour
         reader.Close();
         return JsonConvert.DeserializeObject<List<PlayerPet>>(jsonResponse);
     }
-
     public static PlayerPet GetPlayerPetById(int playerPetId)
     {
         Debug.Log("Goi API voi playerPetId: " + playerPetId);
@@ -30,20 +28,14 @@ public class APIPlayerPet : MonoBehaviour
         reader.Close();
         return JsonConvert.DeserializeObject<PlayerPet>(jsonResponse);
     }
-
-    // Used IEnumerator to allow for asynchronous web requests in Unity
     public static IEnumerator UpdatePlayerPetCoroutine(PlayerPet playerPet, System.Action<bool> callback)
     {
-        // The API expects a PUT request to /PlayerPet/{id} with query parameters
         string safeCustomName = playerPet.petCustomName ?? "";
         string safeStatus = playerPet.status ?? "50%2550%2550";
         string url = $"https://localhost:7035/PlayerPet/{playerPet.playerPetID}?petCustomName={Uri.EscapeDataString(safeCustomName)}&level={playerPet.level}&status={Uri.EscapeDataString(safeStatus)}";
-        
         UnityWebRequest request = UnityWebRequest.Put(url, "");
         request.downloadHandler = new DownloadHandlerBuffer();
-
         yield return request.SendWebRequest();
-
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("Update response: " + request.downloadHandler.text);
@@ -55,34 +47,27 @@ public class APIPlayerPet : MonoBehaviour
             callback?.Invoke(false);
         }
     }
-
     public class AddPlayerPetResponse
     {
         public string message { get; set; }
         public PlayerPet playerPet { get; set; }
     }
-
     public static IEnumerator AddPlayerPetCoroutine(PlayerPet playerPet, System.Action<PlayerPet> callback)
     {
         string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=50%2550%2550";
-
         WWWForm form = new WWWForm();
         UnityWebRequest request = UnityWebRequest.Post(url, form);
         request.downloadHandler = new DownloadHandlerBuffer();
-
         yield return request.SendWebRequest();
-
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("Add response: " + request.downloadHandler.text);
-            
             try
             {
-                // Deserialize response object thay vì array
                 var response = JsonConvert.DeserializeObject<AddPlayerPetResponse>(request.downloadHandler.text);
                 if (response != null && response.playerPet != null)
                 {
-                    callback?.Invoke(response.playerPet); // Trả về PlayerPet có PlayerPetID
+                    callback?.Invoke(response.playerPet);
                 }
                 else
                 {
@@ -102,16 +87,13 @@ public class APIPlayerPet : MonoBehaviour
             callback?.Invoke(null);
         }
     }
-
     public static PlayerPet GetPlayerPetByPlayerIdAndPetId(int playerId, int petId)
     {
         try
         {
-        
             string url = "https://localhost:7035/PlayerPet/ByPlayerAndPet?playerId="+ playerId + "&petId=" + petId;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
-
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
@@ -151,53 +133,6 @@ public class APIPlayerPet : MonoBehaviour
             return null;
         }
     }
-
-    
-
-
-
-    //public static bool AddPlayerPet(PlayerPet playerPet)
-    //{
-    //    string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=50%2550%2550";
-    //    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-    //    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-    //    StreamReader reader = new StreamReader(response.GetResponseStream());
-    //    string jsonResponse = reader.ReadToEnd();
-    //    reader.Close();
-    //    Debug.Log("AddPlayerPet response: " + jsonResponse);
-
-    //    if (response.StatusCode == HttpStatusCode.OK)
-    //    {
-    //        // Deserialize to List<PlayerPet>
-    //        var playerPets = JsonConvert.DeserializeObject<List<PlayerPet>>(jsonResponse);
-    //        if (playerPets != null && playerPets.Count > 0)
-    //        {
-    //            // take the last player pet from the list
-    //            var newPlayerPet = playerPets[playerPets.Count - 1];
-    //            playerPet.playerPetID = newPlayerPet.playerPetID;
-    //            return true;
-    //        }
-    //        else
-    //        {
-    //            Debug.LogError("No player pet returned from API.");
-    //            return false;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        Debug.LogError("Error adding player pet: " + response.StatusDescription);
-    //        return false;
-    //    }
-    //}
-
-
-    //public class AddPlayerPetResponse
-    //{
-    //    public string message { get; set; }
-    //    public PlayerPet playerPet { get; set; }
-    //}
-
-
     public static bool AddPlayerPet(PlayerPet playerPet)
     {
         try
@@ -205,17 +140,12 @@ public class APIPlayerPet : MonoBehaviour
             string url = $"https://localhost:7035/PlayerPet?playerId={playerPet.playerID}&petId={playerPet.petID}&petCustomName={Uri.EscapeDataString(playerPet.petCustomName)}&status=50%2550%2550";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
-
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
             bool success = (int)response.StatusCode >= 200 && (int)response.StatusCode < 300;
-
             StreamReader reader = new StreamReader(response.GetResponseStream());
             string jsonResponse = reader.ReadToEnd();
             reader.Close();
-
             Debug.Log("AddPlayerPet response: " + jsonResponse);
-
             return success;
         }
         catch (WebException ex)
@@ -239,12 +169,6 @@ public class APIPlayerPet : MonoBehaviour
             return false;
         }
     }
-
-    /// <summary>
-    /// Gets all player pets for a specific user by their ID
-    /// </summary>
-    /// <param name="userId">The ID of the user whose pets to retrieve</param>
-    /// <returns>A list of PlayerPet objects or null if an error occurs</returns>
     public static List<PlayerPet> GetPlayerPetByPlayerId(int userId)
     {
         string url = $"https://localhost:7035/PlayerPet/Player/{userId}";
@@ -252,7 +176,6 @@ public class APIPlayerPet : MonoBehaviour
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
-
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
@@ -261,15 +184,11 @@ public class APIPlayerPet : MonoBehaviour
                     {
                         string jsonResponse = reader.ReadToEnd();
                         Debug.Log($"Retrieved {userId}'s pets: " + jsonResponse);
-
-                        // Deserialize the JSON array into a list of PlayerPet objects
-                        // Including the nested petInfo object
                         var settings = new JsonSerializerSettings
                         {
                             NullValueHandling = NullValueHandling.Ignore,
                             Error = (sender, args) => args.ErrorContext.Handled = true
                         };
-
                         return JsonConvert.DeserializeObject<List<PlayerPet>>(jsonResponse, settings);
                     }
                 }

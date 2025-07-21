@@ -1,7 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
 public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Tooltip Settings")]
@@ -9,16 +8,12 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public string tooltipText = "";
     public Color backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.9f);
     public Color textColor = Color.white;
-    
-    // For dynamic tooltip content
     public System.Func<string> GetDynamicTooltip;
-    
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (TooltipSystem.Instance != null)
         {
             string displayText = GetDynamicTooltip?.Invoke() ?? tooltipText;
-            
             if (!string.IsNullOrEmpty(displayText))
             {
                 TooltipSystem.Instance.SetTooltipColor(backgroundColor, textColor);
@@ -26,7 +21,6 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             }
         }
     }
-    
     public void OnPointerExit(PointerEventData eventData)
     {
         if (TooltipSystem.Instance != null)
@@ -34,12 +28,10 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             TooltipSystem.Instance.HideTooltip();
         }
     }
-    
     public void SetTooltipText(string text)
     {
         tooltipText = text;
     }
-    
     public void SetTooltipColors(Color bgColor, Color txtColor)
     {
         backgroundColor = bgColor;

@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using UnityEngine.EventSystems;
-
 public class ToyItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI Components")]
@@ -14,7 +13,6 @@ public class ToyItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public TMP_Text quantityText;
     public TMP_Text descriptionText;
     public Button useButton;
-
     [Header("Visual Effects")]
     public Animation playAnimation;
     public AudioSource playSound;
@@ -24,23 +22,19 @@ public class ToyItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public float hoverScaleSpeed = 0.1f;
     [Tooltip("Optional particle effect when playing")]
     public ParticleSystem playingEffect;
-
     [Header("Default Images")]
     [Tooltip("Placeholder image shown while loading or if image fails to load")]
     public Sprite placeholderImage;
     [Tooltip("Image shown when there's an error loading the toy image")]
     public Sprite errorImage;
-
     private int shopProductId;
     private Action<int> onClickAction;
     private Vector3 originalScale;
     private bool isHovering = false;
-
     private void Start()
     {
         originalScale = transform.localScale;
     }
-
     private void Update()
     {
         if (isHovering)
@@ -54,30 +48,23 @@ public class ToyItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                 originalScale, Time.deltaTime * hoverScaleSpeed * 10);
         }
     }
-
     public void Setup(FeedingManager.FoodItem toyItem, Action<int> onClick)
     {
         shopProductId = toyItem.ShopProductId;
         onClickAction = onClick;
-
         if (nameText != null)
             nameText.text = toyItem.ProductInfo.Name;
-
         if (quantityText != null)
             quantityText.text = $"x{toyItem.Quantity}";
-
         if (descriptionText != null && !string.IsNullOrEmpty(toyItem.ProductInfo.Description))
             descriptionText.text = toyItem.ProductInfo.Description;
-
         if (toyImage != null)
         {
             if (placeholderImage != null)
                 toyImage.sprite = placeholderImage;
-
             if (!string.IsNullOrEmpty(toyItem.ProductInfo.ImageUrl))
                 StartCoroutine(LoadToyImage(toyItem.ProductInfo.ImageUrl));
         }
-
         if (useButton != null)
         {
             useButton.onClick.RemoveAllListeners();
@@ -85,25 +72,20 @@ public class ToyItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             useButton.interactable = toyItem.Quantity > 0;
         }
     }
-
     private void OnUseButtonClicked()
     {
         if (playSound != null)
             playSound.Play();
-
         if (playingEffect != null)
             playingEffect.Play();
-
         onClickAction?.Invoke(shopProductId);
     }
-
     private IEnumerator LoadToyImage(string imageUrl)
     {
         using (UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequestTexture.GetTexture(imageUrl))
         {
             request.timeout = 10;
             yield return request.SendWebRequest();
-
             if (request.result == UnityEngine.Networking.UnityWebRequest.Result.ConnectionError ||
                 request.result == UnityEngine.Networking.UnityWebRequest.Result.ProtocolError)
             {
@@ -123,7 +105,6 @@ public class ToyItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
                         100f,
                         0,
                         SpriteMeshType.FullRect);
-
                     toyImage.sprite = sprite;
                     toyImage.preserveAspect = true;
                 }
@@ -136,14 +117,12 @@ public class ToyItemUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             }
         }
     }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovering = true;
         if (playAnimation != null && !playAnimation.isPlaying)
             playAnimation.Play();
     }
-
     public void OnPointerExit(PointerEventData eventData)
     {
         isHovering = false;

@@ -2,8 +2,7 @@ using System.Net;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json; // Ensure you have the Newtonsoft.Json package
-
+using Newtonsoft.Json;
 public class APIGameRecord : MonoBehaviour
 {
     public static List<GameRecord> GetGameRecordByPlayerID(int playerID)
@@ -26,20 +25,16 @@ public class APIGameRecord : MonoBehaviour
             return null;
         }
     }
-
-
     public static void SendGameRecord(string method, int playerId, int minigameId, int score)
     {
         string url = $"https://localhost:7035/GameRecord?playerId={playerId}&minigameId={minigameId}&score={score}";
         try
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = method.ToUpper(); // "PUT" or "POST"
-            request.ContentLength = 0; // no body for GET requests
-
+            request.Method = method.ToUpper();
+            request.ContentLength = 0;
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
-                //can check response status code if needed
             }
         }
         catch (WebException ex)
@@ -47,6 +42,4 @@ public class APIGameRecord : MonoBehaviour
             Debug.LogError($"HTTP Error: {ex.Message}");
         }
     }
-
-
 }
