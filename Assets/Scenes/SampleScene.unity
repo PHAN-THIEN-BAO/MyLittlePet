@@ -46686,11 +46686,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7924402538795841410, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -621.2299
+      value: -735.2773
       objectReference: {fileID: 0}
     - target: {fileID: 7924402538795841410, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -493.7
+      value: -546.6671
       objectReference: {fileID: 0}
     - target: {fileID: 7924402538795841410, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
       propertyPath: m_LocalScale.x
@@ -46734,11 +46734,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7924402538795841410, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 24
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 7924402538795841410, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -218
+      value: -239
       objectReference: {fileID: 0}
     - target: {fileID: 7924402538795841410, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -66226,6 +66226,16 @@ MonoBehaviour:
   expRewardPerFeed: 50
   noFoodMessage: {fileID: 697802053}
   enableDependencyCheck: 1
+  enableFeedingAudio: 1
+  feedingSoundName: feeding
+  randomPitch: 1
+  feedingAudioClip: {fileID: 0}
+  enableFeedingEffect: 1
+  feedingEffectPrefab: {fileID: 8590053669836786523, guid: 007a78b744ce9a7409016fe34956bfcc, type: 3}
+  effectHeightOffset: 0.5
+  effectDuration: 0.3
+  randomEffectPosition: 1
+  effectPositionRange: {x: 0.5, y: 0.3}
 --- !u!1 &1173983760
 GameObject:
   m_ObjectHideFlags: 0
@@ -111344,6 +111354,18 @@ MonoBehaviour:
   - name: Footstep
     audioClips:
     - {fileID: 0}
+  - name: feeding
+    audioClips:
+    - {fileID: 8300000, guid: 297ab1ba661ad564cb8bcb68cf54fdf9, type: 3}
+  - name: pet_1_click
+    audioClips:
+    - {fileID: 8300000, guid: 7b49a007035582a4fa6984103a18a6c4, type: 3}
+  - name: pet_2_click
+    audioClips:
+    - {fileID: 8300000, guid: 7b49a007035582a4fa6984103a18a6c4, type: 3}
+  - name: pet_3_click
+    audioClips:
+    - {fileID: 8300000, guid: 7b49a007035582a4fa6984103a18a6c4, type: 3}
 --- !u!1 &1995246554
 GameObject:
   m_ObjectHideFlags: 0
@@ -117768,6 +117790,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 1381390383}
+  enableClickAudio: 1
+  randomPitch: 1
+  clickSoundVolume: 0.8
+  petClickAudioClips: []
 --- !u!114 &2071104521
 MonoBehaviour:
   m_ObjectHideFlags: 0

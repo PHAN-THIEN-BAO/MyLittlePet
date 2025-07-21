@@ -35,7 +35,13 @@ public class PlayingManager : MonoBehaviour
             closeButton.onClick.AddListener(CloseMiniGamePanel);
             
         if (startMiniGameButton != null)
-            startMiniGameButton.onClick.AddListener(StartMiniGame);
+        {
+            // ========== CLEAR EXISTING LISTENERS ==========
+            startMiniGameButton.onClick.RemoveAllListeners();
+            
+            // ========== ADD ENHANCED LISTENER ==========
+            startMiniGameButton.onClick.AddListener(StartMiniGameWithManualUpdate);
+        }
 
         // Hide panel by default
         if (miniGamePanel != null)
@@ -101,6 +107,25 @@ public class PlayingManager : MonoBehaviour
         LoadMiniGameScene();
     }
 
+    // ========== NEW METHOD: MANUAL UPDATE + DISABLE AUTO UPDATE ==========
+    private void StartMiniGameWithManualUpdate()
+    {
+        Debug.Log("🎮 Starting mini-game with manual status update...");
+        
+        // ========== UPDATE PET STATUS IMMEDIATELY ==========
+        if (petInfoManager != null)
+        {
+            petInfoManager.OnPlayButtonClickedWithHistory();
+            Debug.Log("✅ Pet status updated immediately");
+        }
+        
+        // ========== SET FLAG TO DISABLE AUTO UPDATE ==========
+        PlayerPrefs.SetInt("ManualStatusUpdate", 1);
+        
+        // ========== START MINI GAME AS NORMAL ==========
+        StartMiniGame();
+    }
+
     private void LoadMiniGameScene()
     {
         ASyncLoading asyncLoader = FindObjectOfType<ASyncLoading>();
@@ -156,6 +181,30 @@ public class PlayingManager : MonoBehaviour
 
     void OnEnable()
     {
+        Debug.Log("🎮 PlayingManager OnEnable called");
+
+        // ========== SAFE CHECK FOR PETINFOMANAGER ==========
+        if (petInfoManager == null)
+        {
+            petInfoManager = FindObjectOfType<PetInfoUIManager>();
+            if (petInfoManager == null)
+            {
+                Debug.LogWarning("⚠️ PetInfoManager not found in OnEnable");
+                return; // Exit early to avoid null reference
+            }
+        }
+
+        // ========== CHECK IF MANUAL UPDATE WAS USED ==========
+        bool manualUpdate = PlayerPrefs.GetInt("ManualStatusUpdate", 0) == 1;
+        
+        // ========== ONLY REFRESH UI IF NEEDED ==========
+        if (manualUpdate && petInfoManager != null)
+        {
+            Debug.Log("🔄 Manual update detected, refreshing UI...");
+            // Add delay before refreshing to ensure scene is fully loaded
+            StartCoroutine(DelayedRefreshUI());
+        }
+        
         // Kiểm tra kết quả mini-game khi trở về scene chính
         if (PlayerPrefs.GetInt("MiniGameCompleted", 0) == 1)
         {
@@ -165,11 +214,29 @@ public class PlayingManager : MonoBehaviour
             
             int totalReward = won ? baseReward + winBonus : baseReward;
             
-            // Tăng happiness cho pet
-            OnMiniGameCompleted(won, totalReward);
-            
-            // ADD EXPERIENCE FOR PLAYING MINI-GAME
-            AddExperienceForPlaying(won);
+            // ========== ONLY UPDATE STATUS IF NOT MANUALLY UPDATED ==========
+            if (!manualUpdate)
+            {
+                // Tăng happiness cho pet
+                OnMiniGameCompleted(won, totalReward);
+            }
+            else
+            {
+                Debug.Log("🎮 Skipping auto status update (manual update was used)");
+                
+                // Still add experience and record history
+                AddExperienceForPlaying(won);
+                RecordPlayingHistory();
+                
+                // Show completion message without status update
+                if (petInfoManager != null)
+                {
+                    string message = won ? 
+                        $"🎉 You won the mini-game!" : 
+                        $"😊 Good effort playing the mini-game!";
+                    petInfoManager.ShowStatusMessage(message, won ? Color.green : Color.yellow);
+                }
+            }
             
             // Clear PlayerPrefs
             PlayerPrefs.DeleteKey("MiniGameCompleted");
@@ -177,6 +244,29 @@ public class PlayingManager : MonoBehaviour
             PlayerPrefs.DeleteKey("MiniGameHappinessReward");
             PlayerPrefs.DeleteKey("MiniGameWinBonus");
             PlayerPrefs.DeleteKey("CurrentPlayerId");
+            PlayerPrefs.DeleteKey("ManualStatusUpdate");
+        }
+        else if (manualUpdate)
+        {
+            Debug.Log("🎮 Manual update detected, clearing flag");
+            PlayerPrefs.DeleteKey("ManualStatusUpdate");
+        }
+    }
+
+    // ========== NEW COROUTINE: DELAYED UI REFRESH ==========
+    private IEnumerator DelayedRefreshUI()
+    {
+        // Wait a few frames for scene to fully load
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        
+        try
+        {
+            RefreshPetStatusUI();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"❌ Error in delayed UI refresh: {ex.Message}");
         }
     }
 
@@ -234,6 +324,83 @@ public class PlayingManager : MonoBehaviour
                     CareHistoryRecorder.Instance.RecordPlayingHistory(playerPetId, currentUser.id);
                 }
             }
+        }
+    }
+
+    // ========== FIXED METHOD: REFRESH PET STATUS UI WITH BETTER ERROR HANDLING ==========
+    private void RefreshPetStatusUI()
+    {
+        try
+        {
+            // ========== CHECK PETINFOMANAGER FIRST ==========
+            if (petInfoManager == null)
+            {
+                Debug.LogWarning("⚠️ PetInfoManager is null, cannot refresh UI");
+                return;
+            }
+
+            // Get current user and pet info
+            User currentUser = PlayerInfomation.LoadPlayerInfo();
+            if (currentUser == null)
+            {
+                Debug.LogWarning("⚠️ Current user is null, cannot refresh UI");
+                return;
+            }
+
+            var pets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
+            if (pets == null || pets.Count == 0)
+            {
+                Debug.LogWarning("⚠️ No pets found for current user, cannot refresh UI");
+                return;
+            }
+
+            // Get the first pet (or current pet if available)
+            PlayerPet currentPet = pets[0];
+            if (currentPet == null)
+            {
+                Debug.LogWarning("⚠️ Current pet is null, cannot refresh UI");
+                return;
+            }
+            
+            // ========== FORCE REFRESH PET INFO PANEL IF OPEN ==========
+            try
+            {
+                if (petInfoManager.IsPanelActive())
+                {
+                    // Refresh the currently displayed pet
+                    petInfoManager.ToggleInfoPanel(currentPet.playerPetID);
+                    Debug.Log($"🔄 Refreshed pet info panel for pet {currentPet.playerPetID}");
+                }
+            }
+            catch (System.Exception panelEx)
+            {
+                Debug.LogError($"❌ Error refreshing pet info panel: {panelEx.Message}");
+            }
+            
+            // ========== UPDATE STATUS BAR MANAGER DIRECTLY ==========
+            try
+            {
+                if (petInfoManager.statusBarManager != null)
+                {
+                    petInfoManager.statusBarManager.UpdatePetStatus(currentPet.status);
+                    Debug.Log($"🔄 Refreshed status bars: {currentPet.status}");
+                }
+                else
+                {
+                    Debug.LogWarning("⚠️ StatusBarManager is null, cannot update status bars");
+                }
+            }
+            catch (System.Exception statusEx)
+            {
+                Debug.LogError($"❌ Error updating status bars: {statusEx.Message}");
+            }
+            
+            Debug.Log($"✅ Pet status UI refreshed successfully");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"❌ Failed to refresh pet status UI: {ex.Message}");
+            Debug.LogError($"❌ Stack trace: {ex.StackTrace}");
         }
     }
 
