@@ -12,6 +12,9 @@ public class PlayerLevel : MonoBehaviour
     [SerializeField] public TMP_Text coinReward;
     [SerializeField] public TMP_Text diamonReward;
     [SerializeField] public TMP_Text gemReward;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip rewardSound;
+
 
     private User currentUser;
 
@@ -178,6 +181,11 @@ public class PlayerLevel : MonoBehaviour
         LeanTween.scale(nextLevelPanel, new Vector3(1, 1, 1), 1f)
             .setDelay(0)
             .setEase(LeanTweenType.easeOutElastic);
+
+        if (audioSource != null && rewardSound != null)
+            audioSource.PlayOneShot(rewardSound);
+
+
         // Lưu thông tin người chơi sau khi cập nhật phần thưởng
         SavePlayerInfo();
     }
