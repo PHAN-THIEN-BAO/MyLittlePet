@@ -39,6 +39,30 @@ public class FeedingManager : MonoBehaviour
     [Tooltip("Check pet status dependencies before feeding")]
     public bool enableDependencyCheck = true;
 
+    [Header("Audio Settings")]
+    [Tooltip("Enable feeding sound effects")]
+    public bool enableFeedingAudio = true;
+    [Tooltip("Sound name for feeding action (must match SoundEffectLibrary)")]
+    public string feedingSoundName = "feeding";
+    [Tooltip("Enable random pitch variation for feeding sounds")]
+    public bool randomPitch = false;
+    [Tooltip("Direct audio clip for feeding (fallback if SoundEffectManager not available)")]
+    public AudioClip feedingAudioClip;
+
+    [Header("Feeding Effect Settings")]
+    [Tooltip("Enable feeding visual effects")]
+    public bool enableFeedingEffect = true;
+    [Tooltip("Prefab to instantiate above pet when feeding")]
+    public GameObject feedingEffectPrefab;
+    [Tooltip("Height offset above pet for the effect")]
+    public float effectHeightOffset = 1.5f;
+    [Tooltip("Duration before destroying the effect")]
+    public float effectDuration = 2.0f;
+    [Tooltip("Enable random position variation for effect")]
+    public bool randomEffectPosition = true;
+    [Tooltip("Random position range for effect")]
+    public Vector2 effectPositionRange = new Vector2(0.5f, 0.3f);
+
     // Reference to the PetInfoUIManager to handle feeding effects
     private PetInfoUIManager petInfoManager;
 
@@ -353,7 +377,7 @@ public class FeedingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Enhanced food item click handler với care history recording
+    /// Enhanced food item click handler với care history recording và audio feedback
     /// </summary>
     private void OnFoodItemClicked(int shopProductId)
     {
@@ -376,13 +400,19 @@ public class FeedingManager : MonoBehaviour
         {
             Debug.Log($"Feeding pet with {selectedItem.ProductInfo.Name}");
 
+            // ========== PLAY FEEDING AUDIO ==========
+            PlayFeedingAudio();
+
+            // ========== INSTANTIATE FEEDING EFFECT ==========
+            InstantiateFeedingEffect();
+
             // Feed the pet
             if (petInfoManager != null)
             {
                 petInfoManager.OnFeedButtonClicked();
                 
                 // ========== RECORD CARE HISTORY ==========
-                
+                RecordFeedingHistory();
             }
 
             // ADD EXPERIENCE FOR FEEDING
@@ -391,6 +421,174 @@ public class FeedingManager : MonoBehaviour
             // Call API to update inventory (reduce quantity by 1)
             StartCoroutine(UpdateInventory(selectedItem));
         }
+    }
+
+    /// <summary>
+    /// Instantiates a feeding effect prefab above the pet
+    /// </summary>
+    private void InstantiateFeedingEffect()
+    {
+        if (!enableFeedingEffect || feedingEffectPrefab == null)
+        {
+            Debug.LogWarning("Feeding effect is disabled or prefab is not assigned");
+            return;
+        }
+
+        // Find the current pet GameObject
+        GameObject currentPet = FindCurrentPetGameObject();
+        if (currentPet == null)
+        {
+            Debug.LogWarning("Could not find current pet GameObject for feeding effect");
+            return;
+        }
+
+        // Calculate effect position above the pet
+        Vector3 effectPosition = currentPet.transform.position;
+        effectPosition.y += effectHeightOffset;
+
+        // Add random position variation if enabled
+        if (randomEffectPosition)
+        {
+            effectPosition.x += UnityEngine.Random.Range(-effectPositionRange.x, effectPositionRange.x);
+            effectPosition.y += UnityEngine.Random.Range(0, effectPositionRange.y);
+        }
+
+        // Instantiate the effect prefab
+        GameObject effectInstance = Instantiate(feedingEffectPrefab, effectPosition, Quaternion.identity);
+        
+        // Ensure the effect is rendered in 2D (set Z position to appropriate layer)
+        Vector3 pos = effectInstance.transform.position;
+        pos.z = currentPet.transform.position.z - 0.1f; // Slightly in front of the pet
+        effectInstance.transform.position = pos;
+
+        Debug.Log($"🍎 Instantiated feeding effect at position: {effectPosition}");
+
+        // Auto-destroy the effect after the specified duration
+        StartCoroutine(DestroyEffectAfterDelay(effectInstance, effectDuration));
+    }
+
+    /// <summary>
+    /// Finds the current pet GameObject in the scene
+    /// </summary>
+    private GameObject FindCurrentPetGameObject()
+    {
+        // Method 1: Try to find through PetInfoUIManager's current pet data
+        if (petInfoManager != null)
+        {
+            var (playerPetId, playerId) = petInfoManager.GetCurrentPetAndPlayerId();
+            if (playerPetId > 0)
+            {
+                // Look for pet with matching PetDataHolder
+                PetDataHolder[] petDataHolders = FindObjectsOfType<PetDataHolder>();
+                foreach (var dataHolder in petDataHolders)
+                {
+                    if (dataHolder.petData != null && dataHolder.petData.playerPetID == playerPetId)
+                    {
+                        return dataHolder.gameObject;
+                    }
+                }
+            }
+        }
+
+        // Method 2: Fallback - find the first active pet in the scene
+        PetDataHolder firstPet = FindObjectOfType<PetDataHolder>();
+        if (firstPet != null)
+        {
+            return firstPet.gameObject;
+        }
+
+        // Method 3: Look for objects with "Pet" tag
+        GameObject taggedPet = GameObject.FindGameObjectWithTag("Pet");
+        if (taggedPet != null)
+        {
+            return taggedPet;
+        }
+
+        // Method 4: Look for objects with specific naming pattern
+        GameObject[] allObjects = FindObjectsOfType<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name.ToLower().Contains("pet") && obj.activeInHierarchy)
+            {
+                return obj;
+            }
+        }
+
+        Debug.LogWarning("Could not find any pet GameObject in the scene");
+        return null;
+    }
+
+    /// <summary>
+    /// Destroys the effect instance after a delay
+    /// </summary>
+    private IEnumerator DestroyEffectAfterDelay(GameObject effectInstance, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
+        if (effectInstance != null)
+        {
+            Debug.Log("🗑️ Destroying feeding effect");
+            Destroy(effectInstance);
+        }
+    }
+
+    /// <summary>
+    /// Plays feeding audio using SoundEffectManager or fallback AudioSource
+    /// </summary>
+    private void PlayFeedingAudio()
+    {
+        if (!enableFeedingAudio) return;
+
+        try
+        {
+            // Try to use SoundEffectManager first (preferred method)
+            SoundEffectManager.Play(feedingSoundName, randomPitch);
+            Debug.Log($"🔊 Played feeding sound: {feedingSoundName}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogWarning($"SoundEffectManager not available or sound '{feedingSoundName}' not found: {ex.Message}");
+            
+            // Fallback: Use direct AudioClip with temporary AudioSource
+            if (feedingAudioClip != null)
+            {
+                PlayFeedingAudioFallback();
+            }
+            else
+            {
+                Debug.LogWarning("No fallback audio clip assigned for feeding sound");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Fallback method to play feeding audio when SoundEffectManager is not available
+    /// </summary>
+    private void PlayFeedingAudioFallback()
+    {
+        if (feedingAudioClip == null) return;
+
+        // Create temporary GameObject for audio playback
+        GameObject tempAudioGO = new GameObject("TempFeedingAudio");
+        tempAudioGO.transform.position = transform.position;
+        
+        AudioSource audioSource = tempAudioGO.AddComponent<AudioSource>();
+        audioSource.clip = feedingAudioClip;
+        audioSource.volume = 0.8f;
+        audioSource.spatialBlend = 0f; // 2D sound
+        
+        // Add random pitch if enabled
+        if (randomPitch)
+        {
+            audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.3f);
+        }
+        
+        audioSource.Play();
+        
+        // Destroy temporary GameObject after audio finishes
+        Destroy(tempAudioGO, feedingAudioClip.length + 0.1f);
+        
+        Debug.Log("🔊 Played feeding sound using fallback method");
     }
     
     /// <summary>

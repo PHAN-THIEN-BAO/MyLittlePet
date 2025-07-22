@@ -514,7 +514,8 @@ public class PetInfoUIManager : MonoBehaviour
 
         if (useActionSystem && actionManager != null)
         {
-            actionManager.PetSleep(sleepIncreaseAmount);
+            // ========== FIX: Pass the current pet's playerPetID ==========
+            actionManager.PetSleep(currentPetDetails.playerPetID, sleepIncreaseAmount);
         }
         else
         {

@@ -407,16 +407,23 @@ public class DialogueController : MonoBehaviour
         // Try to get current pet ID from PetInfoUIManager
         if (petInfoManager != null)
         {
-            // Access private field through reflection or add public getter
-            var currentPetDetails = petInfoManager.GetComponent<PetInfoUIManager>();
-            // For now, return player's first pet or use a different method
-            User user = PlayerInfomation.LoadPlayerInfo();
-            var pets = APIPlayerPet.GetPetsByPlayerId(user.id);
-            if (pets != null && pets.Count > 0)
+            var (currentPetId, _) = petInfoManager.GetCurrentPetAndPlayerId();
+            if (currentPetId != -1)
             {
-                return pets[0].playerPetID;
+                return currentPetId;
             }
         }
+        
+        // Fallback: Try to find the first pet with a valid ID in the scene
+        PetDataHolder[] petHolders = FindObjectsOfType<PetDataHolder>();
+        foreach (var holder in petHolders)
+        {
+            if (holder.petData != null && holder.petData.playerPetID > 0)
+            {
+                return holder.petData.playerPetID;
+            }
+        }
+        
         return -1;
     }
 
