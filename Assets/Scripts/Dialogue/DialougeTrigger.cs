@@ -587,51 +587,51 @@ public class DialougeTrigger : MonoBehaviour
     // Phương thức công khai để kích hoạt dialogue
     public void TriggerDialogue()
     {
-        // Kiểm tra nếu chỉ trigger một lần
         if ((triggerOnce || persistAcrossScenes) && hasTriggered)
             return;
 
         hasTriggered = true;
 
-        // Lưu trạng thái nếu persistAcrossScenes được bật
         if (persistAcrossScenes)
         {
             PlayerPrefs.SetInt(prefsKey, 1);
             PlayerPrefs.Save();
         }
 
-        // Hiển thị panel nếu nó tồn tại
+        // BẬT UI PANEL TRƯỚC
         if (dialoguePanel != null)
             dialoguePanel.SetActive(true);
 
-        // Kiểm tra DialogueManager tồn tại
+        // GỌI DialogueManager
         if (DialogueManager.Instance != null)
         {
-            // Hiển thị biểu tượng chỉ dẫn cùng với dialogue nếu cấu hình để hiển thị cùng nhau
+            // CHỈ GỌI StartDialog NẾU DialogueManager đang active
+            if (DialogueManager.Instance.gameObject.activeInHierarchy)
+            {
+                DialogueManager.Instance.StartDialog(dialogue);
+            }
+            else
+            {
+                Debug.LogError("DialogueManager đã bị tắt trong Hierarchy!");
+            }
+
             if (showIndicatorWithDialogue && indicatorPrefab != null)
             {
                 ShowWorldIndicator();
             }
             else if (!showIndicatorWithDialogue)
             {
-                // Nếu không hiển thị cùng, thì ẩn biểu tượng đi
                 DestroyIndicator();
             }
 
-            DialogueManager.Instance.StartDialog(dialogue);
-
-            // Gọi event khi dialogue bắt đầu
             onDialogueStart?.Invoke();
         }
         else
         {
-            Debug.LogError("DialogueManager.Instance không tồn tại! Đảm bảo có một GameObject với DialogueManager trong scene.");
-
-            // Ẩn lại panel nếu không có DialogueManager
+            Debug.LogError("DialogueManager.Instance không tồn tại!");
             if (dialoguePanel != null)
                 dialoguePanel.SetActive(false);
 
-            // Nếu không có DialogueManager, vẫn hiển thị biểu tượng nếu được cấu hình
             if (showIndicatorWithDialogue && indicatorPrefab != null)
             {
                 ShowWorldIndicator();
