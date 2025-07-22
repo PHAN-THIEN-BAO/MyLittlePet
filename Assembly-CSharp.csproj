@@ -55,11 +55,10 @@
     <UnityVersion>6000.0.40f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.40f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
-    <Analyzer Include="D:\SWP\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
+    <Analyzer Include="C:\Users\OS\Documents\Project\ReactJS\SWP391game\MyLittlePet\Library\PackageCache\com.unity.muse.common@b1b2a854b73e\ThirdParty\AppUI\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Object\Achievement\AchievementDisplay.cs" />
@@ -68,7 +67,6 @@
     <Compile Include="Assets\Scripts\UI\PlayingManager.cs" />
     <Compile Include="Assets\Scripts\Object\CareHistory\PetCareHistoryExtensions.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\FakePlayerPet.cs" />
-    <Compile Include="Assets\Scripts\MiniGameGolf\TurnManager.cs" />
     <Compile Include="Assets\Scripts\UI\PetInfoUIManager.cs" />
     <Compile Include="Assets\Scripts\Dialogue\DialogueManager.cs" />
     <Compile Include="Assets\LeanTween\Framework\LeanTest.cs" />
@@ -80,8 +78,6 @@
     <Compile Include="Assets\Scripts\FarmAction\Game.cs" />
     <Compile Include="Assets\Scripts\Object\ShopProduct\ShopProduct.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralBasics2d.cs" />
-    <Compile Include="Assets\Kalkatos\DottedArrow\Example\Scripts\King.cs" />
-    <Compile Include="Assets\Scripts\MiniGameGolf\GolfBall.cs" />
     <Compile Include="Assets\Scripts\UI\TooltipTrigger.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\TestingZLegacy.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\DisPlayPlayerPet.cs" />
@@ -90,7 +86,6 @@
     <Compile Include="Assets\Scripts\UI\TooltipSystem.cs" />
     <Compile Include="Assets\LeanTween\Testing\TestingSceneSwitching.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\GeneralSequencer.cs" />
-    <Compile Include="Assets\Scripts\MiniGameGolf\GameManager_Golf.cs" />
     <Compile Include="Assets\Quarium\Script\CameraController.cs" />
     <Compile Include="Assets\Scripts\LogOut\QuitApp.cs" />
     <Compile Include="Assets\Scripts\Object\User\APIUser.cs" />
@@ -120,12 +115,9 @@
     <Compile Include="Assets\Mini_game\Scripts\Testing.cs" />
     <Compile Include="Assets\Scripts\UI\FoodItemUI.cs" />
     <Compile Include="Assets\Scripts\UI\FeedingManager.cs" />
-    <Compile Include="Assets\Kalkatos\DottedArrow\Scripts\Arrow.cs" />
     <Compile Include="Assets\LeanTween\Testing\TestingIssue2.cs" />
-    <Compile Include="Assets\Scripts\MiniGameGolf\PetAIController.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\TimeScale.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\AdopPet.cs" />
-    <Compile Include="Assets\Kalkatos\DottedArrow\Example\Scripts\Card.cs" />
     <Compile Include="Assets\Scripts\Object\User\RenameButtonHandler.cs" />
     <Compile Include="Assets\Scripts\Object\Achievement\CollectAchievement.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSplineEndless.cs" />
@@ -179,14 +171,11 @@
     <Compile Include="Assets\Mini_game\Scripts\Character\Monster.cs" />
     <Compile Include="Assets\Scripts\Object\CareHistory\APICareHistory.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCRandomMovement.cs" />
-    <Compile Include="Assets\Kalkatos\DottedArrow\Example\Scripts\CombatManager.cs" />
-    <Compile Include="Assets\Scripts\SceneLoaderMinigame\LoadScene_Golf.cs" />
     <Compile Include="Assets\Scripts\FarmAction\Farm_action.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Player_Controller\GameRestartManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\InteractablePet.cs" />
     <Compile Include="Assets\Scripts\PetActionSystem\PetActionManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\ChoosePet.cs" />
-    <Compile Include="Assets\Scripts\MiniGameGolf\FollowBall.cs" />
     <Compile Include="Assets\Scripts\NPC\NPCDialog.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSplineTrack.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSpline.cs" />
@@ -214,7 +203,6 @@
     <Compile Include="Assets\LeanTween\Framework\LTDescrOptional.cs" />
     <Compile Include="Assets\LeanTween\Testing\TestingIssue.cs" />
     <Compile Include="Assets\Mini_game\Scripts\Enemy\EnemyRandomMovement.cs" />
-    <Compile Include="Assets\Scripts\MiniGameGolf\PlayerController.cs" />
     <Compile Include="Assets\Scripts\UI\PetStatusBarManager.cs" />
     <Compile Include="Assets\Quarium\Script\CameraFollowMouse.cs" />
     <Compile Include="Assets\Scripts\Cutscene\DialogueBaseClass.cs" />
@@ -245,7 +233,6 @@
     <Compile Include="Assets\Scripts\Object\GameRecord\APIGameRecord.cs" />
     <Compile Include="Assets\Scripts\Sounds\MusicManager.cs" />
     <Compile Include="Assets\Scripts\Object\User\PaginationController.cs" />
-    <Compile Include="Assets\Kalkatos\DottedArrow\Scripts\ActivateOnMousePress.cs" />
     <Compile Include="Assets\Scripts\PetActionSystem\PetSleepManager.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerPet\PlayerPet.cs" />
     <Compile Include="Assets\Scripts\UI\UIAnimation\UITween.cs" />
@@ -255,7 +242,6 @@
     <Compile Include="Assets\LeanTween\Examples\Scripts\TestingZLegacyExt.cs" />
     <Compile Include="Assets\Scripts\NPC\npc1.cs" />
     <Compile Include="Assets\Scripts\Object\Pet\APIPet.cs" />
-    <Compile Include="Assets\Scripts\MiniGameGolf\PetStats.cs" />
     <Compile Include="Assets\LeanTween\Examples\Scripts\PathSpline2d.cs" />
     <Compile Include="Assets\LeanTween\Framework\LTSeq.cs" />
     <Compile Include="Assets\Scripts\UI\UIStoreOptionManager.cs" />
@@ -264,7 +250,6 @@
     <Compile Include="Assets\Scripts\UI\ToyItemUI.cs" />
     <Compile Include="Assets\Xander Develops\Ultimate UI Toolkit\CurvedText\Scripts\CurvedText.cs" />
     <Compile Include="Assets\Scripts\ColliderHandling\RandomMovement.cs" />
-    <Compile Include="Assets\Scripts\MiniGameGolf\HoleTrigger.cs" />
     <Compile Include="Assets\Scripts\NPC\NPC.cs" />
     <Compile Include="Assets\Scripts\Object\CareHistory\CareHistorySetup.cs" />
     <Compile Include="Assets\Scripts\Object\PlayerInventory\APIPlayerInventory.cs" />
