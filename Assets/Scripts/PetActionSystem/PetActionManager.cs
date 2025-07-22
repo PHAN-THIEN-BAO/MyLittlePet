@@ -453,12 +453,32 @@ public class PetActionManager : MonoBehaviour
         AddAction(action);
     }
 
-    public void PetSleep(int petID, int amount = 0, float duration = 5f, string dependsOn = null)
+    public void PetSleep(int playerPetID, int amount = 0, float duration = 5f, string dependsOn = null)
     {
         var action = new PetAction($"sleep_{Time.time}", PetAction.ActionType.Sleep, PetAction.ActionPriority.Normal);
         if (amount > 0) action.SetParameter("amount", amount);
-        action.SetParameter("petID", petID);
+        action.SetParameter("petID", playerPetID); // Use playerPetID here!
         action.SetParameter("duration", duration);
+        if (!string.IsNullOrEmpty(dependsOn)) action.AddDependency(dependsOn);
+        AddAction(action);
+    }
+
+    public void PetSleep(int amount = 0, string dependsOn = null)
+    {
+        // This is the old method - should get current pet ID somehow
+        var action = new PetAction($"sleep_{Time.time}", PetAction.ActionType.Sleep, PetAction.ActionPriority.Normal);
+        if (amount > 0) action.SetParameter("amount", amount);
+        
+        // Try to get current pet ID from PetInfoUIManager
+        if (petInfoManager != null)
+        {
+            var (currentPetId, _) = petInfoManager.GetCurrentPetAndPlayerId();
+            if (currentPetId != -1)
+            {
+                action.SetParameter("petID", currentPetId);
+            }
+        }
+        
         if (!string.IsNullOrEmpty(dependsOn)) action.AddDependency(dependsOn);
         AddAction(action);
     }

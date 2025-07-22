@@ -152,12 +152,10 @@ public class CareHistoryItemUI : MonoBehaviour
     {
         try
         {
-            // You may need to implement APIUser.GetUserById() or similar
-            // For now, check if it's the current player
-            User currentUser = PlayerInfomation.LoadPlayerInfo();
-            if (currentUser != null && currentUser.id == playerId)
+            User user = APIUser.GetUserById(playerId);
+            if (user != null && !string.IsNullOrEmpty(user.userName))
             {
-                playerNameText.text = "You";
+                playerNameText.text = user.userName;
             }
             else
             {

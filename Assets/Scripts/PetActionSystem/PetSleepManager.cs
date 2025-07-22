@@ -54,31 +54,31 @@ public class PetSleepManager : MonoBehaviour
     /// <summary>
     /// Put pet to sleep for specified duration
     /// </summary>
-    public void PutPetToSleep(int petID, float duration = 0f)
+    public void PutPetToSleep(int playerPetID, float duration = 0f)
     {
         // Use default duration if none specified
         if (duration <= 0f)
             duration = defaultSleepDuration;
 
         // Find pet in scene
-        GameObject petObject = FindPetById(petID);
+        GameObject petObject = FindPetById(playerPetID);
         if (petObject == null)
         {
-            Debug.LogWarning($"Pet with ID {petID} not found in scene!");
+            Debug.LogWarning($"Pet with ID {playerPetID} not found in scene!");
             return;
         }
 
         // Check if pet is already sleeping
-        if (sleepingPets.ContainsKey(petID))
+        if (sleepingPets.ContainsKey(playerPetID))
         {
-            Debug.LogWarning($"Pet {petID} is already sleeping!");
+            Debug.LogWarning($"Pet {playerPetID} is already sleeping!");
             return;
         }
 
         // Add experience for putting pet to sleep
         AddExperienceForSleep();
 
-        StartCoroutine(SleepPetCoroutine(petID, petObject, duration));
+        StartCoroutine(SleepPetCoroutine(playerPetID, petObject, duration));
     }
 
     /// <summary>
@@ -123,28 +123,28 @@ public class PetSleepManager : MonoBehaviour
     /// <summary>
     /// Check if pet is currently sleeping
     /// </summary>
-    public bool IsPetSleeping(int petID)
+    public bool IsPetSleeping(int playerPetID)
     {
-        return sleepingPets.ContainsKey(petID);
+        return sleepingPets.ContainsKey(playerPetID);
     }
 
     /// <summary>
     /// Get remaining sleep time for pet
     /// </summary>
-    public float GetRemainingSleepTime(int petID)
+    public float GetRemainingSleepTime(int playerPetID)
     {
-        if (sleepingPets.ContainsKey(petID))
+        if (sleepingPets.ContainsKey(playerPetID))
         {
-            SleepingPetData sleepData = sleepingPets[petID];
+            SleepingPetData sleepData = sleepingPets[playerPetID];
             float elapsedTime = Time.time - sleepData.sleepStartTime;
             return Mathf.Max(0f, sleepData.sleepDuration - elapsedTime);
         }
         return 0f;
     }
 
-    private IEnumerator SleepPetCoroutine(int petID, GameObject petObject, float duration)
+    private IEnumerator SleepPetCoroutine(int playerPetID, GameObject petObject, float duration)
     {
-        Debug.Log($"🛌 Pet {petID} is going to sleep for {duration} seconds");
+        Debug.Log($"🛌 Pet {playerPetID} is going to sleep for {duration} seconds");
 
         // Disable movement and other components
         List<MonoBehaviour> disabledComponents = DisablePetComponents(petObject);
@@ -169,7 +169,7 @@ public class PetSleepManager : MonoBehaviour
             expAwarded = true // Experience already awarded when sleep started
         };
         
-        sleepingPets[petID] = sleepData;
+        sleepingPets[playerPetID] = sleepData;
 
         // Reset movement animation parameters
         Animator animator = petObject.GetComponent<Animator>();
@@ -180,23 +180,23 @@ public class PetSleepManager : MonoBehaviour
         }
 
         // Fire sleep started event
-        OnPetStartSleep?.Invoke(petID);
+        OnPetStartSleep?.Invoke(playerPetID);
 
         // Wait for sleep duration
         yield return new WaitForSeconds(duration);
 
         // Wake up pet
-        WakeUpPetInternal(petID);
+        WakeUpPetInternal(playerPetID);
     }
 
-    private void WakeUpPetInternal(int petID)
+    private void WakeUpPetInternal(int playerPetID)
     {
-        if (!sleepingPets.ContainsKey(petID))
+        if (!sleepingPets.ContainsKey(playerPetID))
             return;
 
-        SleepingPetData sleepData = sleepingPets[petID];
+        SleepingPetData sleepData = sleepingPets[playerPetID];
         
-        Debug.Log($"😴 Pet {petID} is waking up");
+        Debug.Log($"😴 Pet {playerPetID} is waking up");
 
         // Re-enable components
         EnablePetComponents(sleepData.disabledComponents);
@@ -206,10 +206,10 @@ public class PetSleepManager : MonoBehaviour
             Destroy(sleepData.sleepEffect);
 
         // Remove from sleeping pets
-        sleepingPets.Remove(petID);
+        sleepingPets.Remove(playerPetID);
 
         // Fire wake up event
-        OnPetWakeUp?.Invoke(petID);
+        OnPetWakeUp?.Invoke(playerPetID);
     }
 
     private List<MonoBehaviour> DisablePetComponents(GameObject petObject)
@@ -218,6 +218,8 @@ public class PetSleepManager : MonoBehaviour
 
         if (blockMovementDuringSleep)
         {
+            // Only disable movement scripts attached directly to this pet GameObject
+
             // Disable NPCRandomMovement if exists
             NPCRandomMovement npcMovement = petObject.GetComponent<NPCRandomMovement>();
             if (npcMovement != null && npcMovement.enabled)
@@ -226,15 +228,15 @@ public class PetSleepManager : MonoBehaviour
                 disabledComponents.Add(npcMovement);
             }
 
-            // Disable any custom movement scripts
-            MonoBehaviour[] allComponents = petObject.GetComponents<MonoBehaviour>();
-            foreach (var component in allComponents)
+            // Disable other movement-related scripts (by name) attached directly to petObject
+            foreach (var component in petObject.GetComponents<MonoBehaviour>())
             {
-                // Check for movement-related components by name
-                string componentName = component.GetType().Name.ToLower();
-                if ((componentName.Contains("movement") || componentName.Contains("move")) && 
-                    component.enabled && !disabledComponents.Contains(component))
+                if (component == npcMovement) continue; // Already handled
+
+                string typeName = component.GetType().Name.ToLower();
+                if ((typeName.Contains("movement") || typeName.Contains("move")) && component.enabled)
                 {
+                    Debug.Log($"Disabling movement on: {petObject.name}, component: {component.GetType().Name}");
                     component.enabled = false;
                     disabledComponents.Add(component);
                 }
@@ -253,13 +255,20 @@ public class PetSleepManager : MonoBehaviour
         }
     }
 
-    private GameObject FindPetById(int petID)
+    private GameObject FindPetById(int playerPetID)
     {
-        // Try to find pet using PetDataHolder
+        Debug.Log($"Looking for pet with playerPetID={playerPetID}");
         PetDataHolder[] petHolders = FindObjectsOfType<PetDataHolder>();
         foreach (var holder in petHolders)
         {
-            if (holder.petData != null && holder.petData.petID == petID)
+            if (holder.petData != null)
+                Debug.Log($"Found pet: playerPetID={holder.petData.playerPetID}, petID={holder.petData.petID}");
+        }
+
+        // Try to find pet using PetDataHolder
+        foreach (var holder in petHolders)
+        {
+            if (holder.petData != null && holder.petData.playerPetID == playerPetID)
             {
                 return holder.gameObject;
             }
@@ -270,7 +279,7 @@ public class PetSleepManager : MonoBehaviour
         foreach (var handler in clickHandlers)
         {
             PetDataHolder dataHolder = handler.GetComponent<PetDataHolder>();
-            if (dataHolder != null && dataHolder.petData != null && dataHolder.petData.petID == petID)
+            if (dataHolder != null && dataHolder.petData != null && dataHolder.petData.playerPetID == playerPetID)
             {
                 return handler.gameObject;
             }
@@ -282,9 +291,9 @@ public class PetSleepManager : MonoBehaviour
     /// <summary>
     /// Check if any actions should be blocked for sleeping pet
     /// </summary>
-    public bool ShouldBlockAction(int petID, PetAction.ActionType actionType)
+    public bool ShouldBlockAction(int playerPetID, PetAction.ActionType actionType)
     {
-        if (!blockActionsDuringSleep || !IsPetSleeping(petID))
+        if (!blockActionsDuringSleep || !IsPetSleeping(playerPetID))
             return false;
 
         // Block all actions except wake up during sleep
@@ -303,9 +312,9 @@ public class PetSleepManager : MonoBehaviour
     {
         // Wake up all pets when manager is destroyed
         List<int> sleepingPetIds = new List<int>(sleepingPets.Keys);
-        foreach (int petID in sleepingPetIds)
+        foreach (int playerPetID in sleepingPetIds)
         {
-            WakePetUp(petID);
+            WakePetUp(playerPetID);
         }
     }
 }
