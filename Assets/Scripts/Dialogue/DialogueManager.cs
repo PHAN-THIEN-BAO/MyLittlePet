@@ -363,6 +363,12 @@ public class DialogueManager : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy)
         {
+            dialogPanel.SetActive(true);
+        }
+
+
+        if (!gameObject.activeInHierarchy)
+        {
             Debug.LogError("DialogueManager GameObject đang bị tắt! Không thể chạy coroutine.");
             return;
         }
