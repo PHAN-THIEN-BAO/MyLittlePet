@@ -164,11 +164,13 @@ public class AchievementProgress : MonoBehaviour
 
                 // Get progress text
                 TMP_Text progressText = achievement.transform.Find("Progress_Detail")?.GetComponent<TMP_Text>();
+                Debug.Log($"Progress Text: {progressText?.text}");
                 if (progressText == null) continue;
 
                 // Check if current progress is greater than or equal to target
                 int currentValue = ExtractFirstNumber(progressText.text);
                 int targetValue = ExtractLastNumber(progressText.text);
+                //Debug.Log($"Current Value: {currentValue},  /  Target Value: {targetValue}");
 
                 // If completed, show the Ready_Collected_Button
                 GameObject readyButton = achievement.transform.Find("Ready_Collected_Button")?.gameObject;
@@ -225,13 +227,28 @@ public class AchievementProgress : MonoBehaviour
 
         // Check if the format is correct
         if (parts.Length != 2)
-            return 0;
-
-        // Try to parse the first part as an integer
-        if (float.TryParse(parts[0], out float firstNumber))
         {
-            // Check if there's a 'k' suffix
-            if (parts[0].Contains("k") || parts[0].Contains("K"))
+            return 0;
+        }
+
+        Debug.Log($"ExtractFirstNumber - parts[0]: {parts[0]}");
+
+        string firstPart = parts[0].Trim();
+
+        // Check if there's a 'k' suffix
+        bool hasKSuffix = firstPart.EndsWith("k") || firstPart.EndsWith("K");
+
+        if (hasKSuffix)
+        {
+            // Remove the 'k' suffix
+            firstPart = firstPart.Substring(0, firstPart.Length - 1);
+        }
+
+        // Now try to parse without the 'k'
+        if (float.TryParse(firstPart, out float firstNumber))
+        {
+            // If it had a 'k' suffix, multiply by 1000
+            if (hasKSuffix)
             {
                 firstNumber *= 1000; // Convert thousands to actual number
             }
