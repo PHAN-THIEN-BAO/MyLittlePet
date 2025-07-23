@@ -122,8 +122,15 @@ public class PetInfoUIManager : MonoBehaviour
             Debug.Log("✅ PetInfoUIManager registered with PetActionManager at Start");
         }
 
-        // Start the decay system
-        StartDecaySystem();
+        // ========== DISABLE LOCAL DECAY SYSTEM ==========
+        // Don't start decay system here anymore - GlobalPetStatusManager handles it
+        // StartDecaySystem(); // ← Comment this out
+
+        // Subscribe to global decay events
+        if (GlobalPetStatusManager.Instance != null)
+        {
+            GlobalPetStatusManager.Instance.OnPetStatusDecayed += OnGlobalPetStatusDecayed;
+        }
     }
 
     private void OnEnable()
@@ -291,6 +298,12 @@ public class PetInfoUIManager : MonoBehaviour
         {
             talkToNPCButton.onClick.RemoveListener(OnTalkToNPCButtonClicked);
         }
+
+        // Unsubscribe from global events
+        if (GlobalPetStatusManager.Instance != null)
+        {
+            GlobalPetStatusManager.Instance.OnPetStatusDecayed -= OnGlobalPetStatusDecayed;
+        }
     }
 
     public void ToggleInfoPanel(int petID)
@@ -425,7 +438,35 @@ public class PetInfoUIManager : MonoBehaviour
 
         UpdateCareButtonStates();
         UpdateTalkButtonState(); // ========== NEW: UPDATE TALK BUTTON ==========
-        StartDecaySystem();
+
+        // ========== REMOVE LOCAL DECAY START ==========
+        // StartDecaySystem(); // ← Comment this out
+
+        // Register this pet with global decay system if not already registered
+        if (GlobalPetStatusManager.Instance != null)
+        {
+            GlobalPetStatusManager.Instance.RegisterPetForDecay(petDetails.playerPetID);
+        }
+    }
+
+    /// <summary>
+    /// Handle global pet status decay events
+    /// </summary>
+    private void OnGlobalPetStatusDecayed(int petID, string newStatus)
+    {
+        // Update UI if this is the currently displayed pet
+        if (currentPetDetails != null && currentPetDetails.playerPetID == petID)
+        {
+            currentPetDetails.status = newStatus;
+            
+            if (statusBarManager != null)
+            {
+                statusBarManager.UpdatePetStatus(newStatus);
+            }
+            
+            UpdateCareButtonStates();
+            UpdateTalkButtonState();
+        }
     }
 
     // === UPDATED PET CARE SYSTEM WITH DEPENDENCY CHECKS ===
@@ -433,6 +474,17 @@ public class PetInfoUIManager : MonoBehaviour
     public void FeedPet()
     {
         if (currentPetDetails == null) return;
+
+        // ========== NEW: WAKE UP PET IF SLEEPING ==========
+        bool petWasAwakened = false;
+        if (PetSleepManager.Instance != null)
+        {
+            petWasAwakened = PetSleepManager.Instance.WakeUpPetForFeeding(currentPetDetails.playerPetID);
+            if (petWasAwakened)
+            {
+                ShowStatusMessage("Pet woke up to eat! 🍎😊", Color.cyan);
+            }
+        }
 
         // Check dependency
         ActionBlockReason blockReason = CanPerformAction(PetAction.ActionType.Feed);
@@ -453,13 +505,24 @@ public class PetInfoUIManager : MonoBehaviour
             UpdatePetStatus(0, feedIncreaseAmount);
         }
 
-        Debug.Log($"Fed pet {currentPetDetails.playerPetID}, increasing hunger by {feedIncreaseAmount}");
+        Debug.Log($"Fed pet {currentPetDetails.playerPetID}, increasing hunger by {feedIncreaseAmount}{(petWasAwakened ? " (pet was awakened)" : "")}");
         ShowStatusMessage("Pet has been fed! 🍎", Color.green);
     }
 
     public void PlayWithPet()
     {
         if (currentPetDetails == null) return;
+
+        // ========== NEW: WAKE UP PET IF SLEEPING ==========
+        bool petWasAwakened = false;
+        if (PetSleepManager.Instance != null)
+        {
+            petWasAwakened = PetSleepManager.Instance.WakeUpPetForCareAction(currentPetDetails.playerPetID, PetAction.ActionType.Play);
+            if (petWasAwakened)
+            {
+                ShowStatusMessage("Pet woke up to play! 🎾😊", Color.cyan);
+            }
+        }
 
         // Check dependency
         ActionBlockReason blockReason = CanPerformAction(PetAction.ActionType.Play);
@@ -487,7 +550,7 @@ public class PetInfoUIManager : MonoBehaviour
             UpdatePetStatus(1, playIncreaseAmount);
         }
 
-        Debug.Log($"Played with pet {currentPetDetails.playerPetID}, increasing happiness by {playIncreaseAmount}");
+        Debug.Log($"Played with pet {currentPetDetails.playerPetID}, increasing happiness by {playIncreaseAmount}{(petWasAwakened ? " (pet was awakened)" : "")}");
         ShowStatusMessage("Pet enjoyed playing! 🎾", Color.green);
     }
 
@@ -810,6 +873,13 @@ public class PetInfoUIManager : MonoBehaviour
     {
         if (currentPetDetails == null) return;
 
+        // ========== CHECK IF PET IS SLEEPING ==========
+        bool isPetSleeping = false;
+        if (PetSleepManager.Instance != null)
+        {
+            isPetSleeping = PetSleepManager.Instance.IsPetSleeping(currentPetDetails.playerPetID);
+        }
+
         string[] statusValues = currentPetDetails.status.Split('%');
         if (statusValues.Length < 3)
         {
@@ -838,7 +908,16 @@ public class PetInfoUIManager : MonoBehaviour
 
         UpdateCareButtonStates();
         UpdateTalkButtonState(); // ========== NEW: UPDATE TALK BUTTON ==========
-        StartCoroutine(UpdatePetInDatabase());
+
+        // ========== CRITICAL FIX: DON'T UPDATE DATABASE IF PET IS SLEEPING ==========
+        if (!isPetSleeping)
+        {
+            StartCoroutine(UpdatePetInDatabase());
+        }
+        else
+        {
+            Debug.Log($"Pet {currentPetDetails.playerPetID} is sleeping - database update from UpdatePetStatus skipped to prevent conflicts");
+        }
 
         Debug.Log($"Updated pet status to: {newStatus}");
     }
@@ -948,6 +1027,13 @@ public class PetInfoUIManager : MonoBehaviour
         {
             if (currentPetDetails != null)
             {
+                // ========== NEW: CHECK IF PET IS SLEEPING ==========
+                bool isPetSleeping = false;
+                if (PetSleepManager.Instance != null)
+                {
+                    isPetSleeping = PetSleepManager.Instance.IsPetSleeping(currentPetDetails.playerPetID);
+                }
+
                 bool wasDecayed = false;
                 string[] statusValues = currentPetDetails.status.Split('%');
 
@@ -958,6 +1044,7 @@ public class PetInfoUIManager : MonoBehaviour
                         int.TryParse(statusValues[1], out happiness) &&
                         int.TryParse(statusValues[2], out energy))
                     {
+                        // Always decay hunger and happiness
                         if (hunger > minStatusValue)
                         {
                             hunger -= hungerDecayAmount;
@@ -970,7 +1057,8 @@ public class PetInfoUIManager : MonoBehaviour
                             wasDecayed = true;
                         }
 
-                        if (energy > minStatusValue)
+                        // ========== ONLY DECAY ENERGY IF PET IS NOT SLEEPING ==========
+                        if (!isPetSleeping && energy > minStatusValue)
                         {
                             energy -= energyDecayAmount;
                             wasDecayed = true;
@@ -988,9 +1076,30 @@ public class PetInfoUIManager : MonoBehaviour
 
                             UpdateCareButtonStates();
                             UpdateTalkButtonState(); // ========== NEW: UPDATE TALK BUTTON ==========
-                            StartCoroutine(UpdatePetInDatabase());
 
-                            Debug.Log($"Pet status decayed: {newStatus}");
+                            // ========== CRITICAL FIX: DON'T UPDATE DATABASE IF PET IS SLEEPING ==========
+                            if (!isPetSleeping)
+                            {
+                                StartCoroutine(UpdatePetInDatabase());
+                            }
+                            else
+                            {
+                                Debug.Log($"Pet {currentPetDetails.playerPetID} is sleeping - database update skipped to prevent conflicts");
+                            }
+
+                            // ========== ENHANCED LOGGING ==========
+                            if (isPetSleeping)
+                            {
+                                Debug.Log($"Pet {currentPetDetails.playerPetID} status decayed (sleeping - energy preserved, DB update skipped): {newStatus}");
+                            }
+                            else
+                            {
+                                Debug.Log($"Pet {currentPetDetails.playerPetID} status decayed: {newStatus}");
+                            }
+                        }
+                        else if (isPetSleeping)
+                        {
+                            Debug.Log($"Pet {currentPetDetails.playerPetID} is sleeping - energy decay prevented, DB update skipped");
                         }
                     }
                     else
