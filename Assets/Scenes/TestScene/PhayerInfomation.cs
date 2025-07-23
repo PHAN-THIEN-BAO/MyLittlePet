@@ -16,7 +16,7 @@ public class PhayerInfomation : MonoBehaviour
 
     public void NewUser()
     {
-        User user = APIUser.GetUser();
+        User user = PlayerInfomation.LoadPlayerInfo();
         Id.text = user.id.ToString();
         Name.text = user.userName;
         Pass.text = user.password;
