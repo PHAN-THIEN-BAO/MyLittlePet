@@ -61,4 +61,6 @@ public class PlayerController : MonoBehaviour
 
         // Check if the player is moving horizontally
     }
+    public bool isMyTurn { get; set; }
+
 }

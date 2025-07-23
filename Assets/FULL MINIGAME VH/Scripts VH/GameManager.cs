@@ -12,12 +12,12 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        UpdateScore(); // Initialize the score display at the start of the game
-        gameOverUI.SetActive(false); // Ensure the Game Over UI is not visible at the start
-        gameWinUI.SetActive(false); // Ensure the Game Win UI is not visible at the start
+        UpdateScore(); 
+        gameOverUI.SetActive(false); 
+        gameWinUI.SetActive(false); 
     }
 
-    // Update is called once per frame
+  
     void Update()
     {
 
@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
     }
     public bool IsGameWin()
     {
-        return isGameWin; // Return the current state of the game win flag
+        return isGameWin; 
 
     }
 }
