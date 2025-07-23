@@ -14871,7 +14871,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultSleepDuration: 20
   showSleepVisuals: 1
-  sleepEffectPrefab: {fileID: 9057664245928733209, guid: 6a098c064c4e43e4b891dbb7b9761aa6, type: 3}
+  sleepEffectPrefab: {fileID: 4416633606163296975, guid: e062b2a06a181564aa67c6e78b367792, type: 3}
   expRewardPerSleep: 5
   autoWakeUpOnFullEnergy: 1
   enableEnergyRecovery: 1
@@ -77212,7 +77212,7 @@ MonoBehaviour:
   minEnergyForPlay: 25
   minHungerForSleep: 20
   maxEnergyForSleep: 80
-  criticalThreshold: 5
+  criticalThreshold: 1
   actionManager: {fileID: 404148668}
   useActionSystem: 1
   pendingFeedAmount: 0
@@ -111147,7 +111147,7 @@ GameObject:
   - component: {fileID: 1996332135}
   - component: {fileID: 1996332134}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: HistorySetup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
