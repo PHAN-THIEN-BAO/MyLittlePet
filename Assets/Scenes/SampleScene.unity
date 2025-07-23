@@ -14016,7 +14016,7 @@ Transform:
   m_GameObject: {fileID: 270203808}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.7077117, w: 0.70650136}
-  m_LocalPosition: {x: -8.112, y: -0.195, z: 0}
+  m_LocalPosition: {x: -9.33, y: -0.2, z: 0}
   m_LocalScale: {x: 1.2928636, y: 1.0451, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46083,11 +46083,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
---- !u!1 &842362740 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4145351480241360498, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
-  m_PrefabInstance: {fileID: 842362739}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &842362741 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7924402538795841410, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
@@ -59029,6 +59024,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1048676310}
   m_CullTransparentMesh: 1
+--- !u!1 &1048744814 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4145351480241360498, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
+  m_PrefabInstance: {fileID: 842362739}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1049103779
 GameObject:
   m_ObjectHideFlags: 0
@@ -64831,6 +64831,7 @@ GameObject:
   - component: {fileID: 1160407899}
   - component: {fileID: 1160407898}
   - component: {fileID: 1160407897}
+  - component: {fileID: 1160407901}
   m_Layer: 0
   m_Name: My_home_text (1)
   m_TagString: Untagged
@@ -64896,34 +64897,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5b8716783afed64f97b9fdf2268af84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue:
-    dialogueLines:
-    - character:
-        name: Cris
-        icon: {fileID: 104178132242338865, guid: 78c980917f0b2304295511b0f816539e, type: 3}
-      line: Go outside...
-  dialoguePanel: {fileID: 842362740}
-  indicatorPrefab: {fileID: 3177871889576272409, guid: 9b926ac5246fede42a69a9d7219399ae, type: 3}
-  indicatorOffset: {x: -0.6, y: -0.1, z: 0}
-  bobSpeed: 0
-  bobHeight: 0
-  rotationSpeed: 0
-  continuousRotation: 1
-  rotationAxis: 2
-  maxRotationAngle: 45
-  customRotationAxis: {x: 0, y: 0, z: 1}
-  initialEulerAngles: {x: 0, y: 0, z: 180}
-  showIndicatorWithDialogue: 1
-  triggerOnContact: 1
-  triggerOnce: 0
-  persistAcrossScenes: 0
-  dialogueId: 
-  onDialogueStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onDialogueEnd:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!212 &1160407899
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -64994,6 +64967,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.227}
+--- !u!114 &1160407901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160407896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 004cf78631314334fbe8008b6363279f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogue:
+    dialogueLines:
+    - character:
+        name: Cris
+        icon: {fileID: 1318041274673610211, guid: 78c980917f0b2304295511b0f816539e, type: 3}
+      line: Go outside.
+  dialoguePanel: {fileID: 1048744814}
+  indicatorPrefab: {fileID: 3177871889576272409, guid: 9b926ac5246fede42a69a9d7219399ae, type: 3}
+  indicatorOffset: {x: -0.6, y: -0.1, z: 0}
+  bobSpeed: 0
+  bobHeight: 0
+  rotationSpeed: 0
+  continuousRotation: 1
+  rotationAxis: 2
+  maxRotationAngle: 45
+  customRotationAxis: {x: 0, y: 0, z: 1}
+  initialEulerAngles: {x: 0, y: 0, z: 180}
+  showIndicatorWithDialogue: 1
+  triggerOnContact: 1
+  triggerOnce: 0
+  persistAcrossScenes: 0
+  dialogueId: 
+  onDialogueStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1163347743
 GameObject:
   m_ObjectHideFlags: 0
