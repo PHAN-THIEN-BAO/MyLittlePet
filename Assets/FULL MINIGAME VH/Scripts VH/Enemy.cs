@@ -6,35 +6,33 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float distance = 5f;
     private Vector3 startPos;
     private bool movingRight = true;
-    // Range within which the enemy can move
-    // Speed of the enemy movement
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
-        startPos = transform.position; // Store the initial position of the enemy
+        startPos = transform.position;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-        float leftBound = startPos.x - distance; // Calculate the left boundaryB
-        float rightBound = startPos.x + distance; // Calculate the right boundary
+        float leftBound = startPos.x - distance; 
+        float rightBound = startPos.x + distance; 
         if (movingRight)
         {
-            transform.Translate(Vector2.right * speed * Time.deltaTime); // Move the enemy to the right
+            transform.Translate(Vector2.right * speed * Time.deltaTime); 
             if(transform.position.x >= rightBound)
             {
-                movingRight = false; // Change direction when reaching the right boundary
-                Flip(); // Flip the enemy's direction
+                movingRight = false; 
+                Flip(); 
             }
         }
         else
         {
             {
-                transform.Translate(Vector2.left * speed * Time.deltaTime); // Move the enemy to the left
+                transform.Translate(Vector2.left * speed * Time.deltaTime); 
                 if (transform.position.x <= leftBound)
                 {
-                    movingRight = true; // Change direction when reaching the left boundary
+                    movingRight = true; 
                     Flip();
 
                 }
@@ -44,8 +42,8 @@ public class Enemy : MonoBehaviour
     }
     void Flip()
     {
-        Vector3 scaler = transform.localScale; // Get the current scale of the enemy
-        scaler.x *= -1; // Flip the x scale to change direction
-        transform.localScale = scaler; // Apply the new scale to the enemy  
+        Vector3 scaler = transform.localScale; 
+        scaler.x *= -1; 
+        transform.localScale = scaler; 
     }
 }

@@ -8,49 +8,48 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     private Animator animator;
     private bool isGrounded;
-    // Transform to check if the player is on the ground
-    // Speed at which the player moves
+    
     private Rigidbody2D rb;
     private GameManager gameManager;
-    private AudioManager audioManager;// Reference to the GameManager script
+    private AudioManager audioManager;
     private void Awake()
     {
-        animator = GetComponent<Animator>(); // Get the Animator component attached to the player
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         gameManager =FindAnyObjectByType<GameManager>();
-        audioManager = FindAnyObjectByType<AudioManager>(); // Find the AudioManager in the scene
+        audioManager = FindAnyObjectByType<AudioManager>(); 
 
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+  
     void Start()
     {
 
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (gameManager.IsGameOver()||gameManager.IsGameWin()) return;
         HandleMovement();
-        HandleJump(); // Call the jump handling method
+        HandleJump(); 
         UpdateAnimation();
          }
     private void HandleMovement()
     {
-        float moveInput = Input.GetAxis("Horizontal"); // Get horizontal input (A/D or Left/Right arrow keys)
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y); // Set the horizontal velocity while keeping the vertical velocity unchanged
-        if (moveInput > 0) transform.localScale = new Vector3(1, 1, 1); // Face right when moving right
-        else if (moveInput < 0) transform.localScale = new Vector3(-1, 1, 1); // Face left when moving left
+        float moveInput = Input.GetAxis("Horizontal"); 
+        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y); 
+        if (moveInput > 0) transform.localScale = new Vector3(1, 1, 1); 
+        else if (moveInput < 0) transform.localScale = new Vector3(-1, 1, 1); 
     }
     private void HandleJump()
     {
-        if (Input.GetButtonDown("Jump") && isGrounded) // Check if the jump button is pressed and the player is on the ground
+        if (Input.GetButtonDown("Jump") && isGrounded) 
         {
-            audioManager.PlayJumpSound(); // Play jump sound effect
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce); // Apply an upward force for jumping
+            audioManager.PlayJumpSound();
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce); 
 
         }
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer); // Check if the player is on the ground using a circle overlap check
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer); 
     }
     private void UpdateAnimation()
     {
@@ -59,7 +58,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isRunning", isRunning);
         animator.SetBool("isJumping", isJumping);
 
-        // Check if the player is moving horizontally
+       
     }
     public bool isMyTurn { get; set; }
 

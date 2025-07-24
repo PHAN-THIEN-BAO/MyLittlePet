@@ -1,15 +1,15 @@
 using UnityEngine;
-using TMPro; // Assuming you want to use TextMeshPro for UI text display
-using UnityEngine.SceneManagement; // For scene management, if needed
+using TMPro; 
+using UnityEngine.SceneManagement; 
 public class GameManager : MonoBehaviour
 {
     private int score = 0;
-    [SerializeField] private TextMeshProUGUI scoreText; // Reference to the TextMeshProUGUI component for displaying score
+    [SerializeField] private TextMeshProUGUI scoreText; 
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject gameWinUI;
-    private bool isGameOver = false; // Flag to check if the game is over
+    private bool isGameOver = false; 
     private bool isGameWin = false;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         UpdateScore(); 
@@ -34,37 +34,37 @@ public class GameManager : MonoBehaviour
     }
     private void UpdateScore()
     {
-        scoreText.text = score.ToString(); // Update the score text display
+        scoreText.text = score.ToString(); 
     }
     public void GameOver()
     {
-        isGameOver = true; // Set the game over flag to true
-        Time.timeScale = 0; // Pause the game by setting time scale to 0
-        gameOverUI.SetActive(true); // Activate the Game Over UI
+        isGameOver = true; 
+        Time.timeScale = 0; 
+        gameOverUI.SetActive(true); 
     }
     public void GameWin()
     {
-        isGameWin = true; // Set the game win flag to true
-        Time.timeScale = 0; // Pause the game by setting time scale to 0
-        gameWinUI.SetActive(true); // Activate the Game Win UI
+        isGameWin = true; 
+        Time.timeScale = 0; 
+        gameWinUI.SetActive(true); 
     }
     public void RestartGame()
     {
-        isGameOver = false; // Reset the game over flag
-        Time.timeScale = 1; // Resume the game by setting time scale back to 1
-        score = 0; // Reset the score
-        UpdateScore(); // Update the score display
-        SceneManager.LoadScene("Game"); // Reload the game scene to restart the game
+        isGameOver = false;
+        Time.timeScale = 1; 
+        score = 0; 
+        UpdateScore(); 
+        SceneManager.LoadScene("Game"); 
 
     }
     public void GotoMenu()
     { 
         SceneManager.LoadScene("Menu");
-        Time.timeScale = 1;// Load the main menu scene
+        Time.timeScale = 1;
     }    
     public bool IsGameOver()
     {
-        return isGameOver; // Return the current state of the game over flag
+        return isGameOver; 
     }
     public bool IsGameWin()
     {
