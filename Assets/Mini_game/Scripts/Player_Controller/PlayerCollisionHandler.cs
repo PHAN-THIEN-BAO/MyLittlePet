@@ -2,19 +2,24 @@
 // This was created with assistance from Muse, a Unity Artificial Intelligence product
 
 using UnityEngine;
-using TMPro; // Import thư viện TextMeshPro
+using TMPro;
+using System.Collections.Generic; // Import thư viện TextMeshPro
 
 public class PlayerCollisionHandler : MonoBehaviour
 {
-    public int collisionLimit = 3; // Số lần va chạm tối đa
-    public GameObject gameOverCanvas; // Tham chiếu đến GameOver_Panel
-    public GameObject youWonCanvas; // Tham chiếu đến Won_Panel
-    public TMP_Text livesTMPText; // Tham chiếu đến Text_Lives (TMP)
-    private int collisionCount = 0; // Đếm số lần va chạm
+    private int collisionLimit = 3; // maximum number of collisions allowed before game over
+    public GameObject gameOverCanvas; // reference to GameOver_Panel
+    public GameObject youWonCanvas; // reference to YouWon_Panel
+    public TMP_Text livesTMPText; // reference to TextMeshPro for displaying lives
+    private int collisionCount = 0; // count of collisions
+    public TMP_Text reward;
+    public GameObject coinImg;
+    public GameObject diamondImg;
+    public GameObject gemImg;
 
     void Start()
     {
-        // Ẩn các Canvas ngay từ đầu
+        // hide Game Over and You Won canvases at the start
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(false);
@@ -25,32 +30,65 @@ public class PlayerCollisionHandler : MonoBehaviour
             youWonCanvas.SetActive(false);
         }
 
-        // Cập nhật số mạng ban đầu lên UI
+        // update the lives text at the start
         UpdateLivesText();
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // Kiểm tra va chạm với Enemy
+        // check if the collided object has the tag "Enemy"
         if (collision.gameObject.CompareTag("Enemy"))
         {
             collisionCount++;
             Debug.Log("Số lần va chạm: " + collisionCount);
 
-            // Cập nhật UI
+            // update the lives text
             UpdateLivesText();
 
-            // Nếu số lần va chạm vượt giới hạn => Game Over
+            // if the collision count reaches the limit, show Game Over UI
             if (collisionCount >= collisionLimit)
             {
                 GameOver();
             }
         }
 
-        // Kiểm tra va chạm với Goal để kết thúc game
+        // check if the collided object has the tag "Goal"
         if (collision.gameObject.CompareTag("Goal"))
         {
             YouWon();
+            if(livesTMPText.text == "x1")
+            {
+                User user = PlayerInfomation.LoadPlayerInfo();
+                int rewardAmount = Random.Range(100, 251);
+                user.coin += rewardAmount;
+                reward.text = "+ " + rewardAmount.ToString();
+                HideAllCurrencies();
+                coinImg.SetActive(true); // show the coin image
+                PlayerInfomation.SavePlayerInfo(user);
+                APIUser.UpdateUser();
+            }
+            else if (livesTMPText.text == "x2")
+            {
+                User user = PlayerInfomation.LoadPlayerInfo();
+                int rewardAmount = Random.Range(1, 6);
+                user.diamond += rewardAmount;
+                reward.text = "+ " + rewardAmount.ToString();
+                HideAllCurrencies();
+                diamondImg.SetActive(true); // show the diamond image
+                PlayerInfomation.SavePlayerInfo(user);
+                APIUser.UpdateUser();
+            }
+            else if (livesTMPText.text == "x3")
+            {
+                User user = PlayerInfomation.LoadPlayerInfo();
+                int rewardAmount = Random.Range(1, 4);
+                user.gem += rewardAmount;
+                reward.text = "+ " + rewardAmount.ToString();
+                HideAllCurrencies();
+                gemImg.SetActive(true); // show the gem image
+                PlayerInfomation.SavePlayerInfo(user);
+                APIUser.UpdateUser();
+            }
         }
     }
 
@@ -58,28 +96,60 @@ public class PlayerCollisionHandler : MonoBehaviour
     {
         if (gameOverCanvas != null)
         {
-            gameOverCanvas.SetActive(true); // Hiển thị Game Over UI
+            gameOverCanvas.SetActive(true); // show Game Over UI
         }
 
-        Time.timeScale = 0; // Dừng game
+        Time.timeScale = 0; // stop the game
     }
 
     void YouWon()
     {
         if (youWonCanvas != null)
         {
-            youWonCanvas.SetActive(true); // Hiển thị You Won UI
+            youWonCanvas.SetActive(true); // show You Won UI
+
+            // set score to api
+            User user = PlayerInfomation.LoadPlayerInfo();
+            List<GameRecord> gameRecordList = APIGameRecord.GetGameRecordByPlayerID(user.id);
+            // get gameRecordList with minigameID = 1
+            GameRecord gameRecord = gameRecordList.Find(gr => gr.minigameID == 1);
+            if (gameRecord != null)
+            {
+                gameRecord.score += 1; // increment score by 1
+                APIGameRecord.SendGameRecord("PUT", user.id, 1, gameRecord.score); // update game record
+            }
+            else
+            {
+                APIGameRecord.SendGameRecord("POST", user.id, 1, 1);
+            }
+
         }
 
-        Time.timeScale = 0; // Dừng game
+        Time.timeScale = 0; // stop the game
     }
 
     void UpdateLivesText()
     {
         if (livesTMPText != null)
         {
-            int livesRemaining = collisionLimit - collisionCount; // Tính số mạng còn lại
-            livesTMPText.text = "x" + livesRemaining; // Cập nhật nội dung Text
+            int livesRemaining = collisionLimit - collisionCount; // calculate remaining lives
+            livesTMPText.text = "x" + livesRemaining; // update the TextMeshPro text
+        }
+    }
+
+    void HideAllCurrencies()
+    {
+        if (coinImg != null)
+        {
+            coinImg.SetActive(false); // hide the coin image
+        }
+        if (diamondImg != null)
+        {
+            diamondImg.SetActive(false); // hide the diamond image
+        }
+        if (gemImg != null)
+        {
+            gemImg.SetActive(false); // hide the gem image
         }
     }
 }
