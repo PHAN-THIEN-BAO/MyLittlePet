@@ -30,8 +30,8 @@ public class AdopPet : MonoBehaviour
             playerID = playerId,
             petID = shopProduct.petID.Value,
             petCustomName = customNamePet,
-            status = "50%2550%2550",
-            level = 1
+            status = "50%2550%2550"
+            
         };
         StartCoroutine(APIPlayerPet.AddPlayerPetCoroutine(newPlayerPet, (createdPet) =>
         {

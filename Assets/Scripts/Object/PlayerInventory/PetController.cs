@@ -65,9 +65,7 @@ public class PetController : MonoBehaviour
                 case "PetNameText":
                     t.text = pet.petCustomName;
                     break;
-                case "PetLevelText":
-                    t.text = "Level: " + pet.level;
-                    break;
+                
                 case "PetStatusText":
                     t.text = "Status: " + pet.status;
                     break;

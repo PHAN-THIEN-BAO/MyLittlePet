@@ -38,8 +38,13 @@ public class DisPlayPlayerPet : MonoBehaviour
             petClones.Add(petObj);
             var nameText = petObj.transform.Find("Name_Player_Pet")?.GetComponent<TMP_Text>();
             if (nameText != null) nameText.text = playerPet.petCustomName;
+
+            // Level functionality has been removed from the database schema
+            // Set level display to show status instead
             var levelText = petObj.transform.Find("Level")?.GetComponent<TMP_Text>();
-            if (levelText != null) levelText.text = "Lv:" + playerPet.level.ToString();
+            if (levelText != null) levelText.text = "Status: " + (playerPet.status ?? "Active");
+
+            // Set avatar
             var avatarImage = petObj.transform.Find("Avatar")?.GetComponent<Image>();
             if (avatarImage != null)
             {

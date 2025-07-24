@@ -2277,14 +2277,6 @@
             }
           },
           {
-            "name": "level",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
             "name": "status",
             "in": "query",
             "schema": {
@@ -2397,110 +2389,6 @@
           {
             "name": "petId",
             "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/PlayerPet/{id}/Experience": {
-      "put": {
-        "tags": [
-          "PlayerPet"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/PlayerPet/{id}/LevelUp": {
-      "put": {
-        "tags": [
-          "PlayerPet"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": { }
-            },
-            "text/json": {
-              "schema": { }
-            },
-            "application/*+json": {
-              "schema": { }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/PlayerPet/{id}/Progress": {
-      "get": {
-        "tags": [
-          "PlayerPet"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
             "schema": {
               "type": "integer",
               "format": "int32"
@@ -4227,11 +4115,6 @@
             "format": "date-time",
             "nullable": true
           },
-          "level": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
           "status": {
             "type": "string",
             "nullable": true
@@ -4239,11 +4122,6 @@
           "lastStatusUpdate": {
             "type": "string",
             "format": "date-time",
-            "nullable": true
-          },
-          "exp": {
-            "type": "integer",
-            "format": "int32",
             "nullable": true
           },
           "careHistories": {

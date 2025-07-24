@@ -15,13 +15,9 @@ public partial class PlayerPet
 
     public DateTime? AdoptedAt { get; set; }
 
-    public int? Level { get; set; }
-
     public string? Status { get; set; }
 
     public DateTime? LastStatusUpdate { get; set; }
-
-    public int? Exp { get; set; }
 
     public virtual ICollection<CareHistory> CareHistories { get; set; } = new List<CareHistory>();
 
