@@ -1540,6 +1540,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8cc4ed5bba9d45489004bb1aaab1d3c, type: 3}
+--- !u!1 &737028029 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f8cc4ed5bba9d45489004bb1aaab1d3c, type: 3}
+  m_PrefabInstance: {fileID: 737028028}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &750291766
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3009,14 +3014,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07c46af66eed3254fad679f96fda8593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBall: {fileID: 0}
+  playerBall: {fileID: 2024387741}
   minShotPower: 2
   maxShotPower: 30
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
-  arrowIndicator: {fileID: 0}
-  powerSlider: {fileID: 0}
+    m_Bits: 64
+  arrowIndicator: {fileID: 737028029}
+  powerSlider: {fileID: 306161579}
   isMyTurn: 0
 --- !u!4 &1280068769
 Transform:
@@ -3084,13 +3089,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c0b7ec77ce3674449c8d0259ca51e73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBall: {fileID: 0}
-  petBall: {fileID: 0}
-  hole: {fileID: 0}
-  petAI: {fileID: 0}
-  playerController: {fileID: 0}
-  playerCamera: {fileID: 0}
-  petCamera: {fileID: 0}
+  playerBall: {fileID: 2024387741}
+  petBall: {fileID: 27997821}
+  hole: {fileID: 708065314}
+  petAI: {fileID: 484147556}
+  playerController: {fileID: 1280068768}
+  playerCamera: {fileID: 588196799}
+  petCamera: {fileID: 1826198679}
 --- !u!4 &1303808447
 Transform:
   m_ObjectHideFlags: 0
