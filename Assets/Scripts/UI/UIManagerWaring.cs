@@ -10,13 +10,11 @@ public class UIManagerWaring : MonoBehaviour
     {
         PaneWaringlUI.SetActive(true);
     }
-    // if player pressed yes Waring
     public void OnPress()
     {
         HideAll();
         PanelUI.SetActive(true);
     }
-    // if player pressed no Waring
     public void OnBackPress()
     {
         HideAll();

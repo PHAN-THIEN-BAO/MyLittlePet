@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using UnityEngine;
+
+
 public class APIPlayerAchievement : MonoBehaviour
 {
     public static List<PlayerAchievement> GetAchievementByIdPlayer(int idPlayer)
     {
+        
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://localhost:7035/PlayerAchievement/Player/" + idPlayer);
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
         StreamReader reader = new StreamReader(response.GetResponseStream());
@@ -14,6 +17,8 @@ public class APIPlayerAchievement : MonoBehaviour
         reader.Close();
         return JsonConvert.DeserializeObject<List<PlayerAchievement>>(jsonResponse);
     }
+
+
     public static bool AddAchievement(int achievementId)
     {
         User user = PlayerInfomation.LoadPlayerInfo();
@@ -23,6 +28,7 @@ public class APIPlayerAchievement : MonoBehaviour
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
             request.ContentType = "application/json";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 return response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.Created;
@@ -41,6 +47,7 @@ public class APIPlayerAchievement : MonoBehaviour
             return false;
         }
     }
+
     public static bool UpdatePlayerAchievement(int achievementId)
     {
         User user = PlayerInfomation.LoadPlayerInfo();
@@ -49,12 +56,14 @@ public class APIPlayerAchievement : MonoBehaviour
             Debug.LogError("User not found.");
             return false;
         }
+
         string url = $"https://localhost:7035/PlayerAchievement/{user.id}/{achievementId}/Collect";
         try
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "PUT";
             request.ContentType = "application/json";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 return response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent;
@@ -66,4 +75,7 @@ public class APIPlayerAchievement : MonoBehaviour
             return false;
         }
     }
+
+
+
 }

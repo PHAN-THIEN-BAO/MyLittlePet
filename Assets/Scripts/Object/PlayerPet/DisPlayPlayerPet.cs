@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+
 public class DisPlayPlayerPet : MonoBehaviour
 {
     [SerializeField] public TMP_Text playerId;
@@ -10,8 +11,10 @@ public class DisPlayPlayerPet : MonoBehaviour
     [SerializeField] public TMP_Text numberOfPet;
     [SerializeField] public Transform tranformPet;
     [SerializeField] public GameObject scrollListPet;
+
     private List<GameObject> petClones = new List<GameObject>();
     private const string defaultImageUrl = "https://drive.google.com/uc?id=1fsJXvABMVtfGSPJz7E-_yhqv0H7Fo8oS";
+
     public void DisplayListPet()
     {
         for (int i = tranformPet.childCount - 1; i >= 0; i--)
@@ -24,27 +27,33 @@ public class DisPlayPlayerPet : MonoBehaviour
         string[] parts = playerId.text.Split(':');
         if (parts.Length < 2) return;
         if (!int.TryParse(parts[1].Trim(), out int userId)) return;
+
         List<PlayerPet> playerPets = APIPlayerPet.GetPlayerPetByPlayerId(userId);
+
         if (playerPets != null)
             numberOfPet.text = "Pet Own: " + playerPets.Count.ToString();
         else
             numberOfPet.text = "Pet Own: 0";
+
+
+
+
         pet.SetActive(false);
+
         if (playerPets == null || playerPets.Count == 0) return;
+
         foreach (var playerPet in playerPets)
         {
             GameObject petObj = Instantiate(pet, tranformPet);
             petObj.SetActive(true);
             petClones.Add(petObj);
+
             var nameText = petObj.transform.Find("Name_Player_Pet")?.GetComponent<TMP_Text>();
             if (nameText != null) nameText.text = playerPet.petCustomName;
 
-            // Level functionality has been removed from the database schema
-            // Set level display to show status instead
             var levelText = petObj.transform.Find("Level")?.GetComponent<TMP_Text>();
             if (levelText != null) levelText.text = "Status: " + (playerPet.status ?? "Active");
 
-            // Set avatar
             var avatarImage = petObj.transform.Find("Avatar")?.GetComponent<Image>();
             if (avatarImage != null)
             {
@@ -60,12 +69,14 @@ public class DisPlayPlayerPet : MonoBehaviour
         }
         ResetScrollPosition();
     }
+
     private IEnumerator LoadImage(string url, Image image)
     {
         using (var www = new UnityEngine.Networking.UnityWebRequest(url))
         {
             www.downloadHandler = new UnityEngine.Networking.DownloadHandlerTexture();
             yield return www.SendWebRequest();
+
             if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
             {
                 var texture = ((UnityEngine.Networking.DownloadHandlerTexture)www.downloadHandler).texture;
@@ -74,6 +85,7 @@ public class DisPlayPlayerPet : MonoBehaviour
             }
         }
     }
+
     private void ResetScrollPosition()
     {
         if (scrollListPet != null)
@@ -82,6 +94,8 @@ public class DisPlayPlayerPet : MonoBehaviour
             if (scrollRect != null)
             {
                 scrollRect.normalizedPosition = new Vector2(0, 1);
+
+
             }
             else
             {

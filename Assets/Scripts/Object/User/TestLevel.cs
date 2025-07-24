@@ -1,6 +1,8 @@
 using UnityEngine;
+
 public class TestLevel : MonoBehaviour
 {
+
     void Update()
     {
        if(Input.GetKeyDown(KeyCode.Space))
@@ -10,10 +12,11 @@ public class TestLevel : MonoBehaviour
             {
                 playerLevel.AddExp(60);
             }
+
             else
             {
                 Debug.LogError("Không tìm th?y PlayerLevel trong scene!");
             }
-        }
+        } 
     }
 }

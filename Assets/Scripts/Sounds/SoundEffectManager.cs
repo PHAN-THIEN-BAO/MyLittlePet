@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+
 public class SoundEffectManager : MonoBehaviour
 {
     private static SoundEffectManager Instance;
@@ -8,6 +9,7 @@ public class SoundEffectManager : MonoBehaviour
     private static AudioSource VoiceAudioSource;
     private static SoundEffectLibrary soundEffectLibrary;
     [SerializeField] private Slider sfxSlider;
+
     private void Awake()
     {
         if (Instance == null)
@@ -25,6 +27,7 @@ public class SoundEffectManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     public static void Play(string soundname, bool randomPitch = false)
     {
         AudioClip audioClip = soundEffectLibrary.GetRandomClip(soundname);
@@ -41,6 +44,7 @@ public class SoundEffectManager : MonoBehaviour
             }
         }
     }
+
     public static void PlayVoice(AudioClip audioClip, float pitch = 1f)
     {
         VoiceAudioSource.pitch = pitch;
@@ -50,12 +54,14 @@ public class SoundEffectManager : MonoBehaviour
     {
         sfxSlider.onValueChanged.AddListener(delegate { OnValueChanged(); });
     }
+
     public static void SetVolume(float volume)
     {
         audioSource.volume = volume;
         randomPitchAudioSource.volume = volume;
         VoiceAudioSource.volume = volume;
     }
+
     public void OnValueChanged()
     {
         SetVolume(sfxSlider.value);

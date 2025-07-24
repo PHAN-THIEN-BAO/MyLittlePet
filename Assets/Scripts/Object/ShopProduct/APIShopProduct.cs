@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using UnityEngine;
+
 public class APIShopProduct : MonoBehaviour
 {
     public static List<ShopProduct> GetAllShopProducts(string Type)
@@ -13,7 +14,9 @@ public class APIShopProduct : MonoBehaviour
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string jsonResponse = reader.ReadToEnd();
         reader.Close();
+
         var allProducts = JsonConvert.DeserializeObject<List<ShopProduct>>(jsonResponse);
+
         allProducts.RemoveAll(p => p.status == 0);
         return allProducts;
     }
@@ -26,12 +29,14 @@ public class APIShopProduct : MonoBehaviour
         reader.Close();
         return JsonConvert.DeserializeObject<ShopProduct>(jsonResponse);
     }
+
     public static ShopProduct GetShopProductByIdPet(int petId)
     {
         try
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"https://localhost:7035/ShopProduct/Pet/{petId}");
             request.Method = "GET";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
@@ -40,7 +45,9 @@ public class APIShopProduct : MonoBehaviour
                     {
                         string jsonResponse = reader.ReadToEnd();
                         Debug.Log($"[API] Raw JSON for petId {petId}: {jsonResponse}");
+
                         var productResponse = JsonConvert.DeserializeObject<ShopProductResponse>(jsonResponse);
+
                         if (productResponse != null &&
                             productResponse.products != null &&
                             productResponse.products.Count > 0)
@@ -81,10 +88,17 @@ public class APIShopProduct : MonoBehaviour
             return null;
         }
     }
+
     [Serializable]
     public class ShopProductResponse
     {
         public string message;
         public List<ShopProduct> products;
     }
+
+
+
+
+
+
 }

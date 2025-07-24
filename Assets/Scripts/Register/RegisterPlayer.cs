@@ -3,21 +3,25 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System.Collections;
+
 public class RegisterPlayer : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] public string Scenename;
+
     [Header("UI References")]
     [SerializeField] public TMP_InputField registerUsernameField;
     [SerializeField] public TMP_InputField registerPasswordField;
     [SerializeField] public TMP_InputField confirmPasswordField;
     [SerializeField] public Button registerButton;
     [SerializeField] public TextMeshProUGUI registerErrorText;
+
     public void RegisterNewUser()
     {
         string username = registerUsernameField.text;
         string password = registerPasswordField.text;
         string confirmPassword = confirmPasswordField.text;
+
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) ||
             string.IsNullOrEmpty(confirmPassword))
         {
@@ -26,6 +30,7 @@ public class RegisterPlayer : MonoBehaviour
             Debug.LogError("Fill all field please!");
             return;
         }
+
         if (password != confirmPassword)
         {
             registerErrorText.text = "Passwords do not match!";
@@ -33,17 +38,22 @@ public class RegisterPlayer : MonoBehaviour
             Debug.LogError("Ðang ký th?t b?i. M?t kh?u không kh?p.");
             return;
         }
+
         try
         {
             bool success = APIUser.RegisterAPI(username, password);
+
             if (success)
             {
                 registerErrorText.text = "Registration successful!";
                 registerErrorText.color = Color.green;
+
                 registerUsernameField.text = "";
                 registerPasswordField.text = "";
                 confirmPasswordField.text = "";
+
                 Debug.Log("Ðang ký thành công cho ngu?i dùng: " + username);
+
             }
             else
             {
@@ -59,6 +69,7 @@ public class RegisterPlayer : MonoBehaviour
             Debug.LogException(ex);
         }
     }
+
     private IEnumerator LoadSceneAfterDelay(string sceneName, float delay)
     {
         yield return new WaitForSeconds(delay);

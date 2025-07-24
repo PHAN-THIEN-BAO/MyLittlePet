@@ -1,15 +1,20 @@
 using UnityEngine;
 using System.Collections;
+
 public class CareHistoryRecorder : MonoBehaviour
 {
     [Header("Care History Settings")]
     [SerializeField] private bool enableHistoryRecording = true;
     [SerializeField] private bool showRecordingMessages = false;
+    
     private const int FEEDING_ACTIVITY_ID = 1;
     private const int PLAYING_ACTIVITY_ID = 3;
     private const int SLEEPING_ACTIVITY_ID = 2;
+    
     public static CareHistoryRecorder Instance { get; private set; }
+    
     public System.Action<CareHistory> OnCareHistoryRecorded;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -23,10 +28,12 @@ public class CareHistoryRecorder : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    
     private void Start()
     {
         RegisterWithManagers();
     }
+    
     private void RegisterWithManagers()
     {
         PetInfoUIManager petInfoManager = FindObjectOfType<PetInfoUIManager>();
@@ -34,16 +41,19 @@ public class CareHistoryRecorder : MonoBehaviour
         {
             Debug.Log("?? CareHistoryRecorder found PetInfoUIManager");
         }
+        
         FeedingManager feedingManager = FindObjectOfType<FeedingManager>();
         if (feedingManager != null)
         {
             Debug.Log("?? CareHistoryRecorder found FeedingManager");
         }
+        
         PlayingManager playingManager = FindObjectOfType<PlayingManager>();
         if (playingManager != null)
         {
             Debug.Log("?? CareHistoryRecorder found PlayingManager");
         }
+        
         PetSleepManager sleepManager = FindObjectOfType<PetSleepManager>();
         if (sleepManager != null)
         {
@@ -51,21 +61,28 @@ public class CareHistoryRecorder : MonoBehaviour
             Debug.Log("?? CareHistoryRecorder subscribed to PetSleepManager events");
         }
     }
+    
     public void RecordFeedingHistory(int playerPetId, int playerId)
     {
         if (!enableHistoryRecording) return;
+        
         StartCoroutine(CreateCareHistoryRecord(playerPetId, playerId, FEEDING_ACTIVITY_ID, "Feeding"));
     }
+    
     public void RecordPlayingHistory(int playerPetId, int playerId)
     {
         if (!enableHistoryRecording) return;
+        
         StartCoroutine(CreateCareHistoryRecord(playerPetId, playerId, PLAYING_ACTIVITY_ID, "Playing"));
     }
+    
     public void RecordSleepingHistory(int playerPetId, int playerId)
     {
         if (!enableHistoryRecording) return;
+        
         StartCoroutine(CreateCareHistoryRecord(playerPetId, playerId, SLEEPING_ACTIVITY_ID, "Sleeping"));
     }
+    
     private void OnPetStartedSleeping(int petId)
     {
         int playerId = GetPlayerIdFromPetId(petId);
@@ -74,25 +91,30 @@ public class CareHistoryRecorder : MonoBehaviour
             RecordSleepingHistory(petId, playerId);
         }
     }
+    
     private IEnumerator CreateCareHistoryRecord(int playerPetId, int playerId, int activityId, string activityName)
     {
         if (showRecordingMessages)
         {
             Debug.Log($"?? Recording {activityName} history for Pet {playerPetId}, Player {playerId}");
         }
+        
         bool success = false;
+        
         yield return StartCoroutine(APICareHistory.CreateCareHistoryCoroutine(
-            playerPetId,
-            playerId,
-            activityId,
+            playerPetId, 
+            playerId, 
+            activityId, 
             (result) => success = result
         ));
+        
         if (success)
         {
             if (showRecordingMessages)
             {
                 Debug.Log($"? {activityName} history recorded successfully");
             }
+            
             CareHistory recordedHistory = new CareHistory
             {
                 playerPetId = playerPetId,
@@ -100,7 +122,9 @@ public class CareHistoryRecorder : MonoBehaviour
                 activityId = activityId,
                 performedAt = System.DateTime.Now
             };
+            
             OnCareHistoryRecorded?.Invoke(recordedHistory);
+            
             RefreshCareHistoryPanelIfOpen();
         }
         else
@@ -108,6 +132,7 @@ public class CareHistoryRecorder : MonoBehaviour
             Debug.LogError($"? Failed to record {activityName} history");
         }
     }
+    
     private int GetPlayerIdFromPetId(int petId)
     {
         try
@@ -117,6 +142,7 @@ public class CareHistoryRecorder : MonoBehaviour
             {
                 return playerPet.playerID;
             }
+            
             User currentUser = PlayerInfomation.LoadPlayerInfo();
             if (currentUser != null)
             {
@@ -127,8 +153,10 @@ public class CareHistoryRecorder : MonoBehaviour
         {
             Debug.LogError($"Error getting player ID from pet ID {petId}: {ex.Message}");
         }
+        
         return -1;
     }
+    
     private void RefreshCareHistoryPanelIfOpen()
     {
         CareHistoryManager careHistoryManager = FindObjectOfType<CareHistoryManager>();
@@ -137,6 +165,7 @@ public class CareHistoryRecorder : MonoBehaviour
             careHistoryManager.RefreshIfOpen();
         }
     }
+    
     public static void RecordCareActivity(int playerPetId, int playerId, int activityId)
     {
         if (Instance != null)
@@ -145,6 +174,7 @@ public class CareHistoryRecorder : MonoBehaviour
             Instance.StartCoroutine(Instance.CreateCareHistoryRecord(playerPetId, playerId, activityId, activityName));
         }
     }
+    
     private static string GetActivityName(int activityId)
     {
         switch (activityId)
@@ -155,15 +185,18 @@ public class CareHistoryRecorder : MonoBehaviour
             default: return $"Activity {activityId}";
         }
     }
+    
     public void SetHistoryRecording(bool enabled)
     {
         enableHistoryRecording = enabled;
         Debug.Log($"Care history recording {(enabled ? "enabled" : "disabled")}");
     }
+    
     public void SetShowRecordingMessages(bool show)
     {
         showRecordingMessages = show;
     }
+    
     private void OnDestroy()
     {
         PetSleepManager sleepManager = FindObjectOfType<PetSleepManager>();

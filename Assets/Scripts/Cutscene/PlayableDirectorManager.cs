@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
+
 public class PlayableDirectorManager : MonoBehaviour
 {
     [Header("Playable Director Settings")]
@@ -10,27 +11,34 @@ public class PlayableDirectorManager : MonoBehaviour
     [SerializeField] private bool autoPlayOnStart = true;
     [SerializeField] private bool disableAfterPlayed = true;
     [SerializeField] private bool onlyDisablePlayableDirector = true;
+
     private static Dictionary<string, HashSet<string>> playedCutscenes = new Dictionary<string, HashSet<string>>();
     private static bool isDataLoaded = false;
+
     private string currentPlayingUserId = null;
     private bool isPlaying = false;
+
     private void Awake()
     {
         if (playableDirector == null)
         {
             playableDirector = GetComponent<PlayableDirector>();
         }
+
         if (string.IsNullOrEmpty(cutsceneId))
         {
             cutsceneId = gameObject.scene.name + "_" + gameObject.name + "_" + transform.GetSiblingIndex();
         }
+
         if (!isDataLoaded)
         {
             LoadPlayedCutscenes();
             isDataLoaded = true;
         }
+
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
     private void Start()
     {
         if (autoPlayOnStart)
@@ -38,6 +46,7 @@ public class PlayableDirectorManager : MonoBehaviour
             Invoke(nameof(CheckAndPlayCutscene), 0.2f);
         }
     }
+
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -46,23 +55,29 @@ public class PlayableDirectorManager : MonoBehaviour
             playableDirector.stopped -= OnCutsceneComplete;
         }
     }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         SavePlayedCutscenes();
+
         if (this != null && gameObject != null && autoPlayOnStart)
         {
             Invoke(nameof(CheckAndPlayCutscene), 0.3f);
         }
     }
+
     public void CheckAndPlayCutscene()
     {
         User currentUser = PlayerInfomation.LoadPlayerInfo();
+
         if (currentUser == null)
         {
             Debug.LogWarning("No user information found. Cannot determine if cutscene should play.");
             return;
         }
+
         string userId = currentUser.id.ToString();
+
         if (!HasCutscenePlayed(userId, cutsceneId))
         {
             PlayCutscene(userId);
@@ -70,6 +85,7 @@ public class PlayableDirectorManager : MonoBehaviour
         else
         {
             Debug.Log($"Cutscene {cutsceneId} has already been played for user {userId}. Skipping.");
+
             if (disableAfterPlayed)
             {
                 if (onlyDisablePlayableDirector)
@@ -88,14 +104,18 @@ public class PlayableDirectorManager : MonoBehaviour
             }
         }
     }
+
     private void PlayCutscene(string userId)
     {
         if (playableDirector != null && playableDirector.playableAsset != null)
         {
             Debug.Log($"Playing cutscene {cutsceneId} for user {userId}");
+
             currentPlayingUserId = userId;
             isPlaying = true;
+
             playableDirector.stopped += OnCutsceneComplete;
+
             playableDirector.Play();
         }
         else
@@ -103,19 +123,26 @@ public class PlayableDirectorManager : MonoBehaviour
             Debug.LogError("PlayableDirector or PlayableAsset is not assigned!");
         }
     }
+
     private void OnCutsceneComplete(PlayableDirector director)
     {
         Debug.Log($"Cutscene {cutsceneId} completed for user {currentPlayingUserId}");
+
         playableDirector.stopped -= OnCutsceneComplete;
+
         if (!string.IsNullOrEmpty(currentPlayingUserId) && isPlaying)
         {
             MarkCutsceneAsPlayed(currentPlayingUserId, cutsceneId);
             Debug.Log($"Marked cutscene {cutsceneId} as completed for user {currentPlayingUserId}");
         }
+
         currentPlayingUserId = null;
         isPlaying = false;
+
         SavePlayedCutscenes();
+
     }
+
     public static bool HasCutscenePlayed(string userId, string cutsceneId)
     {
         if (!isDataLoaded)
@@ -123,9 +150,11 @@ public class PlayableDirectorManager : MonoBehaviour
             LoadPlayedCutscenes();
             isDataLoaded = true;
         }
+
         return playedCutscenes.ContainsKey(userId) &&
                playedCutscenes[userId].Contains(cutsceneId);
     }
+
     public static void MarkCutsceneAsPlayed(string userId, string cutsceneId)
     {
         if (!isDataLoaded)
@@ -133,42 +162,52 @@ public class PlayableDirectorManager : MonoBehaviour
             LoadPlayedCutscenes();
             isDataLoaded = true;
         }
+
         if (!playedCutscenes.ContainsKey(userId))
         {
             playedCutscenes[userId] = new HashSet<string>();
         }
+
         playedCutscenes[userId].Add(cutsceneId);
+
         Debug.Log($"Marked cutscene {cutsceneId} as played for user {userId}");
     }
+
     public bool IsPlaying()
     {
         return isPlaying && playableDirector != null && playableDirector.state == PlayState.Playing;
     }
+
     public string GetCurrentPlayingUserId()
     {
         return currentPlayingUserId;
     }
+
     public void StopAndMarkAsPlayed()
     {
         if (isPlaying && playableDirector != null)
         {
             playableDirector.Stop();
+
             if (!string.IsNullOrEmpty(currentPlayingUserId))
             {
                 MarkCutsceneAsPlayed(currentPlayingUserId, cutsceneId);
                 SavePlayedCutscenes();
                 Debug.Log($"Stopped and marked cutscene {cutsceneId} as played for user {currentPlayingUserId}");
             }
+
             currentPlayingUserId = null;
             isPlaying = false;
         }
     }
+
     private static void SavePlayedCutscenes()
     {
         try
         {
             PlayedCutscenesData data = new PlayedCutscenesData();
             data.userCutscenes = new List<UserCutsceneData>();
+
             foreach (var kvp in playedCutscenes)
             {
                 UserCutsceneData userData = new UserCutsceneData();
@@ -176,9 +215,11 @@ public class PlayableDirectorManager : MonoBehaviour
                 userData.playedCutscenes = new List<string>(kvp.Value);
                 data.userCutscenes.Add(userData);
             }
+
             string json = JsonUtility.ToJson(data);
             PlayerPrefs.SetString("PlayedCutscenes", json);
             PlayerPrefs.Save();
+
             Debug.Log("Saved played cutscenes data to PlayerPrefs");
         }
         catch (System.Exception ex)
@@ -186,17 +227,20 @@ public class PlayableDirectorManager : MonoBehaviour
             Debug.LogError("Failed to save played cutscenes: " + ex.Message);
         }
     }
+
     private static void LoadPlayedCutscenes()
     {
         try
         {
             playedCutscenes.Clear();
+
             if (PlayerPrefs.HasKey("PlayedCutscenes"))
             {
                 string json = PlayerPrefs.GetString("PlayedCutscenes");
                 if (!string.IsNullOrEmpty(json))
                 {
                     PlayedCutscenesData data = JsonUtility.FromJson<PlayedCutscenesData>(json);
+
                     if (data != null && data.userCutscenes != null)
                     {
                         foreach (var userData in data.userCutscenes)
@@ -208,6 +252,7 @@ public class PlayableDirectorManager : MonoBehaviour
                         }
                     }
                 }
+
                 Debug.Log("Loaded played cutscenes data from PlayerPrefs");
             }
             else
@@ -221,6 +266,7 @@ public class PlayableDirectorManager : MonoBehaviour
             playedCutscenes.Clear();
         }
     }
+
     public static void ResetUserCutscenes(string userId)
     {
         if (playedCutscenes.ContainsKey(userId))
@@ -230,6 +276,7 @@ public class PlayableDirectorManager : MonoBehaviour
             Debug.Log($"Reset all cutscenes for user {userId}");
         }
     }
+
     public static void ResetAllCutscenes()
     {
         playedCutscenes.Clear();
@@ -238,6 +285,7 @@ public class PlayableDirectorManager : MonoBehaviour
         isDataLoaded = false;
         Debug.Log("Reset all cutscene data");
     }
+
     public void ForcePlayCutscene()
     {
         if (playableDirector != null && playableDirector.playableAsset != null)
@@ -247,6 +295,7 @@ public class PlayableDirectorManager : MonoBehaviour
             {
                 string userId = currentUser.id.ToString();
                 Debug.Log($"Force playing cutscene {cutsceneId}");
+
                 currentPlayingUserId = userId;
                 isPlaying = true;
                 playableDirector.stopped += OnCutsceneComplete;
@@ -254,16 +303,19 @@ public class PlayableDirectorManager : MonoBehaviour
             }
         }
     }
+
     public static void ForceSave()
     {
         SavePlayedCutscenes();
     }
 }
+
 [System.Serializable]
 public class PlayedCutscenesData
 {
     public List<UserCutsceneData> userCutscenes;
 }
+
 [System.Serializable]
 public class UserCutsceneData
 {

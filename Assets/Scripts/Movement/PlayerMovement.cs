@@ -1,6 +1,24 @@
+//using UnityEngine;
+//using UnityEngine.InputSystem;
+
+//public class PlayerMovement : MonoBehaviour
+
+
+
+
+
+
+
+
+
+
+
+
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
@@ -9,15 +27,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;
     private Animator animator;
     private bool playingFootsteps = false;
+
     public float footstepSpeed = 0.5f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
+
     void Update()
     {
         bool isMovementBlocked = IsMovementBlocked();
+
         if (isMovementBlocked)
         {
             rb.linearVelocity = Vector2.zero;
@@ -28,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = moveInput * moveSpeed;
             animator.SetBool("IsWalking", rb.linearVelocity.magnitude > 0);
+
             if (rb.linearVelocity.magnitude > 0 && !playingFootsteps)
             {
                 StartFootSteps();
@@ -38,14 +61,18 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
     public void Move(InputAction.CallbackContext context)
     {
         bool isMovementBlocked = IsMovementBlocked();
+
         if (isMovementBlocked)
         {
             return;
         }
+
         animator.SetBool("IsWalking", true);
+
         if (context.canceled)
         {
             animator.SetBool("IsWalking", false);
@@ -56,6 +83,7 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("InputX", moveInput.x);
         animator.SetFloat("InputY", moveInput.y);
     }
+
     private bool IsMovementBlocked()
     {
         foreach (GameObject blocker in movementBlockers)
@@ -67,6 +95,7 @@ public class PlayerMovement : MonoBehaviour
         }
         return false;
     }
+
     public void AddMovementBlocker(GameObject blocker)
     {
         if (!movementBlockers.Contains(blocker))
@@ -74,6 +103,7 @@ public class PlayerMovement : MonoBehaviour
             movementBlockers.Add(blocker);
         }
     }
+
     public void RemoveMovementBlocker(GameObject blocker)
     {
         if (movementBlockers.Contains(blocker))
@@ -81,15 +111,18 @@ public class PlayerMovement : MonoBehaviour
             movementBlockers.Remove(blocker);
         }
     }
+
     void StartFootSteps()
     {
         playingFootsteps = true;
         InvokeRepeating(nameof(PlayFootstep), 0f, footstepSpeed);
     }
+
     void PlayFootstep()
     {
         SoundEffectManager.Play("Footstep");
     }
+
     void StopFootStep()
     {
         playingFootsteps = false;

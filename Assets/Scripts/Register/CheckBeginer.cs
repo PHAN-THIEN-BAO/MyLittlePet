@@ -1,11 +1,14 @@
 using UnityEngine;
+
 public class CheckBeginer : MonoBehaviour
 {
     [SerializeField] public GameObject choosePetPannel;
+
     void Start()
     {
         Check();
     }
+
     public void Check()
     {
         User user = PlayerInfomation.LoadPlayerInfo();
@@ -19,9 +22,11 @@ public class CheckBeginer : MonoBehaviour
             choosePetPannel.SetActive(false);
         }
     }
+
     private void AddDefaultAchievement()
     {
         User user = PlayerInfomation.LoadPlayerInfo();
         APIPlayerAchievement.AddAchievement(1);
+
     }
 }

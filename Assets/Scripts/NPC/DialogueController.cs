@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+
 public class DialogueController : MonoBehaviour
 {
     public static DialogueController Instance { get; private set; }
@@ -10,16 +11,21 @@ public class DialogueController : MonoBehaviour
     public Image portraitImage;
     public Transform choiceContainer;
     public GameObject choiceButtonPrefab;
+
     [Header("UI Controls")]
     public Button closeButton;
+
     private PetInfoUIManager petInfoManager;
     private FeedingManager feedingManager;
     private PlayingManager playingManager;
     private PetSleepManager petSleepManager;
+
     [Header("Sleep Settings")]
     [SerializeField] private float dialogueSleepDuration = 8f;
     [SerializeField] private bool showSleepMessage = true;
+
     private NPC currentNPC;
+
     public enum PetCareAction
     {
         None,
@@ -28,6 +34,7 @@ public class DialogueController : MonoBehaviour
         Sleep,
         CareForAll
     }
+
     void Awake()
     {
         if (Instance == null)
@@ -39,9 +46,11 @@ public class DialogueController : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     void Start()
     {
         InitializeCloseButton();
+
         petInfoManager = FindObjectOfType<PetInfoUIManager>();
         if (petInfoManager == null)
         {
@@ -57,6 +66,7 @@ public class DialogueController : MonoBehaviour
         {
             Debug.LogWarning("PlayingManager not found in the scene. Playing panel will not show toy items.");
         }
+        
         petSleepManager = FindObjectOfType<PetSleepManager>();
         if (petSleepManager == null)
         {
@@ -65,12 +75,14 @@ public class DialogueController : MonoBehaviour
             Debug.Log("PetSleepManager created automatically.");
         }
     }
+
     private void InitializeCloseButton()
     {
         if (closeButton != null)
         {
             closeButton.onClick.RemoveAllListeners();
             closeButton.onClick.AddListener(CloseDialogue);
+            
             TooltipTrigger tooltip = closeButton.gameObject.GetComponent<TooltipTrigger>();
             if (tooltip == null)
             {
@@ -78,6 +90,7 @@ public class DialogueController : MonoBehaviour
             }
             tooltip.GetDynamicTooltip = () => "Close dialogue";
             tooltip.SetTooltipColors(new Color(0.3f, 0.3f, 0.3f, 0.9f), Color.white);
+            
             Debug.Log("? Close button initialized for DialogueController");
         }
         else
@@ -85,6 +98,7 @@ public class DialogueController : MonoBehaviour
             Debug.LogWarning("?? Close button not assigned in DialogueController!");
         }
     }
+
     public void CloseDialogue()
     {
         if (dialoguePanel != null && dialoguePanel.activeInHierarchy)
@@ -95,61 +109,78 @@ public class DialogueController : MonoBehaviour
                 currentNPC = null;
                 Debug.Log("?? NPC dialogue state reset");
             }
+
             ClearChoices();
+
             ShowDialogueUI(false);
+
             if (dialogueText != null)
                 dialogueText.text = "";
+
             OnDialogueClosed?.Invoke();
+
             Debug.Log("?? Dialogue closed by user");
         }
     }
+
     public void SetCurrentNPC(NPC npc)
     {
         currentNPC = npc;
         Debug.Log($"?? Current NPC set: {(npc != null ? npc.name : "null")}");
     }
+
     public void ClearCurrentNPC()
     {
         currentNPC = null;
         Debug.Log("?? Current NPC cleared");
     }
+
     public System.Action OnDialogueClosed;
+
     public void ShowDialogueUI(bool show)
     {
         dialoguePanel.SetActive(show);
+        
         if (!show && TooltipSystem.Instance != null)
         {
             TooltipSystem.Instance.HideTooltip();
         }
+
         if (closeButton != null)
         {
             closeButton.gameObject.SetActive(show);
         }
+
         if (!show && currentNPC != null)
         {
             ClearCurrentNPC();
         }
     }
+
     public void SetNPCInfo(string npcName, Sprite portrait)
     {
         nameText.text = npcName;
         portraitImage.sprite = portrait;
     }
+
     public void SetDialogueText(string text)
     {
         dialogueText.text = text;
     }
+
     public void ClearChoices()
     {
         if (TooltipSystem.Instance != null)
         {
             TooltipSystem.Instance.HideTooltip();
         }
+        
         foreach (Transform child in choiceContainer)
         {
             Destroy(child.gameObject);
         }
     }
+
     public GameObject CreateChoiceButton(string choiceText, UnityEngine.Events.UnityAction onClick)
     {
         GameObject choiceButton = Instantiate(choiceButtonPrefab, choiceContainer);
@@ -157,16 +188,21 @@ public class DialogueController : MonoBehaviour
         choiceButton.GetComponent<Button>().onClick.AddListener(onClick);
         return choiceButton;
     }
+
     public GameObject CreatePetCareChoiceButton(string choiceText, PetCareAction careAction, UnityEngine.Events.UnityAction additionalAction = null, int customCareAmount = 0)
     {
         GameObject choiceButton = Instantiate(choiceButtonPrefab, choiceContainer);
         Button button = choiceButton.GetComponent<Button>();
+        
         bool disableButton = false;
         PetInfoUIManager.ActionBlockReason blockReason = PetInfoUIManager.ActionBlockReason.None;
+        
         if (petInfoManager != null)
         {
             PetAction.ActionType actionType = ConvertToPetActionType(careAction);
+            
             blockReason = petInfoManager.CanPerformAction(actionType);
+            
             if (blockReason != PetInfoUIManager.ActionBlockReason.None)
             {
                 disableButton = true;
@@ -182,49 +218,63 @@ public class DialogueController : MonoBehaviour
                         blockReason = PetInfoUIManager.ActionBlockReason.TooEnergetic;
                     }
                 }
+                
                 switch (careAction)
                 {
                     case PetCareAction.Feed:
                         disableButton = petInfoManager.IsHungerAtMax();
                         break;
+                        
                     case PetCareAction.Play:
                         disableButton = petInfoManager.IsHappinessAtMax();
                         break;
+                        
                     case PetCareAction.Sleep:
                         if (!disableButton)
                             disableButton = petInfoManager.IsEnergyAtMax();
                         break;
+                        
                     case PetCareAction.CareForAll:
                         disableButton = petInfoManager.IsAllStatusAtMax();
                         break;
                 }
             }
         }
+        
         choiceButton.GetComponentInChildren<TMP_Text>().text = choiceText;
         button.interactable = !disableButton;
+        
         AddTooltipToDialogueButton(button, careAction, blockReason);
+        
         button.onClick.AddListener(() => {
             if (TooltipSystem.Instance != null)
             {
                 TooltipSystem.Instance.HideTooltip();
             }
+            
             PerformPetCareAction(careAction, customCareAmount);
             ShowDialogueUI(false);
         });
+        
         if (additionalAction != null)
         {
             button.onClick.AddListener(additionalAction);
         }
+        
         return choiceButton;
     }
+
     private void AddTooltipToDialogueButton(Button button, PetCareAction careAction, PetInfoUIManager.ActionBlockReason blockReason)
     {
         TooltipTrigger tooltip = button.gameObject.AddComponent<TooltipTrigger>();
+        
         tooltip.GetDynamicTooltip = () => GetDialogueButtonTooltipText(careAction, blockReason);
+        
         Color bgColor, textColor;
         GetDialogueTooltipColors(blockReason, out bgColor, out textColor);
         tooltip.SetTooltipColors(bgColor, textColor);
     }
+
     private string GetDialogueButtonTooltipText(PetCareAction careAction, PetInfoUIManager.ActionBlockReason blockReason)
     {
         if (careAction == PetCareAction.Sleep && petSleepManager != null)
@@ -236,6 +286,7 @@ public class DialogueController : MonoBehaviour
                 return $"Pet is sleeping";
             }
         }
+        
         if (blockReason == PetInfoUIManager.ActionBlockReason.None)
         {
             return $"Ready to {careAction.ToString().ToLower()}";
@@ -246,6 +297,7 @@ public class DialogueController : MonoBehaviour
             return $"{icon} {GetShortBlockReason(blockReason)}";
         }
     }
+
     private void GetDialogueTooltipColors(PetInfoUIManager.ActionBlockReason reason, out Color backgroundColor, out Color textColor)
     {
         switch (reason)
@@ -254,20 +306,24 @@ public class DialogueController : MonoBehaviour
                 backgroundColor = new Color(0.2f, 0.5f, 0.2f, 0.9f);
                 textColor = Color.white;
                 break;
+                
             case PetInfoUIManager.ActionBlockReason.Critical:
                 backgroundColor = new Color(0.7f, 0.1f, 0.1f, 0.9f);
                 textColor = Color.white;
                 break;
+                
             case PetInfoUIManager.ActionBlockReason.HappinessAtMax:
                 backgroundColor = new Color(0.1f, 0.3f, 0.6f, 0.9f);
                 textColor = Color.white;
                 break;
+                
             default:
                 backgroundColor = new Color(0.7f, 0.5f, 0.1f, 0.9f);
                 textColor = Color.white;
                 break;
         }
     }
+
     private PetAction.ActionType ConvertToPetActionType(PetCareAction careAction)
     {
         switch (careAction)
@@ -279,6 +335,7 @@ public class DialogueController : MonoBehaviour
             default: return PetAction.ActionType.Feed;
         }
     }
+
     private string GetShortBlockReason(PetInfoUIManager.ActionBlockReason reason)
     {
         switch (reason)
@@ -292,6 +349,7 @@ public class DialogueController : MonoBehaviour
             default: return "Blocked";
         }
     }
+
     private int GetCurrentPetId()
     {
         if (petInfoManager != null)
@@ -302,6 +360,7 @@ public class DialogueController : MonoBehaviour
                 return currentPetId;
             }
         }
+        
         PetDataHolder[] petHolders = FindObjectsOfType<PetDataHolder>();
         foreach (var holder in petHolders)
         {
@@ -310,8 +369,10 @@ public class DialogueController : MonoBehaviour
                 return holder.petData.playerPetID;
             }
         }
+        
         return -1;
     }
+
     private void PerformPetCareAction(PetCareAction action, int customCareAmount = 0)
     {
         if (petInfoManager == null)
@@ -319,8 +380,10 @@ public class DialogueController : MonoBehaviour
             Debug.LogWarning("Cannot perform pet care action: PetInfoUIManager is not found");
             return;
         }
+
         PetAction.ActionType actionType = ConvertToPetActionType(action);
         var blockReason = petInfoManager.CanPerformAction(actionType);
+
         if (blockReason != PetInfoUIManager.ActionBlockReason.None)
         {
             string message = petInfoManager.GetBlockReasonMessage(blockReason, actionType);
@@ -328,6 +391,7 @@ public class DialogueController : MonoBehaviour
             petInfoManager.ShowStatusMessage(message, Color.red);
             return;
         }
+
         int playerId = PlayerInfomation.LoadPlayerInfo().id;
         int currentPetId = GetCurrentPetId();
 
@@ -337,7 +401,7 @@ public class DialogueController : MonoBehaviour
             petWasAwakened = petSleepManager.WakeUpPetForCareAction(currentPetId, actionType);
             if (petWasAwakened)
             {
-                petInfoManager.ShowStatusMessage($"Pet woke up for {action.ToString().ToLower()}! 😊", Color.cyan);
+                petInfoManager.ShowStatusMessage($"Pet woke up for {action.ToString().ToLower()}! ??", Color.cyan);
             }
         }
 
@@ -346,7 +410,7 @@ public class DialogueController : MonoBehaviour
             case PetCareAction.Feed:
                 if (petWasAwakened)
                 {
-                    Debug.Log($"🍎 Pet {currentPetId} was awakened for feeding via dialogue");
+                    Debug.Log($"?? Pet {currentPetId} was awakened for feeding via dialogue");
                 }
 
                 if (feedingManager != null)
@@ -361,10 +425,11 @@ public class DialogueController : MonoBehaviour
                 }
                 petInfoManager.OnFeedButtonClickedWithHistory();
                 break;
+
             case PetCareAction.Play:
                 if (petWasAwakened)
                 {
-                    Debug.Log($"🎾 Pet {currentPetId} was awakened for playing via dialogue");
+                    Debug.Log($"?? Pet {currentPetId} was awakened for playing via dialogue");
                 }
 
                 if (playingManager != null)
@@ -385,7 +450,9 @@ public class DialogueController : MonoBehaviour
                         Debug.Log("Dialogue choice: Play with pet");
                     }
                 }
+                //petInfoManager.OnPlayButtonClickedWithHistory();
                 break;
+
             case PetCareAction.Sleep:
                 if (petSleepManager != null)
                 {
@@ -401,6 +468,7 @@ public class DialogueController : MonoBehaviour
                             return;
                         }
                         petSleepManager.PutPetToSleep(currentPetId, dialogueSleepDuration);
+
                         if (customCareAmount > 0)
                         {
                             petInfoManager.UpdatePetStatus(2, customCareAmount);
@@ -440,11 +508,11 @@ public class DialogueController : MonoBehaviour
                 }
                 petInfoManager.OnSleepButtonClickedWithHistory();
                 break;
+
             case PetCareAction.CareForAll:
-          
                 if (petWasAwakened)
                 {
-                    Debug.Log($"🎯 Pet {currentPetId} was awakened for comprehensive care via dialogue");
+                    Debug.Log($"?? Pet {currentPetId} was awakened for comprehensive care via dialogue");
                 }
 
                 if (customCareAmount > 0)
@@ -458,36 +526,44 @@ public class DialogueController : MonoBehaviour
                     Debug.Log("Dialogue choice: Care for all pet needs");
                 }
                 break;
+
             case PetCareAction.None:
             default:
                 break;
         }
     }
+
     public void CloseDialogueExternal()
     {
         CloseDialogue();
     }
+
     public bool IsDialogueActive()
     {
         return dialoguePanel != null && dialoguePanel.activeInHierarchy;
     }
+
     public void ForceCloseDialogue()
     {
         if (dialoguePanel != null)
         {
             dialoguePanel.SetActive(false);
         }
+        
         if (currentNPC != null)
         {
             currentNPC.EndDialogue();
             currentNPC = null;
         }
+        
         ClearChoices();
         if (dialogueText != null) dialogueText.text = "";
         if (nameText != null) nameText.text = "";
         if (portraitImage != null) portraitImage.sprite = null;
+        
         Debug.Log("?? Dialogue force closed");
     }
+
     public bool StartDialogueWithNPC(NPC npc)
     {
         if (npc == null)
@@ -495,21 +571,25 @@ public class DialogueController : MonoBehaviour
             Debug.LogError("Cannot start dialogue: NPC is null");
             return false;
         }
+
         if (!npc.CanInteract())
         {
             Debug.LogWarning($"Cannot start dialogue: NPC {npc.name} is busy");
             return false;
         }
+
         if (!npc.HasDialogueData())
         {
             Debug.LogWarning($"Cannot start dialogue: NPC {npc.name} has no dialogue data");
             return false;
         }
+
         if (IsDialogueActive())
         {
             Debug.LogWarning("Cannot start dialogue: Another dialogue is already active");
             return false;
         }
+
         try
         {
             npc.StartDialogueExternal();
@@ -522,14 +602,17 @@ public class DialogueController : MonoBehaviour
             return false;
         }
     }
+
     public bool StartDialogueWithAnyNPC()
     {
         NPC[] npcs = FindObjectsOfType<NPC>();
+        
         if (npcs == null || npcs.Length == 0)
         {
             Debug.LogWarning("No NPCs found in the scene");
             return false;
         }
+
         foreach (NPC npc in npcs)
         {
             if (npc.CanInteract() && npc.HasDialogueData())
@@ -537,6 +620,7 @@ public class DialogueController : MonoBehaviour
                 return StartDialogueWithNPC(npc);
             }
         }
+
         Debug.LogWarning("No available NPCs with dialogue data found");
         return false;
     }

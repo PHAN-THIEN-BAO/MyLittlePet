@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+
 public class ChoosePet : MonoBehaviour
 {
     [SerializeField] public TMP_Text petID;
@@ -14,8 +15,10 @@ public class ChoosePet : MonoBehaviour
     [SerializeField] public GameObject failPanel;
     [SerializeField] public GameObject cutsceneGameObject;
     public PetController petController;
+
     private PlayableDirector playableDirector;
     private PlayableDirectorManager directorManager;
+
     private void Awake()
     {
         if (cutsceneGameObject != null)
@@ -24,10 +27,12 @@ public class ChoosePet : MonoBehaviour
             directorManager = cutsceneGameObject.GetComponent<PlayableDirectorManager>();
         }
     }
+
     private void Start()
     {
         PreventAutoPlayTimeline();
     }
+
     private void PreventAutoPlayTimeline()
     {
         if (cutsceneGameObject != null)
@@ -35,12 +40,14 @@ public class ChoosePet : MonoBehaviour
             cutsceneGameObject.SetActive(false);
             Debug.Log("Timeline GameObject disabled to prevent auto-play on scene start.");
         }
+
         if (playableDirector != null)
         {
             playableDirector.Stop();
             Debug.Log("PlayableDirector stopped to prevent auto-play.");
         }
     }
+
     public void ChooseAPet()
     {
         User user = PlayerInfomation.LoadPlayerInfo();
@@ -55,6 +62,7 @@ public class ChoosePet : MonoBehaviour
         {
             Debug.Log("Pet added successfully!");
             successPanel.SetActive(true);
+
             if (petController != null)
             {
                 petController.SpawnPet(playerPet);
@@ -66,6 +74,7 @@ public class ChoosePet : MonoBehaviour
             Debug.LogError("Failed to add pet.");
         }
     }
+
     public void CloseSuccessPanelAndStartCutscene()
     {
         if (successPanel != null)
@@ -73,8 +82,10 @@ public class ChoosePet : MonoBehaviour
             successPanel.SetActive(false);
             Debug.Log("Success panel closed.");
         }
+
         StartCutscene();
     }
+
     public void StartCutscene()
     {
         if (cutsceneGameObject != null)
@@ -84,6 +95,7 @@ public class ChoosePet : MonoBehaviour
                 cutsceneGameObject.SetActive(true);
                 Debug.Log("Cutscene GameObject activated.");
             }
+
             if (directorManager != null)
             {
                 directorManager.ForcePlayCutscene();
@@ -104,6 +116,7 @@ public class ChoosePet : MonoBehaviour
             Debug.LogError("Cutscene GameObject chua du?c gán trong Inspector!");
         }
     }
+
     public void CloseSuccessPanel()
     {
         if (successPanel != null)

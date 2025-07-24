@@ -2,20 +2,26 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class NPC : MonoBehaviour, IInteractable
 {
     public NPCDialogue dialogueData;
+
     private DialogueController dialogueUI;
+
     private int dialogueIndex;
     private bool isTyping, isDialogueActive;
+
     private void Start()
     {
         dialogueUI = DialogueController.Instance;
     }
+
     public bool CanInteract()
     {
         return !isDialogueActive;
     }
+
     public void Interact()
     {
         if (dialogueData == null)
@@ -29,6 +35,7 @@ public class NPC : MonoBehaviour, IInteractable
             StartDialogue();
         }
     }
+
     public void StartDialogueExternal()
     {
         if (dialogueData == null)
@@ -36,14 +43,17 @@ public class NPC : MonoBehaviour, IInteractable
             Debug.LogWarning($"No dialogue data assigned to NPC: {name}");
             return;
         }
+
         if (isDialogueActive)
         {
             Debug.LogWarning($"NPC {name} is already in dialogue");
             return;
         }
+
         StartDialogue();
         Debug.Log($"?? External dialogue started with NPC: {name}");
     }
+
     public void ForceEndDialogue()
     {
         if (isDialogueActive)
@@ -52,32 +62,39 @@ public class NPC : MonoBehaviour, IInteractable
             Debug.Log($"?? Force ended dialogue with NPC: {name}");
         }
     }
+
     public bool HasDialogueData()
     {
         return dialogueData != null && dialogueData.dialogueLines != null && dialogueData.dialogueLines.Length > 0;
     }
+
     public string GetDisplayName()
     {
-        return dialogueData != null && !string.IsNullOrEmpty(dialogueData.npcName)
-            ? dialogueData.npcName
+        return dialogueData != null && !string.IsNullOrEmpty(dialogueData.npcName) 
+            ? dialogueData.npcName 
             : name;
     }
+
     public void StopInteract()
     {
         throw new System.NotImplementedException();
     }
+
     void StartDialogue()
     {
         isDialogueActive = true;
         dialogueIndex = 0;
+
         if (dialogueUI != null)
         {
             dialogueUI.SetCurrentNPC(this);
             dialogueUI.SetNPCInfo(dialogueData.npcName, dialogueData.npcPortrait);
             dialogueUI.ShowDialogueUI(true);
         }
+
         DisplayCurrentLine();
     }
+
     void NextLine()
     {
         if (isTyping)
@@ -86,12 +103,15 @@ public class NPC : MonoBehaviour, IInteractable
             dialogueUI.SetDialogueText(dialogueData.dialogueLines[dialogueIndex]);
             isTyping = false;
         }
+
         dialogueUI.ClearChoices();
+
         if (dialogueData.endDialogueLines.Length > dialogueIndex && dialogueData.endDialogueLines[dialogueIndex])
         {
             EndDialogue();
             return;
         }
+
         foreach (DialogueChoice dialogueChoice in dialogueData.choices)
         {
             if (dialogueChoice.dialogueIndex == dialogueIndex)
@@ -110,6 +130,7 @@ public class NPC : MonoBehaviour, IInteractable
             EndDialogue();
         }
     }
+
     IEnumerator TypeLine()
     {
         isTyping = true;
@@ -119,6 +140,7 @@ public class NPC : MonoBehaviour, IInteractable
             dialogueUI.SetDialogueText(dialogueUI.dialogueText.text += letter);
             yield return new WaitForSeconds(dialogueData.typingSpeed);
         }
+
         isTyping = false;
         if (dialogueData.autoProgressLines.Length > dialogueIndex && dialogueData.autoProgressLines[dialogueIndex])
         {
@@ -126,15 +148,18 @@ public class NPC : MonoBehaviour, IInteractable
             NextLine();
         }
     }
+
     void DisplayChoices(DialogueChoice choice)
     {
         for (int i = 0; i < choice.choices.Length; i++)
         {
             int nextIndex = choice.nextDialogueIndexes[i];
+
             if (choice.petCareOptions != null && i < choice.petCareOptions.Length &&
                 choice.petCareOptions[i] != PetCareOptionType.None)
             {
                 DialogueController.PetCareAction careAction = DialogueController.PetCareAction.None;
+
                 switch (choice.petCareOptions[i])
                 {
                     case PetCareOptionType.Feed:
@@ -150,11 +175,13 @@ public class NPC : MonoBehaviour, IInteractable
                         careAction = DialogueController.PetCareAction.CareForAll;
                         break;
                 }
+
                 int customCareAmount = 0;
                 if (choice.customCareAmount != null && i < choice.customCareAmount.Length)
                 {
                     customCareAmount = choice.customCareAmount[i];
                 }
+
                 dialogueUI.CreatePetCareChoiceButton(
                     choice.choices[i],
                     careAction,
@@ -169,27 +196,32 @@ public class NPC : MonoBehaviour, IInteractable
             }
         }
     }
+
     void ChooseOption(int nextIndex)
     {
         dialogueIndex = nextIndex;
         dialogueUI.ClearChoices();
         DisplayCurrentLine();
     }
+
     void DisplayCurrentLine()
     {
         StopAllCoroutines();
         StartCoroutine(TypeLine());
     }
+
     public void EndDialogue()
     {
         StopAllCoroutines();
         isDialogueActive = false;
+
         if (dialogueUI != null)
         {
             dialogueUI.ClearCurrentNPC();
             dialogueUI.SetDialogueText("");
             dialogueUI.ShowDialogueUI(false);
         }
+
         Debug.Log($"?? {name} dialogue ended, ready for new interaction");
     }
 }

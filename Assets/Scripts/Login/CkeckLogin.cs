@@ -7,10 +7,14 @@ public class CkeckLogin : MonoBehaviour
     [Header("Scenes")]
     [SerializeField] private GameObject loadingScene;
     [SerializeField] private GameObject mainMenu;
+
+
     [SerializeField] public string LoginScene;
     [SerializeField] public string MainScene;
+
     [Header("Loading Bar")]
     [SerializeField] private Slider loadingBar;
+
     public void CheckLogin()
     {
         if (PlayerPrefs.HasKey("SavedUser"))
@@ -26,9 +30,11 @@ public class CkeckLogin : MonoBehaviour
             StartCoroutine(LoadScenceASync(LoginScene));
         }
     }
+
     IEnumerator LoadScenceASync(string scenetoLoad)
     {
         UnityEngine.AsyncOperation loadOperation = SceneManager.LoadSceneAsync(scenetoLoad);
+
         while (!loadOperation.isDone)
         {
             float progressValue = Mathf.Clamp01(loadOperation.progress / 0.9f);
@@ -36,4 +42,5 @@ public class CkeckLogin : MonoBehaviour
             yield return null;
         }
     }
+
 }

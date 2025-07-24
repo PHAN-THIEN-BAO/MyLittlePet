@@ -1,21 +1,26 @@
 using UnityEngine;
 using TMPro;
+
 public class GameManager_Golf : MonoBehaviour
 {
     public GolfBall playerBall, petBall;
     public PetStats petStats;
+
     public int playerStrokeCount = 0;
     public int petStrokeCount = 0;
     public TextMeshProUGUI playerStrokeText;
     public TextMeshProUGUI petStrokeText;
     public TextMeshProUGUI winText;
+
     private bool playerDone = false;
     private bool petDone = false;
     private bool gameEnded = false;
+
     void Start()
     {
         UpdateStrokeUI();
     }
+
     void Update()
     {
         if (playerBall.transform.position.y < -5f)
@@ -29,16 +34,19 @@ public class GameManager_Golf : MonoBehaviour
             petBall.ResetToLastSafe();
         }
     }
+
     public void AddPlayerStroke()
     {
         playerStrokeCount++;
         UpdateStrokeUI();
     }
+
     public void AddPetStroke()
     {
         petStrokeCount++;
         UpdateStrokeUI();
     }
+
     void UpdateStrokeUI()
     {
         if (playerStrokeText != null)
@@ -46,9 +54,11 @@ public class GameManager_Golf : MonoBehaviour
         if (petStrokeText != null)
             petStrokeText.text = "Số gậy pet: " + petStrokeCount;
     }
+
     public void RegisterFinish(GolfBall ball)
     {
         if (gameEnded) return;
+
         if (ball == playerBall)
         {
             playerDone = true;
@@ -67,6 +77,7 @@ public class GameManager_Golf : MonoBehaviour
                 winText.gameObject.SetActive(true);
             }
         }
+
         if (playerDone && petDone)
         {
             gameEnded = true;

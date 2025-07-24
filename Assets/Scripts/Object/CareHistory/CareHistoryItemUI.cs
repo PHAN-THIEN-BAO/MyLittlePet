@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+
 public class CareHistoryItemUI : MonoBehaviour
 {
     [Header("UI Components")]
@@ -11,12 +12,15 @@ public class CareHistoryItemUI : MonoBehaviour
     [SerializeField] private TMP_Text playerNameText;
     [SerializeField] private Image activityIcon;
     [SerializeField] private Button detailsButton;
+
     [Header("Activity Icons")]
     [SerializeField] private Sprite feedingIcon;
     [SerializeField] private Sprite sleepIcon;
     [SerializeField] private Sprite playIcon;
     [SerializeField] private Sprite defaultIcon;
+
     private CareHistory historyData;
+
     private void Start()
     {
         if (detailsButton != null)
@@ -24,37 +28,46 @@ public class CareHistoryItemUI : MonoBehaviour
             detailsButton.onClick.AddListener(ShowDetails);
         }
     }
+
     public void SetupHistoryItem(CareHistory history, bool showDetails = true)
     {
         historyData = history;
+
         if (dateTimeText != null)
         {
             dateTimeText.text = FormatDateTime(history.performedAt);
         }
+
         if (activityTypeText != null)
         {
             activityTypeText.text = GetActivityTypeText(history.activityId);
         }
+
         if (petNameText != null)
         {
             SetPetInfo(history.playerPetId);
         }
+
         if (playerNameText != null)
         {
             SetPlayerInfo(history.playerId);
         }
+
         if (activityIcon != null)
         {
             activityIcon.sprite = GetActivityIcon(history.activityId);
         }
+
         if (detailsButton != null)
         {
             detailsButton.gameObject.SetActive(showDetails);
         }
     }
+
     private string FormatDateTime(DateTime dateTime)
     {
         TimeSpan timeDiff = DateTime.Now - dateTime;
+
         if (timeDiff.TotalMinutes < 1)
             return "Just now";
         else if (timeDiff.TotalMinutes < 60)
@@ -66,6 +79,7 @@ public class CareHistoryItemUI : MonoBehaviour
         else
             return dateTime.ToString("MMM dd, yyyy");
     }
+
     private string GetActivityTypeText(int activityId)
     {
         switch (activityId)
@@ -76,6 +90,7 @@ public class CareHistoryItemUI : MonoBehaviour
             default: return $"Activity {activityId}";
         }
     }
+
     private Sprite GetActivityIcon(int activityId)
     {
         switch (activityId)
@@ -86,6 +101,7 @@ public class CareHistoryItemUI : MonoBehaviour
             default: return defaultIcon;
         }
     }
+
     private void SetPetInfo(int playerPetId)
     {
         try
@@ -106,6 +122,7 @@ public class CareHistoryItemUI : MonoBehaviour
             petNameText.text = $"Pet {playerPetId}";
         }
     }
+
     private void SetPlayerInfo(int playerId)
     {
         try
@@ -126,17 +143,22 @@ public class CareHistoryItemUI : MonoBehaviour
             playerNameText.text = $"Player {playerId}";
         }
     }
+
     private void ShowDetails()
     {
         if (historyData == null) return;
+
         string details = $"Care History Details:\n" +
                         $"Date: {historyData.performedAt:MMM dd, yyyy HH:mm:ss}\n" +
                         $"Activity: {GetActivityTypeText(historyData.activityId)}\n" +
                         $"Pet ID: {historyData.playerPetId}\n" +
                         $"Player ID: {historyData.playerId}\n" +
                         $"History ID: {historyData.careHistoryId}";
+
         Debug.Log(details);
+        
     }
+
     public CareHistory GetHistoryData()
     {
         return historyData;

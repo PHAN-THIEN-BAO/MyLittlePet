@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public class TurnManager : MonoBehaviour
 {
     public GolfBall playerBall;
@@ -6,13 +7,16 @@ public class TurnManager : MonoBehaviour
     public Transform hole;
     public PetAIController petAI;
     public PlayerController playerController;
+
     public GameObject playerCamera;
     public GameObject petCamera;
+
     private bool isPlayerTurn = true;
     private bool ballIsMoving = false;
     private bool petAIMovedThisTurn = false;
     private float stopTimer = 0f;
     private float waitAfterStop = 1.5f;
+
     void Start()
     {
         if (isPlayerTurn)
@@ -21,9 +25,11 @@ public class TurnManager : MonoBehaviour
             Debug.Log("Đến lượt Pet");
         UpdateCamera();
     }
+
     void Update()
     {
         playerController.isMyTurn = isPlayerTurn;
+
         if (!ballIsMoving)
         {
             if (isPlayerTurn)
@@ -53,10 +59,12 @@ public class TurnManager : MonoBehaviour
                     ballIsMoving = false;
                     isPlayerTurn = !isPlayerTurn;
                     petAIMovedThisTurn = false;
+
                     if (isPlayerTurn)
                         Debug.Log("Đến lượt Player");
                     else
                         Debug.Log("Đến lượt Pet");
+
                     UpdateCamera();
                     stopTimer = 0f;
                 }
@@ -67,10 +75,12 @@ public class TurnManager : MonoBehaviour
             }
         }
     }
+
     private void UpdateCamera()
     {
         playerCamera.SetActive(isPlayerTurn);
         petCamera.SetActive(!isPlayerTurn);
+
         var playerListener = playerCamera.GetComponent<AudioListener>();
         var petListener = petCamera.GetComponent<AudioListener>();
         if (playerListener != null) playerListener.enabled = isPlayerTurn;

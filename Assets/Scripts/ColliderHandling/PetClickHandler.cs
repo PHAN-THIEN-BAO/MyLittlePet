@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 public class PetClickHandler : MonoBehaviour
 {
     public PetInfoUIManager uiManager;
+
     [Header("Pet Click Audio Settings")]
     [Tooltip("Enable pet click sound effects")]
     public bool enableClickAudio = true;
@@ -13,13 +15,16 @@ public class PetClickHandler : MonoBehaviour
     public float clickSoundVolume = 0.8f;
     [Tooltip("Array of direct audio clips for each petID (fallback if SoundEffectManager not available)")]
     public AudioClip[] petClickAudioClips;
+
     private void OnMouseDown()
     {
         Debug.Log("Clicked pet: " + gameObject.name);
+        
         var dataHolder = GetComponent<PetDataHolder>();
         if (dataHolder != null && uiManager != null)
         {
             PlayPetClickAudio(dataHolder.petData.petID);
+
             uiManager.ToggleInfoPanel(dataHolder.petData.playerPetID);
         }
         else
@@ -27,10 +32,13 @@ public class PetClickHandler : MonoBehaviour
             Debug.LogWarning("PetDataHolder or PetInfoUIManager is not assigned to " + gameObject.name);
         }
     }
+
     private void PlayPetClickAudio(int petID)
     {
         if (!enableClickAudio) return;
+
         string petSoundName = $"pet_{petID}_click";
+        
         try
         {
             SoundEffectManager.Play(petSoundName, randomPitch);
@@ -39,9 +47,11 @@ public class PetClickHandler : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogWarning($"SoundEffectManager not available or sound '{petSoundName}' not found: {ex.Message}");
+            
             PlayPetClickAudioFallback(petID);
         }
     }
+
     private void PlayPetClickAudioFallback(int petID)
     {
         if (petClickAudioClips == null || petClickAudioClips.Length == 0)
@@ -49,6 +59,7 @@ public class PetClickHandler : MonoBehaviour
             Debug.LogWarning("No fallback audio clips assigned for pet click sounds");
             return;
         }
+
         if (petID >= 0 && petID < petClickAudioClips.Length)
         {
             AudioClip clipToPlay = petClickAudioClips[petID];
@@ -68,6 +79,7 @@ public class PetClickHandler : MonoBehaviour
             PlayDefaultPetClickSound();
         }
     }
+
     private void PlayDefaultPetClickSound()
     {
         if (petClickAudioClips != null && petClickAudioClips.Length > 0 && petClickAudioClips[0] != null)
@@ -80,23 +92,31 @@ public class PetClickHandler : MonoBehaviour
             Debug.LogWarning("No default pet click audio available");
         }
     }
+
     private void PlayAudioClipDirect(AudioClip audioClip, string tempObjectName)
     {
         if (audioClip == null) return;
+
         GameObject tempAudioGO = new GameObject(tempObjectName);
         tempAudioGO.transform.position = transform.position;
+        
         AudioSource audioSource = tempAudioGO.AddComponent<AudioSource>();
         audioSource.clip = audioClip;
         audioSource.volume = clickSoundVolume;
         audioSource.spatialBlend = 0f;
+        
         if (randomPitch)
         {
             audioSource.pitch = UnityEngine.Random.Range(0.9f, 1.1f);
         }
+        
         audioSource.Play();
+        
         Destroy(tempAudioGO, audioClip.length + 0.1f);
+        
         Debug.Log($"?? Played pet click sound using fallback method: {audioClip.name}");
     }
+
     [ContextMenu("Test Pet Click Sound")]
     public void TestPetClickSound()
     {
@@ -110,11 +130,13 @@ public class PetClickHandler : MonoBehaviour
             Debug.LogWarning("Cannot test pet click sound: No PetDataHolder or petData found");
         }
     }
+
     public void SetPetClickAudioClips(AudioClip[] audioClips)
     {
         petClickAudioClips = audioClips;
         Debug.Log($"Pet click audio clips set: {audioClips?.Length ?? 0} clips assigned");
     }
+
     public void SetClickAudioEnabled(bool enabled)
     {
         enableClickAudio = enabled;

@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using NUnit.Framework;
 using System.Collections.Generic;
+
 public class ShopValidate : MonoBehaviour
 {
     public bool CheckCanBuy(GameObject notEnoughMoneyPanel)
@@ -15,6 +16,7 @@ public class ShopValidate : MonoBehaviour
                 notEnoughMoneyPanel.SetActive(true);
             return false;
         }
+
         Transform idItemTransform = transform.parent.Find("Id_Item");
         if (idItemTransform == null)
         {
@@ -23,6 +25,7 @@ public class ShopValidate : MonoBehaviour
                 notEnoughMoneyPanel.SetActive(true);
             return false;
         }
+
         TMP_Text idText = idItemTransform.GetComponent<TMP_Text>();
         if (idText == null)
         {
@@ -31,7 +34,9 @@ public class ShopValidate : MonoBehaviour
                 notEnoughMoneyPanel.SetActive(true);
             return false;
         }
+
         int shopProductID = int.Parse(idText.text);
+
         ShopProduct product = APIShopProduct.GetShopProductById(shopProductID);
         if (product == null)
         {
@@ -40,6 +45,7 @@ public class ShopValidate : MonoBehaviour
                 notEnoughMoneyPanel.SetActive(true);
             return false;
         }
+
         int userCurrency = 0;
         if (product.currencyType == "Coin")
             userCurrency = user.coin;
@@ -47,7 +53,9 @@ public class ShopValidate : MonoBehaviour
             userCurrency = user.diamond;
         else if (product.currencyType == "Gem")
             userCurrency = user.gem;
+
         int quantity = 1;
+
         bool canBuy = CurenciesValidation.ValidateCurrencies(userCurrency, product.price, quantity);
         if (!canBuy)
         {
@@ -66,6 +74,8 @@ public class ShopValidate : MonoBehaviour
     public bool CheckCanBuyPet(GameObject OwnedPetPanel, int petId, int playerId)
     {
         PlayerPet playerPet = APIPlayerPet.GetPlayerPetByPlayerIdAndPetId(playerId ,petId);
+
+
         if (playerPet == null)
         {
             Debug.Log("Player pet not found, ok can buy");
@@ -80,4 +90,5 @@ public class ShopValidate : MonoBehaviour
             return false;
         }
     }
+
 }

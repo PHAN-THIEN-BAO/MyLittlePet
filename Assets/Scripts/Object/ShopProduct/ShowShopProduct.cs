@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Networking;
+
 public class ShowShopProduct : MonoBehaviour
 {
     [SerializeField] public GameObject scrollViewObject;
@@ -19,12 +20,22 @@ public class ShowShopProduct : MonoBehaviour
     [SerializeField] public List<Sprite> productSprites;
     [SerializeField] public GameObject Item;
     [SerializeField] public Transform contentPanel;
+
+
+
+
+    //public void GetProducts(string type)
+
+
+
     public void GetProducts(string type)
     {
         List<ShopProduct> products = APIShopProduct.GetAllShopProducts(type);
+
         while (name.Count < products.Count)
         {
             GameObject newItem = Instantiate(Item, contentPanel);
+
             TMP_Text nameText = newItem.transform.Find("Name_Item").GetComponent<TMP_Text>();
             TMP_Text descriptionText = newItem.transform.Find("Description").GetComponent<TMP_Text>();
             TMP_Text valueText = newItem.transform.Find("Price").GetComponent<TMP_Text>();
@@ -34,6 +45,7 @@ public class ShowShopProduct : MonoBehaviour
             GameObject coinImg = newItem.transform.Find("Coin_Img").gameObject;
             GameObject diamondImg = newItem.transform.Find("Diamond_Img").gameObject;
             GameObject gemImg = newItem.transform.Find("Gem_Img").gameObject;
+
             name.Add(nameText);
             description.Add(descriptionText);
             value.Add(valueText);
@@ -44,15 +56,19 @@ public class ShowShopProduct : MonoBehaviour
             diamondDisplay.Add(diamondImg);
             gemDisplay.Add(gemImg);
         }
+
         int count = products.Count;
+
         for (int i = 0; i < count; i++)
         {
             name[i].text = products[i].name;
             description[i].text = products[i].description;
             value[i].text = products[i].price.ToString();
             Pet_Id[i].text = products[i].petID.HasValue ? products[i].petID.Value.ToString() : "N/A";
+
             Id[i].text = products[i].shopProductID.ToString();
             Id[i].gameObject.SetActive(false);
+
             if (!string.IsNullOrEmpty(products[i].imageUrl))
             {
                 StartCoroutine(LoadImageFromUrl(products[i].imageUrl, productImages[i]));
@@ -61,20 +77,27 @@ public class ShowShopProduct : MonoBehaviour
             {
                 productImages[i].gameObject.SetActive(false);
             }
+
             coinDisplay[i].SetActive(products[i].currencyType == "Coin");
             diamondDisplay[i].SetActive(products[i].currencyType == "Diamond");
             gemDisplay[i].SetActive(products[i].currencyType == "Gem");
         }
+
+
+
         for (int i = count; i < name.Count; i++)
         {
             name[i].transform.parent.gameObject.SetActive(false);
         }
         StartCoroutine(ScrollToTop());
     }
+
+
     private IEnumerator LoadImageFromUrl(string url, Image targetImage)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(url);
         yield return request.SendWebRequest();
+
         if (request.result == UnityWebRequest.Result.Success)
         {
             Texture2D texture = DownloadHandlerTexture.GetContent(request);
@@ -88,10 +111,14 @@ public class ShowShopProduct : MonoBehaviour
             targetImage.gameObject.SetActive(false);
         }
     }
+
     private IEnumerator ScrollToTop()
     {
+        //wait for the end of the frame to ensure all UI elements are laid out
         yield return null;
+
         Canvas.ForceUpdateCanvases();
+
         if (scrollViewObject != null)
         {
             ScrollRect scrollRect = scrollViewObject.GetComponent<ScrollRect>();

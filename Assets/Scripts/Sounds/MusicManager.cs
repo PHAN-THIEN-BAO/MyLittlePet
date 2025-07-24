@@ -1,12 +1,16 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class MusicManager : MonoBehaviour
 {
     private static MusicManager Instance;
     private AudioSource audioSource;
     public AudioClip backgroundMusic;
     [SerializeField] private Slider musicSlider;
+
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -28,10 +32,12 @@ public class MusicManager : MonoBehaviour
         }
         musicSlider.onValueChanged.AddListener(delegate { SetVolume(musicSlider.value); });
     }
+
     public static void SetVolume(float volume)
     {
         Instance.audioSource.volume = volume;
     }
+
     public void PlayBackgroundMusic(bool resetSong, AudioClip audioClip = null)
     {
         if (audioClip != null)
@@ -47,6 +53,7 @@ public class MusicManager : MonoBehaviour
             audioSource.Play();
         }
     }
+
     public void PauseBackgroundMusic()
     {
         audioSource.Pause();

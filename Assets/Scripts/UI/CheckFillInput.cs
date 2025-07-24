@@ -1,10 +1,13 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class CheckFillInput : MonoBehaviour
 {
+
     [SerializeField] public TMP_InputField inputField;
     [SerializeField] public Button submitButton;
+
     private void Update()
     {
         if (!string.IsNullOrEmpty(inputField.text))
@@ -18,4 +21,6 @@ public class CheckFillInput : MonoBehaviour
                 submitButton.gameObject.SetActive(false);
         }
     }
+
+
 }

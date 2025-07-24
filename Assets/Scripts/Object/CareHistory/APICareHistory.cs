@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System;
+
 public class APICareHistory : MonoBehaviour
 {
     public static List<CareHistory> GetAllCareHistory()
@@ -15,6 +16,7 @@ public class APICareHistory : MonoBehaviour
             string url = "https://localhost:7035/CareHistory";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
@@ -39,6 +41,7 @@ public class APICareHistory : MonoBehaviour
             return null;
         }
     }
+
     public static CareHistory GetCareHistoryById(int careHistoryId)
     {
         try
@@ -46,6 +49,7 @@ public class APICareHistory : MonoBehaviour
             string url = $"https://localhost:7035/CareHistory/{careHistoryId}";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
@@ -70,6 +74,7 @@ public class APICareHistory : MonoBehaviour
             return null;
         }
     }
+
     public static List<CareHistory> GetCareHistoryByPlayerPetId(int playerPetId)
     {
         try
@@ -77,6 +82,7 @@ public class APICareHistory : MonoBehaviour
             string url = $"https://localhost:7035/CareHistory/PlayerPet/{playerPetId}";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
@@ -101,6 +107,7 @@ public class APICareHistory : MonoBehaviour
             return null;
         }
     }
+
     public static List<CareHistory> GetCareHistoryByPlayerId(int playerId)
     {
         try
@@ -108,6 +115,7 @@ public class APICareHistory : MonoBehaviour
             string url = $"https://localhost:7035/CareHistory/Player/{playerId}";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
@@ -132,6 +140,7 @@ public class APICareHistory : MonoBehaviour
             return null;
         }
     }
+
     public static bool CreateCareHistory(int playerPetId, int playerId, int activityId)
     {
         try
@@ -139,14 +148,17 @@ public class APICareHistory : MonoBehaviour
             string url = $"https://localhost:7035/CareHistory?playerPetId={playerPetId}&playerId={playerId}&activityId={activityId}";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "POST";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 bool success = (int)response.StatusCode >= 200 && (int)response.StatusCode < 300;
+
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
                     string jsonResponse = reader.ReadToEnd();
                     Debug.Log("CreateCareHistory response: " + jsonResponse);
                 }
+
                 return success;
             }
         }
@@ -156,13 +168,17 @@ public class APICareHistory : MonoBehaviour
             return false;
         }
     }
+
     public static IEnumerator CreateCareHistoryCoroutine(int playerPetId, int playerId, int activityId, System.Action<bool> callback)
     {
         string url = $"https://localhost:7035/CareHistory?playerPetId={playerPetId}&playerId={playerId}&activityId={activityId}";
+
         WWWForm form = new WWWForm();
         UnityWebRequest request = UnityWebRequest.Post(url, form);
         request.downloadHandler = new DownloadHandlerBuffer();
+
         yield return request.SendWebRequest();
+
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("CreateCareHistory response: " + request.downloadHandler.text);
@@ -174,6 +190,7 @@ public class APICareHistory : MonoBehaviour
             callback?.Invoke(false);
         }
     }
+
     public static bool DeleteCareHistory(int careHistoryId)
     {
         try
@@ -181,14 +198,17 @@ public class APICareHistory : MonoBehaviour
             string url = $"https://localhost:7035/CareHistory/{careHistoryId}";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "DELETE";
+
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 bool success = (int)response.StatusCode >= 200 && (int)response.StatusCode < 300;
+
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
                 {
                     string jsonResponse = reader.ReadToEnd();
                     Debug.Log("DeleteCareHistory response: " + jsonResponse);
                 }
+
                 return success;
             }
         }
@@ -198,12 +218,16 @@ public class APICareHistory : MonoBehaviour
             return false;
         }
     }
+
     public static IEnumerator DeleteCareHistoryCoroutine(int careHistoryId, System.Action<bool> callback)
     {
         string url = $"https://localhost:7035/CareHistory/{careHistoryId}";
+
         UnityWebRequest request = UnityWebRequest.Delete(url);
         request.downloadHandler = new DownloadHandlerBuffer();
+
         yield return request.SendWebRequest();
+
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("DeleteCareHistory response: " + request.downloadHandler.text);

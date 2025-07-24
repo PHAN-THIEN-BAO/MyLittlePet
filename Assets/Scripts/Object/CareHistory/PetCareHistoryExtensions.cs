@@ -1,4 +1,5 @@
 using UnityEngine;
+
 public static class PetCareHistoryExtensions
 {
     public static void RecordFeedingAction(this PetInfoUIManager petInfoManager)
@@ -12,6 +13,7 @@ public static class PetCareHistoryExtensions
             }
         }
     }
+    
     public static void RecordPlayingAction(this PetInfoUIManager petInfoManager)
     {
         if (CareHistoryRecorder.Instance != null && petInfoManager != null)
@@ -23,6 +25,7 @@ public static class PetCareHistoryExtensions
             }
         }
     }
+    
     public static void RecordSleepingAction(this PetInfoUIManager petInfoManager)
     {
         if (CareHistoryRecorder.Instance != null && petInfoManager != null)
@@ -34,12 +37,14 @@ public static class PetCareHistoryExtensions
             }
         }
     }
+    
     public static (int playerPetId, int playerId) GetCurrentPetAndPlayerIds(this PetInfoUIManager petInfoManager)
     {
         try
         {
             User currentUser = PlayerInfomation.LoadPlayerInfo();
             if (currentUser == null) return (-1, -1);
+            
             return petInfoManager.GetCurrentPetAndPlayerId();
         }
         catch (System.Exception ex)

@@ -1,15 +1,19 @@
 using UnityEngine;
+
 public class InteractablePet : MonoBehaviour, IInteractable
 {
     [Header("Pet Interaction")]
     public PetInfoUIManager uiManager;
+    
     public bool CanInteract()
     {
         return true;
     }
+
     public void Interact()
     {
         Debug.Log("Interacted with pet: " + gameObject.name);
+        
         var dataHolder = GetComponent<PetDataHolder>();
         if (dataHolder != null && uiManager != null)
         {
@@ -21,9 +25,11 @@ public class InteractablePet : MonoBehaviour, IInteractable
             Debug.LogWarning("PetDataHolder or PetInfoUIManager is not assigned to " + gameObject.name);
         }
     }
+
     public void StopInteract()
     {
     }
+
     public int GetPlayerPetID()
     {
         var dataHolder = GetComponent<PetDataHolder>();

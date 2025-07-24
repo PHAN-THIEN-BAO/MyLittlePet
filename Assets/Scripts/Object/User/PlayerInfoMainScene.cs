@@ -1,7 +1,9 @@
 using TMPro;
 using UnityEngine;
+
 public class PlayerInfoMainScene : MonoBehaviour
 {
+
     [SerializeField] public TMP_Text coin;
     [SerializeField] public TMP_Text diamond;
     [SerializeField] public TMP_Text gem;
@@ -9,6 +11,8 @@ public class PlayerInfoMainScene : MonoBehaviour
     [SerializeField] public TMP_Text coinShop;
     [SerializeField] public TMP_Text diamondShop;
     [SerializeField] public TMP_Text gemShop;
+
+
     private void Start()
     {
         MainSceneInfo();
@@ -31,8 +35,10 @@ public class PlayerInfoMainScene : MonoBehaviour
             Debug.LogError("User information is not available.");
         }
     }
+
     public void UpdateUI()
     {
         MainSceneInfo();
     }
+
 }
