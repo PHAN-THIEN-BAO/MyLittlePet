@@ -10952,16 +10952,16 @@ RectTransform:
   m_GameObject: {fileID: 227810905}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1670534794}
   - {fileID: 1205297945}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1159311849}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 636.6667, y: 360.0013}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1285, y: 720.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &227810907
@@ -29234,7 +29234,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 58
     m_Right: 0
-    m_Top: 0
+    m_Top: 11
     m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 19.16
@@ -65341,6 +65341,7 @@ RectTransform:
   - {fileID: 1247469736}
   - {fileID: 654394868}
   - {fileID: 1479263631}
+  - {fileID: 227810906}
   - {fileID: 842362741}
   m_Father: {fileID: 898268565}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.213}
@@ -103639,8 +103640,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -0.52549744, y: -0.0008239746}
-  m_SizeDelta: {x: 809.737, y: 103.37799}
+  m_AnchoredPosition: {x: -0.52549744, y: -0.00036621094}
+  m_SizeDelta: {x: 809.737, y: 114.37799}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1857611726
 MonoBehaviour:
@@ -103671,7 +103672,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 58
     m_Right: 0
-    m_Top: 0
+    m_Top: 11
     m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 19.16
@@ -112292,7 +112293,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 410.8, y: -51.689}
+  m_AnchoredPosition: {x: 410.8, y: -62.689}
   m_SizeDelta: {x: 705.6, y: 103.378}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2004106057
@@ -121811,4 +121812,3 @@ SceneRoots:
   - {fileID: 1160407900}
   - {fileID: 1996332135}
   - {fileID: 1949935719}
-  - {fileID: 227810906}
