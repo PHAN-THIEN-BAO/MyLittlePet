@@ -63,8 +63,8 @@ public class IdleObjectClickHandler : MonoBehaviour
                     if (petNameText != null)
                         petNameText.text = petDetails.petCustomName;
                     
-                    if (petLevelText != null)
-                        petLevelText.text = "Level: " + petDetails.level.ToString();
+                    //if (petLevelText != null)
+                    //    petLevelText.text = "Level: " + petDetails.level.ToString();
                     
                     // Parse and display the separate statuses
                     ParseAndDisplayStatuses(petDetails.status);

@@ -220,14 +220,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.LastStatusUpdate)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Level).HasDefaultValue(1);
             entity.Property(e => e.PetCustomName)
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.PetId).HasColumnName("PetID");
             entity.Property(e => e.PlayerId).HasColumnName("PlayerID");
             entity.Property(e => e.Status).HasMaxLength(50);
-            entity.Property(e => e.Exp);
 
             entity.HasOne(d => d.Pet).WithMany(p => p.PlayerPets)
                 .HasForeignKey(d => d.PetId)

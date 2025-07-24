@@ -416,8 +416,7 @@ public class PetInfoUIManager : MonoBehaviour
         if (petNameText != null)
             petNameText.text = petDetails.petCustomName;
 
-        if (petLevelText != null)
-            petLevelText.text = "Lv. " + petDetails.level.ToString();
+      
 
         if (petAdoptedDateText != null)
             petAdoptedDateText.text = "Adopted: " + petDetails.adoptedAt.ToString("MM/dd/yyyy");
@@ -432,7 +431,7 @@ public class PetInfoUIManager : MonoBehaviour
 
         if (statusBarManager != null)
         {
-            statusBarManager.UpdateLevelSlider(petDetails.level);
+           
             statusBarManager.UpdatePetStatus(petDetails.status);
         }
 

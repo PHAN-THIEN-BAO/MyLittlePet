@@ -37,7 +37,7 @@ public class APIPlayerPet : MonoBehaviour
         // The API expects a PUT request to /PlayerPet/{id} with query parameters
         string safeCustomName = playerPet.petCustomName ?? "";
         string safeStatus = playerPet.status ?? "50%2550%2550";
-        string url = $"https://localhost:7035/PlayerPet/{playerPet.playerPetID}?petCustomName={Uri.EscapeDataString(safeCustomName)}&level={playerPet.level}&status={Uri.EscapeDataString(safeStatus)}";
+        string url = $"https://localhost:7035/PlayerPet/{playerPet.playerPetID}?petCustomName={Uri.EscapeDataString(safeCustomName)}&status={Uri.EscapeDataString(safeStatus)}";
         
         UnityWebRequest request = UnityWebRequest.Put(url, "");
         request.downloadHandler = new DownloadHandlerBuffer();

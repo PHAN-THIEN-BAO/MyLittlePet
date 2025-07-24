@@ -4264,7 +4264,6 @@ MonoBehaviour:
     playerID: 0
     petID: 0
     petCustomName: 
-    level: 0
     status: 
 --- !u!114 &595482172
 MonoBehaviour:
@@ -4279,6 +4278,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 0}
+  enableClickAudio: 1
+  randomPitch: 1
+  clickSoundVolume: 0.8
+  petClickAudioClips: []
 --- !u!61 &595482173
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8566,34 +8569,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5b8716783afed64f97b9fdf2268af84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue:
-    dialogueLines:
-    - character:
-        name: Cris
-        icon: {fileID: 104178132242338865, guid: 78c980917f0b2304295511b0f816539e, type: 3}
-      line: Go outside...
-  dialoguePanel: {fileID: 2107037342}
-  indicatorPrefab: {fileID: 3177871889576272409, guid: 9b926ac5246fede42a69a9d7219399ae, type: 3}
-  indicatorOffset: {x: 0, y: 0, z: 0}
-  bobSpeed: 0
-  bobHeight: 0
-  rotationSpeed: 0
-  continuousRotation: 1
-  rotationAxis: 2
-  maxRotationAngle: 45
-  customRotationAxis: {x: 0, y: 0, z: 0}
-  initialEulerAngles: {x: 0, y: 0, z: 45}
-  showIndicatorWithDialogue: 1
-  triggerOnContact: 1
-  triggerOnce: 0
-  persistAcrossScenes: 0
-  dialogueId: 
-  onDialogueStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onDialogueEnd:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!212 &711813553
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -17975,6 +17950,14 @@ PrefabInstance:
       propertyPath: movementBlocker
       value: 
       objectReference: {fileID: 1058087660}
+    - target: {fileID: 7098668647279437839, guid: f5bed27ee231dc241a705adad358c953, type: 3}
+      propertyPath: movementBlockers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7098668647279437839, guid: f5bed27ee231dc241a705adad358c953, type: 3}
+      propertyPath: 'movementBlockers.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1058087660}
     - target: {fileID: 9099769163965444293, guid: f5bed27ee231dc241a705adad358c953, type: 3}
       propertyPath: m_LocalScale.x
       value: 2
@@ -21999,11 +21982,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
---- !u!1 &2107037342 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4145351480241360498, guid: 92d6c6d68b241ff429a1f686204d5487, type: 3}
-  m_PrefabInstance: {fileID: 2107037341}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2136889161
 GameObject:
   m_ObjectHideFlags: 0
