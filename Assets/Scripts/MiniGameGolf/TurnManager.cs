@@ -6,8 +6,7 @@ public class TurnManager : MonoBehaviour
     public GolfBall petBall;
     public Transform hole;
     public PetAIController petAI;
-    public PlayerController playerController;
-
+    public PlayerController_Golf playerController;
     public GameObject playerCamera;
     public GameObject petCamera;
 

@@ -11,7 +11,7 @@ public class GameManager_Golf : MonoBehaviour
     public TextMeshProUGUI playerStrokeText;
     public TextMeshProUGUI petStrokeText;
     public TextMeshProUGUI winText;
-
+    public GameObject quitButton;
     private bool playerDone = false;
     private bool petDone = false;
     private bool gameEnded = false;
@@ -19,6 +19,10 @@ public class GameManager_Golf : MonoBehaviour
     void Start()
     {
         UpdateStrokeUI();
+        if (winText != null)
+            winText.gameObject.SetActive(false);
+        if (quitButton != null)
+            quitButton.SetActive(false);
     }
 
     void Update()
@@ -66,6 +70,7 @@ public class GameManager_Golf : MonoBehaviour
             {
                 winText.text = "Bạn đã thắng!";
                 winText.gameObject.SetActive(true);
+                if (quitButton != null) quitButton.SetActive(true);
             }
         }
         else if (ball == petBall)
@@ -75,12 +80,14 @@ public class GameManager_Golf : MonoBehaviour
             {
                 winText.text = "Pet đã thắng!";
                 winText.gameObject.SetActive(true);
+                if (quitButton != null) quitButton.SetActive(true);
             }
         }
 
         if (playerDone && petDone)
         {
             gameEnded = true;
+            if (quitButton != null) quitButton.SetActive(true);
         }
     }
 }
