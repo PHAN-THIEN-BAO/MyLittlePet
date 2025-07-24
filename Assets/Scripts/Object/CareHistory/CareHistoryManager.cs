@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class CareHistoryManager : MonoBehaviour
 {
@@ -14,7 +14,6 @@ public class CareHistoryManager : MonoBehaviour
 
     private void Awake()
     {
-        // Đảm bảo panel bị ẩn khi khởi động
         if (careHistoryPanel != null)
         {
             careHistoryPanel.SetActive(false);
@@ -22,9 +21,6 @@ public class CareHistoryManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Mở Care History Panel
-    /// </summary>
     public void OpenCareHistoryPanel()
     {
         if (careHistoryPanel == null)
@@ -35,17 +31,14 @@ public class CareHistoryManager : MonoBehaviour
 
         if (isPanelOpen) return;
 
-        // Kích hoạt panel
         careHistoryPanel.SetActive(true);
         isPanelOpen = true;
 
-        // Refresh dữ liệu khi mở panel
         if (careHistoryLoader != null)
         {
             careHistoryLoader.RefreshCareHistory();
         }
 
-        // Animation mở panel
         if (useAnimation)
         {
             AnimateOpenPanel();
@@ -54,9 +47,6 @@ public class CareHistoryManager : MonoBehaviour
         Debug.Log("Care History Panel opened");
     }
 
-    /// <summary>
-    /// Đóng Care History Panel
-    /// </summary>
     public void CloseCareHistoryPanel()
     {
         if (careHistoryPanel == null || !isPanelOpen) return;
@@ -74,9 +64,6 @@ public class CareHistoryManager : MonoBehaviour
         Debug.Log("Care History Panel closed");
     }
 
-    /// <summary>
-    /// Toggle Care History Panel (mở/đóng)
-    /// </summary>
     public void ToggleCareHistoryPanel()
     {
         if (isPanelOpen)
@@ -89,23 +76,16 @@ public class CareHistoryManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Animation mở panel
-    /// </summary>
     private void AnimateOpenPanel()
     {
         if (careHistoryPanel == null) return;
 
-        // Scale từ 0 lên 1
         careHistoryPanel.transform.localScale = Vector3.zero;
         
         LeanTween.scale(careHistoryPanel, Vector3.one, animationDuration)
             .setEase(LeanTweenType.easeOutBack);
     }
 
-    /// <summary>
-    /// Animation đóng panel
-    /// </summary>
     private void AnimateClosePanel()
     {
         if (careHistoryPanel == null) return;
@@ -118,9 +98,6 @@ public class CareHistoryManager : MonoBehaviour
             });
     }
 
-    /// <summary>
-    /// Set filter và mở panel
-    /// </summary>
     public void OpenWithPlayerHistory()
     {
         OpenCareHistoryPanel();
@@ -130,9 +107,6 @@ public class CareHistoryManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Set filter pet và mở panel
-    /// </summary>
     public void OpenWithPetHistory(int petId = -1)
     {
         OpenCareHistoryPanel();
@@ -142,9 +116,6 @@ public class CareHistoryManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Set filter tất cả và mở panel
-    /// </summary>
     public void OpenWithAllHistory()
     {
         OpenCareHistoryPanel();
@@ -154,17 +125,11 @@ public class CareHistoryManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Kiểm tra panel có đang mở không
-    /// </summary>
     public bool IsPanelOpen()
     {
         return isPanelOpen;
     }
 
-    /// <summary>
-    /// Refresh dữ liệu nếu panel đang mở
-    /// </summary>
     public void RefreshIfOpen()
     {
         if (isPanelOpen && careHistoryLoader != null)

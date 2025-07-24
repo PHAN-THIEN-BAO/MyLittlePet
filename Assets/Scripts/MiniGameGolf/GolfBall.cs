@@ -37,10 +37,9 @@ public class GolfBall : MonoBehaviour
 
     public void HitBall(Vector3 direction, float power)
     {
-        // Đảm bảo bóng dừng hoàn toàn trước khi đánh tiếp
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rb.Sleep(); // Đảm bảo Rigidbody reset trạng thái động lực học
+        rb.Sleep();
 
         rb.AddForce(direction.normalized * power, ForceMode.Impulse);
         shotsTaken++;

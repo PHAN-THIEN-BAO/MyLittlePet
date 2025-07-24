@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System;
@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 public static class APICareActivity
 {
-    // Lấy tất cả các hoạt động chăm sóc
     public static List<CareActivity> GetAllCareActivities()
     {
         try

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class InteractablePet : MonoBehaviour, IInteractable
 {
@@ -7,7 +7,7 @@ public class InteractablePet : MonoBehaviour, IInteractable
     
     public bool CanInteract()
     {
-        return true; // Pet luôn có thể tương tác
+        return true;
     }
 
     public void Interact()
@@ -17,7 +17,6 @@ public class InteractablePet : MonoBehaviour, IInteractable
         var dataHolder = GetComponent<PetDataHolder>();
         if (dataHolder != null && uiManager != null)
         {
-            // Use the petData to show info (same as PetClickHandler)
             uiManager.ToggleInfoPanel(dataHolder.petData.playerPetID);
             Debug.Log($"Opened pet info panel for PlayerPetID: {dataHolder.petData.playerPetID}");
         }
@@ -29,12 +28,8 @@ public class InteractablePet : MonoBehaviour, IInteractable
 
     public void StopInteract()
     {
-        // Pet không cần xử lý stop interact
     }
 
-    /// <summary>
-    /// Get the PlayerPetID for this pet
-    /// </summary>
     public int GetPlayerPetID()
     {
         var dataHolder = GetComponent<PetDataHolder>();

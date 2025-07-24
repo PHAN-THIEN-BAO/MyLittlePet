@@ -1,17 +1,17 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class DialougePanelTrigger : MonoBehaviour
 {
-    [Header("Nội dung hiển thị")]
+    [Header("N?i dung hi?n th?")]
     public Sprite dialogueImage;
-    public string dialogueTitle = "Tiêu đề";
+    public string dialogueTitle = "Ti�u d?";
     [TextArea(3, 5)]
-    public string dialogueDescription = "Nội dung mô tả ở đây...";
+    public string dialogueDescription = "N?i dung m� t? ? d�y...";
 
-    [Header("Cài đặt kích hoạt")]
-    [Tooltip("Nếu true, dialogue sẽ tự động hiển thị khi va chạm với Player")]
+    [Header("C�i d?t k�ch ho?t")]
+    [Tooltip("N?u true, dialogue s? t? d?ng hi?n th? khi va ch?m v?i Player")]
     public bool triggerOnContact = true;
-    [Tooltip("Nếu true, dialogue chỉ hiển thị một lần")]
+    [Tooltip("N?u true, dialogue ch? hi?n th? m?t l?n")]
     public bool showOnce = false;
 
     private bool hasTriggered = false;
@@ -47,7 +47,7 @@ public class DialougePanelTrigger : MonoBehaviour
         }
         else
         {
-            Debug.LogError("DialoguePanelManager không tồn tại trong scene!");
+            Debug.LogError("DialoguePanelManager kh�ng t?n t?i trong scene!");
         }
     }
 
@@ -59,7 +59,6 @@ public class DialougePanelTrigger : MonoBehaviour
         }
     }
 
-    // Reset trạng thái đã hiển thị
     public void ResetTrigger()
     {
         hasTriggered = false;

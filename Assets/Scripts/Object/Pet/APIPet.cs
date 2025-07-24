@@ -6,7 +6,6 @@ using System.IO;
 
 public class APIPet : MonoBehaviour
 {
-    // Takes a pet ID and returns the corresponding Pet object
     public static IEnumerator GetPetByIdCoroutine(int petId, System.Action<Pet> callback)
     {
         string url = "https://localhost:7035/Pet/" + petId;

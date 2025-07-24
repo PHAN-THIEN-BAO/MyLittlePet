@@ -10,11 +10,9 @@ public class OpenAdopButton : MonoBehaviour
 
     void Awake()
     {
-        // Take the parent transform of this GameObject
         Transform parentTransform = transform.parent;
         if (parentTransform != null)
         {
-            // Find and assign components from the parent GameObject
             nameInput = parentTransform.Find("Name_Input").GetComponent<TMP_InputField>();
             adopButton = parentTransform.Find("Adop_Button").GetComponent<Button>();
             currentButton = parentTransform.Find("Open_Adop_Button").GetComponent<Button>();

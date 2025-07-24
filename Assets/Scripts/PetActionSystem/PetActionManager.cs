@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,17 +14,14 @@ public class PetActionManager : MonoBehaviour
     [SerializeField] private bool requirePetInfoManager = true;
     [SerializeField] private float retryFindManagerInterval = 2f;
     
-    // Action storage
     private Dictionary<string, PetAction> allActions = new Dictionary<string, PetAction>();
     private Queue<PetAction> actionQueue = new Queue<PetAction>();
     private List<PetAction> executingActions = new List<PetAction>();
     private List<PetAction> completedActions = new List<PetAction>();
     
-    // Dependency tracking
     private Dictionary<string, HashSet<string>> dependencyGraph = new Dictionary<string, HashSet<string>>();
     private Dictionary<string, int> inDegree = new Dictionary<string, int>();
     
-    // Reference to PetInfoUIManager
     private PetInfoUIManager petInfoManager;
     private Coroutine findManagerCoroutine;
     
@@ -47,7 +44,6 @@ public class PetActionManager : MonoBehaviour
     {
         FindPetInfoManager();
         
-        // Start coroutine to periodically search for PetInfoUIManager if not found
         if (petInfoManager == null && requirePetInfoManager)
         {
             findManagerCoroutine = StartCoroutine(RetryFindPetInfoManager());
@@ -56,7 +52,6 @@ public class PetActionManager : MonoBehaviour
 
     private void Update()
     {
-        // Only process actions if we have PetInfoUIManager or if it's not required
         if (petInfoManager != null || !requirePetInfoManager)
         {
             ProcessActionQueue();
@@ -64,18 +59,14 @@ public class PetActionManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Find PetInfoUIManager in scene
-    /// </summary>
     private void FindPetInfoManager()
     {
         petInfoManager = FindObjectOfType<PetInfoUIManager>();
         if (petInfoManager != null)
         {
             if (enableLogging)
-                Debug.Log("✅ PetInfoUIManager found and connected to PetActionManager");
+                Debug.Log("? PetInfoUIManager found and connected to PetActionManager");
             
-            // Stop retry coroutine if running
             if (findManagerCoroutine != null)
             {
                 StopCoroutine(findManagerCoroutine);
@@ -84,13 +75,10 @@ public class PetActionManager : MonoBehaviour
         }
         else if (requirePetInfoManager)
         {
-            Debug.LogWarning("⚠️ PetInfoUIManager not found! PetActionManager will retry finding it.");
+            Debug.LogWarning("?? PetInfoUIManager not found! PetActionManager will retry finding it.");
         }
     }
 
-    /// <summary>
-    /// Coroutine to periodically retry finding PetInfoUIManager
-    /// </summary>
     private IEnumerator RetryFindPetInfoManager()
     {
         while (petInfoManager == null)
@@ -100,20 +88,15 @@ public class PetActionManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Manually set PetInfoUIManager reference (useful for late initialization)
-    /// </summary>
     public void SetPetInfoUIManager(PetInfoUIManager manager)
     {
         petInfoManager = manager;
         if (enableLogging)
-            Debug.Log("✅ PetInfoUIManager manually set for PetActionManager");
+            Debug.Log("? PetInfoUIManager manually set for PetActionManager");
     }
 
-    // Add action with automatic topological sorting
     public void AddAction(PetAction action)
     {
-        // Check if we can add actions that require PetInfoUIManager
         if (requirePetInfoManager && petInfoManager == null && RequiresPetInfoManager(action.type))
         {
             Debug.LogWarning($"Cannot add action {action.actionId} of type {action.type}: PetInfoUIManager not found!");
@@ -137,7 +120,6 @@ public class PetActionManager : MonoBehaviour
             return;
         }
 
-        // Re-queue actions in topological order
         actionQueue.Clear();
         foreach (var sortedAction in sortedActions)
         {
@@ -153,9 +135,6 @@ public class PetActionManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Check if action type requires PetInfoUIManager
-    /// </summary>
     private bool RequiresPetInfoManager(PetAction.ActionType actionType)
     {
         switch (actionType)
@@ -173,20 +152,17 @@ public class PetActionManager : MonoBehaviour
         }
     }
 
-    // Build dependency graph for topological sorting
     private void BuildDependencyGraph()
     {
         dependencyGraph.Clear();
         inDegree.Clear();
 
-        // Initialize
         foreach (var action in allActions.Values)
         {
             dependencyGraph[action.actionId] = new HashSet<string>();
             inDegree[action.actionId] = 0;
         }
 
-        // Build edges
         foreach (var action in allActions.Values)
         {
             foreach (string dependency in action.dependencies)
@@ -200,14 +176,12 @@ public class PetActionManager : MonoBehaviour
         }
     }
 
-    // Topological sorting using Kahn's algorithm
     private List<PetAction> TopologicalSort()
     {
         var result = new List<PetAction>();
         var queue = new Queue<string>();
         var tempInDegree = new Dictionary<string, int>(inDegree);
 
-        // Add all nodes with no incoming edges
         foreach (var kvp in tempInDegree)
         {
             if (kvp.Value == 0)
@@ -221,7 +195,6 @@ public class PetActionManager : MonoBehaviour
             string currentId = queue.Dequeue();
             result.Add(allActions[currentId]);
 
-            // Remove edges from current node
             foreach (string neighbor in dependencyGraph[currentId])
             {
                 tempInDegree[neighbor]--;
@@ -232,13 +205,11 @@ public class PetActionManager : MonoBehaviour
             }
         }
 
-        // Check for circular dependencies
         if (result.Count != allActions.Count)
         {
-            return null; // Circular dependency detected
+            return null;
         }
 
-        // Sort by priority within topological order
         return result.OrderBy(a => GetTopologicalIndex(a, result))
                     .ThenByDescending(a => (int)a.priority)
                     .ToList();
@@ -249,14 +220,12 @@ public class PetActionManager : MonoBehaviour
         return topologicalOrder.FindIndex(a => a.actionId == action.actionId);
     }
 
-    // Process the action queue
     private void ProcessActionQueue()
     {
         while (actionQueue.Count > 0 && executingActions.Count < maxConcurrentActions)
         {
             PetAction nextAction = actionQueue.Dequeue();
             
-            // Skip actions that require PetInfoUIManager if it's not available
             if (RequiresPetInfoManager(nextAction.type) && petInfoManager == null)
             {
                 if (enableLogging)
@@ -264,21 +233,18 @@ public class PetActionManager : MonoBehaviour
                 continue;
             }
             
-            // Check if dependencies are met
             if (AreDependenciesMet(nextAction))
             {
                 StartCoroutine(ExecuteAction(nextAction));
             }
             else
             {
-                // Re-queue if dependencies not met
                 actionQueue.Enqueue(nextAction);
-                break; // Avoid infinite loop
+                break;
             }
         }
     }
 
-    // Check if all dependencies are completed
     private bool AreDependenciesMet(PetAction action)
     {
         foreach (string dependencyId in action.dependencies)
@@ -295,7 +261,6 @@ public class PetActionManager : MonoBehaviour
         return true;
     }
 
-    // Execute action coroutine
     private IEnumerator ExecuteAction(PetAction action)
     {
         action.isExecuting = true;
@@ -309,10 +274,8 @@ public class PetActionManager : MonoBehaviour
 
         action.OnActionStarted?.Invoke(action);
 
-        // Execute the actual action based on type
         yield return StartCoroutine(ExecuteActionByType(action));
 
-        // Mark as completed
         action.isCompleted = true;
         action.isExecuting = false;
         executingActions.Remove(action);
@@ -326,21 +289,17 @@ public class PetActionManager : MonoBehaviour
         }
     }
 
-    // Execute specific action types
     private IEnumerator ExecuteActionByType(PetAction action)
     {
-        // Early exit for actions that don't require PetInfoUIManager
         if (!RequiresPetInfoManager(action.type))
         {
             switch (action.type)
             {
                 case PetAction.ActionType.StatusDecay:
-                    // Handle status decay without PetInfoUIManager
                     yield return new WaitForSeconds(0.1f);
                     break;
                     
                 case PetAction.ActionType.LevelUp:
-                    // Handle level up logic without PetInfoUIManager
                     yield return new WaitForSeconds(1.0f);
                     break;
                     
@@ -351,7 +310,6 @@ public class PetActionManager : MonoBehaviour
             yield break;
         }
 
-        // For actions that require PetInfoUIManager
         if (petInfoManager == null)
         {
             Debug.LogError($"Cannot execute action {action.actionId}: PetInfoUIManager is required but not found!");
@@ -363,20 +321,19 @@ public class PetActionManager : MonoBehaviour
         {
             case PetAction.ActionType.Feed:
                 int feedAmount = action.GetParameter("amount", petInfoManager.feedIncreaseAmount);
-                petInfoManager.UpdatePetStatus(0, feedAmount); // 0 = hunger
+                petInfoManager.UpdatePetStatus(0, feedAmount);
                 yield return new WaitForSeconds(0.5f);
                 break;
 
             case PetAction.ActionType.Play:
                 int playAmount = action.GetParameter("amount", petInfoManager.playIncreaseAmount);
-                petInfoManager.UpdatePetStatus(1, playAmount); // 1 = happiness
+                petInfoManager.UpdatePetStatus(1, playAmount);
                 yield return new WaitForSeconds(1.0f);
                 break;
 
             case PetAction.ActionType.Sleep:
                 int sleepAmount = action.GetParameter("amount", petInfoManager.sleepIncreaseAmount);
                 
-                // ========== INTEGRATE WITH PETSLEEPMANAGER ==========
                 if (PetSleepManager.Instance != null)
                 {
                     int petID = action.GetParameter("petID", -1);
@@ -389,7 +346,7 @@ public class PetActionManager : MonoBehaviour
                     }
                 }
                 
-                petInfoManager.UpdatePetStatus(2, sleepAmount); // 2 = energy
+                petInfoManager.UpdatePetStatus(2, sleepAmount);
                 yield return new WaitForSeconds(2.0f);
                 break;
 
@@ -417,15 +374,13 @@ public class PetActionManager : MonoBehaviour
         }
     }
 
-    // Update executing actions
     private void UpdateExecutingActions()
     {
         for (int i = executingActions.Count - 1; i >= 0; i--)
         {
             PetAction action = executingActions[i];
             
-            // Check for timeout or other failure conditions
-            if (Time.time - action.executionTime > 10f) // 10 second timeout
+            if (Time.time - action.executionTime > 10f)
             {
                 Debug.LogWarning($"Action {action.actionId} timed out!");
                 action.OnActionFailed?.Invoke(action);
@@ -436,7 +391,6 @@ public class PetActionManager : MonoBehaviour
         }
     }
 
-    // Convenience methods for adding common actions
     public void FeedPet(int amount = 0, string dependsOn = null)
     {
         var action = new PetAction($"feed_{Time.time}", PetAction.ActionType.Feed, PetAction.ActionPriority.Normal);
@@ -457,7 +411,7 @@ public class PetActionManager : MonoBehaviour
     {
         var action = new PetAction($"sleep_{Time.time}", PetAction.ActionType.Sleep, PetAction.ActionPriority.Normal);
         if (amount > 0) action.SetParameter("amount", amount);
-        action.SetParameter("petID", playerPetID); // Use playerPetID here!
+        action.SetParameter("petID", playerPetID);
         action.SetParameter("duration", duration);
         if (!string.IsNullOrEmpty(dependsOn)) action.AddDependency(dependsOn);
         AddAction(action);
@@ -465,11 +419,9 @@ public class PetActionManager : MonoBehaviour
 
     public void PetSleep(int amount = 0, string dependsOn = null)
     {
-        // This is the old method - should get current pet ID somehow
         var action = new PetAction($"sleep_{Time.time}", PetAction.ActionType.Sleep, PetAction.ActionPriority.Normal);
         if (amount > 0) action.SetParameter("amount", amount);
         
-        // Try to get current pet ID from PetInfoUIManager
         if (petInfoManager != null)
         {
             var (currentPetId, _) = petInfoManager.GetCurrentPetAndPlayerId();
@@ -490,7 +442,6 @@ public class PetActionManager : MonoBehaviour
         AddAction(action);
     }
 
-    // Clear all actions
     public void ClearAllActions()
     {
         allActions.Clear();
@@ -501,7 +452,6 @@ public class PetActionManager : MonoBehaviour
         inDegree.Clear();
     }
 
-    // Get action status
     public bool IsActionCompleted(string actionId)
     {
         return allActions.ContainsKey(actionId) && allActions[actionId].isCompleted;
@@ -512,9 +462,6 @@ public class PetActionManager : MonoBehaviour
         return allActions.ContainsKey(actionId) && allActions[actionId].isExecuting;
     }
     
-    /// <summary>
-    /// Check if PetInfoUIManager is available
-    /// </summary>
     public bool HasPetInfoUIManager()
     {
         return petInfoManager != null;

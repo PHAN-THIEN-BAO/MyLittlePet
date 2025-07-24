@@ -1,8 +1,8 @@
 [System.Serializable]
 public class Shop
 {
-    public int shopID;           // ShopID
-    public string name;          // Name
-    public string type;          // Type
-    public string description;   // Description
+    public int shopID;
+    public string name;
+    public string type;
+    public string description;
 }

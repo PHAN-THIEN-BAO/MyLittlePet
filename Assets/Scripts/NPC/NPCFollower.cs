@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NPCFollower : MonoBehaviour
@@ -39,7 +39,6 @@ public class NPCFollower : MonoBehaviour
 
     void InitializeNPC()
     {
-        // Tìm player
         if (player == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -50,13 +49,12 @@ public class NPCFollower : MonoBehaviour
             }
             else
             {
-                Debug.LogError("NPCFollower: Không tìm thấy Player!");
+                Debug.LogError("NPCFollower: Kh�ng t�m th?y Player!");
                 enabled = false;
                 return;
             }
         }
 
-        // Setup components
         if (SetupComponents())
         {
             isInitialized = true;
@@ -64,14 +62,13 @@ public class NPCFollower : MonoBehaviour
         }
         else
         {
-            Debug.LogError("NPCFollower: Không thể khởi tạo components!");
+            Debug.LogError("NPCFollower: Kh�ng th? kh?i t?o components!");
             enabled = false;
         }
     }
 
     bool SetupComponents()
     {
-        // Rigidbody2D
         rb2D = GetComponent<Rigidbody2D>();
         if (rb2D == null)
         {
@@ -80,7 +77,7 @@ public class NPCFollower : MonoBehaviour
 
         if (rb2D == null)
         {
-            Debug.LogError("NPCFollower: Không thể tạo Rigidbody2D!");
+            Debug.LogError("NPCFollower: Kh�ng th? t?o Rigidbody2D!");
             return false;
         }
 
@@ -91,7 +88,6 @@ public class NPCFollower : MonoBehaviour
         rb2D.interpolation = RigidbodyInterpolation2D.Interpolate;
         rb2D.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
-        // Animator và SpriteRenderer (optional)
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -112,13 +108,11 @@ public class NPCFollower : MonoBehaviour
         Vector2 currentPlayerPos = player.position;
         float distanceMoved = Vector2.Distance(currentPlayerPos, lastPlayerPosition);
 
-        // Chỉ ghi lại vị trí khi player di chuyển đủ xa
         if (distanceMoved >= minimumMoveDistance)
         {
             positionHistory.Enqueue(lastPlayerPosition);
             lastPlayerPosition = currentPlayerPos;
 
-            // Giới hạn queue size
             while (positionHistory.Count > maxQueueSize)
             {
                 currentTarget = positionHistory.Dequeue();
@@ -139,22 +133,19 @@ public class NPCFollower : MonoBehaviour
         float distanceToTarget = Vector2.Distance(currentPos, currentTarget);
         float distanceToPlayer = Vector2.Distance(currentPos, player.position);
 
-        // Sửa logic: Ưu tiên target hơn khoảng cách đến player
         if (distanceToTarget <= stoppingDistance)
         {
             StopMovement();
-            hasTarget = false; // Target đã đạt được
+            hasTarget = false;
             return;
         }
 
-        // Chỉ dừng nếu quá gần player VÀ không có target quan trọng
         if (distanceToPlayer < followDistance * 0.7f && distanceToTarget > stoppingDistance * 2f)
         {
             StopMovement();
             return;
         }
 
-        // Di chuyển đến target
         MoveToTarget(currentPos, distanceToTarget);
     }
 
@@ -164,8 +155,7 @@ public class NPCFollower : MonoBehaviour
 
         if (smoothMovement)
         {
-            // Tăng tốc dần với giới hạn
-            float targetSpeed = Mathf.Min(moveSpeed, distanceToTarget * 2f); // Giảm tốc khi gần target
+            float targetSpeed = Mathf.Min(moveSpeed, distanceToTarget * 2f);
             currentSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.fixedDeltaTime / accelerationTime);
             currentVelocity = direction * currentSpeed;
         }
@@ -185,7 +175,6 @@ public class NPCFollower : MonoBehaviour
     {
         if (smoothMovement)
         {
-            // Giảm tốc dần
             currentSpeed = Mathf.Lerp(currentSpeed, 0f, Time.fixedDeltaTime / decelerationTime);
             currentVelocity = Vector2.Lerp(currentVelocity, Vector2.zero, Time.fixedDeltaTime / decelerationTime);
 
@@ -210,7 +199,6 @@ public class NPCFollower : MonoBehaviour
 
     void UpdateAnimationAndDirection()
     {
-        // Cập nhật animation
         if (enableAnimation && animator != null)
         {
             animator.SetFloat("Move X", currentVelocity.x);
@@ -218,21 +206,19 @@ public class NPCFollower : MonoBehaviour
             animator.SetBool("IsMoving", isMoving);
         }
 
-        // Lật sprite theo hướng di chuyển - ưu tiên hướng so với player
         if (enableDirectionFlip && spriteRenderer != null)
         {
-            // Luôn luôn quay mặt về hướng player hiện tại, bất kể đang di chuyển hay không
             Vector2 directionToPlayer = ((Vector2)player.position - (Vector2)transform.position).normalized;
             
             if (Mathf.Abs(directionToPlayer.x) > 0.1f)
             {
                 if (directionToPlayer.x > 0)
                 {
-                    spriteRenderer.flipX = false; // Quay phải
+                    spriteRenderer.flipX = false;
                 }
                 else
                 {
-                    spriteRenderer.flipX = true;  // Quay trái
+                    spriteRenderer.flipX = true;
                 }
             }
         }
@@ -244,15 +230,12 @@ public class NPCFollower : MonoBehaviour
 
         Vector3 position = transform.position;
 
-        // Vẽ khoảng cách follow bằng wireframe sphere (3D nhưng vẫn thấy được)
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(position, followDistance);
 
-        // Vẽ khoảng cách dừng
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(position, stoppingDistance);
 
-        // Vẽ target hiện tại
         if (hasTarget)
         {
             Gizmos.color = Color.blue;
@@ -260,7 +243,6 @@ public class NPCFollower : MonoBehaviour
             Gizmos.DrawLine(position, currentTarget);
         }
 
-        // Vẽ đường đi
         if (positionHistory != null && positionHistory.Count > 1)
         {
             Gizmos.color = Color.yellow;
@@ -278,7 +260,6 @@ public class NPCFollower : MonoBehaviour
         }
     }
 
-    // Public methods với validation
     public void SetFollowTarget(Transform newPlayer)
     {
         if (newPlayer == null)
@@ -306,7 +287,7 @@ public class NPCFollower : MonoBehaviour
         if (player != null)
         {
             lastPlayerPosition = player.position;
-            positionHistory.Clear(); // Reset để tránh jump
+            positionHistory.Clear();
         }
     }
 

@@ -4,8 +4,8 @@ using UnityEngine;
 public class PlayAudio : MonoBehaviour
 {
     [Header("Audio Settings")]
-    public AudioClip firstAudioClip;      // play once at the start
-    public AudioClip infiniteAudioClip;   // play infinitely after the first clip
+    public AudioClip firstAudioClip;
+    public AudioClip infiniteAudioClip;
     [Range(0f, 1f)]
     public float volume = 1f;
 
@@ -43,7 +43,6 @@ public class PlayAudio : MonoBehaviour
 
     void Update()
     {
-        // if the first audio clip has finished playing, switch to the infinite audio clip
         if (playedFirst && !audioSource.isPlaying)
         {
             PlayInfinite();

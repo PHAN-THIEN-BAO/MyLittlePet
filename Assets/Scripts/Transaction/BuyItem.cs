@@ -24,7 +24,6 @@ public class BuyItem : MonoBehaviour
             Debug.Log("Sibling: " + child.name);
         }
 
-        // 1. Take product ID from sibling Id_Item
         Transform idItemTransform = transform.parent.Find("Id_Item");
         if (idItemTransform == null)
         {
@@ -50,16 +49,10 @@ public class BuyItem : MonoBehaviour
 
         //TMP_Text idPetText = idPetTransform.GetComponent<TMP_Text>();
         //if (idPetText != null)
-        //{
-        //    if()
-        //    {
 
-        //    }
-        //}
 
         int shopProductID = int.Parse(idText.text);
 
-        // 2. Take product from database by ID
         ShopProduct product = APIShopProduct.GetShopProductById(shopProductID);
         if (product == null)
         {
@@ -67,7 +60,6 @@ public class BuyItem : MonoBehaviour
             return;
         }
 
-        // 3. check if user has enough currency to buy the product
         int quantity = 1;
         int userCurrency = ChooseUserCurrencies(product.currencyType);
         bool canBuy = CurenciesValidation.ValidateCurrencies(userCurrency, product.price, quantity);
@@ -77,7 +69,6 @@ public class BuyItem : MonoBehaviour
             return;
         }
 
-        // 4. Subtract currency from user
         PlayerInfomation.UpdatePlayerInfo(u =>
         {
             if (product.currencyType == "Coin")
@@ -88,13 +79,11 @@ public class BuyItem : MonoBehaviour
                 u.gem -= product.price * quantity;
         });
 
-        // 5. Update user information in the database
         APIUser.UpdateUser();
 
         Debug.Log("Purchase successful!");
 
 
-        // 6. Update player inventory
         PlayerInventory playerInventory = new PlayerInventory
         {
             playerID = user.id,
@@ -130,7 +119,7 @@ public class BuyItem : MonoBehaviour
         }
         else
         {
-            return user.coin; // Default to coin if no match
+            return user.coin;
         }
 
     }

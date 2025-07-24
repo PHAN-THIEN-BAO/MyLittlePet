@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -17,23 +17,19 @@ public class DisPlayPlayerPet : MonoBehaviour
 
     public void DisplayListPet()
     {
-        // 1. Delete all cloned pets except the original prefab
         for (int i = tranformPet.childCount - 1; i >= 0; i--)
         {
             var child = tranformPet.GetChild(i).gameObject;
-            if (child != pet) // not the original pet prefab
+            if (child != pet)
                 Destroy(child);
         }
         petClones.Clear();
-        // 2. split playerId text to get userId
         string[] parts = playerId.text.Split(':');
         if (parts.Length < 2) return;
         if (!int.TryParse(parts[1].Trim(), out int userId)) return;
 
-        // 3. call API to get player pets by userId
         List<PlayerPet> playerPets = APIPlayerPet.GetPlayerPetByPlayerId(userId);
 
-        // 4. show number of pets
         if (playerPets != null)
             numberOfPet.text = "Pet Own: " + playerPets.Count.ToString();
         else
@@ -42,28 +38,22 @@ public class DisPlayPlayerPet : MonoBehaviour
 
 
 
-        // 5. Hide the original pet prefab
         pet.SetActive(false);
 
         if (playerPets == null || playerPets.Count == 0) return;
 
-        // 6. Clone pet and set data for each pet
         foreach (var playerPet in playerPets)
         {
             GameObject petObj = Instantiate(pet, tranformPet);
             petObj.SetActive(true);
             petClones.Add(petObj);
 
-            // Set tên
             var nameText = petObj.transform.Find("Name_Player_Pet")?.GetComponent<TMP_Text>();
             if (nameText != null) nameText.text = playerPet.petCustomName;
 
-            // Level functionality has been removed from the database schema
-            // Set level display to show status instead
             var levelText = petObj.transform.Find("Level")?.GetComponent<TMP_Text>();
             if (levelText != null) levelText.text = "Status: " + (playerPet.status ?? "Active");
 
-            // Set avatar
             var avatarImage = petObj.transform.Find("Avatar")?.GetComponent<Image>();
             if (avatarImage != null)
             {
@@ -77,7 +67,6 @@ public class DisPlayPlayerPet : MonoBehaviour
                 StartCoroutine(LoadImage(imageUrl, avatarImage));
             }
         }
-        // 7. scroll list pet to the top
         ResetScrollPosition();
     }
 
@@ -97,9 +86,6 @@ public class DisPlayPlayerPet : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Set scroll position of the scrollListPet to the top.
-    /// </summary>
     private void ResetScrollPosition()
     {
         if (scrollListPet != null)
@@ -107,7 +93,6 @@ public class DisPlayPlayerPet : MonoBehaviour
             ScrollRect scrollRect = scrollListPet.GetComponent<ScrollRect>();
             if (scrollRect != null)
             {
-                // scroll to the top using normalized position
                 scrollRect.normalizedPosition = new Vector2(0, 1);
 
 

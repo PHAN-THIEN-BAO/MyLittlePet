@@ -11,10 +11,9 @@ public class LoadChoosePet : MonoBehaviour
 
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SetPetInfo(int.Parse(petID.text)); // Example pet ID, replace with actual ID as needed
+        SetPetInfo(int.Parse(petID.text));
         Debug.Log("LoadChoosePet Start called with petID: " + petID.text);
     }
 

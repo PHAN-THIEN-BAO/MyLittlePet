@@ -7,49 +7,29 @@ using UnityEngine;
 
 public class APIShopProduct : MonoBehaviour
 {
-    /// <summary>
-    /// Fetches all shop products of a specific type from the API.
-    /// </summary>
-    /// <param name="Type"></param>
-    /// <returns></returns>
     public static List<ShopProduct> GetAllShopProducts(string Type)
     {
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/ShopProduct/Type/" + Type);
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        // Read the response stream and convert it to a string
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string jsonResponse = reader.ReadToEnd();
         reader.Close();
 
-        // Parse JSON thành List<ShopProduct>
         var allProducts = JsonConvert.DeserializeObject<List<ShopProduct>>(jsonResponse);
 
-        // fillter out products with status 0
         allProducts.RemoveAll(p => p.status == 0);
         return allProducts;
     }
-    /// <summary>
-    /// Fetches a specific shop product by its ID from the API.
-    /// </summary>
-    /// <param name="shopProductID"></param>
-    /// <returns></returns>
     public static ShopProduct GetShopProductById(int shopProductID)
     {
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:7035/ShopProduct/" + shopProductID);
         HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-        // Read the response stream and convert it to a string
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string jsonResponse = reader.ReadToEnd();
         reader.Close();
-        // Parse the JSON response into a ShopProduct object
         return JsonConvert.DeserializeObject<ShopProduct>(jsonResponse);
     }
 
-    /// <summary>
-    /// Fetches a shop product by pet ID from the API.
-    /// </summary>
-    /// <param name="petId">The ID of the pet</param>
-    /// <returns>A ShopProduct associated with the specified pet ID</returns>
     public static ShopProduct GetShopProductByIdPet(int petId)
     {
         try
@@ -66,10 +46,8 @@ public class APIShopProduct : MonoBehaviour
                         string jsonResponse = reader.ReadToEnd();
                         Debug.Log($"[API] Raw JSON for petId {petId}: {jsonResponse}");
 
-                        // Parse JSON to ShopProductResponse
                         var productResponse = JsonConvert.DeserializeObject<ShopProductResponse>(jsonResponse);
 
-                        // check if products list is not null and has at least one product
                         if (productResponse != null &&
                             productResponse.products != null &&
                             productResponse.products.Count > 0)
