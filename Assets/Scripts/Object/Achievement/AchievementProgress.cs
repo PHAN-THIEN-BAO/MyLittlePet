@@ -119,9 +119,13 @@ public class AchievementProgress : MonoBehaviour
                     continue;
                 }
                 TMP_Text progressText = achievement.transform.Find("Progress_Detail")?.GetComponent<TMP_Text>();
+                Debug.Log($"Progress Text: {progressText?.text}");
                 if (progressText == null) continue;
                 int currentValue = ExtractFirstNumber(progressText.text);
                 int targetValue = ExtractLastNumber(progressText.text);
+                //Debug.Log($"Current Value: {currentValue},  /  Target Value: {targetValue}");
+
+                // If completed, show the Ready_Collected_Button
                 GameObject readyButton = achievement.transform.Find("Ready_Collected_Button")?.gameObject;
                 GameObject notCollectedButton = achievement.transform.Find("Not_Collected_Button")?.gameObject;
                 if (readyButton != null)
@@ -154,10 +158,28 @@ public class AchievementProgress : MonoBehaviour
             return 0;
         string[] parts = progressString.Split('/');
         if (parts.Length != 2)
-            return 0;
-        if (float.TryParse(parts[0], out float firstNumber))
         {
-            if (parts[0].Contains("k") || parts[0].Contains("K"))
+            return 0;
+        }
+
+        Debug.Log($"ExtractFirstNumber - parts[0]: {parts[0]}");
+
+        string firstPart = parts[0].Trim();
+
+        // Check if there's a 'k' suffix
+        bool hasKSuffix = firstPart.EndsWith("k") || firstPart.EndsWith("K");
+
+        if (hasKSuffix)
+        {
+            // Remove the 'k' suffix
+            firstPart = firstPart.Substring(0, firstPart.Length - 1);
+        }
+
+        // Now try to parse without the 'k'
+        if (float.TryParse(firstPart, out float firstNumber))
+        {
+            // If it had a 'k' suffix, multiply by 1000
+            if (hasKSuffix)
             {
                 firstNumber *= 1000;
             }

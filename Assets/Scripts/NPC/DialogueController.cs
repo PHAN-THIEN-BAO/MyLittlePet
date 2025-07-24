@@ -330,9 +330,27 @@ public class DialogueController : MonoBehaviour
         }
         int playerId = PlayerInfomation.LoadPlayerInfo().id;
         int currentPetId = GetCurrentPetId();
+
+        // ========== NEW: WAKE UP PET IF NEEDED ==========
+        bool petWasAwakened = false;
+        if (petSleepManager != null && currentPetId != -1)
+        {
+            petWasAwakened = petSleepManager.WakeUpPetForCareAction(currentPetId, actionType);
+            if (petWasAwakened)
+            {
+                petInfoManager.ShowStatusMessage($"Pet woke up for {action.ToString().ToLower()}! 😊", Color.cyan);
+            }
+        }
+
         switch (action)
         {
             case PetCareAction.Feed:
+                // ========== ENHANCED FEED WITH WAKE UP FEEDBACK ==========
+                if (petWasAwakened)
+                {
+                    Debug.Log($"🍎 Pet {currentPetId} was awakened for feeding via dialogue");
+                }
+
                 if (feedingManager != null)
                 {
                     feedingManager.ShowFeedingPanel(playerId, customCareAmount);
@@ -346,6 +364,12 @@ public class DialogueController : MonoBehaviour
                 petInfoManager.OnFeedButtonClickedWithHistory();
                 break;
             case PetCareAction.Play:
+                // ========== ENHANCED PLAY WITH WAKE UP FEEDBACK ==========
+                if (petWasAwakened)
+                {
+                    Debug.Log($"🎾 Pet {currentPetId} was awakened for playing via dialogue");
+                }
+
                 if (playingManager != null)
                 {
                     playingManager.ShowPlayingPanel(playerId);
@@ -420,6 +444,12 @@ public class DialogueController : MonoBehaviour
                 petInfoManager.OnSleepButtonClickedWithHistory();
                 break;
             case PetCareAction.CareForAll:
+                // ========== ENHANCED CARE ALL WITH WAKE UP FEEDBACK ==========
+                if (petWasAwakened)
+                {
+                    Debug.Log($"🎯 Pet {currentPetId} was awakened for comprehensive care via dialogue");
+                }
+
                 if (customCareAmount > 0)
                 {
                     petInfoManager.ScheduleSmartCare();

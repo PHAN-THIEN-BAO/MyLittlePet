@@ -18,7 +18,6 @@ public class DialogueLine
 public class Dialogue
 {
     public List<DialogueLine> dialogueLines = new List<DialogueLine>();
-}
 public class DialougeTrigger : MonoBehaviour
 {
     public Dialogue dialogue;
@@ -136,15 +135,32 @@ public class DialougeTrigger : MonoBehaviour
         if ((triggerOnce || persistAcrossScenes) && hasTriggered)
             return;
         hasTriggered = true;
+
         if (persistAcrossScenes)
         {
             PlayerPrefs.SetInt(prefsKey, 1);
             PlayerPrefs.Save();
         }
+
+
+        // BẬT UI PANEL TRƯỚC
         if (dialoguePanel != null)
             dialoguePanel.SetActive(true);
+
+        // GỌI DialogueManager
         if (DialogueManager.Instance != null)
         {
+            // CHỈ GỌI StartDialog NẾU DialogueManager đang active
+            if (DialogueManager.Instance.gameObject.activeInHierarchy)
+            {
+                DialogueManager.Instance.StartDialog(dialogue);
+            }
+            else
+            {
+                Debug.LogError("DialogueManager đã bị tắt trong Hierarchy!");
+            }
+
+
             if (showIndicatorWithDialogue && indicatorPrefab != null)
             {
                 ShowWorldIndicator();
@@ -153,14 +169,20 @@ public class DialougeTrigger : MonoBehaviour
             {
                 DestroyIndicator();
             }
-            DialogueManager.Instance.StartDialog(dialogue);
+
+
             onDialogueStart?.Invoke();
         }
         else
         {
-            Debug.LogError("DialogueManager.Instance kh�ng t?n t?i! �?m b?o c� m?t GameObject v?i DialogueManager trong scene.");
+
+           
+
+            Debug.LogError("DialogueManager.Instance không tồn tại!");
             if (dialoguePanel != null)
                 dialoguePanel.SetActive(false);
+
+
             if (showIndicatorWithDialogue && indicatorPrefab != null)
             {
                 ShowWorldIndicator();
