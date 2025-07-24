@@ -18,6 +18,7 @@ public class DialogueLine
 public class Dialogue
 {
     public List<DialogueLine> dialogueLines = new List<DialogueLine>();
+}
 public class DialougeTrigger : MonoBehaviour
 {
     public Dialogue dialogue;

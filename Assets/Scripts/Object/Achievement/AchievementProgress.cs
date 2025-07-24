@@ -123,9 +123,7 @@ public class AchievementProgress : MonoBehaviour
                 if (progressText == null) continue;
                 int currentValue = ExtractFirstNumber(progressText.text);
                 int targetValue = ExtractLastNumber(progressText.text);
-                //Debug.Log($"Current Value: {currentValue},  /  Target Value: {targetValue}");
-
-                // If completed, show the Ready_Collected_Button
+                
                 GameObject readyButton = achievement.transform.Find("Ready_Collected_Button")?.gameObject;
                 GameObject notCollectedButton = achievement.transform.Find("Not_Collected_Button")?.gameObject;
                 if (readyButton != null)
@@ -166,19 +164,19 @@ public class AchievementProgress : MonoBehaviour
 
         string firstPart = parts[0].Trim();
 
-        // Check if there's a 'k' suffix
+       
         bool hasKSuffix = firstPart.EndsWith("k") || firstPart.EndsWith("K");
 
         if (hasKSuffix)
         {
-            // Remove the 'k' suffix
+           
             firstPart = firstPart.Substring(0, firstPart.Length - 1);
         }
 
-        // Now try to parse without the 'k'
+        
         if (float.TryParse(firstPart, out float firstNumber))
         {
-            // If it had a 'k' suffix, multiply by 1000
+           
             if (hasKSuffix)
             {
                 firstNumber *= 1000;

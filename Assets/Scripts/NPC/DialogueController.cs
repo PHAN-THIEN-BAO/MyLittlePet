@@ -331,7 +331,6 @@ public class DialogueController : MonoBehaviour
         int playerId = PlayerInfomation.LoadPlayerInfo().id;
         int currentPetId = GetCurrentPetId();
 
-        // ========== NEW: WAKE UP PET IF NEEDED ==========
         bool petWasAwakened = false;
         if (petSleepManager != null && currentPetId != -1)
         {
@@ -345,7 +344,6 @@ public class DialogueController : MonoBehaviour
         switch (action)
         {
             case PetCareAction.Feed:
-                // ========== ENHANCED FEED WITH WAKE UP FEEDBACK ==========
                 if (petWasAwakened)
                 {
                     Debug.Log($"🍎 Pet {currentPetId} was awakened for feeding via dialogue");
@@ -364,7 +362,6 @@ public class DialogueController : MonoBehaviour
                 petInfoManager.OnFeedButtonClickedWithHistory();
                 break;
             case PetCareAction.Play:
-                // ========== ENHANCED PLAY WITH WAKE UP FEEDBACK ==========
                 if (petWasAwakened)
                 {
                     Debug.Log($"🎾 Pet {currentPetId} was awakened for playing via dialogue");
@@ -444,7 +441,7 @@ public class DialogueController : MonoBehaviour
                 petInfoManager.OnSleepButtonClickedWithHistory();
                 break;
             case PetCareAction.CareForAll:
-                // ========== ENHANCED CARE ALL WITH WAKE UP FEEDBACK ==========
+          
                 if (petWasAwakened)
                 {
                     Debug.Log($"🎯 Pet {currentPetId} was awakened for comprehensive care via dialogue");
