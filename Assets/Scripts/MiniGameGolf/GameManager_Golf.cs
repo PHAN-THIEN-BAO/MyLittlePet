@@ -54,9 +54,9 @@ public class GameManager_Golf : MonoBehaviour
     void UpdateStrokeUI()
     {
         if (playerStrokeText != null)
-            playerStrokeText.text = "Số gậy người chơi: " + playerStrokeCount;
+            playerStrokeText.text = "Số gậy: " + playerStrokeCount;
         if (petStrokeText != null)
-            petStrokeText.text = "Số gậy pet: " + petStrokeCount;
+            petStrokeText.text = "Số gậy: " + petStrokeCount;
     }
 
     public void RegisterFinish(GolfBall ball)
@@ -68,6 +68,7 @@ public class GameManager_Golf : MonoBehaviour
             playerDone = true;
             if (!petDone && winText != null)
             {
+                playerStrokeText.gameObject.SetActive(false);
                 winText.text = "Bạn đã thắng!";
                 winText.gameObject.SetActive(true);
                 if (quitButton != null) quitButton.SetActive(true);
