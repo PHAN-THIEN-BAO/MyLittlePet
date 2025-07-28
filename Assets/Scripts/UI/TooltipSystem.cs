@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
@@ -16,7 +16,7 @@ public class TooltipSystem : MonoBehaviour
 
     [Header("Fixed Position Settings")]
     public bool useFixedPosition = true;
-    public Vector2 fixedPosition = new Vector2(100, -100); // Position từ góc trên-trái
+    public Vector2 fixedPosition = new Vector2(100, -100);
     
     private Canvas canvas;
     private RectTransform canvasRect;
@@ -44,7 +44,6 @@ public class TooltipSystem : MonoBehaviour
         if (showCoroutine != null)
             StopCoroutine(showCoroutine);
             
-        // ========== BỎ QUA POSITION PARAMETER NẾU SỬ DỤNG FIXED POSITION ==========
         Vector2 actualPosition = useFixedPosition ? fixedPosition : position;
         showCoroutine = StartCoroutine(ShowTooltipDelayed(text, actualPosition));
     }
@@ -74,23 +73,19 @@ public class TooltipSystem : MonoBehaviour
             
             if (useFixedPosition)
             {
-                // ========== VỊ TRÍ CỐ ĐỊNH ==========
                 tooltipRect.anchoredPosition = fixedPosition;
             }
             else
             {
-                // ========== VỊ TRÍ THEO MOUSE (LEGACY) ==========
                 Vector2 localPosition;
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
                     canvasRect, position + offset, canvas.worldCamera, out localPosition);
                 
-                // Keep tooltip within canvas bounds
                 Vector3[] canvasCorners = new Vector3[4];
                 canvasRect.GetWorldCorners(canvasCorners);
                 Vector3[] tooltipCorners = new Vector3[4];
                 tooltipRect.GetWorldCorners(tooltipCorners);
                 
-                // Adjust position if tooltip goes outside canvas
                 if (localPosition.x + tooltipRect.rect.width > canvasRect.rect.width / 2)
                     localPosition.x -= tooltipRect.rect.width + offset.x * 2;
                     

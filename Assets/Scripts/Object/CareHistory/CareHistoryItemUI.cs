@@ -29,53 +29,41 @@ public class CareHistoryItemUI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Set up the history item with care history data
-    /// </summary>
     public void SetupHistoryItem(CareHistory history, bool showDetails = true)
     {
         historyData = history;
 
-        // Set date and time
         if (dateTimeText != null)
         {
             dateTimeText.text = FormatDateTime(history.performedAt);
         }
 
-        // Set activity type
         if (activityTypeText != null)
         {
             activityTypeText.text = GetActivityTypeText(history.activityId);
         }
 
-        // Set pet information
         if (petNameText != null)
         {
             SetPetInfo(history.playerPetId);
         }
 
-        // Set player information
         if (playerNameText != null)
         {
             SetPlayerInfo(history.playerId);
         }
 
-        // Set activity icon
         if (activityIcon != null)
         {
             activityIcon.sprite = GetActivityIcon(history.activityId);
         }
 
-        // Show/hide details button
         if (detailsButton != null)
         {
             detailsButton.gameObject.SetActive(showDetails);
         }
     }
 
-    /// <summary>
-    /// Format the DateTime for display
-    /// </summary>
     private string FormatDateTime(DateTime dateTime)
     {
         TimeSpan timeDiff = DateTime.Now - dateTime;
@@ -92,12 +80,8 @@ public class CareHistoryItemUI : MonoBehaviour
             return dateTime.ToString("MMM dd, yyyy");
     }
 
-    /// <summary>
-    /// Get activity type text based on activity ID
-    /// </summary>
     private string GetActivityTypeText(int activityId)
     {
-        // You can customize this based on your activity types
         switch (activityId)
         {
             case 1: return "Feeding";
@@ -107,9 +91,6 @@ public class CareHistoryItemUI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Get activity icon based on activity ID
-    /// </summary>
     private Sprite GetActivityIcon(int activityId)
     {
         switch (activityId)
@@ -121,9 +102,6 @@ public class CareHistoryItemUI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Set pet information
-    /// </summary>
     private void SetPetInfo(int playerPetId)
     {
         try
@@ -145,9 +123,6 @@ public class CareHistoryItemUI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Set player information
-    /// </summary>
     private void SetPlayerInfo(int playerId)
     {
         try
@@ -169,9 +144,6 @@ public class CareHistoryItemUI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Show detailed information about this care history item
-    /// </summary>
     private void ShowDetails()
     {
         if (historyData == null) return;
@@ -185,13 +157,8 @@ public class CareHistoryItemUI : MonoBehaviour
 
         Debug.Log(details);
         
-        // You can implement a popup or tooltip system here
-        // For now, just log the details
     }
 
-    /// <summary>
-    /// Get the history data for this item
-    /// </summary>
     public CareHistory GetHistoryData()
     {
         return historyData;

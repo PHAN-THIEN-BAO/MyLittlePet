@@ -1,7 +1,6 @@
 using System.IO;
 using System.Net;
 using UnityEngine;
-
 public class APiMinigame : MonoBehaviour
 {
     public static Minigame GetMinigameById(int minigameID)

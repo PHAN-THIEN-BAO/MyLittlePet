@@ -3,29 +3,29 @@ using UnityEngine;
 public class ObjectSceneTransition : MonoBehaviour
 {
     [Header("Scene Transition Settings")]
-    [SerializeField] private string targetSceneName = ""; // Tên scene ?ích
-    [SerializeField] private Vector3 playerSpawnPosition = Vector3.zero; // V? trí spawn player
+    [SerializeField] private string targetSceneName = "";
+    [SerializeField] private Vector3 playerSpawnPosition = Vector3.zero;
     
     [Header("Interaction Method")]
     [SerializeField] private TransitionMethod transitionMethod = TransitionMethod.OnTrigger;
     [SerializeField] private KeyCode interactKey = KeyCode.E;
     
     [Header("UI Feedback")]
-    [SerializeField] private GameObject interactionPrompt; // UI thông báo
+    [SerializeField] private GameObject interactionPrompt;
     [SerializeField] private string promptMessage = "Press E to enter";
     
     [Header("Advanced Settings")]
-    [SerializeField] private bool useOnce = false; // Ch? dùng m?t l?n
-    [SerializeField] private bool destroyAfterUse = false; // Xóa sau khi dùng
+    [SerializeField] private bool useOnce = false;
+    [SerializeField] private bool destroyAfterUse = false;
     
     private bool playerInRange = false;
     private bool hasBeenUsed = false;
 
     public enum TransitionMethod
     {
-        OnTrigger,    // T? ??ng khi player ch?m vào
-        KeyPress,     // Nh?n phím khi ? g?n
-        OnClick       // Click chu?t vào object
+        OnTrigger,
+        KeyPress,
+        OnClick
     }
 
     void Update()
@@ -89,7 +89,6 @@ public class ObjectSceneTransition : MonoBehaviour
         if (useOnce) hasBeenUsed = true;
         HideInteractionPrompt();
 
-        // S? d?ng SceneTransitionManager n?u có
         if (SceneTransitionManager.Instance != null)
         {
             SceneTransitionManager.Instance.TransitionToScene(targetSceneName, playerSpawnPosition);
@@ -129,11 +128,9 @@ public class ObjectSceneTransition : MonoBehaviour
         }
     }
 
-    // Public methods
     public void ManualTrigger() => TriggerTransition();
     public void ResetUsage() => hasBeenUsed = false;
 
-    // Gizmos cho debug
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;

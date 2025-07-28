@@ -7,16 +7,14 @@ public class LogoutUser : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 {
     [SerializeField] public string LoadScene;
     [SerializeField] private Color normalColor = Color.white;
-    [SerializeField] private Color hoverColor = new Color(0.9f, 0.9f, 0.9f); // Slightly different color
+    [SerializeField] private Color hoverColor = new Color(0.9f, 0.9f, 0.9f);
 
     private Image buttonImage;
 
     private void Awake()
     {
-        // Get the Image component (button background)
         buttonImage = GetComponent<Image>();
 
-        // If no Image component found, try to find it in children
         if (buttonImage == null)
         {
             buttonImage = GetComponentInChildren<Image>();
@@ -41,9 +39,7 @@ public class LogoutUser : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void LogOut()
     {
-        // Clear player information
         PlayerInfomation.ClearPlayerInfo();
-        // go to the login scene
         SceneManager.LoadScene(LoadScene);
     }
 }

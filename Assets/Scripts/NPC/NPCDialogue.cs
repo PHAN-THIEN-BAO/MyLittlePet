@@ -33,8 +33,8 @@ public class DialogueChoice
     public int dialogueIndex;
     public string[] choices;
     public int[] nextDialogueIndexes;
-    public PetCareOptionType[] petCareOptions; // Array of pet care actions for each choice
+    public PetCareOptionType[] petCareOptions;
     
     [Tooltip("Custom care amount for each choice, if left at 0, the default from PetInfoUIManager will be used")]
-    public int[] customCareAmount; // Optional custom increase amounts for each choice
+    public int[] customCareAmount;
 }

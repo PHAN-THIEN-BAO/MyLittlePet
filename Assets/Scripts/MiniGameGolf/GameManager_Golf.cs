@@ -10,19 +10,21 @@ public class GameManager_Golf : MonoBehaviour
     public int petStrokeCount = 0;
     public TextMeshProUGUI playerStrokeText;
     public TextMeshProUGUI petStrokeText;
-    public TextMeshProUGUI winText; // Kéo vào Inspector
-
+    public TextMeshProUGUI winText;
+    public GameObject quitButton;
     private bool playerDone = false;
     private bool petDone = false;
     private bool gameEnded = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         UpdateStrokeUI();
+        if (winText != null)
+            winText.gameObject.SetActive(false);
+        if (quitButton != null)
+            quitButton.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (playerBall.transform.position.y < -5f)
@@ -52,9 +54,9 @@ public class GameManager_Golf : MonoBehaviour
     void UpdateStrokeUI()
     {
         if (playerStrokeText != null)
-            playerStrokeText.text = "Số gậy người chơi: " + playerStrokeCount;
+            playerStrokeText.text = "Số gậy: " + playerStrokeCount;
         if (petStrokeText != null)
-            petStrokeText.text = "Số gậy pet: " + petStrokeCount;
+            petStrokeText.text = "Số gậy: " + petStrokeCount;
     }
 
     public void RegisterFinish(GolfBall ball)
@@ -64,28 +66,29 @@ public class GameManager_Golf : MonoBehaviour
         if (ball == playerBall)
         {
             playerDone = true;
-            // Nếu pet chưa vào lỗ, người chơi thắng trước
             if (!petDone && winText != null)
             {
+                playerStrokeText.gameObject.SetActive(false);
                 winText.text = "Bạn đã thắng!";
                 winText.gameObject.SetActive(true);
+                if (quitButton != null) quitButton.SetActive(true);
             }
         }
         else if (ball == petBall)
         {
             petDone = true;
-            // Nếu player chưa vào lỗ, pet thắng trước
             if (!playerDone && winText != null)
             {
                 winText.text = "Pet đã thắng!";
                 winText.gameObject.SetActive(true);
+                if (quitButton != null) quitButton.SetActive(true);
             }
         }
 
         if (playerDone && petDone)
         {
             gameEnded = true;
-            // Có thể xử lý thêm nếu muốn
+            if (quitButton != null) quitButton.SetActive(true);
         }
     }
 }

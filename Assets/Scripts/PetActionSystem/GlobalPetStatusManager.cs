@@ -1,15 +1,12 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Manages status decay for all pets in the scene, independent of UI state
-/// </summary>
 public class GlobalPetStatusManager : MonoBehaviour
 {
     [Header("Global Decay Settings")]
     [Tooltip("Time in seconds between status decay updates")]
-    public float decayInterval = 300f; // 5 minutes
+    public float decayInterval = 300f;
     [Tooltip("Amount to reduce hunger by on decay")]
     public int hungerDecayAmount = 5;
     [Tooltip("Amount to reduce happiness by on decay")]
@@ -25,15 +22,12 @@ public class GlobalPetStatusManager : MonoBehaviour
     [Tooltip("Enable decay system")]
     public bool enableDecay = true;
     
-    // Singleton instance
     public static GlobalPetStatusManager Instance { get; private set; }
     
-    // Track all pets and their decay coroutines
     private Dictionary<int, Coroutine> petDecayCoroutines = new Dictionary<int, Coroutine>();
     private Dictionary<int, PlayerPet> cachedPetData = new Dictionary<int, PlayerPet>();
     
-    // Events
-    public System.Action<int, string> OnPetStatusDecayed; // (petID, newStatus)
+    public System.Action<int, string> OnPetStatusDecayed;
     
     private void Awake()
     {
@@ -41,7 +35,7 @@ public class GlobalPetStatusManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            Debug.Log("🌍 GlobalPetStatusManager initialized");
+            Debug.Log("?? GlobalPetStatusManager initialized");
         }
         else
         {
@@ -51,38 +45,28 @@ public class GlobalPetStatusManager : MonoBehaviour
     
     private void Start()
     {
-        // Auto-discover all pets in scene and start decay
         StartCoroutine(InitializePetDecaySystem());
     }
     
-    /// <summary>
-    /// Initialize decay system for all pets in the scene
-    /// </summary>
     private IEnumerator InitializePetDecaySystem()
     {
-        yield return new WaitForSeconds(1f); // Wait for scene to fully load
+        yield return new WaitForSeconds(1f);
         
         if (!enableDecay)
         {
-            Debug.Log("🌍 Global pet decay system is disabled");
+            Debug.Log("?? Global pet decay system is disabled");
             yield break;
         }
         
-        // Find all pets in the scene
         DiscoverAllPets();
         
-        // Start periodic discovery of new pets
         StartCoroutine(PeriodicPetDiscovery());
         
-        Debug.Log($"🌍 Global pet decay system started - checking every {decayInterval}s");
+        Debug.Log($"?? Global pet decay system started - checking every {decayInterval}s");
     }
     
-    /// <summary>
-    /// Discover all pets currently in the scene
-    /// </summary>
     private void DiscoverAllPets()
     {
-        // Find pets through PetDataHolder components
         PetDataHolder[] petHolders = FindObjectsOfType<PetDataHolder>();
         
         foreach (var holder in petHolders)
@@ -93,13 +77,9 @@ public class GlobalPetStatusManager : MonoBehaviour
             }
         }
         
-        // Also check current user's pets from API
         StartCoroutine(DiscoverUserPets());
     }
     
-    /// <summary>
-    /// Discover current user's pets from API
-    /// </summary>
     private IEnumerator DiscoverUserPets()
     {
         User currentUser = PlayerInfomation.LoadPlayerInfo();
@@ -118,7 +98,7 @@ public class GlobalPetStatusManager : MonoBehaviour
                     }
                     
                     if (showDecayLogs)
-                        Debug.Log($"🌍 Discovered {userPets.Count} pets for user {currentUser.id}");
+                        Debug.Log($"?? Discovered {userPets.Count} pets for user {currentUser.id}");
                 }
             }
             catch (System.Exception ex)
@@ -128,41 +108,31 @@ public class GlobalPetStatusManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Periodically discover new pets that might be spawned
-    /// </summary>
     private IEnumerator PeriodicPetDiscovery()
     {
         while (enabled)
         {
-            yield return new WaitForSeconds(60f); // Check every minute for new pets
+            yield return new WaitForSeconds(60f);
             DiscoverAllPets();
         }
     }
     
-    /// <summary>
-    /// Register a pet for decay monitoring
-    /// </summary>
     public void RegisterPetForDecay(int playerPetID)
     {
         if (petDecayCoroutines.ContainsKey(playerPetID))
         {
             if (showDecayLogs)
-                Debug.Log($"🌍 Pet {playerPetID} already registered for decay");
+                Debug.Log($"?? Pet {playerPetID} already registered for decay");
             return;
         }
         
-        // Start decay coroutine for this pet
         Coroutine decayCoroutine = StartCoroutine(PetDecayCoroutine(playerPetID));
         petDecayCoroutines[playerPetID] = decayCoroutine;
         
         if (showDecayLogs)
-            Debug.Log($"🌍 Registered pet {playerPetID} for global decay monitoring");
+            Debug.Log($"?? Registered pet {playerPetID} for global decay monitoring");
     }
     
-    /// <summary>
-    /// Unregister a pet from decay monitoring
-    /// </summary>
     public void UnregisterPetFromDecay(int playerPetID)
     {
         if (petDecayCoroutines.ContainsKey(playerPetID))
@@ -172,16 +142,12 @@ public class GlobalPetStatusManager : MonoBehaviour
             cachedPetData.Remove(playerPetID);
             
             if (showDecayLogs)
-                Debug.Log($"🌍 Unregistered pet {playerPetID} from decay monitoring");
+                Debug.Log($"?? Unregistered pet {playerPetID} from decay monitoring");
         }
     }
     
-    /// <summary>
-    /// Individual pet decay coroutine
-    /// </summary>
     private IEnumerator PetDecayCoroutine(int playerPetID)
     {
-        // Initial delay before first decay
         yield return new WaitForSeconds(decayInterval);
         
         while (enabled)
@@ -192,24 +158,20 @@ public class GlobalPetStatusManager : MonoBehaviour
                 continue;
             }
             
-            // Check if pet is sleeping
             bool isPetSleeping = PetSleepManager.Instance != null && 
                                PetSleepManager.Instance.IsPetSleeping(playerPetID);
             
-            // ========== SKIP DECAY FOR SLEEPING PETS ==========
             if (isPetSleeping)
             {
                 if (showDecayLogs)
-                    Debug.Log($"🌍 Pet {playerPetID} is sleeping - skipping all decay to prevent database conflicts");
+                    Debug.Log($"?? Pet {playerPetID} is sleeping - skipping all decay to prevent database conflicts");
                 
                 yield return new WaitForSeconds(decayInterval);
                 continue;
             }
             
-            // ========== CHECK IF PET JUST WOKE UP - INVALIDATE CACHE ==========
             InvalidatePetCache(playerPetID);
             
-            // Get current pet data (now fresh from database)
             PlayerPet petData = GetPetData(playerPetID);
             if (petData != null)
             {
@@ -217,16 +179,12 @@ public class GlobalPetStatusManager : MonoBehaviour
                 
                 if (wasDecayed)
                 {
-                    // Update in database
                     yield return StartCoroutine(UpdatePetInDatabase(petData));
                     
-                    // Cache the updated data
                     cachedPetData[playerPetID] = petData;
                     
-                    // Fire event for UI updates
                     OnPetStatusDecayed?.Invoke(playerPetID, petData.status);
                     
-                    // Update PetInfoUIManager if it's showing this pet
                     UpdatePetInfoUIIfActive(playerPetID, petData.status);
                 }
             }
@@ -235,9 +193,6 @@ public class GlobalPetStatusManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Process decay for a specific pet
-    /// </summary>
     private bool ProcessPetDecay(PlayerPet petData, bool isPetSleeping)
     {
         string[] statusValues = petData.status.Split('%');
@@ -249,7 +204,6 @@ public class GlobalPetStatusManager : MonoBehaviour
             int.TryParse(statusValues[1], out int happiness) &&
             int.TryParse(statusValues[2], out int energy))
         {
-            // Always decay hunger and happiness
             if (hunger > minStatusValue)
             {
                 hunger -= hungerDecayAmount;
@@ -262,7 +216,6 @@ public class GlobalPetStatusManager : MonoBehaviour
                 wasDecayed = true;
             }
             
-            // Only decay energy if pet is not sleeping
             if (!isPetSleeping && energy > minStatusValue)
             {
                 energy -= energyDecayAmount;
@@ -277,11 +230,11 @@ public class GlobalPetStatusManager : MonoBehaviour
                 {
                     if (isPetSleeping)
                     {
-                        Debug.Log($"🌍 Pet {petData.playerPetID} global decay (sleeping - energy preserved): {petData.status}");
+                        Debug.Log($"?? Pet {petData.playerPetID} global decay (sleeping - energy preserved): {petData.status}");
                     }
                     else
                     {
-                        Debug.Log($"🌍 Pet {petData.playerPetID} global decay: {petData.status}");
+                        Debug.Log($"?? Pet {petData.playerPetID} global decay: {petData.status}");
                     }
                 }
             }
@@ -290,18 +243,13 @@ public class GlobalPetStatusManager : MonoBehaviour
         return wasDecayed;
     }
     
-    /// <summary>
-    /// Get pet data (cached or from API)
-    /// </summary>
     private PlayerPet GetPetData(int playerPetID)
     {
-        // Try cached data first
         if (cachedPetData.ContainsKey(playerPetID))
         {
             return cachedPetData[playerPetID];
         }
         
-        // Get from API
         try
         {
             PlayerPet petData = APIPlayerPet.GetPlayerPetById(playerPetID);
@@ -318,23 +266,17 @@ public class GlobalPetStatusManager : MonoBehaviour
         }
     }
     
-    /// <summary>
-    /// Update pet in database
-    /// </summary>
     private IEnumerator UpdatePetInDatabase(PlayerPet petData)
     {
         yield return APIPlayerPet.UpdatePlayerPetCoroutine(petData, success =>
         {
             if (!success)
             {
-                Debug.LogError($"🌍 Failed to update pet {petData.playerPetID} in database during global decay");
+                Debug.LogError($"?? Failed to update pet {petData.playerPetID} in database during global decay");
             }
         });
     }
     
-    /// <summary>
-    /// Update PetInfoUIManager if it's showing this pet
-    /// </summary>
     private void UpdatePetInfoUIIfActive(int playerPetID, string newStatus)
     {
         PetInfoUIManager petInfoManager = FindObjectOfType<PetInfoUIManager>();
@@ -343,38 +285,30 @@ public class GlobalPetStatusManager : MonoBehaviour
             var (currentPetId, _) = petInfoManager.GetCurrentPetAndPlayerId();
             if (currentPetId == playerPetID)
             {
-                // Update the UI status bars
                 if (petInfoManager.statusBarManager != null)
                 {
                     petInfoManager.statusBarManager.UpdatePetStatus(newStatus);
                 }
                 
                 if (showDecayLogs)
-                    Debug.Log($"🌍 Updated PetInfoUIManager for pet {playerPetID}");
+                    Debug.Log($"?? Updated PetInfoUIManager for pet {playerPetID}");
             }
         }
     }
     
-    /// <summary>
-    /// Get list of all pets being monitored
-    /// </summary>
     public List<int> GetMonitoredPets()
     {
         return new List<int>(petDecayCoroutines.Keys);
     }
     
-    /// <summary>
-    /// Manual refresh of pet data cache
-    /// </summary>
     public void RefreshPetDataCache()
     {
         cachedPetData.Clear();
-        Debug.Log("🌍 Pet data cache refreshed");
+        Debug.Log("?? Pet data cache refreshed");
     }
     
     private void OnDestroy()
     {
-        // Stop all decay coroutines
         foreach (var coroutine in petDecayCoroutines.Values)
         {
             if (coroutine != null)
@@ -384,16 +318,13 @@ public class GlobalPetStatusManager : MonoBehaviour
         cachedPetData.Clear();
     }
     
-    /// <summary>
-    /// Invalidate pet cache for a specific pet
-    /// </summary>
     private void InvalidatePetCache(int playerPetID)
     {
         if (cachedPetData.ContainsKey(playerPetID))
         {
             cachedPetData.Remove(playerPetID);
             if (showDecayLogs)
-                Debug.Log($"🌍 Invalidated cache for pet {playerPetID}");
+                Debug.Log($"?? Invalidated cache for pet {playerPetID}");
         }
     }
 }

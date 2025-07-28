@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 
 public class PlayerInfoMainScene : MonoBehaviour
@@ -15,7 +15,6 @@ public class PlayerInfoMainScene : MonoBehaviour
 
     private void Start()
     {
-        // Initialize the UI with player information
         MainSceneInfo();
     }
     public void MainSceneInfo()
@@ -37,10 +36,8 @@ public class PlayerInfoMainScene : MonoBehaviour
         }
     }
 
-    // Thêm phương thức UpdateUI để tiện cho việc gọi từ các script khác
     public void UpdateUI()
     {
-        // Gọi MainSceneInfo để cập nhật giao diện
         MainSceneInfo();
     }
 

@@ -1,19 +1,16 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-/// <summary>
-/// Component để save/load vị trí player thông qua trigger collider 2D
-/// </summary>
 public class PlayerPositionSaver : MonoBehaviour
 {
     [Header("Save Position Settings")]
-    [SerializeField] private string savePointId; // ID duy nhất cho save point này
-    [SerializeField] private bool autoGenerateId = true; // Tự động tạo ID
-    [SerializeField] private bool saveOnTriggerEnter = true; // Save khi player vào trigger
-    [SerializeField] private bool saveOnTriggerExit = false; // Save khi player rời trigger
+    [SerializeField] private string savePointId;
+    [SerializeField] private bool autoGenerateId = true;
+    [SerializeField] private bool saveOnTriggerEnter = true;
+    [SerializeField] private bool saveOnTriggerExit = false;
 
     [Header("Visual Feedback")]
-    [SerializeField] private GameObject saveIndicator; // UI hiển thị khi save
-    [SerializeField] private float indicatorDisplayTime = 2f; // Thời gian hiển thị indicator
+    [SerializeField] private GameObject saveIndicator;
+    [SerializeField] private float indicatorDisplayTime = 2f;
     [SerializeField] private string saveMessage = "Position Saved!";
 
     [Header("Audio Feedback")]
@@ -27,7 +24,6 @@ public class PlayerPositionSaver : MonoBehaviour
 
     private void Awake()
     {
-        // Lấy collider component
         triggerCollider = GetComponent<Collider2D>();
         if (triggerCollider == null)
         {
@@ -36,7 +32,6 @@ public class PlayerPositionSaver : MonoBehaviour
             return;
         }
 
-        // Đảm bảo collider là trigger
         if (!triggerCollider.isTrigger)
         {
             triggerCollider.isTrigger = true;
@@ -44,13 +39,11 @@ public class PlayerPositionSaver : MonoBehaviour
                 Debug.LogWarning($"Collider2D on {gameObject.name} was not set as trigger. Automatically set to trigger.");
         }
 
-        // Tự động tạo ID nếu cần
         if (autoGenerateId && string.IsNullOrEmpty(savePointId))
         {
             savePointId = gameObject.scene.name + "_" + gameObject.name + "_" + transform.GetSiblingIndex();
         }
 
-        // Validate save point ID
         if (string.IsNullOrEmpty(savePointId))
         {
             Debug.LogError($"PlayerPositionSaver on {gameObject.name} requires a valid savePointId!");
@@ -74,9 +67,6 @@ public class PlayerPositionSaver : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Save vị trí player hiện tại
-    /// </summary>
     public void SavePlayerPosition(Transform playerTransform)
     {
         if (playerTransform == null)
@@ -85,7 +75,6 @@ public class PlayerPositionSaver : MonoBehaviour
             return;
         }
 
-        // Lấy thông tin user hiện tại
         User currentUser = PlayerInfomation.LoadPlayerInfo();
         if (currentUser == null)
         {
@@ -96,13 +85,10 @@ public class PlayerPositionSaver : MonoBehaviour
         string userId = currentUser.id.ToString();
         Vector3 position = playerTransform.position;
 
-        // Save position
         PlayerPositionManager.SavePlayerPosition(userId, savePointId, position);
 
-        // Visual feedback
         ShowSaveIndicator();
 
-        // Audio feedback
         PlaySaveSound();
 
         if (enableDebugLogs)
@@ -111,9 +97,6 @@ public class PlayerPositionSaver : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Load vị trí player đã save (nếu có)
-    /// </summary>
     public bool LoadPlayerPosition(Transform playerTransform)
     {
         if (playerTransform == null)
@@ -122,7 +105,6 @@ public class PlayerPositionSaver : MonoBehaviour
             return false;
         }
 
-        // Lấy thông tin user hiện tại
         User currentUser = PlayerInfomation.LoadPlayerInfo();
         if (currentUser == null)
         {
@@ -132,7 +114,6 @@ public class PlayerPositionSaver : MonoBehaviour
 
         string userId = currentUser.id.ToString();
 
-        // Kiểm tra xem có saved position không
         if (PlayerPositionManager.HasSavedPosition(userId, savePointId))
         {
             Vector3 savedPosition = PlayerPositionManager.LoadPlayerPosition(userId, savePointId);
@@ -156,30 +137,22 @@ public class PlayerPositionSaver : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Hiển thị indicator khi save
-    /// </summary>
     private void ShowSaveIndicator()
     {
         if (saveIndicator != null)
         {
             saveIndicator.SetActive(true);
 
-            // Tìm text component và cập nhật message
             var textComp = saveIndicator.GetComponentInChildren<UnityEngine.UI.Text>();
             if (textComp != null) textComp.text = saveMessage;
 
             var tmpComp = saveIndicator.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (tmpComp != null) tmpComp.text = saveMessage;
 
-            // Tự động ẩn sau một thời gian
             Invoke(nameof(HideSaveIndicator), indicatorDisplayTime);
         }
     }
 
-    /// <summary>
-    /// Ẩn save indicator
-    /// </summary>
     private void HideSaveIndicator()
     {
         if (saveIndicator != null)
@@ -188,9 +161,6 @@ public class PlayerPositionSaver : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Phát âm thanh khi save
-    /// </summary>
     private void PlaySaveSound()
     {
         if (audioSource != null && saveSound != null)
@@ -199,9 +169,6 @@ public class PlayerPositionSaver : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Public method để save position từ script khác
-    /// </summary>
     public void ManualSavePosition()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -215,9 +182,6 @@ public class PlayerPositionSaver : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Public method để load position từ script khác
-    /// </summary>
     public bool ManualLoadPosition()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -232,9 +196,6 @@ public class PlayerPositionSaver : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Reset saved position cho save point này
-    /// </summary>
     public void ResetSavedPosition()
     {
         User currentUser = PlayerInfomation.LoadPlayerInfo();
@@ -250,7 +211,6 @@ public class PlayerPositionSaver : MonoBehaviour
         }
     }
 
-    // Gizmos để visualize save point trong editor
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

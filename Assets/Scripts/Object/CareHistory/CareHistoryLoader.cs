@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
@@ -99,13 +99,12 @@ public class CareHistoryLoader : MonoBehaviour
     {
         switch (option)
         {
-            case 0: // Most Recent
+            case 0:
                 sortByMostRecent = true;
                 ProcessAndDisplayHistory(currentCareHistory);
                 break;
-            case 1: // Pet Name (A-Z)
+            case 1:
                 sortByMostRecent = false;
-                // Get all pets of current user
                 var playerPets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
                 currentCareHistory = currentCareHistory
                     .OrderBy(h => {
@@ -116,17 +115,6 @@ public class CareHistoryLoader : MonoBehaviour
                 DisplayCareHistory();
                 break;
                 //case 2: // Activity Type (A-Z)
-                //    sortByMostRecent = false;
-                //    // Get all activities
-                //    var activities = APICareActivity.GetAllCareActivities();
-                //    currentCareHistory = currentCareHistory
-                //        .OrderBy(h => {
-                //            var activity = activities.FirstOrDefault(a => a.ActivityId == h.activityId);
-                //            return activity != null ? activity.ActivityType : "";
-                //        })
-                //        .ToList();
-                //    DisplayCareHistory();
-                //    break;
         }
     }
 
@@ -155,14 +143,12 @@ public class CareHistoryLoader : MonoBehaviour
 
         IEnumerable<CareHistory> filtered = allCareHistory;
 
-        // Filter theo pet
         if (selectedPetIndex > 0)
         {
             var selectedPet = playerPets.OrderBy(p => p.petCustomName).ElementAt(selectedPetIndex - 1);
             filtered = filtered.Where(h => h.playerPetId == selectedPet.playerPetID);
         }
 
-        // Filter theo activity
         if (selectedActivityIndex > 0)
         {
             var selectedType = activities.OrderBy(a => a.activityType).ElementAt(selectedActivityIndex - 1).activityType;
@@ -177,20 +163,14 @@ public class CareHistoryLoader : MonoBehaviour
         DisplayCareHistory();
     }
 
-    /// <summary>
-    /// Main method to load care history based on current settings
-    /// </summary>
     public void LoadCareHistoryData()
     {
-        // Show loading indicator
         if (loadingIndicator != null)
             loadingIndicator.SetActive(true);
 
-        // Hide no history text initially
         if (noHistoryText != null)
             noHistoryText.gameObject.SetActive(false);
 
-        // Get current user information
         currentUser = PlayerInfomation.LoadPlayerInfo();
         if (currentUser == null)
         {
@@ -217,7 +197,6 @@ public class CareHistoryLoader : MonoBehaviour
             }
             else if (loadCurrentPetHistory)
             {
-                // Load history for the current active pet
                 PlayerPet activePet = GetCurrentActivePet();
                 if (activePet != null)
                 {
@@ -246,59 +225,42 @@ public class CareHistoryLoader : MonoBehaviour
         }
         finally
         {
-            // Hide loading indicator
             if (loadingIndicator != null)
                 loadingIndicator.SetActive(false);
         }
     }
 
-    /// <summary>
-    /// Load all care history records
-    /// </summary>
     private List<CareHistory> LoadAllCareHistory()
     {
         Debug.Log("CareHistoryLoader: Loading all care history...");
         return APICareHistory.GetAllCareHistory();
     }
 
-    /// <summary>
-    /// Load care history for a specific player
-    /// </summary>
     private List<CareHistory> LoadPlayerCareHistory(int playerId)
     {
         Debug.Log($"CareHistoryLoader: Loading care history for player {playerId}...");
         return APICareHistory.GetCareHistoryByPlayerId(playerId);
     }
 
-    /// <summary>
-    /// Load care history for a specific pet
-    /// </summary>
     private List<CareHistory> LoadPetCareHistory(int playerPetId)
     {
         Debug.Log($"CareHistoryLoader: Loading care history for pet {playerPetId}...");
         return APICareHistory.GetCareHistoryByPlayerPetId(playerPetId);
     }
 
-    /// <summary>
-    /// Get the current active pet for the player
-    /// </summary>
     private PlayerPet GetCurrentActivePet()
     {
         List<PlayerPet> playerPets = APIPlayerPet.GetPetsByPlayerId(currentUser.id);
         if (playerPets != null && playerPets.Count > 0)
         {
-            // Return the first pet or implement logic to get the currently selected pet
             return playerPets[0];
         }
         return null;
     }
 
-    /// <summary>
-    /// Process the loaded history data and display it
-    /// </summary>
     private void ProcessAndDisplayHistory(List<CareHistory> historyData)
     {
-        allCareHistory = historyData; // Lưu lại danh sách gốc
+        allCareHistory = historyData;
         currentCareHistory = historyData;
 
         if (sortByMostRecent)
@@ -316,12 +278,8 @@ public class CareHistoryLoader : MonoBehaviour
         DisplayCareHistory();
     }
 
-    /// <summary>
-    /// Display the care history in the UI
-    /// </summary>
     private void DisplayCareHistory()
     {
-        // Clear existing items
         ClearHistoryDisplay();
 
         if (currentCareHistory == null || currentCareHistory.Count == 0)
@@ -338,9 +296,6 @@ public class CareHistoryLoader : MonoBehaviour
         Debug.Log($"CareHistoryLoader: Displayed {currentCareHistory.Count} care history items");
     }
 
-    /// <summary>
-    /// Create a single history item in the UI
-    /// </summary>
     private void CreateHistoryItem(CareHistory history)
     {
         if (careHistoryItemPrefab == null || contentParent == null)
@@ -351,7 +306,6 @@ public class CareHistoryLoader : MonoBehaviour
 
         GameObject historyItem = Instantiate(careHistoryItemPrefab, contentParent);
         
-        // Set up the history item data
         CareHistoryItemUI itemUI = historyItem.GetComponent<CareHistoryItemUI>();
         if (itemUI != null)
         {
@@ -359,17 +313,12 @@ public class CareHistoryLoader : MonoBehaviour
         }
         else
         {
-            // Fallback: try to set up manually if no CareHistoryItemUI component
             SetupHistoryItemManually(historyItem, history);
         }
     }
 
-    /// <summary>
-    /// Manually set up history item if no CareHistoryItemUI component exists
-    /// </summary>
     private void SetupHistoryItemManually(GameObject historyItem, CareHistory history)
     {
-        // Try to find common text components and set their values
         TMP_Text dateText = historyItem.transform.Find("DateText")?.GetComponent<TMP_Text>();
         if (dateText != null)
             dateText.text = history.performedAt.ToString("MMM dd, yyyy HH:mm");
@@ -383,9 +332,6 @@ public class CareHistoryLoader : MonoBehaviour
             petText.text = $"Pet ID: {history.playerPetId}";
     }
 
-    /// <summary>
-    /// Clear all existing history items from display
-    /// </summary>
     private void ClearHistoryDisplay()
     {
         if (contentParent != null)
@@ -397,9 +343,6 @@ public class CareHistoryLoader : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Show message when no history is available
-    /// </summary>
     private void ShowNoHistoryMessage(string message)
     {
         ClearHistoryDisplay();
@@ -413,17 +356,11 @@ public class CareHistoryLoader : MonoBehaviour
         Debug.Log($"CareHistoryLoader: {message}");
     }
 
-    /// <summary>
-    /// Refresh the care history display
-    /// </summary>
     public void RefreshCareHistory()
     {
         LoadCareHistoryData();
     }
 
-    /// <summary>
-    /// Set filter to load all history
-    /// </summary>
     public void SetLoadAllHistory()
     {
         loadAllHistory = true;
@@ -432,9 +369,6 @@ public class CareHistoryLoader : MonoBehaviour
         LoadCareHistoryData();
     }
 
-    /// <summary>
-    /// Set filter to load current player's history
-    /// </summary>
     public void SetLoadPlayerHistory()
     {
         loadAllHistory = false;
@@ -443,9 +377,6 @@ public class CareHistoryLoader : MonoBehaviour
         LoadCareHistoryData();
     }
 
-    /// <summary>
-    /// Set filter to load specific pet's history
-    /// </summary>
     public void SetLoadPetHistory(int playerPetId = -1)
     {
         loadAllHistory = false;
@@ -458,17 +389,11 @@ public class CareHistoryLoader : MonoBehaviour
         LoadCareHistoryData();
     }
 
-    /// <summary>
-    /// Set the maximum number of history items to display
-    /// </summary>
     public void SetMaxHistoryItems(int maxItems)
     {
         maxHistoryItems = maxItems;
     }
 
-    /// <summary>
-    /// Toggle sorting by most recent
-    /// </summary>
     public void SetSortByMostRecent(bool sortRecent)
     {
         sortByMostRecent = sortRecent;
@@ -478,17 +403,11 @@ public class CareHistoryLoader : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Get the currently loaded care history data
-    /// </summary>
     public List<CareHistory> GetCurrentCareHistory()
     {
         return currentCareHistory;
     }
 
-    /// <summary>
-    /// Get care history count for current player
-    /// </summary>
     public int GetPlayerCareHistoryCount()
     {
         if (currentUser == null)

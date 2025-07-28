@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,9 +36,6 @@ public class NPC : MonoBehaviour, IInteractable
         }
     }
 
-    /// <summary>
-    /// Start dialogue externally (called from PetInfoUIManager)
-    /// </summary>
     public void StartDialogueExternal()
     {
         if (dialogueData == null)
@@ -54,32 +51,23 @@ public class NPC : MonoBehaviour, IInteractable
         }
 
         StartDialogue();
-        Debug.Log($"🎭 External dialogue started with NPC: {name}");
+        Debug.Log($"?? External dialogue started with NPC: {name}");
     }
 
-    /// <summary>
-    /// Force end dialogue (for cleanup purposes)
-    /// </summary>
     public void ForceEndDialogue()
     {
         if (isDialogueActive)
         {
             EndDialogue();
-            Debug.Log($"🎭 Force ended dialogue with NPC: {name}");
+            Debug.Log($"?? Force ended dialogue with NPC: {name}");
         }
     }
 
-    /// <summary>
-    /// Check if this NPC has dialogue data assigned
-    /// </summary>
     public bool HasDialogueData()
     {
         return dialogueData != null && dialogueData.dialogueLines != null && dialogueData.dialogueLines.Length > 0;
     }
 
-    /// <summary>
-    /// Get NPC display name for UI
-    /// </summary>
     public string GetDisplayName()
     {
         return dialogueData != null && !string.IsNullOrEmpty(dialogueData.npcName) 
@@ -234,6 +222,6 @@ public class NPC : MonoBehaviour, IInteractable
             dialogueUI.ShowDialogueUI(false);
         }
 
-        Debug.Log($"🎭 {name} dialogue ended, ready for new interaction");
+        Debug.Log($"?? {name} dialogue ended, ready for new interaction");
     }
 }

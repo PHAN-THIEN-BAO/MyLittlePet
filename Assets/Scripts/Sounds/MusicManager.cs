@@ -10,7 +10,6 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private Slider musicSlider;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
     {
@@ -39,7 +38,6 @@ public class MusicManager : MonoBehaviour
         Instance.audioSource.volume = volume;
     }
 
-    // Update is called once per frame
     public void PlayBackgroundMusic(bool resetSong, AudioClip audioClip = null)
     {
         if (audioClip != null)

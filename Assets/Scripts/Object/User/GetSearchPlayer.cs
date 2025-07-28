@@ -7,12 +7,8 @@ public class GetSearchPlayer : MonoBehaviour
     [SerializeField] public TMP_Text playerId;
     [SerializeField] public TMP_Text playerLevel;
 
-    /// <summary>
-    /// Retrieves user details based on the ID found in the parent Player GameObject
-    /// </summary>
     public void GetPlayerSearchId()
     {
-        // take the parent transform of this GameObject
         Transform parentTransform = transform.parent;
         if (parentTransform == null)
         {
@@ -20,7 +16,6 @@ public class GetSearchPlayer : MonoBehaviour
             return;
         }
 
-        // find the TMP_Text component with name "Id" in the parent GameObject
         TMP_Text idText = parentTransform.Find("Id")?.GetComponent<TMP_Text>();
         if (idText == null)
         {
@@ -28,7 +23,6 @@ public class GetSearchPlayer : MonoBehaviour
             return;
         }
 
-        // take the text from the TMP_Text component
         string idString = idText.text;
         string[] parts = idString.Split(':');
         if (parts.Length < 2)
@@ -44,7 +38,6 @@ public class GetSearchPlayer : MonoBehaviour
             return;
         }
 
-        // call the API to get user information by ID
         User user = APIUser.GetUserById(userId);
         if (user == null)
         {
@@ -52,14 +45,9 @@ public class GetSearchPlayer : MonoBehaviour
             return;
         }
 
-        // update the UI with user information
         UpdateUserDisplay(user);
     }
 
-    /// <summary>
-    /// Updates the UI with user information
-    /// </summary>
-    /// <param name="user">The user data to display</param>
     private void UpdateUserDisplay(User user)
     {
         if (playerName != null)

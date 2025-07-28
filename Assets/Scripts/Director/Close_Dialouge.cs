@@ -22,11 +22,9 @@ public class Close_Dialouge : MonoBehaviour
 
     void Start()
     {
-        // If no dialogue panel is assigned, try to find it from parent
         if (dialoguePanel == null)
             dialoguePanel = transform.parent.gameObject;
 
-        // Set up the button click event if available
         if (closeButton != null && closeOnButtonClick)
         {
             closeButton.onClick.AddListener(CloseDialogue);
@@ -35,27 +33,20 @@ public class Close_Dialouge : MonoBehaviour
 
     void Update()
     {
-        // Check for key press to close the dialogue
         if (Input.GetKeyDown(closeKey))
         {
             CloseDialogue();
         }
     }
 
-    /// <summary>
-    /// Closes the dialogue panel and notifies the DialogueManager
-    /// </summary>
     public void CloseDialogue()
     {
         if (dialoguePanel != null)
         {
-            // Hide the dialogue panel
             dialoguePanel.SetActive(false);
 
-            // If force close is enabled and DialogueManager exists, end the dialogue
             if (forceClose && DialogueManager.Instance != null)
             {
-                // Try to end the current dialogue through the DialogueManager
                 if (typeof(DialogueManager).GetMethod("EndDialogue") != null)
                 {
                     DialogueManager.Instance.SendMessage("EndDialogue", SendMessageOptions.DontRequireReceiver);

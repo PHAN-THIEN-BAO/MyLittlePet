@@ -1,14 +1,10 @@
 using UnityEngine;
-
 public class UITween : MonoBehaviour
 {
     [SerializeField] GameObject pannelUI;
     [SerializeField] public float duration = 1f;
     [SerializeField] public float delay = 0.5f;
     [SerializeField] public float rootSize = 1f;
-
-
-
     public void OnOpenScaleEaseOutElastic()
     {
         pannelUI.transform.localScale = Vector3.zero;
@@ -16,7 +12,6 @@ public class UITween : MonoBehaviour
             .setDelay(delay)
             .setEase(LeanTweenType.easeOutElastic);
     }
-
     public void OnOpenScaleEaseOutBounce()
     {
         pannelUI.transform.localScale = Vector3.zero;
@@ -24,7 +19,6 @@ public class UITween : MonoBehaviour
             .setDelay(delay)
             .setEase(LeanTweenType.easeOutBounce);
     }
-
     public void OnOpenScaleEaseOutQuint()
     {
         pannelUI.transform.localScale = Vector3.zero;
@@ -32,7 +26,6 @@ public class UITween : MonoBehaviour
             .setDelay(delay)
             .setEase(LeanTweenType.easeOutQuint);
     }
-
     public void OnOpenFadeInPanel()
     {
         CanvasGroup canvasGroup = pannelUI.GetComponent<CanvasGroup>();
@@ -46,16 +39,6 @@ public class UITween : MonoBehaviour
             .setDelay(delay)
             .setOnUpdate((float val) => { canvasGroup.alpha = val; });
     }
-
-
-
-
-
-
-
-
-
-
     public void OnCloseScaleEaseInElastic(GameObject closePannel)
     {
         LeanTween.scale(pannelUI, Vector3.zero, duration)
@@ -66,9 +49,4 @@ public class UITween : MonoBehaviour
                 closePannel.SetActive(false);
             });
     }
-
-
-
-
-
 }

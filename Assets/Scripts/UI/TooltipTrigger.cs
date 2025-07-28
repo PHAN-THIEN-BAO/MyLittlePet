@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -10,7 +10,6 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public Color backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.9f);
     public Color textColor = Color.white;
     
-    // For dynamic tooltip content
     public System.Func<string> GetDynamicTooltip;
     
     public void OnPointerEnter(PointerEventData eventData)

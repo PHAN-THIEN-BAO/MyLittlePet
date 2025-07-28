@@ -6,8 +6,7 @@ public class TurnManager : MonoBehaviour
     public GolfBall petBall;
     public Transform hole;
     public PetAIController petAI;
-    public PlayerController playerController;
-
+    public PlayerController_Golf playerController;
     public GameObject playerCamera;
     public GameObject petCamera;
 
@@ -15,9 +14,8 @@ public class TurnManager : MonoBehaviour
     private bool ballIsMoving = false;
     private bool petAIMovedThisTurn = false;
     private float stopTimer = 0f;
-    private float waitAfterStop = 1.5f; // Số giây chờ sau khi bóng dừng
+    private float waitAfterStop = 1.5f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if (isPlayerTurn)
@@ -27,17 +25,14 @@ public class TurnManager : MonoBehaviour
         UpdateCamera();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Cập nhật trạng thái lượt cho PlayerController
         playerController.isMyTurn = isPlayerTurn;
 
         if (!ballIsMoving)
         {
             if (isPlayerTurn)
             {
-                // Chờ PlayerController xử lý input và đánh bóng
                 if (playerBall.IsMoving())
                 {
                     ballIsMoving = true;
@@ -64,7 +59,6 @@ public class TurnManager : MonoBehaviour
                     isPlayerTurn = !isPlayerTurn;
                     petAIMovedThisTurn = false;
 
-                    // Thông báo lượt
                     if (isPlayerTurn)
                         Debug.Log("Đến lượt Player");
                     else
@@ -76,7 +70,7 @@ public class TurnManager : MonoBehaviour
             }
             else
             {
-                stopTimer = 0f; // Nếu bóng lại di chuyển, reset timer
+                stopTimer = 0f;
             }
         }
     }

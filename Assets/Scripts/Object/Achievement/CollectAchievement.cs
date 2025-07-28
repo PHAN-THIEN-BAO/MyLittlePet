@@ -9,7 +9,6 @@ public class CollectAchievement : MonoBehaviour
     [SerializeField] public GameObject successPannel;
     public void GetCollectAchievement()
     {
-        // Get user information
         User user = PlayerInfomation.LoadPlayerInfo();
 
 
@@ -19,11 +18,8 @@ public class CollectAchievement : MonoBehaviour
             return;
         }
 
-        // add 5 diamond for user
         PlayerInfomation.UpdatePlayerInfo(u => u.diamond += 5);
-        // Update the user information in PlayerInfomation
         APIUser.UpdateUser();
-        // Get the achievements for the user
         if (APIPlayerAchievement.UpdatePlayerAchievement(int.Parse(achievementId.text)))
         {
             Debug.Log("Achievement updated successfully.");

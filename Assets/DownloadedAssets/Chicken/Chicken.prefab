@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -6634434424695484549}
   - component: {fileID: 4784399002308692863}
   - component: {fileID: -7338489238845247030}
-  - component: {fileID: -480311346664662960}
+  - component: {fileID: -3806797324083620804}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -143,7 +143,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.0001
+  m_Mass: 1000
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_GravityScale: 0
@@ -219,7 +219,7 @@ MonoBehaviour:
   uiManager: {fileID: 0}
   enableClickAudio: 1
   randomPitch: 1
-  clickSoundVolume: 0.8
+  clickSoundVolume: 0.5
   petClickAudioClips: []
 --- !u!114 &4784399002308692863
 MonoBehaviour:
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueData: {fileID: 11400000, guid: d1cb285466607f74ca0ff1c917cce88e, type: 2}
---- !u!114 &-480311346664662960
+--- !u!114 &-3806797324083620804
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

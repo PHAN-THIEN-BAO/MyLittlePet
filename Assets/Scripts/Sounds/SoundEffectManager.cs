@@ -20,11 +20,11 @@ public class SoundEffectManager : MonoBehaviour
             randomPitchAudioSource = audioSources[1];
             VoiceAudioSource = audioSources[2];
             soundEffectLibrary = GetComponent<SoundEffectLibrary>();
-            DontDestroyOnLoad(gameObject); // Keep this object across scenes
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject); // Destroy duplicate instances
+            Destroy(gameObject);
         }
     }
 
@@ -50,13 +50,11 @@ public class SoundEffectManager : MonoBehaviour
         VoiceAudioSource.pitch = pitch;
         VoiceAudioSource.PlayOneShot(audioClip);
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         sfxSlider.onValueChanged.AddListener(delegate { OnValueChanged(); });
     }
 
-    // Update is called once per frame
     public static void SetVolume(float volume)
     {
         audioSource.volume = volume;
