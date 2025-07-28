@@ -45,55 +45,55 @@ public static class APIUser
     /// <param name="password"></param>
     /// <param name="email"></param>
     /// <returns></returns>
-    public static bool RegisterAPI(string userName, string password, string email)
-    {
-        try
-        {
-            // Create a request to the API endpoint with required parameters
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(
-                "https://localhost:7035/User/register?userName=" + userName +
-                "&password=" + password +
-                "&email=" + email);
+    //public static bool RegisterAPI(string userName, string password, string email)
+    //{
+    //    try
+    //    {
+    //        // Create a request to the API endpoint with required parameters
+    //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(
+    //            "https://localhost:7035/User/register?userName=" + userName +
+    //            "&password=" + password +
+    //            "&email=" + email);
 
-            request.Method = "POST";
+    //        request.Method = "POST";
 
-            // Get the response
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+    //        // Get the response
+    //        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-            // Check if request was successful (status code 200-299)
-            bool success = (int)response.StatusCode >= 200 && (int)response.StatusCode < 300;
+    //        // Check if request was successful (status code 200-299)
+    //        bool success = (int)response.StatusCode >= 200 && (int)response.StatusCode < 300;
 
-            // Read and parse the response if needed
-            StreamReader reader = new StreamReader(response.GetResponseStream());
-            string jsonResponse = reader.ReadToEnd();
-            reader.Close();
+    //        // Read and parse the response if needed
+    //        StreamReader reader = new StreamReader(response.GetResponseStream());
+    //        string jsonResponse = reader.ReadToEnd();
+    //        reader.Close();
 
-            Debug.Log("Registration response: " + jsonResponse);
+    //        Debug.Log("Registration response: " + jsonResponse);
 
-            return success;
-        }
-        catch (WebException ex)
-        {
-            // Log the error
-            if (ex.Response != null)
-            {
-                using (StreamReader reader = new StreamReader(ex.Response.GetResponseStream()))
-                {
-                    Debug.LogError("Registration error: " + reader.ReadToEnd());
-                }
-            }
-            else
-            {
-                Debug.LogError("Registration error: " + ex.Message);
-            }
-            return false;
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError("Unexpected error during registration: " + ex.Message);
-            return false;
-        }
-    }
+    //        return success;
+    //    }
+    //    catch (WebException ex)
+    //    {
+    //        // Log the error
+    //        if (ex.Response != null)
+    //        {
+    //            using (StreamReader reader = new StreamReader(ex.Response.GetResponseStream()))
+    //            {
+    //                Debug.LogError("Registration error: " + reader.ReadToEnd());
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError("Registration error: " + ex.Message);
+    //        }
+    //        return false;
+    //    }
+    //    catch (System.Exception ex)
+    //    {
+    //        Debug.LogError("Unexpected error during registration: " + ex.Message);
+    //        return false;
+    //    }
+    //}
 
     /// <summary>
     /// Register a new user via the API (without email)
