@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -6634434424695484549}
   - component: {fileID: 4784399002308692863}
   - component: {fileID: -7338489238845247030}
+  - component: {fileID: -3806797324083620804}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -123,7 +124,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8127601577889786839}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14b317dbeb8bf4b9f871fe611d58d3a7, type: 3}
   m_Name: 
@@ -142,7 +143,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.0001
+  m_Mass: 1000
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_GravityScale: 0
@@ -216,6 +217,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 0}
+  enableClickAudio: 1
+  randomPitch: 1
+  clickSoundVolume: 0.5
+  petClickAudioClips: []
 --- !u!114 &4784399002308692863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +238,6 @@ MonoBehaviour:
     playerID: 0
     petID: 0
     petCustomName: 
-    level: 0
     status: 
 --- !u!114 &-7338489238845247030
 MonoBehaviour:
@@ -248,5 +252,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueData: {fileID: 11400000, guid: d1cb285466607f74ca0ff1c917cce88e, type: 2}
-  playerPetID: -1
-  petSprites: []
+--- !u!114 &-3806797324083620804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8127601577889786839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7abeec905f4aeaa48adc50f669b29cde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 1
+  changeDirectionTime: 2
+  isMoving: 0

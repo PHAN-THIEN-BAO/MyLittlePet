@@ -508,25 +508,6 @@ public class DialogueController : MonoBehaviour
                 }
                 petInfoManager.OnSleepButtonClickedWithHistory();
                 break;
-
-            case PetCareAction.CareForAll:
-                if (petWasAwakened)
-                {
-                    Debug.Log($"?? Pet {currentPetId} was awakened for comprehensive care via dialogue");
-                }
-
-                if (customCareAmount > 0)
-                {
-                    petInfoManager.ScheduleSmartCare();
-                    Debug.Log($"Dialogue choice: Smart care for all pet needs");
-                }
-                else
-                {
-                    petInfoManager.OnCareForAllButtonClicked();
-                    Debug.Log("Dialogue choice: Care for all pet needs");
-                }
-                break;
-
             case PetCareAction.None:
             default:
                 break;

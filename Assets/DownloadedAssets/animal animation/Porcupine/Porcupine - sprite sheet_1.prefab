@@ -170,11 +170,11 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3305312009468169975}
-  m_BodyType: 2
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 1000
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 0
@@ -216,6 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 0.2
   changeDirectionTime: 2
+  isMoving: 0
 --- !u!114 &4648877860938061980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +234,6 @@ MonoBehaviour:
     playerID: 0
     petID: 0
     petCustomName: 
-    level: 0
     status: 
 --- !u!114 &3196386444279987403
 MonoBehaviour:
@@ -248,3 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 0}
+  enableClickAudio: 1
+  randomPitch: 1
+  clickSoundVolume: 0.8
+  petClickAudioClips: []
