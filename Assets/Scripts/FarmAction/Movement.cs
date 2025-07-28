@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Movement : MonoBehaviour
 {
-    public float speed;
+    public float speed; // speed of the player
 
     public Animator animator;
 

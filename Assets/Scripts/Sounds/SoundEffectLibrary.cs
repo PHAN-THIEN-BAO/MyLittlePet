@@ -16,6 +16,7 @@ public class SoundEffectLibrary : MonoBehaviour
             soundDictionary[soundEffectGroup.name] = soundEffectGroup.audioClips;
         }
     }
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
    public AudioClip GetRandomClip(string name)
     {
         if (soundDictionary.ContainsKey(name))

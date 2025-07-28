@@ -1,11 +1,11 @@
 [System.Serializable]
 public class PlayerPet
 {
-    public int playerPetID;
-    public int playerID;
-    public int petID;
-    public string petCustomName;
-    public System.DateTime adoptedAt;
-    public string status;
-    public System.DateTime lastStatusUpdate;
+    public int playerPetID;         // PlayerPetID
+    public int playerID;            // PlayerID
+    public int petID;               // PetID
+    public string petCustomName;    // PetCustomName
+    public System.DateTime adoptedAt; // AdoptedAt
+    public string status;           // Status
+    public System.DateTime lastStatusUpdate; // LastStatusUpdate
 }

@@ -32,10 +32,13 @@ public class PetAction
     public bool isCompleted;
     public bool isExecuting;
     
+    // Dependencies - actions that must complete before this one can execute
     public List<string> dependencies;
     
+    // Action parameters
     public Dictionary<string, object> parameters;
     
+    // Events
     public System.Action<PetAction> OnActionStarted;
     public System.Action<PetAction> OnActionCompleted;
     public System.Action<PetAction> OnActionFailed;

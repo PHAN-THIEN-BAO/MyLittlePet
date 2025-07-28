@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
@@ -12,32 +12,33 @@ public class NPCDialogueTrigger : MonoBehaviour
     public Image portraitImage;
     
     [Header("Trigger Settings")]
-    [Tooltip("T? d?ng b?t d?u dialogue khi Player v�o trigger")]
+    [Tooltip("Tự động bắt đầu dialogue khi Player vào trigger")]
     public bool autoStartOnEnter = true;
     
-    [Tooltip("T? d?ng d�ng dialogue khi Player r?i trigger")]
+    [Tooltip("Tự động đóng dialogue khi Player rời trigger")]
     public bool autoCloseOnExit = true;
     
-    [Tooltip("Ch? trigger dialogue m?t l?n")]
+    [Tooltip("Chỉ trigger dialogue một lần")]
     public bool triggerOnce = false;
     
-    [Tooltip("Delay tru?c khi b?t d?u dialogue (gi�y)")]
+    [Tooltip("Delay trước khi bắt đầu dialogue (giây)")]
     public float startDelay = 0.5f;
 
     [Header("Close Button Integration")]
     public Button closeButton;
     
     [Header("Destruction Settings")]
-    [Tooltip("GameObject s? b? ph� h?y khi dialogue k?t th�c")]
+    [Tooltip("GameObject sẽ bị phá hủy khi dialogue kết thúc")]
     public GameObject targetToDestroy;
     
-    [Tooltip("T? ph� h?y NPC n�y sau khi dialogue ho�n th�nh")]
+    [Tooltip("Tự phá hủy NPC này sau khi dialogue hoàn thành")]
     public bool destroySelfAfterDialogue = false;
 
     [Header("Visual Indicator")]
-    [Tooltip("Hi?n th? indicator khi player c� th? tuong t�c")]
+    [Tooltip("Hiển thị indicator khi player có thể tương tác")]
     public GameObject interactionIndicator;
     
+    // Private variables
     private int dialogIndex;
     private bool isTyping, isDialogActive, hasTriggered;
     private bool isPlayerInRange = false;
@@ -45,16 +46,19 @@ public class NPCDialogueTrigger : MonoBehaviour
 
     private void Start()
     {
+        // Setup close button if assigned
         if (closeButton != null)
         {
             closeButton.onClick.AddListener(OnCloseButtonClicked);
         }
 
+        // Đảm bảo dialogue panel bị ẩn ban đầu
         if (dialogPanel != null)
         {
             dialogPanel.SetActive(false);
         }
 
+        // Ẩn interaction indicator ban đầu
         if (interactionIndicator != null)
         {
             interactionIndicator.SetActive(false);
@@ -63,6 +67,7 @@ public class NPCDialogueTrigger : MonoBehaviour
 
     private void Update()
     {
+        // Cho phép player nhấn Space để tiếp tục dialogue khi ở trong vùng trigger
         if (isDialogActive && isPlayerInRange && Input.GetKeyDown(KeyCode.Space))
         {
             NextLine();
@@ -77,11 +82,13 @@ public class NPCDialogueTrigger : MonoBehaviour
         
         isPlayerInRange = true;
 
+        // Hiển thị interaction indicator
         if (interactionIndicator != null)
         {
             interactionIndicator.SetActive(true);
         }
 
+        // Tự động bắt đầu dialogue nếu được thiết lập
         if (autoStartOnEnter && (!triggerOnce || !hasTriggered))
         {
             if (startDelay > 0)
@@ -103,27 +110,34 @@ public class NPCDialogueTrigger : MonoBehaviour
         
         isPlayerInRange = false;
 
+        // Ẩn interaction indicator
         if (interactionIndicator != null)
         {
             interactionIndicator.SetActive(false);
         }
 
+        // Hủy coroutine start dialogue nếu đang chạy
         if (startDialogueCoroutine != null)
         {
             StopCoroutine(startDialogueCoroutine);
             startDialogueCoroutine = null;
         }
 
+        // Tự động đóng dialogue nếu được thiết lập
         if (autoCloseOnExit && isDialogActive)
         {
             EndDialog();
         }
     }
 
+    /// <summary>
+    /// Coroutine để bắt đầu dialogue sau delay
+    /// </summary>
     private IEnumerator StartDialogueWithDelay()
     {
         yield return new WaitForSeconds(startDelay);
         
+        // Kiểm tra player vẫn trong vùng trigger
         if (isPlayerInRange && (!triggerOnce || !hasTriggered))
         {
             StartDialog();
@@ -132,6 +146,9 @@ public class NPCDialogueTrigger : MonoBehaviour
         startDialogueCoroutine = null;
     }
 
+    /// <summary>
+    /// Bắt đầu dialogue (có thể gọi từ bên ngoài)
+    /// </summary>
     public void StartDialog()
     {
         if (DialogData == null)
@@ -148,36 +165,48 @@ public class NPCDialogueTrigger : MonoBehaviour
         hasTriggered = true;
         dialogIndex = 0;
 
+        // Setup NPC info
         nameText.SetText(DialogData.npcName);
         portraitImage.sprite = DialogData.npcPortrait;
 
+        // Hiển thị dialogue panel
         dialogPanel.SetActive(true);
 
+        // Bắt đầu typing effect
         StartCoroutine(TypeLine());
 
         Debug.Log($"Started dialogue with {DialogData.npcName}");
     }
 
+    /// <summary>
+    /// Chuyển sang dòng dialogue tiếp theo
+    /// </summary>
     public void NextLine()
     {
         if (!isDialogActive) return;
 
         if (isTyping)
         {
+            // Skip typing animation
             StopAllCoroutines();
             dialogText.SetText(DialogData.dialogLines[dialogIndex]);
             isTyping = false;
         }
         else if (++dialogIndex < DialogData.dialogLines.Length)
         {
+            // Move to next line
             StartCoroutine(TypeLine());
         }
         else
         {
+            // End of dialogue
             EndDialog();
         }
     }
 
+    /// <summary>
+    /// Coroutine typing effect
+    /// </summary>
     private IEnumerator TypeLine()
     {
         isTyping = true;
@@ -187,6 +216,7 @@ public class NPCDialogueTrigger : MonoBehaviour
         {
             dialogText.text += letter;
             
+            // Play voice sound if available
             if (DialogData.voiceSound != null)
             {
                 SoundEffectManager.PlayVoice(DialogData.voiceSound, DialogData.voicePitch);
@@ -197,6 +227,7 @@ public class NPCDialogueTrigger : MonoBehaviour
 
         isTyping = false;
 
+        // Auto progress if enabled for this line
         if (DialogData.autoProgressLines.Length > dialogIndex && 
             DialogData.autoProgressLines[dialogIndex])
         {
@@ -205,6 +236,9 @@ public class NPCDialogueTrigger : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Kết thúc dialogue
+    /// </summary>
     public void EndDialog()
     {
         StopAllCoroutines();
@@ -214,12 +248,14 @@ public class NPCDialogueTrigger : MonoBehaviour
 
         Debug.Log($"Ended dialogue with {DialogData.npcName}");
 
+        // Phá hủy target GameObject nếu có
         if (targetToDestroy != null)
         {
             Destroy(targetToDestroy);
             Debug.Log($"Destroyed target object: {targetToDestroy.name}");
         }
 
+        // Tự phá hủy nếu được thiết lập
         if (destroySelfAfterDialogue)
         {
             Debug.Log($"Self-destroying NPC: {gameObject.name}");
@@ -227,6 +263,9 @@ public class NPCDialogueTrigger : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when close button is clicked
+    /// </summary>
     private void OnCloseButtonClicked()
     {
         if (isDialogActive)
@@ -235,10 +274,14 @@ public class NPCDialogueTrigger : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Force start dialogue (bỏ qua trigger once và delay)
+    /// </summary>
     public void ForceStartDialog()
     {
         if (DialogData == null) return;
 
+        // Stop any running coroutines
         StopAllCoroutines();
         
         if (startDialogueCoroutine != null)
@@ -250,6 +293,9 @@ public class NPCDialogueTrigger : MonoBehaviour
         StartDialog();
     }
 
+    /// <summary>
+    /// Force end dialogue
+    /// </summary>
     public void ForceEndDialog()
     {
         if (isDialogActive)
@@ -258,22 +304,34 @@ public class NPCDialogueTrigger : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Reset trigger để có thể trigger lại
+    /// </summary>
     public void ResetTrigger()
     {
         hasTriggered = false;
         Debug.Log($"Reset dialogue trigger for {gameObject.name}");
     }
 
+    /// <summary>
+    /// Kiểm tra player có đang trong vùng trigger không
+    /// </summary>
     public bool IsPlayerInRange()
     {
         return isPlayerInRange;
     }
 
+    /// <summary>
+    /// Kiểm tra dialogue có đang active không
+    /// </summary>
     public bool IsDialogActive()
     {
         return isDialogActive;
     }
 
+    /// <summary>
+    /// Set dialogue data mới
+    /// </summary>
     public void SetDialogData(NPCDialog newDialogData)
     {
         DialogData = newDialogData;
@@ -281,6 +339,7 @@ public class NPCDialogueTrigger : MonoBehaviour
 
     private void OnDisable()
     {
+        // Cleanup khi object bị disable
         if (startDialogueCoroutine != null)
         {
             StopCoroutine(startDialogueCoroutine);
@@ -295,6 +354,7 @@ public class NPCDialogueTrigger : MonoBehaviour
 
     private void OnDestroy()
     {
+        // Cleanup close button listener
         if (closeButton != null)
         {
             closeButton.onClick.RemoveListener(OnCloseButtonClicked);

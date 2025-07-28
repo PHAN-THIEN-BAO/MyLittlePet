@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class UIStoreOptionManager : MonoBehaviour
 {
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     //public GameObject optionItems;
     public GameObject optionPets;
     public GameObject optionConsumption;
@@ -9,6 +10,11 @@ public class UIStoreOptionManager : MonoBehaviour
     //public GameObject optionOther;
 
 
+/*    public void ShowItems()
+    {
+        HideAll();
+        optionItems.SetActive(true);
+    }*/
 
     public void ShowPets()
     {
@@ -22,6 +28,16 @@ public class UIStoreOptionManager : MonoBehaviour
         optionConsumption.SetActive(true);
     }
 
+/*    public void ShowMedicine()
+    {
+        HideAll();
+        optionMedicine.SetActive(true);
+    }
+    public void ShowOther()
+    {
+        HideAll();
+        optionOther.SetActive(true);
+    }*/
 
 
     public void HideAll()

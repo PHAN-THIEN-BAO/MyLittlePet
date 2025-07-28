@@ -1,8 +1,8 @@
 [System.Serializable]
 public class PlayerAchievement
 {
-    public int playerID;
-    public int achievementID;
-    public System.DateTime earnedAt;
-    public bool isCollected;
+    public int playerID;           // PlayerID
+    public int achievementID;      // AchievementID
+    public System.DateTime earnedAt; // EarnedAt
+    public bool isCollected;       // IsCollected
 }

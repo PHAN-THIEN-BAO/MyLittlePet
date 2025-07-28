@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace DialogueSystem
@@ -18,6 +18,7 @@ namespace DialogueSystem
         {
             textHolder = GetComponent<Text>();
             
+            // Kiểm tra các thành phần cần thiết
             if (textHolder == null)
             {
                 Debug.LogError("No Text component found!");

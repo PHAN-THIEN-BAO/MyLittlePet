@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class NPCRandomMovement : MonoBehaviour
 {
@@ -11,9 +11,9 @@ public class NPCRandomMovement : MonoBehaviour
     private Animator animator;
     private NPC npcComponent;
     
-    private int currentDirection = -1;
-    private bool isMovementPaused = false;
-    public bool isMoving;
+    private int currentDirection = -1; // Lưu direction hiện tại
+    private bool isMovementPaused = false; // Để tạm dừng movement khi đang tương tác
+    public bool isMoving; // GOOD: per-pet instance
 
     void Start()
     {
@@ -30,8 +30,10 @@ public class NPCRandomMovement : MonoBehaviour
 
     void Update()
     {
+        // Kiểm tra xem NPC có đang tương tác không
         CheckInteractionState();
         
+        // Chỉ di chuyển khi không bị tạm dừng
         if (!isMovementPaused)
         {
             timer -= Time.deltaTime;
@@ -50,13 +52,16 @@ public class NPCRandomMovement : MonoBehaviour
     {
         if (npcComponent != null)
         {
+            // Kiểm tra xem NPC có đang trong dialogue không
             bool wasMovementPaused = isMovementPaused;
-            isMovementPaused = !npcComponent.CanInteract();
+            isMovementPaused = !npcComponent.CanInteract(); // CanInteract() trả về false khi đang tương tác
             
+            // Nếu vừa bắt đầu tương tác, dừng animation
             if (!wasMovementPaused && isMovementPaused)
             {
                 StopMovement();
             }
+            // Nếu vừa kết thúc tương tác, có thể tiếp tục di chuyển
             else if (wasMovementPaused && !isMovementPaused)
             {
                 ResumeMovement();
@@ -72,29 +77,31 @@ public class NPCRandomMovement : MonoBehaviour
 
     void ResumeMovement()
     {
+        // Đặt lại timer để thay đổi direction ngay lập tức khi resume
         timer = 0f;
     }
 
     void ChangeDirection()
     {
+        // Không thay đổi direction khi đang tương tác
         if (isMovementPaused)
             return;
             
         int newDirection;
         do
         {
-            newDirection = Random.Range(0, 5);
-        } while (newDirection == currentDirection && (currentDirection != -1 || newDirection != 4));
+            newDirection = Random.Range(0, 5); // 0 = Up, 1 = Down, 2 = Left, 3 = Right, 4 = Idle
+        } while (newDirection == currentDirection && (currentDirection != -1 || newDirection != 4)); // Đảm bảo khác direction hiện tại, trừ lần đầu
 
         currentDirection = newDirection;
 
         switch (newDirection)
         {
-            case 0: movement = new Vector2(0, 1); break;
-            case 1: movement = new Vector2(0, -1); break;
-            case 2: movement = new Vector2(-1, 0); break;
-            case 3: movement = new Vector2(1, 0); break;
-            case 4: movement = Vector2.zero; break;
+            case 0: movement = new Vector2(0, 1); break;      // Up
+            case 1: movement = new Vector2(0, -1); break;     // Down
+            case 2: movement = new Vector2(-1, 0); break;     // Left
+            case 3: movement = new Vector2(1, 0); break;      // Right
+            case 4: movement = Vector2.zero; break;           // Idle
         }
 
         timer = changeDirectionTime;
@@ -111,12 +118,14 @@ public class NPCRandomMovement : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        // Chỉ thay đổi direction khi va chạm nếu không đang tương tác
         if (!isMovementPaused && collision.collider != null && collision.collider is BoxCollider2D)
         {
             ChangeDirection();
         }
     }
 
+    // Public methods để có thể control từ bên ngoài nếu cần
     public void PauseMovement()
     {
         isMovementPaused = true;

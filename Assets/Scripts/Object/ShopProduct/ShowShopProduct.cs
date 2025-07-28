@@ -19,19 +19,67 @@ public class ShowShopProduct : MonoBehaviour
     [SerializeField] public List<Image> productImages;
     [SerializeField] public List<Sprite> productSprites;
     [SerializeField] public GameObject Item;
-    [SerializeField] public Transform contentPanel;
+    [SerializeField] public Transform contentPanel; // pull content panel from the scene
 
 
 
 
     //public void GetProducts(string type)
+    //{
+    //    List<ShopProduct> products = APIShopProduct.GetAllShopProducts(type);
+    //    int count = Mathf.Min(name.Count, products.Count);
 
+    //    for (int i = 0; i < count; i++)
+    //    {
+    //        name[i].text = products[i].name;
+    //        value[i].text = products[i].price.ToString();
+    //        if (i < productSprites.Count && i < productImages.Count)
+    //        {
+    //            productImages[i].sprite = productSprites[i];
+    //            productImages[i].gameObject.SetActive(true);
+    //        }
+    //        // Set the active state of the currency displays based on the product's currency type
+    //        if (products[i].currencyType == "Coin")
+    //        {
+    //            coinDisplay[i].SetActive(true);
+    //            diamondDisplay[i].SetActive(false);
+    //            gemDisplay[i].SetActive(false);
+    //        }
+    //        else if (products[i].currencyType == "Diamond")
+    //        {
+    //            coinDisplay[i].SetActive(false);
+    //            diamondDisplay[i].SetActive(true);
+    //            gemDisplay[i].SetActive(false);
+    //        }
+    //        else if (products[i].currencyType == "Gem")
+    //        {
+    //            coinDisplay[i].SetActive(false);
+    //            diamondDisplay[i].SetActive(false);
+    //            gemDisplay[i].SetActive(true);
+    //        }
+    //        else
+    //        {
+    //            // if currency type is not recognized, default to coin
+    //            coinDisplay[i].SetActive(true);
+    //            diamondDisplay[i].SetActive(false);
+    //            gemDisplay[i].SetActive(false);
+    //        }
+    //    }
 
+    //    // hide remaining displays if there are more displays than products
+    //    for (int i = count; i < name.Count; i++)
+    //    {
+    //        coinDisplay[i].SetActive(false);
+    //        diamondDisplay[i].SetActive(false);
+    //        gemDisplay[i].SetActive(false);
+    //    }
+    //}
 
     public void GetProducts(string type)
     {
         List<ShopProduct> products = APIShopProduct.GetAllShopProducts(type);
 
+        // add sprites to the productSprites list if not already added
         while (name.Count < products.Count)
         {
             GameObject newItem = Instantiate(Item, contentPanel);
@@ -66,9 +114,11 @@ public class ShowShopProduct : MonoBehaviour
             value[i].text = products[i].price.ToString();
             Pet_Id[i].text = products[i].petID.HasValue ? products[i].petID.Value.ToString() : "N/A";
 
+            // Set the Id text
             Id[i].text = products[i].shopProductID.ToString();
             Id[i].gameObject.SetActive(false);
 
+            // Load image from URL
             if (!string.IsNullOrEmpty(products[i].imageUrl))
             {
                 StartCoroutine(LoadImageFromUrl(products[i].imageUrl, productImages[i]));
@@ -85,6 +135,7 @@ public class ShowShopProduct : MonoBehaviour
 
 
 
+        // hide remaining displays if there are more displays than products
         for (int i = count; i < name.Count; i++)
         {
             name[i].transform.parent.gameObject.SetActive(false);
@@ -117,13 +168,16 @@ public class ShowShopProduct : MonoBehaviour
         //wait for the end of the frame to ensure all UI elements are laid out
         yield return null;
 
+        // ensure the canvas is updated before scrolling
         Canvas.ForceUpdateCanvases();
 
+        // use the scrollViewObject to find the ScrollRect component
         if (scrollViewObject != null)
         {
             ScrollRect scrollRect = scrollViewObject.GetComponent<ScrollRect>();
             if (scrollRect != null)
             {
+                // scroll to the top
                 scrollRect.verticalNormalizedPosition = 1f;
             }
             else

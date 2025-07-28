@@ -1,3 +1,4 @@
+﻿// Tạo file mới RenameButtonHandler.cs
 using UnityEngine;
 using UnityEngine.UI;
 public class RenameButtonHandler : MonoBehaviour
@@ -13,7 +14,7 @@ public class RenameButtonHandler : MonoBehaviour
     }
     void ToggleRenamePanel()
     {
-        Debug.Log("ToggleRenamePanel du?c g?i");
+        Debug.Log("ToggleRenamePanel được gọi");
         if (renamePanel != null)
         {
             renamePanel.SetActive(!renamePanel.activeSelf);

@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 
 public class PetController : MonoBehaviour
 {
-    public GameObject petPrefab;
-    public Transform petParent;
-    public GameObject[] petPrefabs;
+    public GameObject petPrefab; // Kéo prefab vào đây
+    public Transform petParent;  // Kéo một GameObject trống làm parent (nếu muốn)
+    public GameObject[] petPrefabs; // Kéo các prefab vào đây theo thứ tự petID
 
     void Start()
     {
@@ -31,10 +31,12 @@ public class PetController : MonoBehaviour
 
     public void SpawnPet(PlayerPet pet)
     {
+        // Tạo vị trí ngẫu nhiên hoặc vị trí mặc định
         float randomX = Random.Range(-5f, 5f);
         float randomY = Random.Range(-2f, 2f);
         Vector3 spawnPosition = new Vector3(randomX, randomY, 0);
 
+        // Chọn đúng prefab theo petID
         GameObject prefabToSpawn = (petPrefabs != null && pet.petID >= 0 && pet.petID < petPrefabs.Length)
             ? petPrefabs[pet.petID]
             : null;

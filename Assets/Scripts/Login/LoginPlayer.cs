@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
@@ -10,9 +10,9 @@ public class LoginPlayer : MonoBehaviour
     [SerializeField] public string Scenename;
 
     [Header("New Player Scene Settings")]
-    [SerializeField] private string beginnerSceneName = "Tutorial";
-    [SerializeField] private bool useSceneTransition = true;
-    [SerializeField] private Vector3 playerSpawnPosition = Vector3.zero;
+    [SerializeField] private string beginnerSceneName = "Tutorial"; // Scene cho người chơi mới
+    [SerializeField] private bool useSceneTransition = true; // Sử dụng transition effect
+    [SerializeField] private Vector3 playerSpawnPosition = Vector3.zero; // Vị trí spawn trong scene mới
 
     [Header("UI References")]
     [SerializeField] public TMP_InputField usernameField;
@@ -30,6 +30,7 @@ public class LoginPlayer : MonoBehaviour
         string username = usernameField.text;
         string password = passwordField.text;
 
+        // Check for empty fields first
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
             errorText.text = "Please fill in all fields.";
@@ -40,19 +41,23 @@ public class LoginPlayer : MonoBehaviour
 
         try
         {
+            // Attempt to login
             User user = APIUser.LoginAPI(username, password);
 
             Debug.Log("API returned: " + (user == null ? "null" : "user object"));
 
             if (user != null)
             {
+                // Save user information
                 PlayerInfomation.SavePlayerInfo(user);
+                // Log user information for debugging
                 Debug.Log("User info: " + JsonUtility.ToJson(user));
 
                 currentPanel.SetActive(false);
                 successPanel.SetActive(false);
                 Debug.Log("Login successful! User ID: " + user.id);
 
+                // Kiểm tra xem có phải người chơi mới không và chuyển hướng phù hợp
                 StartCoroutine(CheckAndRedirectPlayer(user));
             }
             else
@@ -98,10 +103,12 @@ public class LoginPlayer : MonoBehaviour
 
     private IEnumerator CheckAndRedirectPlayer(User user)
     {
+        // Đợi một chút để success panel hiển thị
         yield return new WaitForSeconds(1.5f);
 
         try
         {
+            // Kiểm tra số lượng pet của người chơi
             int petCount = APIUser.GetPlayerPetCount(user.id.ToString());
 
             if (petCount == 0)
@@ -109,6 +116,7 @@ public class LoginPlayer : MonoBehaviour
                 successPanel.SetActive(false);
                 tapToPlayPanel.SetActive(false);
                 newGamePanel.SetActive(true);
+                // Người chơi mới - chuyển đến scene cho người mới
                 Debug.Log($"New player detected. Redirecting to beginner scene: {beginnerSceneName}");
                 RedirectToBeginnerScene();
             }
@@ -117,6 +125,7 @@ public class LoginPlayer : MonoBehaviour
                 successPanel.SetActive(false);
                 tapToPlayPanel.SetActive(false);
                 newGamePanel.SetActive(true);
+                // Người chơi cũ - chuyển đến scene bình thường
                 Debug.Log($"Existing player detected. Redirecting to main scene: {Scenename}");
                 RedirectToMainScene();
             }
@@ -124,6 +133,7 @@ public class LoginPlayer : MonoBehaviour
         catch (System.Exception ex)
         {
             Debug.LogError("Error checking player pet count: " + ex.Message);
+            // Fallback: chuyển đến scene bình thường
             RedirectToMainScene();
         }
     }
@@ -138,12 +148,14 @@ public class LoginPlayer : MonoBehaviour
             return;
         }
 
+        // Sử dụng SceneTransitionManager nếu có và được bật
         if (useSceneTransition && SceneTransitionManager.Instance != null)
         {
             SceneTransitionManager.Instance.TransitionToScene(beginnerSceneName, playerSpawnPosition);
         }
         else
         {
+            // Load scene trực tiếp
             SceneManager.LoadScene(beginnerSceneName);
         }
     }
@@ -156,12 +168,14 @@ public class LoginPlayer : MonoBehaviour
             return;
         }
 
+        // Sử dụng SceneTransitionManager nếu có và được bật
         if (useSceneTransition && SceneTransitionManager.Instance != null)
         {
             SceneTransitionManager.Instance.TransitionToScene(Scenename, Vector3.zero);
         }
         else
         {
+            // Load scene trực tiếp
             SceneManager.LoadScene(Scenename);
         }
     }

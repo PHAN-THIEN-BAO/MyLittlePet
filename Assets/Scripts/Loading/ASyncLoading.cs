@@ -17,12 +17,13 @@ public class ASyncLoading : MonoBehaviour
     }
     IEnumerator LoadScenceASync(string scenetoLoad)
     {
+        // Start the asynchronous loading operation
         AsyncOperation loadOperation = SceneManager.LoadSceneAsync(scenetoLoad);
         while (!loadOperation.isDone)
         {
             float progressValue = Mathf.Clamp01(loadOperation.progress / 0.9f);
             loadingBar.value = progressValue;
-            yield return null;
+            yield return null; // Wait for the next frame
         }
     }
 }

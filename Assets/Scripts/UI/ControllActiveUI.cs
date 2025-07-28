@@ -5,8 +5,8 @@ using UnityEngine;
 public class ControllActiveUI : MonoBehaviour
 {
 
-    [SerializeField] public List<GameObject> activeUIList;
-    [SerializeField] public List<GameObject> inactiveUIList;
+    [SerializeField] public List<GameObject> activeUIList; // List to hold active UI elements
+    [SerializeField] public List<GameObject> inactiveUIList; // List to hold inactive UI elements
 
 
     public void ControllUI()
@@ -15,6 +15,10 @@ public class ControllActiveUI : MonoBehaviour
         SetInactiveUI(inactiveUIList);
     }
 
+    /// <summary>
+    /// Sets the active state of UI elements in the provided list to true.
+    /// </summary>
+    /// <param name="UIList"></param>
     public void SetActiveUI(List<GameObject> UIList)
     {
         if (UIList == null)
@@ -28,6 +32,10 @@ public class ControllActiveUI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// Sets the active state of UI elements in the provided list to false.
+    /// </summary>
+    /// <param name="UIList"></param>
     public void SetInactiveUI(List<GameObject> UIList)
     {
         if (UIList == null)

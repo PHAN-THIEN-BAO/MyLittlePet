@@ -1,8 +1,8 @@
 [System.Serializable]
 public class PlayerInventory
 {
-    public int playerID;
-    public int shopProductID;
-    public int quantity;
-    public System.DateTime acquiredAt;
+    public int playerID;           // PlayerID
+    public int shopProductID;      // ShopProductID
+    public int quantity;           // Quantity
+    public System.DateTime acquiredAt; // AcquiredAt
 }

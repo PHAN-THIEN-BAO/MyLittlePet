@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DialogManager : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class DialogManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // Giữ lại khi chuyển scene
         }
         else
         {

@@ -9,6 +9,7 @@ using System;
 
 public class APICareHistory : MonoBehaviour
 {
+    // Get all care history records
     public static List<CareHistory> GetAllCareHistory()
     {
         try
@@ -42,6 +43,7 @@ public class APICareHistory : MonoBehaviour
         }
     }
 
+    // Get care history by ID
     public static CareHistory GetCareHistoryById(int careHistoryId)
     {
         try
@@ -75,6 +77,7 @@ public class APICareHistory : MonoBehaviour
         }
     }
 
+    // Get care history for a specific player pet
     public static List<CareHistory> GetCareHistoryByPlayerPetId(int playerPetId)
     {
         try
@@ -108,6 +111,7 @@ public class APICareHistory : MonoBehaviour
         }
     }
 
+    // Get care history for a specific player
     public static List<CareHistory> GetCareHistoryByPlayerId(int playerId)
     {
         try
@@ -141,6 +145,7 @@ public class APICareHistory : MonoBehaviour
         }
     }
 
+    // Create a new care history record
     public static bool CreateCareHistory(int playerPetId, int playerId, int activityId)
     {
         try
@@ -169,6 +174,7 @@ public class APICareHistory : MonoBehaviour
         }
     }
 
+    // Create care history using Coroutine (asynchronous)
     public static IEnumerator CreateCareHistoryCoroutine(int playerPetId, int playerId, int activityId, System.Action<bool> callback)
     {
         string url = $"https://localhost:7035/CareHistory?playerPetId={playerPetId}&playerId={playerId}&activityId={activityId}";
@@ -191,6 +197,7 @@ public class APICareHistory : MonoBehaviour
         }
     }
 
+    // Delete a care history record
     public static bool DeleteCareHistory(int careHistoryId)
     {
         try
@@ -219,6 +226,7 @@ public class APICareHistory : MonoBehaviour
         }
     }
 
+    // Delete care history using Coroutine (asynchronous)
     public static IEnumerator DeleteCareHistoryCoroutine(int careHistoryId, System.Action<bool> callback)
     {
         string url = $"https://localhost:7035/CareHistory/{careHistoryId}";

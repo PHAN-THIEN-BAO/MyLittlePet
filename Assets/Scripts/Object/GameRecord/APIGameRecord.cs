@@ -2,7 +2,7 @@ using System.Net;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json;
+using Newtonsoft.Json; // Ensure you have the Newtonsoft.Json package
 
 public class APIGameRecord : MonoBehaviour
 {
@@ -34,8 +34,8 @@ public class APIGameRecord : MonoBehaviour
         try
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Method = method.ToUpper();
-            request.ContentLength = 0;
+            request.Method = method.ToUpper(); // "PUT" or "POST"
+            request.ContentLength = 0; // no body for GET requests
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {

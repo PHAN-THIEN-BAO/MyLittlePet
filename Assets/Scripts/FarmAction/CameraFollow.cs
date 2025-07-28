@@ -1,23 +1,24 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FarmCameraFollow : MonoBehaviour
 {
     [Header("Camera Follow Settings")]
-    [SerializeField] private Transform target;
-    [SerializeField] private bool autoFindPlayer = true;
-    [SerializeField] private string playerTag = "Player";
-    [SerializeField] private bool centerPlayerOnStart = true;
+    [SerializeField] private Transform target; // The target to follow
+    [SerializeField] private bool autoFindPlayer = true; // Tự động tìm player
+    [SerializeField] private string playerTag = "Player"; // Tag của player
+    [SerializeField] private bool centerPlayerOnStart = true; // Đặt player ở giữa camera khi bắt đầu
 
     [Header("Follow Behavior")]
-    [SerializeField] private bool useFixedOffset = false;
-    [SerializeField] private Vector3 manualOffset = Vector3.zero;
+    [SerializeField] private bool useFixedOffset = false; // Sử dụng offset cố định
+    [SerializeField] private Vector3 manualOffset = Vector3.zero; // Offset thủ công
 
-    Vector3 camOffset;
+    Vector3 camOffset; // Offset from the target position
 
     void Start()
     {
+        // Tự động tìm player nếu chưa được gán và autoFindPlayer = true
         if (autoFindPlayer && target == null)
         {
             FindPlayer();
@@ -27,10 +28,12 @@ public class FarmCameraFollow : MonoBehaviour
         {
             if (centerPlayerOnStart)
             {
+                // Đặt nhân vật ở giữa camera
                 CenterPlayerInCamera();
             }
             else
             {
+                // Tính offset dựa trên vị trí hiện tại
                 CalculateOffset();
             }
         }
@@ -56,9 +59,11 @@ public class FarmCameraFollow : MonoBehaviour
 
     private void CenterPlayerInCamera()
     {
+        // Đặt player ở vị trí giữa camera (giữ nguyên Z của player)
         Vector3 cameraCenter = new Vector3(transform.position.x, transform.position.y, target.position.z);
         target.position = cameraCenter;
         
+        // Tính offset sau khi đã đặt player ở giữa
         CalculateOffset();
         
         Debug.Log("Player positioned at camera center");
@@ -78,6 +83,6 @@ public class FarmCameraFollow : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position = target.position + camOffset;
+        transform.position = target.position + camOffset; // Update the camera position to follow the target
     }
 }
