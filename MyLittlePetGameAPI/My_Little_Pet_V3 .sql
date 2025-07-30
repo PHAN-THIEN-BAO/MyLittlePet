@@ -1,4 +1,5 @@
 Create database My_Little_Pet_V3;
+Use My_Little_Pet_V3;
 --GO
 
 --CACH CHAY DATABASE 
@@ -10,16 +11,14 @@ Create database My_Little_Pet_V3;
 END"  */
 --4 CHAY PHAN CON LAI
 
+--GO
 
-
---Go
-
-
+Drop database My_Little_Pet_V3;
 CREATE TABLE [User] (
     ID INT PRIMARY KEY  IDENTITY(1,1),
 	Role NVARCHAR(50) NOT NULL,
 	UserName NVARCHAR(100),
-    Email NVARCHAR(100),
+    Email NVARCHAR(100) ,
     Password NVARCHAR(100) NOT NULL,
 	Level INT DEFAULT 1,
 	Coin INT,
@@ -29,25 +28,24 @@ CREATE TABLE [User] (
 	Position FLOAT,
 	EXP INT
 );
-
---Done with Shop and Player 
 CREATE TABLE Pet (
     PetID INT PRIMARY KEY IDENTITY(1,1),
 	AdminID INT,
-    PetType VARCHAR(50) NOT NULL,  
-	PetDefaultName VARCHAR(50) NOT NULL,
+    PetType NVARCHAR(50) NOT NULL,  
+	PetDefaultName NVARCHAR(50) NOT NULL,
 	PetStatus INT DEFAULt 1,
-    Description TEXT,
+    Description NVARCHAR(255),
 	FOREIGN KEY (AdminID) REFERENCES [User](ID)
 );
-
-
+--Select * from Shop
+--ALTER TABLE PlayerPet
+--DROP COLUMN Description;
 
 CREATE TABLE PlayerPet (
     PlayerPetID INT PRIMARY KEY IDENTITY(1,1),
     PlayerID INT NOT NULL,
     PetID INT NOT NULL,
-    PetCustomName VARCHAR(50),             
+    PetCustomName NVARCHAR(50),             
     AdoptedAt DATETIME DEFAULT GETDATE(),
 	UNIQUE(PlayerID, PetCustomName),
 	Status NVARCHAR(50),
@@ -56,11 +54,10 @@ CREATE TABLE PlayerPet (
     FOREIGN KEY (PetID) REFERENCES Pet(PetID)
 );
 
-
 CREATE TABLE Shop (
     ShopID INT PRIMARY KEY IDENTITY(1,1),
     Name NVARCHAR(100) NOT NULL,
-    Type VARCHAR(10),
+    Type NVARCHAR(10),
     Description NVARCHAR(255)
 );
 GO
@@ -70,11 +67,11 @@ CREATE TABLE ShopProduct (
 	AdminID INT NOT NULL,
 	PetID INT NULL,
     Name NVARCHAR(100) NOT NULL,
-    Type VARCHAR(20) NOT NULL,
+    Type NVARCHAR(20) NOT NULL,
     Description NVARCHAR(255),
     ImageUrl NVARCHAR(255),
     Price INT NOT NULL,
-    CurrencyType VARCHAR(20) NOT NULL,
+    CurrencyType NVARCHAR(20) NOT NULL,
     Quantity INT,
 	Status INT DEFAULT 1,
     FOREIGN KEY (ShopID) REFERENCES Shop(ShopID),
@@ -96,12 +93,13 @@ CREATE TABLE PlayerInventory (
 );
 
 
+--Done with Shop and Player 
 
 --C n playerPet vs ACtivity
 CREATE TABLE CareActivity (
     ActivityID INT PRIMARY KEY IDENTITY(1,1),
     ActivityType VARCHAR(50) NOT NULL,   
-    Description TEXT
+    Description NVARCHAR(255)
 );
 
 CREATE TABLE CareHistory (
@@ -121,8 +119,8 @@ CREATE TABLE CareHistory (
 --Player vs Achievement
 CREATE TABLE Achievement (
     AchievementID INT PRIMARY KEY IDENTITY,
-    AchievementName VARCHAR(100) NOT NULL,
-    Description TEXT
+    AchievementName NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(255)
 );
 CREATE TABLE PlayerAchievement (
     PlayerID INT,
@@ -135,12 +133,11 @@ CREATE TABLE PlayerAchievement (
 );
 
 
-
 --Player vs Minigame
 CREATE TABLE Minigame (
     MinigameID INT PRIMARY KEY IDENTITY,
-    Name VARCHAR(100) NOT NULL,
-    Description TEXT
+    Name NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(255)
 );
 
 CREATE TABLE GameRecord (
@@ -177,6 +174,15 @@ END
 
 
 
+--Delete 
+Delete ShopProduct
+DBCC CHECKIDENT (ShopProduct, RESEED, 0);
+--Update
+UPDATE ShopProduct
+SET Type = 'Pet'
+WHERE ShopID = 1 AND PetID IS NOT NULL;
+
+
 INSERT INTO [User] (Role, UserName, Email, Password, Level, Coin, Diamond, Gem)
 VALUES 
 ('Player', N'CatLover01', 'catlover01@example.com', 'pass1234', 5, 1000, 5, 3),
@@ -205,7 +211,7 @@ VALUES
 (1, 'Peacock', 'Peacock', 'A majestic peacock with shimmering feathers and an elegant strut.'),
 (1, 'Porcupine', 'Porcupine', 'A shy porcupine with spiky quills and a big heart.');
 
-
+select * from Pet
 INSERT INTO ShopProduct (ShopID, AdminID,PetID, Name, Type, Description, ImageUrl, Price, CurrencyType)
 VALUES 
 -- Pets Shop (ShopID = 1)
@@ -278,10 +284,6 @@ VALUES
 INSERT INTO Minigame (Name, Description)
 VALUES 
 ('Dark', 'Escape room');
-
-
-
-
 
 
 

@@ -52,9 +52,8 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.AchievementId).HasColumnName("AchievementID");
             entity.Property(e => e.AchievementName)
-                .HasMaxLength(100)
-                .IsUnicode(false);
-            entity.Property(e => e.Description).HasColumnType("text");
+                .HasMaxLength(255);
+            entity.Property(e => e.Description).HasMaxLength(255);
         });
 
         modelBuilder.Entity<CareActivity>(entity =>
@@ -67,7 +66,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.ActivityType)
                 .HasMaxLength(50)
                 .IsUnicode(false);
-            entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Description).HasMaxLength(255);
         });
 
         modelBuilder.Entity<CareHistory>(entity =>
@@ -130,10 +129,9 @@ public partial class AppDbContext : DbContext
             entity.ToTable("Minigame");
 
             entity.Property(e => e.MinigameId).HasColumnName("MinigameID");
-            entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .IsUnicode(false);
+                .HasMaxLength(255);
         });
 
         modelBuilder.Entity<Pet>(entity =>
@@ -144,13 +142,11 @@ public partial class AppDbContext : DbContext
 
             entity.Property(e => e.PetId).HasColumnName("PetID");
             entity.Property(e => e.AdminId).HasColumnName("AdminID");
-            entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.PetDefaultName)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+                .HasMaxLength(50);
             entity.Property(e => e.PetType)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+                .HasMaxLength(50);
 
             entity.HasOne(d => d.Admin).WithMany(p => p.Pets)
                 .HasForeignKey(d => d.AdminId)
@@ -221,8 +217,7 @@ public partial class AppDbContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.PetCustomName)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+                .HasMaxLength(50);
             entity.Property(e => e.PetId).HasColumnName("PetID");
             entity.Property(e => e.PlayerId).HasColumnName("PlayerID");
             entity.Property(e => e.Status).HasMaxLength(50);
@@ -248,8 +243,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Type)
-                .HasMaxLength(10)
-                .IsUnicode(false);
+                .HasMaxLength(10);
         });
 
         modelBuilder.Entity<ShopProduct>(entity =>
@@ -262,14 +256,12 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.AdminId).HasColumnName("AdminID");
             entity.Property(e => e.PetId).HasColumnName("PetID");
             entity.Property(e => e.CurrencyType)
-                .HasMaxLength(20)
-                .IsUnicode(false);            entity.Property(e => e.Description).HasMaxLength(255);
+                .HasMaxLength(20);            entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.ImageUrl).HasMaxLength(255);
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.ShopId).HasColumnName("ShopID");
             entity.Property(e => e.Type)
-                .HasMaxLength(20)
-                .IsUnicode(false);
+                .HasMaxLength(20);
             entity.Property(e => e.Quantity);
             entity.Property(e => e.Status).HasDefaultValue(1);
 
