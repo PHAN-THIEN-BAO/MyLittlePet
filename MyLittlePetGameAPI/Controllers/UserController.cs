@@ -111,7 +111,7 @@ namespace MyLittlePetGameAPI.Controllers
                     Role = "Player", // Always set role to Player for this endpoint
                     UserName = userName,
                     Password = password,
-                    Email = $"user_{Guid.NewGuid():N}@placeholder.com", // Generate unique placeholder email
+                    Email = null, // Generate unique placeholder email
                     Level = 1,
                     Coin = coin ?? 100, // Default starting coins
                     Diamond = diamond ?? 0,

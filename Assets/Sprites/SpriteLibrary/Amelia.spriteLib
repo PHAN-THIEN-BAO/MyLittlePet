@@ -1,0 +1,275 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library:
+  - m_Name: Idle
+    m_Hash: 1008081451
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: Amelia_idle_anim_16x16_0
+      m_Hash: 159628001
+      m_Sprite: {fileID: -3708922225944154069, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -3708922225944154069, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_1
+      m_Hash: 1048873591
+      m_Sprite: {fileID: -2760736548063111837, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -2760736548063111837, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_2
+      m_Hash: 663608269
+      m_Sprite: {fileID: 6790360680606227175, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 6790360680606227175, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_3
+      m_Hash: 277539675
+      m_Sprite: {fileID: 4928252936413336897, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 4928252936413336897, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_4
+      m_Hash: 250511096
+      m_Sprite: {fileID: 938562864792140936, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 938562864792140936, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_5
+      m_Hash: 971591278
+      m_Sprite: {fileID: 7030207018000786032, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 7030207018000786032, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_6
+      m_Hash: 551559124
+      m_Sprite: {fileID: -750434189114621416, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -750434189114621416, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_7
+      m_Hash: 401026882
+      m_Sprite: {fileID: 1918193389454674578, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1918193389454674578, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_8
+      m_Hash: 123220691
+      m_Sprite: {fileID: -5265267857890902978, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -5265267857890902978, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_9
+      m_Hash: 811532869
+      m_Sprite: {fileID: 371063470862747257, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 371063470862747257, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_10
+      m_Hash: 973389620
+      m_Sprite: {fileID: 3556917978707756721, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 3556917978707756721, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_11
+      m_Hash: 218337186
+      m_Sprite: {fileID: 5555299586337194249, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 5555299586337194249, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_12
+      m_Hash: 336256536
+      m_Sprite: {fileID: -2079281101058025938, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -2079281101058025938, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_13
+      m_Hash: 588115598
+      m_Sprite: {fileID: 7405204621183634186, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 7405204621183634186, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_19
+      m_Hash: 64489360
+      m_Sprite: {fileID: 1501692905, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1501692905, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_20
+      m_Hash: 287960311
+      m_Sprite: {fileID: 1626813166, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1626813166, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_23
+      m_Hash: 136363341
+      m_Sprite: {fileID: 463159143, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 463159143, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_21
+      m_Hash: 640605281
+      m_Sprite: {fileID: 146663642, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 146663642, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_22
+      m_Hash: 1059556827
+      m_Sprite: {fileID: 776221849, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 776221849, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_14
+      m_Hash: 1030322989
+      m_Sprite: {fileID: 694878661, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 694878661, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_16
+      m_Hash: 325523969
+      m_Sprite: {fileID: -886967412, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -886967412, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_15
+      m_Hash: 175000507
+      m_Sprite: {fileID: -673960717, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -673960717, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_18
+      m_Hash: 887043846
+      m_Sprite: {fileID: 567854647, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 567854647, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    - m_Name: Amelia_idle_anim_16x16_17
+      m_Hash: 610282135
+      m_Sprite: {fileID: -1094749463, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1094749463, guid: d758d577d278fe44a91b7bef1d8dc3b8, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 24
+  - m_Name: Walking
+    m_Hash: 670923915
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: Amelia_run_16x16_0
+      m_Hash: 551190450
+      m_Sprite: {fileID: 1919563972457424006, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1919563972457424006, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_1
+      m_Hash: 400379684
+      m_Sprite: {fileID: -2917346802057576728, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -2917346802057576728, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_2
+      m_Hash: 248782494
+      m_Sprite: {fileID: -9138915536693372919, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -9138915536693372919, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_3
+      m_Hash: 970141192
+      m_Sprite: {fileID: -8993123205285564308, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -8993123205285564308, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_4
+      m_Hash: 666352555
+      m_Sprite: {fileID: 5563407294750843284, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 5563407294750843284, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_5
+      m_Hash: 280005437
+      m_Sprite: {fileID: -4450262322761531657, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -4450262322761531657, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_6
+      m_Hash: 163175047
+      m_Sprite: {fileID: 8667881304487392831, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 8667881304487392831, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_7
+      m_Hash: 1052699153
+      m_Sprite: {fileID: 6306724619194940093, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 6306724619194940093, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_8
+      m_Hash: 771880832
+      m_Sprite: {fileID: 5755919864681394612, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 5755919864681394612, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_9
+      m_Hash: 419874582
+      m_Sprite: {fileID: 5065274291236072061, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 5065274291236072061, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_10
+      m_Hash: 147842751
+      m_Sprite: {fileID: 4982833479168970092, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 4982833479168970092, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_11
+      m_Hash: 1070126633
+      m_Sprite: {fileID: -752677563906866686, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -752677563906866686, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_12
+      m_Hash: 650217363
+      m_Sprite: {fileID: 4413959395871729748, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 4413959395871729748, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_13
+      m_Hash: 298235653
+      m_Sprite: {fileID: -1387157329041994757, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1387157329041994757, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_14
+      m_Hash: 262283942
+      m_Sprite: {fileID: 707919031, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 707919031, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_15
+      m_Hash: 950342192
+      m_Sprite: {fileID: -772203647, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -772203647, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_16
+      m_Hash: 564937610
+      m_Sprite: {fileID: 71351126, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 71351126, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_17
+      m_Hash: 380334876
+      m_Sprite: {fileID: -815452563, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -815452563, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_18
+      m_Hash: 102002317
+      m_Sprite: {fileID: -2031965378, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -2031965378, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_19
+      m_Hash: 823352859
+      m_Sprite: {fileID: -1582108695, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -1582108695, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_20
+      m_Hash: 602060156
+      m_Sprite: {fileID: 1090467016, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1090467016, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_21
+      m_Hash: 350586346
+      m_Sprite: {fileID: 1916190494, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1916190494, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_22
+      m_Hash: 233624656
+      m_Sprite: {fileID: 998893013, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 998893013, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_23
+      m_Hash: 988538054
+      m_Sprite: {fileID: 685093636, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 685093636, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    - m_Name: Amelia_run_16x16_24
+      m_Hash: 613380453
+      m_Sprite: {fileID: 1340081903, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 1340081903, guid: b3b9d56c7bab49c4689bab14b14e4352, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 25
+  m_PrimaryLibraryGUID: 
+  m_ModificationHash: 638890142630117639
+  m_Version: 1

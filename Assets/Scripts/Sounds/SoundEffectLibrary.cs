@@ -1,16 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
-
 public class SoundEffectLibrary : MonoBehaviour
 {
     [SerializeField] private SoundEffectGroup[] soundEffectGroups;
     private Dictionary<string, List<AudioClip>> soundDictionary;
-
     private void Awake()
     {
         InitializeDictionary();
     }
-
     public void InitializeDictionary()
     {
         soundDictionary = new Dictionary<string, List<AudioClip>>();
@@ -29,7 +26,6 @@ public class SoundEffectLibrary : MonoBehaviour
             {
                 return audioClips[Random.Range(0, audioClips.Count)];
             }
-           
         }
         return null;
     }

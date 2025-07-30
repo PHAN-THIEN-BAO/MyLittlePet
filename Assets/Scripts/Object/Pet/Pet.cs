@@ -7,6 +7,4 @@ public class Pet
     public string petDefaultName;
     public int petStatus;
     public string description;
-
 }
-

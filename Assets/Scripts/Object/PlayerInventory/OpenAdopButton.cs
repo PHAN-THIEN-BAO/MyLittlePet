@@ -1,13 +1,11 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class OpenAdopButton : MonoBehaviour
 {
     private TMP_InputField nameInput;
     private Button adopButton;
     private Button currentButton;
-
     void Awake()
     {
         // Take the parent transform of this GameObject
@@ -24,27 +22,21 @@ public class OpenAdopButton : MonoBehaviour
             Debug.LogError("Cannot find parent for OpenAdopButton");
         }
     }
-
     public void OpenAdopButtonDisplay()
     {
         if (currentButton != null)
             currentButton.gameObject.SetActive(false);
-
         if (adopButton != null)
             adopButton.gameObject.SetActive(true);
-
         if (nameInput != null)
             nameInput.gameObject.SetActive(true);
     }
-
     public void CloseAdopButtonDisplay()
     {
         if (currentButton != null)
             currentButton.gameObject.SetActive(true);
-
         if (adopButton != null)
             adopButton.gameObject.SetActive(false);
-
         if (nameInput != null)
             nameInput.gameObject.SetActive(false);
     }

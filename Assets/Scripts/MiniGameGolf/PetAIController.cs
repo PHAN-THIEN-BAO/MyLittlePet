@@ -8,9 +8,13 @@ public class PetAIController : MonoBehaviour
     public float shotPower = 10f;
     public LayerMask obstacleLayer;
 
+    public AudioSource audioSource;
+    public AudioClip hitSound;
+
     private int outOfBoundsCount = 0;
     private Vector3 lastMoveDirection = Vector3.zero;
 
+    public PlayerController_Golf playerController; 
     void Start() { }
 
     void Update() { }
@@ -116,6 +120,14 @@ public class PetAIController : MonoBehaviour
             }
 
             petBall.HitBall(directions[chosen], powers[chosen] * powerMultiplier);
+
+            if (audioSource != null && hitSound != null)
+                audioSource.PlayOneShot(hitSound);
+
+            
+            if (playerController != null)
+                playerController.isMyTurn = true;
+
             return;
         }
 

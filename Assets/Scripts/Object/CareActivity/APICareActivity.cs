@@ -4,7 +4,6 @@ using System.Net;
 using System;
 using UnityEngine;
 using Newtonsoft.Json;
-
 public static class APICareActivity
 {
     // Lấy tất cả các hoạt động chăm sóc
@@ -15,7 +14,6 @@ public static class APICareActivity
             string url = "https://localhost:7035/CareActivity";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = "GET";
-
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)

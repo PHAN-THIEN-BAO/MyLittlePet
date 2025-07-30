@@ -8,14 +8,18 @@ TagManager:
   - Ball
   - Enemy
   - Goal
+  - Enemy2
+  - Coin
+  - Trap
+  - Key
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ground
+  - 
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 
@@ -45,23 +49,29 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Ground
+  - name: BACKGROUND
     uniqueID: 3790030397
     locked: 0
-  - name: WalkInfront
+  - name: Ground
     uniqueID: 410174045
     locked: 0
-  - name: Collision
+  - name: BackGround
     uniqueID: 2254366047
     locked: 0
-  - name: Player
+  - name: Enemy2
     uniqueID: 711862721
     locked: 0
-  - name: WalkBehind
+  - name: Enemy
     uniqueID: 3131351543
     locked: 0
-  - name: Decor
+  - name: Player
     uniqueID: 1477600039
+    locked: 0
+  - name: Coin
+    uniqueID: 3617830897
+    locked: 0
+  - name: UI
+    uniqueID: 165746793
     locked: 0
   m_RenderingLayers:
   - Default

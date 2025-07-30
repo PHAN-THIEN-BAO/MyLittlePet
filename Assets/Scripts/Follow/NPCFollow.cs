@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-
 public class NPCFollow : MonoBehaviour
 {
     public Transform followCharacter; // The character to follow
@@ -9,11 +8,8 @@ public class NPCFollow : MonoBehaviour
     public float allowableSampleDistance; // Allowable distance to consider the character as "followed"
     void Start()
     {
-        
     }
-
     void Update()
     {
-        
     }
 }
